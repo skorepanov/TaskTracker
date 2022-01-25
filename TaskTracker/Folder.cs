@@ -15,6 +15,10 @@ public class Folder
         this.Tasks = new List<UserTask>();
     }
 
+    public Folder(string title)
+        : this(id: default, title)
+    { }
+
     public void AddTask(UserTask task)
     {
         if (!this.Tasks.Contains(task))

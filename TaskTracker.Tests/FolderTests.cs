@@ -50,7 +50,6 @@ public class FolderTests
         const string TASK_TITLE = "title 42";
         const string TASK_DESCRIPTION = "description 42";
         var task = new UserTask(TASK_ID, TASK_TITLE, TASK_DESCRIPTION);
-        var expectedTasks = new List<UserTask> { task };
 
         const int ID = 42;
         const string TITLE = "title 42";
@@ -58,10 +57,10 @@ public class FolderTests
 
         // Act & Assert
         folder.AddTask(task);
-        folder.Tasks.Should().Equal(expectedTasks);
+        folder.Tasks.Should().ContainSingle(t => t.Equals(task));
 
         var otherTask = new UserTask(TASK_ID, TASK_TITLE, TASK_DESCRIPTION);
         folder.AddTask(otherTask);
-        folder.Tasks.Should().Equal(expectedTasks);
+        folder.Tasks.Should().ContainSingle(t => t.Equals(task));
     }
 }

@@ -15,14 +15,23 @@ public class UserTask : IComparable
         this.Description = description;
     }
 
+    public UserTask(string title, string description)
+        : this(id: default, title, description)
+    { }
+
     public override bool Equals(object obj)
     {
         UserTask task = (UserTask)obj;
         return this.Id == task?.Id;
     }
 
-    public int CompareTo(object? obj)
+    public int CompareTo(object obj)
     {
         throw new NotImplementedException();
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
     }
 }
