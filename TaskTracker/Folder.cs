@@ -7,13 +7,15 @@ public class Folder
 {
     public int Id { get; }
     public string Title { get; }
-    public List<UserTask> Tasks { get; }
+
+    private readonly List<UserTask> _tasks;
+    public IReadOnlyCollection<UserTask> Tasks => _tasks;
 
     public Folder(int id, string title)
     {
         this.Id = id;
         this.Title = title;
-        this.Tasks = new List<UserTask>();
+        this._tasks = new List<UserTask>();
     }
 
     public Folder(string title)
@@ -27,9 +29,9 @@ public class Folder
             throw new ArgumentNullException(paramName: nameof(task));
         }
 
-        if (!this.Tasks.Contains(task))
+        if (!this._tasks.Contains(task))
         {
-            this.Tasks.Add(task);
+            this._tasks.Add(task);
         }
     }
 }
