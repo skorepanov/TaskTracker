@@ -57,6 +57,94 @@ public class TaskServiceTests
     }
     #endregion
 
+    #region Complete and uncomplete task
+    [Test]
+    public void CompleteNonexistentTask()
+    {
+        // Arrange
+        var mockRepository = new Mock<ITaskRepository>();
+        mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
+                      .Returns((UserTask)null);
+
+        var taskService = new TaskService(mockRepository.Object);
+
+        // Act
+        Action action = () => taskService.CompleteTask(taskId: 42);
+
+        // Assert
+        action.Should().Throw<DomainEntityNotFoundException>()
+                       .WithMessage("Задача не обнаружена")
+                       .And.DomainEntityType.Should().Be(typeof(UserTask));
+        mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
+                              Times.Never);
+    }
+
+    [Test]
+    public void CompleteExistentTask()
+    {
+        // Arrange
+        const int TASK_ID = 42;
+        var task = new UserTask(title: "title 42", description: "description 42");
+
+        var mockRepository = new Mock<ITaskRepository>();
+        mockRepository.Setup(r => r.GetTask(TASK_ID))
+                      .Returns(task);
+
+        var taskService = new TaskService(mockRepository.Object);
+
+        // Act
+        taskService.CompleteTask(TASK_ID);
+
+        // Assert
+        // TODO check date?
+        mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
+                              Times.Once);
+    }
+
+    [Test]
+    public void IncompleteNonexistentTask()
+    {
+        // Arrange
+        var mockRepository = new Mock<ITaskRepository>();
+        mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
+                      .Returns((UserTask)null);
+
+        var taskService = new TaskService(mockRepository.Object);
+
+        // Act
+        Action action = () => taskService.IncompleteTask(taskId: 42);
+
+        // Assert
+        action.Should().Throw<DomainEntityNotFoundException>()
+                       .WithMessage("Задача не обнаружена")
+                       .And.DomainEntityType.Should().Be(typeof(UserTask));
+        mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
+                              Times.Never);
+    }
+
+    [Test]
+    public void IncompleteExistentTask()
+    {
+        // Arrange
+        const int TASK_ID = 42;
+        var task = new UserTask(title: "title 42", description: "description 42");
+
+        var mockRepository = new Mock<ITaskRepository>();
+        mockRepository.Setup(r => r.GetTask(TASK_ID))
+                      .Returns(task);
+
+        var taskService = new TaskService(mockRepository.Object);
+
+        // Act
+        taskService.IncompleteTask(TASK_ID);
+
+        // Assert
+        // TODO check date?
+        mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
+                              Times.Once);
+    }
+    #endregion
+
     #region Create folder
     [Test]
     public void CreateFolder()

@@ -8,5 +8,6 @@ public interface ITaskRepository
     void SaveNewTask(UserTask task, int folderId);
     void SaveNewFolder(Folder folder);
 
+    void UpdateTask(UserTask task);
     void UpdateTaskFolder(int taskId, int folderId);
 }

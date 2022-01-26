@@ -8,6 +8,10 @@ public class UserTask : IComparable
     public string Title { get; }
     public string Description { get; }
 
+    public DateTime? CompletionDate { get; private set; }
+
+    public bool IsCompleted => CompletionDate is not null;
+
     public UserTask(int id, string title, string description)
     {
         this.Id = id;
@@ -18,6 +22,16 @@ public class UserTask : IComparable
     public UserTask(string title, string description)
         : this(id: default, title, description)
     { }
+
+    public void Complete(DateTime completionDate)
+    {
+        this.CompletionDate = completionDate;
+    }
+
+    public void Incomplete()
+    {
+        this.CompletionDate = null;
+    }
 
     public override bool Equals(object obj)
     {

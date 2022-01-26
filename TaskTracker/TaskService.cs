@@ -1,4 +1,6 @@
-﻿namespace TaskTracker;
+﻿using System;
+
+namespace TaskTracker;
 
 public class TaskService
 {
@@ -21,6 +23,34 @@ public class TaskService
 
         _taskRepository.SaveNewTask(newTask, folderId);
         return newTask;
+    }
+
+    public void CompleteTask(int taskId)
+    {
+        var task = _taskRepository.GetTask(taskId);
+
+        if (task is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(UserTask),
+                                                    message: "Задача не обнаружена");
+        }
+
+        task.Complete(new DateTime());
+        _taskRepository.UpdateTask(task);
+    }
+
+    public void IncompleteTask(int taskId)
+    {
+        var task = _taskRepository.GetTask(taskId);
+
+        if (task is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(UserTask),
+                                                    message: "Задача не обнаружена");
+        }
+
+        task.Incomplete();
+        _taskRepository.UpdateTask(task);
     }
 
     public Folder CreateFolder(string title)
