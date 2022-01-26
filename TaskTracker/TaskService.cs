@@ -12,11 +12,11 @@ public class TaskService
     public UserTask CreateTask(string title, string description, int folderId)
     {
         var newTask = new UserTask(title, description);
-        var folder = _taskRepository.GetFolder(folderId);
 
-        if (folder is null)
+        if (_taskRepository.GetFolder(folderId) is null)
         {
-            return null;
+            throw new DomainEntityNotFoundException(typeof(Folder),
+                                                    message: "Папка не обнаружена");
         }
 
         _taskRepository.SaveNewTask(newTask, folderId);
@@ -28,5 +28,22 @@ public class TaskService
         var newFolder = new Folder(title);
         _taskRepository.SaveNewFolder(newFolder);
         return newFolder;
+    }
+
+    public void MoveTaskToOtherFolder(int taskId, int destinationFolderId)
+    {
+        if (_taskRepository.GetTask(taskId) is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(UserTask),
+                                                    message: "Задача не обнаружена");
+        }
+
+        if (_taskRepository.GetFolder(destinationFolderId) is null)
+        {
+            throw new DomainEntityNotFoundException(typeof(Folder),
+                                                    message: "Папка не обнаружена");
+        }
+
+        _taskRepository.UpdateTaskFolder(taskId, destinationFolderId);
     }
 }

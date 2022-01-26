@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -19,6 +20,22 @@ public class FolderTests
         // Assert
         folder.Id.Should().Be(ID);
         folder.Title.Should().Be(TITLE);
+    }
+
+    #region Add task to folder
+    [Test]
+    public void AddNullTaskToFolder()
+    {
+        // Arrange
+        var folder = new Folder(title: "title 42");
+
+        // Act
+        Action action = () => folder.AddTask(task: null);
+
+        // Assert
+        action.Should().Throw<ArgumentNullException>()
+                       .WithParameterName(paramName: "task");
+        folder.Tasks.Should().BeEmpty();
     }
 
     [Test]
@@ -63,4 +80,5 @@ public class FolderTests
         folder.AddTask(otherTask);
         folder.Tasks.Should().ContainSingle(t => t.Equals(task));
     }
+    #endregion
 }

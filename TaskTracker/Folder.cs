@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TaskTracker;
 
@@ -21,6 +22,11 @@ public class Folder
 
     public void AddTask(UserTask task)
     {
+        if (task is null)
+        {
+            throw new ArgumentNullException(paramName: nameof(task));
+        }
+
         if (!this.Tasks.Contains(task))
         {
             this.Tasks.Add(task);
