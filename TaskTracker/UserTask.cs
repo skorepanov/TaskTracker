@@ -9,8 +9,10 @@ public class UserTask : IComparable
     public string Description { get; }
 
     public DateTime? CompletionDate { get; private set; }
-
     public bool IsCompleted => CompletionDate is not null;
+
+    public DateTime? DeletionDate { get; private set; }
+    public bool IsDeleted => DeletionDate is not null;
 
     public UserTask(int id, string title, string description)
     {
@@ -31,6 +33,11 @@ public class UserTask : IComparable
     public void Incomplete()
     {
         this.CompletionDate = null;
+    }
+
+    public void Delete(DateTime deletionDate)
+    {
+        this.DeletionDate = deletionDate;
     }
 
     public override bool Equals(object obj)

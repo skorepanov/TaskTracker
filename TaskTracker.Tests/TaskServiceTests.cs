@@ -145,6 +145,51 @@ public class TaskServiceTests
     }
     #endregion
 
+    #region Delete task
+    [Test]
+    public void DeleteNonexistentTask()
+    {
+        // Arrange
+        var mockRepository = new Mock<ITaskRepository>();
+        mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
+                      .Returns((UserTask)null);
+
+        var taskService = new TaskService(mockRepository.Object);
+
+        // Act
+        Action action = () => taskService.DeleteTask(taskId: 42);
+
+        // Assert
+        action.Should().Throw<DomainEntityNotFoundException>()
+                       .WithMessage("Задача не обнаружена")
+                       .And.DomainEntityType.Should().Be(typeof(UserTask));
+        mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
+                              Times.Never);
+    }
+
+    [Test]
+    public void DeleteExistentTask()
+    {
+        // Arrange
+        const int TASK_ID = 42;
+        var task = new UserTask(title: "title 42", description: "description 42");
+
+        var mockRepository = new Mock<ITaskRepository>();
+        mockRepository.Setup(r => r.GetTask(TASK_ID))
+                      .Returns(task);
+
+        var taskService = new TaskService(mockRepository.Object);
+
+        // Act
+        taskService.DeleteTask(TASK_ID);
+
+        // Assert
+        // TODO check date?
+        mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
+                              Times.Once);
+    }
+    #endregion
+
     #region Create folder
     [Test]
     public void CreateFolder()

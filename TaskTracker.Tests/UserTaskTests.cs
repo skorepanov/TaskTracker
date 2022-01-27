@@ -36,4 +36,19 @@ public class UserTaskTests
         task.CompletionDate.Should().BeNull();
         task.IsCompleted.Should().BeFalse();
     }
+
+    [Test]
+    public void DeleteTask()
+    {
+        // Arrange
+        var task = new UserTask(title: "title 42", description: "description 42");
+        var deletionDate = new DateTime(year: 2022, month: 2, day: 10);
+
+        // Act
+        task.Delete(deletionDate);
+
+        // Assert
+        task.DeletionDate.Should().Be(deletionDate);
+        task.IsDeleted.Should().BeTrue();
+    }
 }

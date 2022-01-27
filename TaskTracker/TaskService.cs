@@ -53,6 +53,20 @@ public class TaskService
         _taskRepository.UpdateTask(task);
     }
 
+    public void DeleteTask(int taskId)
+    {
+        var task = _taskRepository.GetTask(taskId);
+
+        if (task is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(UserTask),
+                                                    message: "Задача не обнаружена");
+        }
+
+        task.Delete(new DateTime());
+        _taskRepository.UpdateTask(task);
+    }
+
     public Folder CreateFolder(string title)
     {
         var newFolder = new Folder(title);
