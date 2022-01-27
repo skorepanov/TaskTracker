@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TaskTracker;
 
@@ -10,6 +11,9 @@ public class Folder
 
     private readonly List<UserTask> _tasks;
     public IReadOnlyCollection<UserTask> Tasks => _tasks;
+
+    public int IncompleteTaskCount
+        => this._tasks.Count(t => !t.IsCompleted && !t.IsDeleted);
 
     public Folder(int id, string title)
     {

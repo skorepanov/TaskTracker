@@ -81,4 +81,42 @@ public class FolderTests
         folder.Tasks.Should().ContainSingle(t => t.Equals(task));
     }
     #endregion
+
+    #region Get incomplete task count
+    [Test]
+    public void GetIncompleteTaskCountWhenFolderIsEmpty()
+    {
+        // Arrange
+        var folder = new Folder(title: "title 42");
+
+        // Act
+        var incompleteTaskCount = folder.IncompleteTaskCount;
+
+        // Assert
+        incompleteTaskCount.Should().Be(0);
+    }
+
+    [Test]
+    public void GetIncompleteTaskCountWhenFolderHasDifferentTasks()
+    {
+        // Arrange
+        var folder = new Folder(title: "title 42_1");
+
+        var incompleteTask = new UserTask(title: "title 42_2", description: "description 42_2");
+        var completedTask = new UserTask(title: "title 42_3", description: "description 42_3");
+        completedTask.Complete(new DateTime(year: 2022, month: 1, day: 10));
+        var deletedTask = new UserTask(title: "title 42_4", description: "description 42_4");
+        deletedTask.Delete(new DateTime(year: 2022, month: 2, day: 20));
+
+        folder.AddTask(incompleteTask);
+        folder.AddTask(completedTask);
+        folder.AddTask(deletedTask);
+
+        // Act
+        var incompleteTaskCount = folder.IncompleteTaskCount;
+
+        // Assert
+        incompleteTaskCount.Should().Be(1);
+    }
+    #endregion
 }
