@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TaskTracker;
 
@@ -65,6 +66,15 @@ public class TaskService
 
         task.Delete(new DateTime());
         _taskRepository.UpdateTask(task);
+    }
+
+    public List<Folder> GetFolders()
+    {
+        // TODO: delete test data. Get folders from TaskRepository
+        var testTask = new UserTask(title: "Test task", description: "Test description");
+        var testFolder = new Folder(title: "Test folder");
+        testFolder.AddTask(testTask);
+        return new List<Folder> { testFolder };
     }
 
     public Folder CreateFolder(string title)

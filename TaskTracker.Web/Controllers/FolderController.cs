@@ -6,15 +6,18 @@ namespace TaskTracker.Web;
 [Route("api/folders")]
 public class FolderController : ControllerBase
 {
+    private readonly TaskService _taskService;
+
+    public FolderController(TaskService taskService)
+    {
+        _taskService = taskService;
+    }
+
     [HttpGet]
     public List<FolderVm> GetFolders()
     {
-        // TODO: delete test data. Get folders from TaskService
-        var testTask = new UserTask(title: "Test task", description: "Test description");
-        var testDomainFolder = new Folder(title: "Test folder");
-        testDomainFolder.AddTask(testTask);
-        var folder = new FolderVm(testDomainFolder);
-
-        return new List<FolderVm> { folder };
+        var folders = _taskService.GetFolders();
+        var folderVms = folders.Select(f => new FolderVm(f)).ToList();
+        return folderVms;
     }
 }
