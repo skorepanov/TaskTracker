@@ -14,10 +14,28 @@ public class FolderController : ControllerBase
     }
 
     [HttpGet]
-    public List<FolderVm> GetFolders()
+    public IReadOnlyCollection<FolderVm> GetFolders()
     {
         var folders = _taskService.GetFolders();
-        var folderVms = folders.Select(f => new FolderVm(f)).ToList();
+        var folderVms = FolderVm.CreateCollectionFrom(folders);
         return folderVms;
+    }
+
+    [HttpGet]
+    [Route("{folderId:int}/incompleteTasks")]
+    public IReadOnlyCollection<UserTaskVm> GetIncompleteTasks(int folderId)
+    {
+        var tasks = _taskService.GetIncompleteTasks(folderId);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks);
+        return taskVms;
+    }
+
+    [HttpGet]
+    [Route("{folderId:int}/completedTasks")]
+    public IReadOnlyCollection<UserTaskVm> GetCompletedTasks(int folderId)
+    {
+        var tasks = _taskService.GetCompletedTasks(folderId);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks);
+        return taskVms;
     }
 }

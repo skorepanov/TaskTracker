@@ -12,8 +12,13 @@ public class Folder
     private readonly List<UserTask> _tasks;
     public IReadOnlyCollection<UserTask> Tasks => _tasks;
 
-    public int IncompleteTaskCount
-        => this._tasks.Count(t => !t.IsCompleted && !t.IsDeleted);
+    public int IncompleteTaskCount => this.IncompleteTasks.Count();
+
+    public IReadOnlyCollection<UserTask> CompletedTasks
+        => this._tasks.Where(t => !t.IsDeleted && t.IsCompleted).ToList();
+
+    public IReadOnlyCollection<UserTask> IncompleteTasks
+        => this._tasks.Where(t => !t.IsCompleted && !t.IsDeleted).ToList();
 
     public Folder(int id, string title)
     {

@@ -57,7 +57,7 @@ public class TaskServiceTests
     }
     #endregion
 
-    #region Complete and uncomplete task
+    #region Complete and incomplete task
     [Test]
     public void CompleteNonexistentTask()
     {

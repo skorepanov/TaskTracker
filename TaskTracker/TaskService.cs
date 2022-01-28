@@ -68,6 +68,20 @@ public class TaskService
         _taskRepository.UpdateTask(task);
     }
 
+    public IReadOnlyCollection<UserTask> GetIncompleteTasks(int folderId)
+    {
+        // TODO check folder for null
+        var folder = _taskRepository.GetFolder(folderId);
+        return folder.IncompleteTasks;
+    }
+
+    public IReadOnlyCollection<UserTask> GetCompletedTasks(int folderId)
+    {
+        // TODO check folder for null
+        var folder = _taskRepository.GetFolder(folderId);
+        return folder.CompletedTasks;
+    }
+
     public List<Folder> GetFolders()
     {
         // TODO: delete test data. Get folders from TaskRepository
