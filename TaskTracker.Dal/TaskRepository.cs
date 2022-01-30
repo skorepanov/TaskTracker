@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TaskTracker;
+﻿namespace TaskTracker.Dal;
 
 public class TaskRepository : ITaskRepository
 {

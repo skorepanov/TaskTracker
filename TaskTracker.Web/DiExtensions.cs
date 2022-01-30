@@ -1,4 +1,6 @@
-﻿namespace TaskTracker.Web;
+﻿using TaskTracker.Dal;
+
+namespace TaskTracker.Web;
 
 public static class DiExtensions
 {
