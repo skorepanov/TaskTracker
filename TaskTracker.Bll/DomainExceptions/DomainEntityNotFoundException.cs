@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TaskTracker;
+namespace TaskTracker.Bll;
 
 public class DomainEntityNotFoundException : Exception
 {

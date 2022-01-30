@@ -1,4 +1,6 @@
-﻿namespace TaskTracker.Web;
+﻿using TaskTracker.Bll;
+
+namespace TaskTracker.Web;
 
 public class FolderVm
 {

@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TaskTracker.Dal\TaskTracker.Dal.csproj" />
-      <ProjectReference Include="..\TaskTracker\TaskTracker.csproj" />
+      <ProjectReference Include="..\TaskTracker.Bll\TaskTracker.Bll.csproj" />
     </ItemGroup>
 
 </Project>

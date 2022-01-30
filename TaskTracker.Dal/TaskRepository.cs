@@ -1,4 +1,6 @@
-﻿namespace TaskTracker.Dal;
+﻿using TaskTracker.Bll;
+
+namespace TaskTracker.Dal;
 
 public class TaskRepository : ITaskRepository
 {

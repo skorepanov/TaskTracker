@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTracker", "TaskTracker\TaskTracker.csproj", "{70B58AAC-FA2C-47CB-A52B-16D440953696}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTracker.Bll", "TaskTracker.Bll\TaskTracker.Bll.csproj", "{70B58AAC-FA2C-47CB-A52B-16D440953696}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTracker.Tests", "TaskTracker.Tests\TaskTracker.Tests.csproj", "{85FC02AB-3E5C-4599-AD10-282C77330688}"
 EndProject

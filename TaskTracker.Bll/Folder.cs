@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TaskTracker;
+namespace TaskTracker.Bll;
 
 public class Folder
 {

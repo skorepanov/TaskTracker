@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TaskTracker;
+namespace TaskTracker.Bll;
 
 public class TaskService
 {

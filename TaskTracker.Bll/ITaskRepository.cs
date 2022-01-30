@@ -1,4 +1,4 @@
-﻿namespace TaskTracker;
+﻿namespace TaskTracker.Bll;
 
 public interface ITaskRepository
 {
