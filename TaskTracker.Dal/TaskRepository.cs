@@ -9,6 +9,18 @@ public class TaskRepository : ITaskRepository
         throw new System.NotImplementedException();
     }
 
+    public IReadOnlyCollection<UserTask> GetNonDeletedTasks()
+    {
+        var completedTask = new UserTask(title: "Completed task", description: "Description");
+        completedTask.Complete(DateTime.Now);
+
+        var incompleteTask = new UserTask(title: "Overdue task", description: "Description");
+        incompleteTask.DueDate = DateTime.Now.AddDays(-1);
+
+        var tasks = new List<UserTask> { completedTask, incompleteTask };
+        return tasks;
+    }
+
     public Folder GetFolder(int folderId)
     {
         var folder = new Folder(id: 5, title: "Test folder");

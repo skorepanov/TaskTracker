@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TaskTracker.Bll;
 
@@ -80,6 +81,16 @@ public class TaskService
         // TODO check folder for null
         var folder = _taskRepository.GetFolder(folderId);
         return folder.CompletedTasks;
+    }
+
+    public IReadOnlyCollection<UserTask> GetTodayTasks()
+    {
+        var today = DateTime.Now;
+        var tasks = _taskRepository.GetNonDeletedTasks();
+
+        var todayTasks = tasks.Where(t => t.IsTodayTask(today)).ToList();
+
+        return todayTasks;
     }
 
     public List<Folder> GetFolders()

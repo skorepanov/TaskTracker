@@ -47,6 +47,17 @@ public class UserTask : IComparable
         return (this.DueDate.Value - today).Duration().Days;
     }
 
+    public bool IsTodayTask(DateTime today)
+    {
+        if (this.IsDeleted)
+        {
+            return false;
+        }
+
+        return this.CompletionDate?.Date == today.Date
+           || !this.IsCompleted && this.DueDate?.Date <= today.Date;
+    }
+
     public void Delete(DateTime deletionDate)
     {
         this.DeletionDate = deletionDate;
