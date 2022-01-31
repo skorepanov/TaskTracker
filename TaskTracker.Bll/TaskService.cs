@@ -93,13 +93,10 @@ public class TaskService
         return todayTasks;
     }
 
-    public List<Folder> GetFolders()
+    public IReadOnlyCollection<Folder> GetFolders()
     {
-        // TODO: delete test data. Get folders from TaskRepository
-        var testTask = new UserTask(title: "Test task", description: "Test description");
-        var testFolder = new Folder(title: "Test folder");
-        testFolder.AddTask(testTask);
-        return new List<Folder> { testFolder };
+        var folders = _taskRepository.GetFolders();
+        return folders;
     }
 
     public Folder CreateFolder(string title)

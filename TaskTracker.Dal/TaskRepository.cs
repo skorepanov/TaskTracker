@@ -35,6 +35,14 @@ public class TaskRepository : ITaskRepository
         return folder;
     }
 
+    public IReadOnlyCollection<Folder> GetFolders()
+    {
+        var testTask = new UserTask(title: "Test task", description: "Test description");
+        var testFolder = new Folder(title: "Test folder");
+        testFolder.AddTask(testTask);
+        return new List<Folder> { testFolder };
+    }
+
     public void SaveNewTask(UserTask task, int folderId)
     {
         throw new System.NotImplementedException();

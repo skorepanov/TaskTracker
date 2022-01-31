@@ -6,8 +6,9 @@ public interface ITaskRepository
 {
     UserTask GetTask(int taskId);
     IReadOnlyCollection<UserTask> GetNonDeletedTasks();
-    
+
     Folder GetFolder(int folderId);
+    IReadOnlyCollection<Folder> GetFolders();
 
     void SaveNewTask(UserTask task, int folderId);
     void SaveNewFolder(Folder folder);
