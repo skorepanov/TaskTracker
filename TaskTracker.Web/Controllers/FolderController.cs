@@ -27,7 +27,7 @@ public class FolderController : ControllerBase
     public IReadOnlyCollection<UserTaskVm> GetIncompleteTasks(int folderId)
     {
         var tasks = _taskService.GetIncompleteTasks(folderId);
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
         return taskVms;
     }
 
@@ -36,7 +36,7 @@ public class FolderController : ControllerBase
     public IReadOnlyCollection<UserTaskVm> GetCompletedTasks(int folderId)
     {
         var tasks = _taskService.GetCompletedTasks(folderId);
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
         return taskVms;
     }
 }

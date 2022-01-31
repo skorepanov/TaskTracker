@@ -11,6 +11,8 @@ public class UserTask : IComparable
     public DateTime? CompletionDate { get; private set; }
     public bool IsCompleted => CompletionDate is not null;
 
+    public DateTime? DueDate { get; set; }
+
     public DateTime? DeletionDate { get; private set; }
     public bool IsDeleted => DeletionDate is not null;
 
@@ -35,11 +37,22 @@ public class UserTask : IComparable
         this.CompletionDate = null;
     }
 
+    public int CalculateOverdueDays(DateTime today)
+    {
+        if (this.IsDeleted || this.DueDate is null || this.DueDate >= today)
+        {
+            return 0;
+        }
+
+        return (this.DueDate.Value - today).Duration().Days;
+    }
+
     public void Delete(DateTime deletionDate)
     {
         this.DeletionDate = deletionDate;
     }
 
+    #region Comparisons
     public override bool Equals(object obj)
     {
         UserTask task = (UserTask)obj;
@@ -55,4 +68,5 @@ public class UserTask : IComparable
     {
         return base.GetHashCode();
     }
+    #endregion
 }

@@ -38,6 +38,102 @@ public class UserTaskTests
         task.IsCompleted.Should().BeFalse();
     }
 
+    #region Calculate overdue days
+    [Test]
+    public void CalculateOverdueDaysForTaskWithoutDueDate()
+    {
+        // Arrange
+        var task = new UserTask(title: "title 42", description: "description 42");
+        var today = new DateTime(year: 2022, month: 2, day: 7);
+
+        // Act
+        var overdueDayCount = task.CalculateOverdueDays(today);
+
+        // Assert
+        task.DueDate.Should().BeNull();
+        overdueDayCount.Should().Be(0);
+    }
+
+    [Test]
+    public void CalculateOverdueDaysForTaskWithDueDate()
+    {
+        // Arrange
+        var task = new UserTask(title: "title 42", description: "description 42");
+
+        var dueDate = new DateTime(year: 2022, month: 2, day: 5);
+        task.DueDate = dueDate;
+
+        var today = new DateTime(year: 2022, month: 2, day: 7);
+
+        // Act
+        var overdueDayCount = task.CalculateOverdueDays(today);
+
+        // Assert
+        task.DueDate.Should().Be(dueDate);
+        overdueDayCount.Should().Be(2);
+    }
+
+    [Test]
+    public void CalculateOverdueDaysForNonOverdueTask()
+    {
+        // Arrange
+        var task = new UserTask(title: "title 42", description: "description 42");
+
+        var dueDate = new DateTime(year: 2022, month: 2, day: 5);
+        task.DueDate = dueDate;
+
+        var today = new DateTime(year: 2022, month: 2, day: 3);
+
+        // Act
+        var overdueDayCount = task.CalculateOverdueDays(today);
+
+        // Assert
+        task.DueDate.Should().Be(dueDate);
+        overdueDayCount.Should().Be(0);
+    }
+
+    [Test]
+    public void CalculateOverdueDaysForTodayTask()
+    {
+        // Arrange
+        var task = new UserTask(title: "title 42", description: "description 42");
+
+        var dueDate = new DateTime(year: 2022, month: 2, day: 5);
+        task.DueDate = dueDate;
+
+        var today = dueDate;
+
+        // Act
+        var overdueDayCount = task.CalculateOverdueDays(today);
+
+        // Assert
+        task.DueDate.Should().Be(dueDate);
+        overdueDayCount.Should().Be(0);
+    }
+
+    [Test]
+    public void CalculateOverdueDaysForDeletedTask()
+    {
+        // Arrange
+        var task = new UserTask(title: "title 42", description: "description 42");
+
+        var dueDate = new DateTime(year: 2022, month: 2, day: 5);
+        task.DueDate = dueDate;
+
+        var deletionDate = new DateTime(year: 2022, month: 2, day: 6);
+        task.Delete(deletionDate);
+
+        var today = new DateTime(year: 2022, month: 2, day: 7);
+
+        // Act
+        var overdueDayCount = task.CalculateOverdueDays(today);
+
+        // Assert
+        task.DueDate.Should().Be(dueDate);
+        overdueDayCount.Should().Be(0);
+    }
+    #endregion
+
     [Test]
     public void DeleteTask()
     {
