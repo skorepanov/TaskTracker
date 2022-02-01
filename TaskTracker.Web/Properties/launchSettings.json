@@ -12,9 +12,7 @@
     "TaskTracker.Web": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7265;http://localhost:5265",
+      "applicationUrl": "https://localhost:7265",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
