@@ -2,6 +2,7 @@
 
 namespace TaskTracker.Dal;
 
+// TODO create field with tasks and folders, use it; later - real DB
 public class TaskRepository : ITaskRepository
 {
     public UserTask GetTask(int taskId)
@@ -38,9 +39,10 @@ public class TaskRepository : ITaskRepository
     public IReadOnlyCollection<Folder> GetFolders()
     {
         var testTask = new UserTask(title: "Test task", description: "Test description");
-        var testFolder = new Folder(title: "Test folder");
-        testFolder.AddTask(testTask);
-        return new List<Folder> { testFolder };
+        var testFolder1 = new Folder(id: 1, title: "Test folder 1");
+        testFolder1.AddTask(testTask);
+        var testFolder2 = new Folder(id: 2, "Test folder 2");
+        return new List<Folder> { testFolder1, testFolder2 };
     }
 
     public void SaveNewTask(UserTask task, int folderId)

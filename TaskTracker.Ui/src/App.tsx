@@ -1,26 +1,45 @@
 import React from 'react';
 
-function App() {
-  const folder1 = new Folder(1, "Первая папка");
-  const folder2 = new Folder(2, "Вторая папка");
-  const folders: Folder[] = [folder1, folder2];
+import { AppUrl, Api } from './api';
+import Folder from './components/Folder';
+import IFolder from './interfaces/IFolder';
 
-  return (
-    <div>
-      Folders
-      {folders.map(f => <div>ID: {f.id}, Title: {f.title}</div>)}
-    </div>
-  );
+class App extends React.Component<IAppProps, IAppState> {
+  constructor(props: IAppProps) {
+    super(props);
+    
+    this.state = {
+      folders: [],
+    };
+  }
+
+  async loadFolders() {
+    const url = `${AppUrl}/folders`;
+    
+    const folders = await Api.get<IFolder[]>(url);
+    return this.setState({ folders: folders });
+  }
+
+  componentDidMount() {
+    this.loadFolders();
+  }
+
+  render() {
+    return (
+      <div>
+        <strong>Folders</strong>
+        {this.state.folders.map(f =>
+            <Folder folder={f} key={f.id} />)}
+      </div>
+    );
+  }
 }
 
-class Folder {
-  id: Number;
-  title: string;
+interface IAppProps {
+}
 
-  constructor(id: number, title: string) {
-    this.id = id;
-    this.title = title;
-  }
+interface IAppState {
+  folders: IFolder[];
 }
 
 export default App;
