@@ -8,21 +8,6 @@ namespace TaskTracker.Tests;
 
 public class FolderTests
 {
-    [Test]
-    public void CreateFolder()
-    {
-        // Arrange
-        const int ID = 42;
-        const string TITLE = "title 42";
-
-        // Act
-        var sut = new Folder(ID, TITLE);
-
-        // Assert
-        sut.Id.Should().Be(ID);
-        sut.Title.Should().Be(TITLE);
-    }
-
     #region Add task to folder
     [Test]
     public void AddNullTaskToFolder()
