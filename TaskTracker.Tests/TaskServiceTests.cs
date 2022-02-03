@@ -17,10 +17,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetFolder(It.IsAny<int>()))
                       .Returns((Folder)null);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => taskService.CreateTask(title: "title 42",
+        Action action = () => sut.CreateTask(title: "title 42",
             description: "description 42", folderId: 42);
 
         // Assert
@@ -45,10 +45,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
                       .Returns(folder);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        var task = taskService.CreateTask(TITLE, DESCRIPTION, FOLDER_ID);
+        var task = sut.CreateTask(TITLE, DESCRIPTION, FOLDER_ID);
 
         // Assert
         task.Title.Should().Be(TITLE);
@@ -67,10 +67,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
                       .Returns((UserTask)null);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => taskService.CompleteTask(taskId: 42);
+        Action action = () => sut.CompleteTask(taskId: 42);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
@@ -91,10 +91,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetTask(TASK_ID))
                       .Returns(task);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        taskService.CompleteTask(TASK_ID);
+        sut.CompleteTask(TASK_ID);
 
         // Assert
         // TODO check date?
@@ -110,10 +110,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
                       .Returns((UserTask)null);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => taskService.IncompleteTask(taskId: 42);
+        Action action = () => sut.IncompleteTask(taskId: 42);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
@@ -134,10 +134,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetTask(TASK_ID))
                       .Returns(task);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        taskService.IncompleteTask(TASK_ID);
+        sut.IncompleteTask(TASK_ID);
 
         // Assert
         // TODO check date?
@@ -155,10 +155,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
                       .Returns((UserTask)null);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => taskService.DeleteTask(taskId: 42);
+        Action action = () => sut.DeleteTask(taskId: 42);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
@@ -179,10 +179,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetTask(TASK_ID))
                       .Returns(task);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        taskService.DeleteTask(TASK_ID);
+        sut.DeleteTask(TASK_ID);
 
         // Assert
         // TODO check date?
@@ -202,10 +202,10 @@ public class TaskServiceTests
         var taskService = new TaskService(mockRepository.Object);
 
         // Act
-        var folder = taskService.CreateFolder(TITLE);
+        var sut = taskService.CreateFolder(TITLE);
 
         // Assert
-        folder.Title.Should().Be(TITLE);
+        sut.Title.Should().Be(TITLE);
         mockRepository.Verify(r => r.SaveNewFolder(It.IsAny<Folder>()),
                               Times.Once());
     }
@@ -220,11 +220,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
                       .Returns((UserTask)null);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => taskService.MoveTaskToOtherFolder(taskId: 42_1,
-                                                                destinationFolderId: 42_2);
+        Action action = () => sut.MoveTaskToOtherFolder(taskId: 42_1, destinationFolderId: 42_2);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
@@ -247,11 +246,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetFolder(It.IsAny<int>()))
                       .Returns((Folder)null);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => taskService.MoveTaskToOtherFolder(TASK_ID,
-                                                                destinationFolderId: 42_2);
+        Action action = () => sut.MoveTaskToOtherFolder(TASK_ID, destinationFolderId: 42_2);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
@@ -277,10 +275,10 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
                       .Returns(folder);
 
-        var taskService = new TaskService(mockRepository.Object);
+        var sut = new TaskService(mockRepository.Object);
 
         // Act
-        taskService.MoveTaskToOtherFolder(TASK_ID, FOLDER_ID);
+        sut.MoveTaskToOtherFolder(TASK_ID, FOLDER_ID);
 
         // Assert
         mockRepository.Verify(r => r.UpdateTaskFolder(TASK_ID, FOLDER_ID), Times.Once);

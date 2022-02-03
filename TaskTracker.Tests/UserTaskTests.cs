@@ -13,31 +13,31 @@ public class UserTaskTests
     public void CompleteTask()
     {
         // Arrange
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var sut = new UserTask(title: "title 42", description: "description 42");
         var completionDate = new DateTime(year: 2022, month: 2, day: 10);
 
         // Act
-        task.Complete(completionDate);
+        sut.Complete(completionDate);
 
         // Assert
-        task.CompletionDate.Should().Be(completionDate);
-        task.IsCompleted.Should().BeTrue();
+        sut.CompletionDate.Should().Be(completionDate);
+        sut.IsCompleted.Should().BeTrue();
     }
 
     [Test]
     public void IncompleteTask()
     {
         // Arrange
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var sut = new UserTask(title: "title 42", description: "description 42");
         var completionDate = new DateTime(year: 2022, month: 2, day: 10);
-        task.Complete(completionDate);
+        sut.Complete(completionDate);
 
         // Act
-        task.Incomplete();
+        sut.Incomplete();
 
         // Assert
-        task.CompletionDate.Should().BeNull();
-        task.IsCompleted.Should().BeFalse();
+        sut.CompletionDate.Should().BeNull();
+        sut.IsCompleted.Should().BeFalse();
     }
     #endregion
 
@@ -46,14 +46,14 @@ public class UserTaskTests
     public void CalculateOverdueDaysForTaskWithoutDueDate()
     {
         // Arrange
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var sut = new UserTask(title: "title 42", description: "description 42");
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
         // Act
-        var overdueDayCount = task.CalculateOverdueDays(today);
+        var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        task.DueDate.Should().BeNull();
+        sut.DueDate.Should().BeNull();
         overdueDayCount.Should().Be(0);
     }
 
@@ -61,18 +61,18 @@ public class UserTaskTests
     public void CalculateOverdueDaysForTaskWithDueDate()
     {
         // Arrange
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var sut = new UserTask(title: "title 42", description: "description 42");
 
         var dueDate = new DateTime(year: 2022, month: 2, day: 5);
-        task.DueDate = dueDate;
+        sut.DueDate = dueDate;
 
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
         // Act
-        var overdueDayCount = task.CalculateOverdueDays(today);
+        var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        task.DueDate.Should().Be(dueDate);
+        sut.DueDate.Should().Be(dueDate);
         overdueDayCount.Should().Be(2);
     }
 
@@ -80,18 +80,18 @@ public class UserTaskTests
     public void CalculateOverdueDaysForNonOverdueTask()
     {
         // Arrange
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var sut = new UserTask(title: "title 42", description: "description 42");
 
         var dueDate = new DateTime(year: 2022, month: 2, day: 5);
-        task.DueDate = dueDate;
+        sut.DueDate = dueDate;
 
         var today = new DateTime(year: 2022, month: 2, day: 3);
 
         // Act
-        var overdueDayCount = task.CalculateOverdueDays(today);
+        var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        task.DueDate.Should().Be(dueDate);
+        sut.DueDate.Should().Be(dueDate);
         overdueDayCount.Should().Be(0);
     }
 
@@ -99,18 +99,18 @@ public class UserTaskTests
     public void CalculateOverdueDaysForTodayTask()
     {
         // Arrange
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var sut = new UserTask(title: "title 42", description: "description 42");
 
         var dueDate = new DateTime(year: 2022, month: 2, day: 5);
-        task.DueDate = dueDate;
+        sut.DueDate = dueDate;
 
         var today = dueDate;
 
         // Act
-        var overdueDayCount = task.CalculateOverdueDays(today);
+        var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        task.DueDate.Should().Be(dueDate);
+        sut.DueDate.Should().Be(dueDate);
         overdueDayCount.Should().Be(0);
     }
 
@@ -118,21 +118,21 @@ public class UserTaskTests
     public void CalculateOverdueDaysForDeletedTask()
     {
         // Arrange
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var sut = new UserTask(title: "title 42", description: "description 42");
 
         var dueDate = new DateTime(year: 2022, month: 2, day: 5);
-        task.DueDate = dueDate;
+        sut.DueDate = dueDate;
 
         var deletionDate = new DateTime(year: 2022, month: 2, day: 6);
-        task.Delete(deletionDate);
+        sut.Delete(deletionDate);
 
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
         // Act
-        var overdueDayCount = task.CalculateOverdueDays(today);
+        var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        task.DueDate.Should().Be(dueDate);
+        sut.DueDate.Should().Be(dueDate);
         overdueDayCount.Should().Be(0);
     }
     #endregion
@@ -144,12 +144,12 @@ public class UserTaskTests
         // Arrange
         var today = new DateTime(year: 2022, month: 2, day: 5);
 
-        var task = new UserTask(title: "Title 42", description: "Description 42");
+        var sut = new UserTask(title: "Title 42", description: "Description 42");
         var completionDate = today;
-        task.Complete(completionDate);
+        sut.Complete(completionDate);
 
         // Act
-        var isTodayTask = task.IsTodayTask(today);
+        var isTodayTask = sut.IsTodayTask(today);
 
         // Assert
         isTodayTask.Should().BeTrue();
@@ -159,14 +159,14 @@ public class UserTaskTests
     public void IsTodayTaskThatCompletedEarlier()
     {
         // Arrange
-        var task = new UserTask(title: "Title 42", description: "Description 42");
+        var sut = new UserTask(title: "Title 42", description: "Description 42");
         var completionDate = new DateTime(year: 2022, month: 2, day: 5);
-        task.Complete(completionDate);
+        sut.Complete(completionDate);
 
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
         // Act
-        var isTodayTask = task.IsTodayTask(today);
+        var isTodayTask = sut.IsTodayTask(today);
 
         // Assert
         isTodayTask.Should().BeFalse();
@@ -176,11 +176,11 @@ public class UserTaskTests
     public void IsTodayIncompleteTaskWithoutDueDate()
     {
         // Arrange
-        var task = new UserTask(title: "Title 42", description: "Description 42");
+        var sut = new UserTask(title: "Title 42", description: "Description 42");
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
         // Act
-        var isTodayTask = task.IsTodayTask(today);
+        var isTodayTask = sut.IsTodayTask(today);
 
         // Assert
         isTodayTask.Should().BeFalse();
@@ -191,11 +191,11 @@ public class UserTaskTests
                                                  bool expectedResult)
     {
         // Arrange
-        var task = new UserTask(title: "Title 42", description: "Description 42");
-        task.DueDate = dueDate;
+        var sut = new UserTask(title: "Title 42", description: "Description 42");
+        sut.DueDate = dueDate;
 
         // Act
-        var isTodayTask = task.IsTodayTask(today);
+        var isTodayTask = sut.IsTodayTask(today);
 
         // Assert
         isTodayTask.Should().Be(expectedResult);
@@ -220,12 +220,12 @@ public class UserTaskTests
     public void IsTodayDeletedTask(DateTime deletionDate, DateTime today)
     {
         // Arrange
-        var task = new UserTask(title: "Title 42", description: "Description 42");
-        task.DueDate = today;
-        task.Delete(deletionDate);
+        var sut = new UserTask(title: "Title 42", description: "Description 42");
+        sut.DueDate = today;
+        sut.Delete(deletionDate);
 
         // Act
-        var isTodayTask = task.IsTodayTask(today);
+        var isTodayTask = sut.IsTodayTask(today);
 
         // Assert
         isTodayTask.Should().BeFalse();
@@ -246,15 +246,15 @@ public class UserTaskTests
     public void DeleteTask()
     {
         // Arrange
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var sut = new UserTask(title: "title 42", description: "description 42");
         var deletionDate = new DateTime(year: 2022, month: 2, day: 10);
 
         // Act
-        task.Delete(deletionDate);
+        sut.Delete(deletionDate);
 
         // Assert
-        task.DeletionDate.Should().Be(deletionDate);
-        task.IsDeleted.Should().BeTrue();
+        sut.DeletionDate.Should().Be(deletionDate);
+        sut.IsDeleted.Should().BeTrue();
     }
     #endregion
 }

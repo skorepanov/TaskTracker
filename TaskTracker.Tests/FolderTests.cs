@@ -16,11 +16,11 @@ public class FolderTests
         const string TITLE = "title 42";
 
         // Act
-        var folder = new Folder(ID, TITLE);
+        var sut = new Folder(ID, TITLE);
 
         // Assert
-        folder.Id.Should().Be(ID);
-        folder.Title.Should().Be(TITLE);
+        sut.Id.Should().Be(ID);
+        sut.Title.Should().Be(TITLE);
     }
 
     #region Add task to folder
@@ -28,15 +28,15 @@ public class FolderTests
     public void AddNullTaskToFolder()
     {
         // Arrange
-        var folder = new Folder(title: "title 42");
+        var sut = new Folder(title: "title 42");
 
         // Act
-        Action action = () => folder.AddTask(task: null);
+        Action action = () => sut.AddTask(task: null);
 
         // Assert
         action.Should().Throw<ArgumentNullException>()
                        .WithParameterName(paramName: "task");
-        folder.Tasks.Should().BeEmpty();
+        sut.Tasks.Should().BeEmpty();
     }
 
     [Test]
@@ -51,13 +51,13 @@ public class FolderTests
 
         const int ID = 42;
         const string TITLE = "title 42";
-        var folder = new Folder(ID, TITLE);
+        var sut = new Folder(ID, TITLE);
 
         // Act
-        folder.AddTask(task);
+        sut.AddTask(task);
 
         // Assert
-        folder.Tasks.Should().Equal(expectedTasks);
+        sut.Tasks.Should().Equal(expectedTasks);
     }
 
     [Test]
@@ -71,15 +71,15 @@ public class FolderTests
 
         const int ID = 42;
         const string TITLE = "title 42";
-        var folder = new Folder(ID, TITLE);
+        var sut = new Folder(ID, TITLE);
 
         // Act & Assert
-        folder.AddTask(task);
-        folder.Tasks.Should().ContainSingle(t => t.Equals(task));
+        sut.AddTask(task);
+        sut.Tasks.Should().ContainSingle(t => t.Equals(task));
 
         var otherTask = new UserTask(TASK_ID, TASK_TITLE, TASK_DESCRIPTION);
-        folder.AddTask(otherTask);
-        folder.Tasks.Should().ContainSingle(t => t.Equals(task));
+        sut.AddTask(otherTask);
+        sut.Tasks.Should().ContainSingle(t => t.Equals(task));
     }
     #endregion
 
@@ -88,10 +88,10 @@ public class FolderTests
     public void GetIncompleteTaskCountWhenFolderIsEmpty()
     {
         // Arrange
-        var folder = new Folder(title: "title 42");
+        var sut = new Folder(title: "title 42");
 
         // Act
-        var incompleteTaskCount = folder.IncompleteTaskCount;
+        var incompleteTaskCount = sut.IncompleteTaskCount;
 
         // Assert
         incompleteTaskCount.Should().Be(0);
@@ -101,7 +101,7 @@ public class FolderTests
     public void GetIncompleteTaskCountWhenFolderHasDifferentTasks()
     {
         // Arrange
-        var folder = new Folder(title: "title 42_1");
+        var sut = new Folder(title: "title 42_1");
 
         var incompleteTask = new UserTask(title: "title 42_2", description: "description 42_2");
         var completedTask = new UserTask(title: "title 42_3", description: "description 42_3");
@@ -109,12 +109,12 @@ public class FolderTests
         var deletedTask = new UserTask(title: "title 42_4", description: "description 42_4");
         deletedTask.Delete(new DateTime(year: 2022, month: 2, day: 20));
 
-        folder.AddTask(incompleteTask);
-        folder.AddTask(completedTask);
-        folder.AddTask(deletedTask);
+        sut.AddTask(incompleteTask);
+        sut.AddTask(completedTask);
+        sut.AddTask(deletedTask);
 
         // Act
-        var incompleteTaskCount = folder.IncompleteTaskCount;
+        var incompleteTaskCount = sut.IncompleteTaskCount;
 
         // Assert
         incompleteTaskCount.Should().Be(1);
