@@ -1,17 +1,9 @@
 import React from 'react';
 import IFolder from '../interfaces/IFolder';
 
-class Folder extends React.Component<IFolderProps, IFolderState> {
-    constructor(props: IFolderProps) {
-        super(props);
-        
-        this.state = {
-            folder: props.folder
-        };
-    }
-
+class Folder extends React.Component<IFolderProps> {
     render() {
-        const folder = this.state.folder;
+        const folder = this.props.folder;
         return (
             <div>
                 ID: {folder.id}<br />
@@ -23,10 +15,6 @@ class Folder extends React.Component<IFolderProps, IFolderState> {
 }
 
 interface IFolderProps {
-    folder: IFolder;
-}
-
-interface IFolderState {
     folder: IFolder;
 }
 
