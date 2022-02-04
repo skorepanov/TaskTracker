@@ -21,4 +21,12 @@ public class TaskController : ControllerBase
         var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
         return taskVms;
     }
+
+    [Route("deleted")]
+    public IReadOnlyCollection<DeletedUserTaskVm> GetDeletedTasks()
+    {
+        var tasks = _taskService.GetDeletedTasks();
+        var taskVms = DeletedUserTaskVm.CreateCollectionFrom(tasks);
+        return taskVms;
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace TaskTracker.Web;
 
-// TODO create several view models for completed, incomplete and deleted tasks
+// TODO create several view models for completed and incomplete tasks
 public class UserTaskVm
 {
     public int Id { get; }

@@ -6,6 +6,7 @@ public interface ITaskRepository
 {
     UserTask GetTask(int taskId);
     IReadOnlyCollection<UserTask> GetNonDeletedTasks();
+    IReadOnlyCollection<UserTask> GetDeletedTasks();
 
     Folder GetFolder(int folderId);
     IReadOnlyCollection<Folder> GetFolders();

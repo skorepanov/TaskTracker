@@ -4,6 +4,7 @@ import ITask from '../interfaces/ITask';
 class Task extends React.Component<ITaskProps> {
     render() {
         const task = this.props.task;
+
         return (
             <div>
                 ID: {task.id}<br />

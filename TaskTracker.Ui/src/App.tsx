@@ -3,8 +3,10 @@ import React from 'react';
 import { AppUrl, Api } from './api';
 import Folder from './components/Folder';
 import Task from './components/Task';
+import DeletedTask from './components/DeletedTask';
 import IFolder from './interfaces/IFolder';
 import ITask from './interfaces/ITask';
+import IDeletedTask from './interfaces/IDeletedTask'
 
 class App extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
@@ -13,6 +15,7 @@ class App extends React.Component<IAppProps, IAppState> {
         this.state = {
             folders: [],
             todayTasks: [],
+            deletedTasks: [],
         };
     }
 
@@ -30,9 +33,17 @@ class App extends React.Component<IAppProps, IAppState> {
         return this.setState({ todayTasks: tasks });
     }
 
+    async loadDeletedTasks() {
+        const url = `${AppUrl}/tasks/deleted`;
+
+        const tasks = await Api.get<IDeletedTask[]>(url);
+        return this.setState({ deletedTasks: tasks });
+    }
+
     componentDidMount() {
         this.loadFolders();
         this.loadTodayTasks();
+        this.loadDeletedTasks();
     }
 
     render() {
@@ -50,6 +61,12 @@ class App extends React.Component<IAppProps, IAppState> {
                     <Task task={t} key={t.id} />
                 )
             }
+            <strong>Deleted tasks</strong>
+            {
+                this.state.deletedTasks.map(t =>
+                    <DeletedTask task={t} key={t.id} />
+                )
+            }
         </div>
         );
     }
@@ -61,6 +78,7 @@ interface IAppProps {
 interface IAppState {
     folders: IFolder[];
     todayTasks: ITask[];
+    deletedTasks: IDeletedTask[];
 }
 
 export default App;

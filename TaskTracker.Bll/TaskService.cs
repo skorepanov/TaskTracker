@@ -93,6 +93,12 @@ public class TaskService
         return todayTasks;
     }
 
+    public IReadOnlyCollection<UserTask> GetDeletedTasks()
+    {
+        var tasks = _taskRepository.GetDeletedTasks();
+        return tasks;
+    }
+
     public IReadOnlyCollection<Folder> GetFolders()
     {
         var folders = _taskRepository.GetFolders();
