@@ -20,7 +20,7 @@ public class TaskServiceTests
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => sut.CreateTask(title: "title 42",
+        var action = () => sut.CreateTask(title: "title 42",
             description: "description 42", folderId: 42);
 
         // Assert
@@ -70,7 +70,7 @@ public class TaskServiceTests
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => sut.CompleteTask(taskId: 42);
+        var action = () => sut.CompleteTask(taskId: 42);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
@@ -113,7 +113,7 @@ public class TaskServiceTests
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => sut.IncompleteTask(taskId: 42);
+        var action = () => sut.IncompleteTask(taskId: 42);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
@@ -158,7 +158,7 @@ public class TaskServiceTests
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => sut.DeleteTask(taskId: 42);
+        var action = () => sut.DeleteTask(taskId: 42);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
@@ -223,7 +223,7 @@ public class TaskServiceTests
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => sut.MoveTaskToOtherFolder(taskId: 42_1, destinationFolderId: 42_2);
+        var action = () => sut.MoveTaskToOtherFolder(taskId: 42_1, destinationFolderId: 42_2);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
@@ -249,7 +249,7 @@ public class TaskServiceTests
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        Action action = () => sut.MoveTaskToOtherFolder(TASK_ID, destinationFolderId: 42_2);
+        var action = () => sut.MoveTaskToOtherFolder(TASK_ID, destinationFolderId: 42_2);
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()

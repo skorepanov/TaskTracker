@@ -16,7 +16,7 @@ public class FolderTests
         var sut = new Folder(title: "title 42");
 
         // Act
-        Action action = () => sut.AddTask(task: null);
+        var action = () => sut.AddTask(task: null);
 
         // Assert
         action.Should().Throw<ArgumentNullException>()
