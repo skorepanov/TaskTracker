@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TaskTracker.Bll;
+﻿using TaskTracker.Bll;
 
 namespace TaskTracker.Web;
 

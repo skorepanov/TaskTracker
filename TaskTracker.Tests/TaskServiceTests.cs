@@ -1,10 +1,4 @@
-﻿using System;
-using FluentAssertions;
-using Moq;
-using NUnit.Framework;
-using TaskTracker.Bll;
-
-namespace TaskTracker.Tests;
+﻿namespace TaskTracker.Tests;
 
 public class TaskServiceTests
 {

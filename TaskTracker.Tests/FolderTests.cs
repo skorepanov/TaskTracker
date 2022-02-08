@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
-using NUnit.Framework;
-using TaskTracker.Bll;
-
-namespace TaskTracker.Tests;
+﻿namespace TaskTracker.Tests;
 
 public class FolderTests
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace TaskTracker.Bll;
+﻿namespace TaskTracker.Bll;
 
 public class Folder
 {

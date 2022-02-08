@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TaskTracker.Bll;
+﻿namespace TaskTracker.Bll;
 
 public interface ITaskRepository
 {
