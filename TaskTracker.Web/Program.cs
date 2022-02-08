@@ -8,6 +8,9 @@ builder.Services.AddControllers();
 builder.Services.AddServices();
 builder.Services.AddRepositories();
 
+var connectionString = builder.Configuration.GetConnectionString(name: "Default");
+builder.Services.ConfigureDbContext(connectionString);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

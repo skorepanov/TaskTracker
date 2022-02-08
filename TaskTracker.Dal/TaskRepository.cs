@@ -1,13 +1,21 @@
-﻿using TaskTracker.Bll;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskTracker.Bll;
 
 namespace TaskTracker.Dal;
 
-// TODO create field with tasks and folders, use it; later - real DB
+// TODO use real DB
 public class TaskRepository : ITaskRepository
 {
+    private readonly ApplicationContext _db;
+
+    public TaskRepository(ApplicationContext db)
+    {
+        this._db = db;
+    }
+
     public UserTask GetTask(int taskId)
     {
-        throw new System.NotImplementedException();
+        return this._db.Tasks.Find(taskId);
     }
 
     public IReadOnlyCollection<UserTask> GetNonDeletedTasks()
@@ -46,11 +54,7 @@ public class TaskRepository : ITaskRepository
 
     public IReadOnlyCollection<Folder> GetFolders()
     {
-        var testTask = new UserTask(title: "Test task", description: "Test description");
-        var testFolder1 = new Folder(id: 1, title: "Test folder 1");
-        testFolder1.AddTask(testTask);
-        var testFolder2 = new Folder(id: 2, "Test folder 2");
-        return new List<Folder> { testFolder1, testFolder2 };
+        return _db.Folders.Include(f => f.Tasks).ToList();
     }
 
     public void SaveNewTask(UserTask task, int folderId)

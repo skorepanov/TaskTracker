@@ -4,9 +4,9 @@ namespace TaskTracker.Bll;
 
 public class UserTask : IComparable
 {
-    public int Id { get; }
-    public string Title { get; }
-    public string Description { get; }
+    public int Id { get; private set; }
+    public string Title { get; private set; }
+    public string Description { get; private set; }
 
     public DateTime? CompletionDate { get; private set; }
     public bool IsCompleted => CompletionDate is not null;
@@ -15,6 +15,10 @@ public class UserTask : IComparable
 
     public DateTime? DeletionDate { get; private set; }
     public bool IsDeleted => DeletionDate is not null;
+
+    public Folder Folder { get; private set; }
+
+    private UserTask () { }
 
     public UserTask(int id, string title, string description)
     {
