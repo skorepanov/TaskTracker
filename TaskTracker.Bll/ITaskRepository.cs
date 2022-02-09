@@ -14,4 +14,6 @@ public interface ITaskRepository
 
     void UpdateTask(UserTask task);
     void UpdateTaskFolder(int taskId, int folderId);
+
+    void SaveChanges();
 }

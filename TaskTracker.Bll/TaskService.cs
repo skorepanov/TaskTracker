@@ -101,10 +101,11 @@ public class TaskService
         return folders;
     }
 
-    public Folder CreateFolder(string title)
+    public Folder CreateFolder(FolderChangeData changeData)
     {
-        var newFolder = new Folder(title);
+        var newFolder = Folder.CreateFolder(changeData);
         _taskRepository.SaveNewFolder(newFolder);
+        _taskRepository.SaveChanges();
         return newFolder;
     }
 

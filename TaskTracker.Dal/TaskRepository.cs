@@ -64,7 +64,7 @@ public class TaskRepository : ITaskRepository
 
     public void SaveNewFolder(Folder folder)
     {
-        throw new System.NotImplementedException();
+        _db.Folders.Add(folder);
     }
 
     public void UpdateTask(UserTask task)
@@ -75,5 +75,10 @@ public class TaskRepository : ITaskRepository
     public void UpdateTaskFolder(int taskId, int folderId)
     {
         throw new System.NotImplementedException();
+    }
+
+    public void SaveChanges()
+    {
+        _db.SaveChanges();
     }
 }

@@ -6,9 +6,11 @@ class Folder extends React.Component<IFolderProps> {
         const folder = this.props.folder;
         return (
             <div>
-                ID: {folder.id}<br />
-                Title: {folder.title}<br />
-                Incomplete task count: {folder.incompleteTaskCount}
+                <ul>
+                    <li>
+                        {folder.title} (не выполнено: {folder.incompleteTaskCount} задач) (id: {folder.id})
+                    </li>
+                </ul>
             </div>
         );
     }

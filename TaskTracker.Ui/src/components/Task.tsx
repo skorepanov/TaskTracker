@@ -8,8 +8,8 @@ class Task extends React.Component<ITaskProps> {
         return (
             <div>
                 ID: {task.id}<br />
-                Title: {task.title}<br />
-                Description: {task.description}
+                Заголовок: {task.title}<br />
+                Описание: {task.description}
             </div>
         );
     }

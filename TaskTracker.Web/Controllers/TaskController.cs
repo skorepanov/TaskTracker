@@ -14,18 +14,18 @@ public class TaskController : ControllerBase
     }
 
     [Route("today")]
-    public IReadOnlyCollection<UserTaskVm> GetTodayTasks()
+    public IActionResult GetTodayTasks()
     {
         var tasks = _taskService.GetTodayTasks();
         var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
-        return taskVms;
+        return Ok(taskVms);
     }
 
     [Route("deleted")]
-    public IReadOnlyCollection<DeletedUserTaskVm> GetDeletedTasks()
+    public IActionResult GetDeletedTasks()
     {
         var tasks = _taskService.GetDeletedTasks();
         var taskVms = DeletedUserTaskVm.CreateCollectionFrom(tasks);
-        return taskVms;
+        return Ok(taskVms);
     }
 }

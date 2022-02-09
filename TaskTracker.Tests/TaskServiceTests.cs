@@ -1,5 +1,6 @@
 ﻿namespace TaskTracker.Tests;
 
+// TODO rewrite to integration tests
 public class TaskServiceTests
 {
     #region Create task
@@ -191,12 +192,16 @@ public class TaskServiceTests
     {
         // Arrange
         const string TITLE = "title 42";
+        var folderChangeData = new FolderChangeData()
+        {
+            Title = TITLE
+        };
 
         var mockRepository = new Mock<ITaskRepository>();
         var taskService = new TaskService(mockRepository.Object);
 
         // Act
-        var sut = taskService.CreateFolder(TITLE);
+        var sut = taskService.CreateFolder(folderChangeData);
 
         // Assert
         sut.Title.Should().Be(TITLE);

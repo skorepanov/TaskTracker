@@ -18,6 +18,7 @@ public class Folder
 
     private Folder() { }
 
+    // TODO make private
     public Folder(int id, string title)
     {
         this.Id = id;
@@ -25,9 +26,16 @@ public class Folder
         this._tasks = new List<UserTask>();
     }
 
+    // TODO make private
     public Folder(string title)
         : this(id: default, title)
     { }
+
+    public static Folder CreateFolder(FolderChangeData changeData)
+    {
+        // TODO validate changeData
+        return new Folder(changeData.Title);
+    }
 
     public void AddTask(UserTask task)
     {

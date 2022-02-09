@@ -5,15 +5,15 @@ class DeletedTask extends React.Component<IDeletedTaskProps> {
     render() {
         const task = this.props.task;
         const deletionDate = task.deletionDate
-            ? <span>Deletion date: {task.deletionDate}</span>
+            ? <span>Дата удаления: {task.deletionDate}</span>
             : null;
 
         return (
             <div>
                 <span style={{ color: 'grey' }}>
                     ID: {task.id}<br />
-                    Title: {task.title}<br />
-                    Description: {task.description}<br />
+                    Заголовок: {task.title}<br />
+                    Описание: {task.description}<br />
                     {deletionDate}
                 </span>
             </div>

@@ -3,6 +3,7 @@ import React from 'react';
 import { AppUrl, Api } from './api';
 import Folder from './components/Folder';
 import Task from './components/Task';
+import FolderCreationForm from './components/FolderCreationForm';
 import DeletedTask from './components/DeletedTask';
 import IFolder from './interfaces/IFolder';
 import ITask from './interfaces/ITask';
@@ -11,19 +12,28 @@ import IDeletedTask from './interfaces/IDeletedTask'
 class App extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);
-    
+
         this.state = {
             folders: [],
             todayTasks: [],
             deletedTasks: [],
         };
+
+        this.createFolder = this.createFolder.bind(this);
     }
 
     async loadFolders() {
         const url = `${AppUrl}/folders`;
-    
+
         const folders = await Api.get<IFolder[]>(url);
         return this.setState({ folders: folders });
+    }
+
+    async createFolder(title: string) {
+        const url = `${AppUrl}/folders`;
+
+        await Api.post<IFolder>(url, { title: title })
+        await this.loadFolders();
     }
 
     async loadTodayTasks() {
@@ -49,24 +59,28 @@ class App extends React.Component<IAppProps, IAppState> {
     render() {
         return (
         <div>
-            <strong>Folders</strong>
+            <strong>Папки</strong>
             {
                 this.state.folders.map(f =>
                     <Folder folder={f} key={f.id} />
                 )
             }
-            <strong>Today tasks</strong>
+            <br />
+            <strong>Задачи на сегодня</strong>
             {
                 this.state.todayTasks.map(t =>
                     <Task task={t} key={t.id} />
                 )
             }
-            <strong>Deleted tasks</strong>
+            <br />
+            <strong>Удалённые задачи</strong>
             {
                 this.state.deletedTasks.map(t =>
                     <DeletedTask task={t} key={t.id} />
                 )
             }
+            <br />
+            <FolderCreationForm createFolder={this.createFolder} />
         </div>
         );
     }
