@@ -13,6 +13,14 @@ public class TaskController : ControllerBase
         this._taskService = taskService;
     }
 
+    [HttpPost]
+    public IActionResult CreateTask([FromBody] UserTaskChangeData changeData)
+    {
+        var task = _taskService.CreateTask(changeData);
+        var taskVm = new UserTaskVm(task, DateTime.Now);
+        return Ok(taskVm);
+    }
+
     [Route("today")]
     public IActionResult GetTodayTasks()
     {

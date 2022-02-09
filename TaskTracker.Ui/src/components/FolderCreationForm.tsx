@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Button } from 'antd';
+import { Input, Button, Space } from 'antd';
 
 class FolderCreationForm extends React.Component<IFolderCreationFormProps, IFolderCreationFormState> {
     constructor(props: IFolderCreationFormProps) {
@@ -8,12 +8,10 @@ class FolderCreationForm extends React.Component<IFolderCreationFormProps, IFold
         this.state = {
             title: ''
         };
-
-        this.createTask = this.createTask.bind(this);
     }
 
-    async createTask() {
-        let title = this.state.title;
+    async createFolder() {
+        const { title } = this.state;
         await this.props.createFolder(title);
         this.setState({ title: '' });
     }
@@ -28,18 +26,19 @@ class FolderCreationForm extends React.Component<IFolderCreationFormProps, IFold
 
     render() {
         return (
-            <div>
-                <strong>Новая папка</strong><br />
+            <Space direction='vertical'>
+                <strong>Новая папка</strong>
                 <Input
-                    placeholder="Название папки"
+                    placeholder='Название папки'
                     value={this.state.title}
-                    onChange={(e) => this.onTitleChange(e) }
+                    onChange={e => this.onTitleChange(e)}
+                    style={{ width: 300 }}
                 />
                 <Button
-                    onClick={this.createTask}
+                    onClick={() => this.createFolder()}
                     disabled={this.isButtonDisabled()}
                 >Добавить</Button>
-            </div>
+            </Space>
         );
     }
 }

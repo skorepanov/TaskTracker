@@ -14,10 +14,12 @@ public class UserTask : IComparable
     public DateTime? DeletionDate { get; private set; }
     public bool IsDeleted => DeletionDate is not null;
 
+    // TODO remove navigation property
     public Folder Folder { get; private set; }
 
     private UserTask () { }
 
+    // TODO make private
     public UserTask(int id, string title, string description)
     {
         this.Id = id;
@@ -25,9 +27,22 @@ public class UserTask : IComparable
         this.Description = description;
     }
 
+    // TODO make private
     public UserTask(string title, string description)
         : this(id: default, title, description)
     { }
+
+    private UserTask(string title, string description, Folder folder)
+        : this(id: default, title, description)
+    {
+        this.Folder = folder;
+    }
+
+    public static UserTask CreateTask(UserTaskChangeData changeData, Folder folder)
+    {
+        // TODO validate changeData
+        return new UserTask(changeData.Title, changeData.Description, folder);
+    }
 
     public void Complete(DateTime completionDate)
     {

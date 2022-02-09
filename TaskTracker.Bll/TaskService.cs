@@ -9,17 +9,19 @@ public class TaskService
         this._taskRepository = taskRepository;
     }
 
-    public UserTask CreateTask(string title, string description, int folderId)
+    public UserTask CreateTask(UserTaskChangeData changeData)
     {
-        var newTask = new UserTask(title, description);
+        var folder = _taskRepository.GetFolder(changeData.FolderId);
 
-        if (_taskRepository.GetFolder(folderId) is null)
+        if (folder is null)
         {
             throw new DomainEntityNotFoundException(typeof(Folder),
                                                     message: "Папка не обнаружена");
         }
 
-        _taskRepository.SaveNewTask(newTask, folderId);
+        var newTask = UserTask.CreateTask(changeData, folder);
+        _taskRepository.SaveNewTask(newTask);
+        _taskRepository.SaveChanges();
         return newTask;
     }
 

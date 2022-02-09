@@ -17,7 +17,8 @@ public class FolderController : ControllerBase
     public IActionResult CreateFolder([FromBody] FolderChangeData changeData)
     {
         var folder = _taskService.CreateFolder(changeData);
-        return Ok(folder);
+        var folderVm = new FolderVm(folder);
+        return Ok(folderVm);
     }
 
     [HttpGet]

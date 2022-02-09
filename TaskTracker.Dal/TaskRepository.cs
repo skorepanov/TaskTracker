@@ -48,9 +48,9 @@ public class TaskRepository : ITaskRepository
         return _db.Folders.Include(f => f.Tasks).ToList();
     }
 
-    public void SaveNewTask(UserTask task, int folderId)
+    public void SaveNewTask(UserTask task)
     {
-        throw new System.NotImplementedException();
+        _db.Tasks.Add(task);
     }
 
     public void SaveNewFolder(Folder folder)
