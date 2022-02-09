@@ -19,24 +19,17 @@ public class UserTask : IComparable
 
     private UserTask () { }
 
-    // TODO make private
-    public UserTask(int id, string title, string description)
+    private UserTask(int id, string title, string description, Folder folder)
     {
         this.Id = id;
         this.Title = title;
         this.Description = description;
-    }
-
-    // TODO make private
-    public UserTask(string title, string description)
-        : this(id: default, title, description)
-    { }
-
-    private UserTask(string title, string description, Folder folder)
-        : this(id: default, title, description)
-    {
         this.Folder = folder;
     }
+
+    private UserTask(string title, string description, Folder folder)
+        : this(id: default, title, description, folder)
+    { }
 
     public static UserTask CreateTask(UserTaskChangeData changeData, Folder folder)
     {

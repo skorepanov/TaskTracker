@@ -88,7 +88,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42;
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var task = CreateTask(TASK_ID);
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -131,7 +131,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42;
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var task = CreateTask(TASK_ID);
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -176,7 +176,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42;
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var task = CreateTask(TASK_ID);
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -245,7 +245,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42_1;
-        var task = new UserTask(title: "title 42", description: "description 42");
+        var task = CreateTask(TASK_ID);
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -260,8 +260,8 @@ public class TaskServiceTests
 
         // Assert
         action.Should().Throw<DomainEntityNotFoundException>()
-            .WithMessage("Папка не обнаружена")
-            .And.DomainEntityType.Should().Be(typeof(Folder));
+                       .WithMessage("Папка не обнаружена")
+                       .And.DomainEntityType.Should().Be(typeof(Folder));
         mockRepository.Verify(r => r.UpdateTaskFolder(It.IsAny<int>(), It.IsAny<int>()),
                               Times.Never);
     }
@@ -271,7 +271,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42_1;
-        var task = new UserTask(title: "title 42_1", description: "description 42_1");
+        var task = CreateTask(TASK_ID);
 
         const int FOLDER_ID = 42_2;
         var folder = CreateFolder(FOLDER_ID);
@@ -302,6 +302,20 @@ public class TaskServiceTests
         };
 
         return Folder.CreateFolder(folderChangeData);
+    }
+
+    private UserTask CreateTask(int id = 42, string title = "Task title 42",
+        string description = "Description 42", Folder folder = default)
+    {
+        var userTaskChangeData = new UserTaskChangeData
+        {
+            Id = id,
+            Title = title,
+            Description = description,
+            FolderId = folder?.Id ?? default,
+        };
+
+        return UserTask.CreateTask(userTaskChangeData, folder);
     }
     #endregion
 }

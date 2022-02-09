@@ -20,10 +20,22 @@ public class TaskRepository : ITaskRepository
 
     public IReadOnlyCollection<UserTask> GetNonDeletedTasks()
     {
-        var completedTask = new UserTask(id: 3, title: "Completed task", description: "Description");
+        var completedUserTaskChangeData = new UserTaskChangeData
+        {
+            Id = 3,
+            Title = "Completed task",
+            Description = "Description",
+        };
+        var completedTask = UserTask.CreateTask(completedUserTaskChangeData, folder: null);
         completedTask.Complete(DateTime.Now);
 
-        var incompleteTask = new UserTask(id: 4, title: "Overdue task", description: "Description");
+        var incompleteUserTaskChangeData = new UserTaskChangeData
+        {
+            Id = 4,
+            Title = "Overdue task",
+            Description = "Description",
+        };
+        var incompleteTask = UserTask.CreateTask(incompleteUserTaskChangeData, folder: null);
         incompleteTask.DueDate = DateTime.Now.AddDays(-1);
 
         var tasks = new List<UserTask> { completedTask, incompleteTask };
@@ -32,7 +44,13 @@ public class TaskRepository : ITaskRepository
 
     public IReadOnlyCollection<UserTask> GetDeletedTasks()
     {
-        var deletedTask = new UserTask(id: 66, title: "Deleted task", description: "Description");
+        var changeData = new UserTaskChangeData
+        {
+            Id = 66,
+            Title = "Deleted task",
+            Description = "Description",
+        };
+        var deletedTask = UserTask.CreateTask(changeData, folder: null);
         deletedTask.Delete(DateTime.Now.AddDays(-1));
         var tasks = new List<UserTask> { deletedTask };
         return tasks;

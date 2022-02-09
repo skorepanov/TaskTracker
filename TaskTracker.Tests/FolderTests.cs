@@ -22,10 +22,7 @@ public class FolderTests
     public void AddOneTaskToFolder()
     {
         // Arrange
-        const int TASK_ID = 42;
-        const string TASK_TITLE = "title 42";
-        const string TASK_DESCRIPTION = "description 42";
-        var task = new UserTask(TASK_ID, TASK_TITLE, TASK_DESCRIPTION);
+        var task = CreateTask();
         var expectedTasks = new List<UserTask> { task };
 
         var sut = CreateSut();
@@ -42,9 +39,7 @@ public class FolderTests
     {
         // Arrange
         const int TASK_ID = 42;
-        const string TASK_TITLE = "title 42";
-        const string TASK_DESCRIPTION = "description 42";
-        var task = new UserTask(TASK_ID, TASK_TITLE, TASK_DESCRIPTION);
+        var task = CreateTask(TASK_ID);
 
         var sut = CreateSut();
 
@@ -52,7 +47,7 @@ public class FolderTests
         sut.AddTask(task);
         sut.Tasks.Should().ContainSingle(t => t.Equals(task));
 
-        var otherTask = new UserTask(TASK_ID, TASK_TITLE, TASK_DESCRIPTION);
+        var otherTask = CreateTask(TASK_ID);
         sut.AddTask(otherTask);
         sut.Tasks.Should().ContainSingle(t => t.Equals(task));
     }
@@ -78,10 +73,12 @@ public class FolderTests
         // Arrange
         var sut = CreateSut();
 
-        var incompleteTask = new UserTask(title: "title 42_2", description: "description 42_2");
-        var completedTask = new UserTask(title: "title 42_3", description: "description 42_3");
+        var incompleteTask = CreateTask(id: 42_1);
+
+        var completedTask = CreateTask(id: 42_2);
         completedTask.Complete(new DateTime(year: 2022, month: 1, day: 10));
-        var deletedTask = new UserTask(title: "title 42_4", description: "description 42_4");
+
+        var deletedTask = CreateTask(id: 42_3);
         deletedTask.Delete(new DateTime(year: 2022, month: 2, day: 20));
 
         sut.AddTask(incompleteTask);
@@ -106,6 +103,20 @@ public class FolderTests
         };
 
         return Folder.CreateFolder(folderChangeData);
+    }
+
+    private UserTask CreateTask(int id = 42, string title = "Task title 42",
+        string description = "Description 42", Folder folder = default)
+    {
+        var userTaskChangeData = new UserTaskChangeData
+        {
+            Id = id,
+            Title = title,
+            Description = description,
+            FolderId = folder?.Id ?? default,
+        };
+
+        return UserTask.CreateTask(userTaskChangeData, folder);
     }
     #endregion
 }

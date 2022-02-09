@@ -7,7 +7,7 @@ public class UserTaskTests
     public void CompleteTask()
     {
         // Arrange
-        var sut = new UserTask(title: "title 42", description: "description 42");
+        var sut = CreateSut();
         var completionDate = new DateTime(year: 2022, month: 2, day: 10);
 
         // Act
@@ -22,7 +22,7 @@ public class UserTaskTests
     public void IncompleteTask()
     {
         // Arrange
-        var sut = new UserTask(title: "title 42", description: "description 42");
+        var sut = CreateSut();
         var completionDate = new DateTime(year: 2022, month: 2, day: 10);
         sut.Complete(completionDate);
 
@@ -40,7 +40,7 @@ public class UserTaskTests
     public void CalculateOverdueDaysForTaskWithoutDueDate()
     {
         // Arrange
-        var sut = new UserTask(title: "title 42", description: "description 42");
+        var sut = CreateSut();
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
         // Act
@@ -55,7 +55,7 @@ public class UserTaskTests
     public void CalculateOverdueDaysForTaskWithDueDate()
     {
         // Arrange
-        var sut = new UserTask(title: "title 42", description: "description 42");
+        var sut = CreateSut();
 
         var dueDate = new DateTime(year: 2022, month: 2, day: 5);
         sut.DueDate = dueDate;
@@ -74,7 +74,7 @@ public class UserTaskTests
     public void CalculateOverdueDaysForNonOverdueTask()
     {
         // Arrange
-        var sut = new UserTask(title: "title 42", description: "description 42");
+        var sut = CreateSut();
 
         var dueDate = new DateTime(year: 2022, month: 2, day: 5);
         sut.DueDate = dueDate;
@@ -93,7 +93,7 @@ public class UserTaskTests
     public void CalculateOverdueDaysForTodayTask()
     {
         // Arrange
-        var sut = new UserTask(title: "title 42", description: "description 42");
+        var sut = CreateSut();
 
         var dueDate = new DateTime(year: 2022, month: 2, day: 5);
         sut.DueDate = dueDate;
@@ -112,7 +112,7 @@ public class UserTaskTests
     public void CalculateOverdueDaysForDeletedTask()
     {
         // Arrange
-        var sut = new UserTask(title: "title 42", description: "description 42");
+        var sut = CreateSut();
 
         var dueDate = new DateTime(year: 2022, month: 2, day: 5);
         sut.DueDate = dueDate;
@@ -138,7 +138,7 @@ public class UserTaskTests
         // Arrange
         var today = new DateTime(year: 2022, month: 2, day: 5);
 
-        var sut = new UserTask(title: "Title 42", description: "Description 42");
+        var sut = CreateSut();
         var completionDate = today;
         sut.Complete(completionDate);
 
@@ -153,7 +153,7 @@ public class UserTaskTests
     public void IsTodayTaskThatCompletedEarlier()
     {
         // Arrange
-        var sut = new UserTask(title: "Title 42", description: "Description 42");
+        var sut = CreateSut();
         var completionDate = new DateTime(year: 2022, month: 2, day: 5);
         sut.Complete(completionDate);
 
@@ -170,7 +170,7 @@ public class UserTaskTests
     public void IsTodayIncompleteTaskWithoutDueDate()
     {
         // Arrange
-        var sut = new UserTask(title: "Title 42", description: "Description 42");
+        var sut = CreateSut();
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
         // Act
@@ -185,7 +185,7 @@ public class UserTaskTests
                                                  bool expectedResult)
     {
         // Arrange
-        var sut = new UserTask(title: "Title 42", description: "Description 42");
+        var sut = CreateSut();
         sut.DueDate = dueDate;
 
         // Act
@@ -214,7 +214,7 @@ public class UserTaskTests
     public void IsTodayDeletedTask(DateTime deletionDate, DateTime today)
     {
         // Arrange
-        var sut = new UserTask(title: "Title 42", description: "Description 42");
+        var sut = CreateSut();
         sut.DueDate = today;
         sut.Delete(deletionDate);
 
@@ -240,7 +240,7 @@ public class UserTaskTests
     public void DeleteTask()
     {
         // Arrange
-        var sut = new UserTask(title: "title 42", description: "description 42");
+        var sut = CreateSut();
         var deletionDate = new DateTime(year: 2022, month: 2, day: 10);
 
         // Act
@@ -249,6 +249,22 @@ public class UserTaskTests
         // Assert
         sut.DeletionDate.Should().Be(deletionDate);
         sut.IsDeleted.Should().BeTrue();
+    }
+    #endregion
+
+    #region helpers
+    private UserTask CreateSut(int id = 42, string title = "Task title 42",
+        string description = "Description 42", Folder folder = default)
+    {
+        var userTaskChangeData = new UserTaskChangeData
+        {
+            Id = id,
+            Title = title,
+            Description = description,
+            FolderId = folder?.Id ?? default,
+        };
+
+        return UserTask.CreateTask(userTaskChangeData, folder);
     }
     #endregion
 }
