@@ -18,16 +18,14 @@ public class Folder
 
     private Folder() { }
 
-    // TODO make private
-    public Folder(int id, string title)
+    private Folder(int id, string title)
     {
         this.Id = id;
         this.Title = title;
         this._tasks = new List<UserTask>();
     }
 
-    // TODO make private
-    public Folder(string title)
+    private Folder(string title)
         : this(id: default, title)
     { }
 

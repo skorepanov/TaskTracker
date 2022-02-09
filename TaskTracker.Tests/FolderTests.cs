@@ -7,7 +7,7 @@ public class FolderTests
     public void AddNullTaskToFolder()
     {
         // Arrange
-        var sut = new Folder(title: "title 42");
+        var sut = CreateSut();
 
         // Act
         var action = () => sut.AddTask(task: null);
@@ -28,9 +28,7 @@ public class FolderTests
         var task = new UserTask(TASK_ID, TASK_TITLE, TASK_DESCRIPTION);
         var expectedTasks = new List<UserTask> { task };
 
-        const int ID = 42;
-        const string TITLE = "title 42";
-        var sut = new Folder(ID, TITLE);
+        var sut = CreateSut();
 
         // Act
         sut.AddTask(task);
@@ -48,9 +46,7 @@ public class FolderTests
         const string TASK_DESCRIPTION = "description 42";
         var task = new UserTask(TASK_ID, TASK_TITLE, TASK_DESCRIPTION);
 
-        const int ID = 42;
-        const string TITLE = "title 42";
-        var sut = new Folder(ID, TITLE);
+        var sut = CreateSut();
 
         // Act & Assert
         sut.AddTask(task);
@@ -67,7 +63,7 @@ public class FolderTests
     public void GetIncompleteTaskCountWhenFolderIsEmpty()
     {
         // Arrange
-        var sut = new Folder(title: "title 42");
+        var sut = CreateSut();
 
         // Act
         var incompleteTaskCount = sut.IncompleteTaskCount;
@@ -80,7 +76,7 @@ public class FolderTests
     public void GetIncompleteTaskCountWhenFolderHasDifferentTasks()
     {
         // Arrange
-        var sut = new Folder(title: "title 42_1");
+        var sut = CreateSut();
 
         var incompleteTask = new UserTask(title: "title 42_2", description: "description 42_2");
         var completedTask = new UserTask(title: "title 42_3", description: "description 42_3");
@@ -97,6 +93,19 @@ public class FolderTests
 
         // Assert
         incompleteTaskCount.Should().Be(1);
+    }
+    #endregion
+
+    #region helpers
+    private Folder CreateSut(int id = 42, string title = "Folder title 42")
+    {
+        var folderChangeData = new FolderChangeData
+        {
+            Id = id,
+            Title = title
+        };
+
+        return Folder.CreateFolder(folderChangeData);
     }
     #endregion
 }

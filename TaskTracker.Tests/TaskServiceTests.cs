@@ -34,7 +34,7 @@ public class TaskServiceTests
         const string DESCRIPTION = "description 42";
         const int FOLDER_ID = 42;
 
-        var folder = new Folder(title: "title 42");
+        var folder = CreateFolder(FOLDER_ID);
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
@@ -266,7 +266,7 @@ public class TaskServiceTests
         var task = new UserTask(title: "title 42_1", description: "description 42_1");
 
         const int FOLDER_ID = 42_2;
-        var folder = new Folder(title: "title 42_2");
+        var folder = CreateFolder(FOLDER_ID);
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -281,6 +281,19 @@ public class TaskServiceTests
 
         // Assert
         mockRepository.Verify(r => r.UpdateTaskFolder(TASK_ID, FOLDER_ID), Times.Once);
+    }
+    #endregion
+
+    #region helpers
+    private Folder CreateFolder(int id = default, string title = default)
+    {
+        var folderChangeData = new FolderChangeData
+        {
+            Id = id,
+            Title = title,
+        };
+
+        return Folder.CreateFolder(folderChangeData);
     }
     #endregion
 }
