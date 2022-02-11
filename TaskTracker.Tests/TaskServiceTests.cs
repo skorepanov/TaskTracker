@@ -23,7 +23,7 @@ public class TaskServiceTests
         action.Should().Throw<DomainEntityNotFoundException>()
             .WithMessage("Папка не обнаружена")
             .And.DomainEntityType.Should().Be(typeof(Folder));
-        mockRepository.Verify(r => r.SaveNewTask(It.IsAny<UserTask>()),
+        mockRepository.Verify(r => r.SaveNewTask(It.IsAny<UserTask>(), It.IsAny<int>()),
                               Times.Never);
     }
 
@@ -56,7 +56,7 @@ public class TaskServiceTests
         // Assert
         task.Title.Should().Be(TITLE);
         task.Description.Should().Be(DESCRIPTION);
-        mockRepository.Verify(r => r.SaveNewTask(It.IsAny<UserTask>()),
+        mockRepository.Verify(r => r.SaveNewTask(It.IsAny<UserTask>(), It.IsAny<int>()),
                               Times.Once);
     }
     #endregion
@@ -305,17 +305,16 @@ public class TaskServiceTests
     }
 
     private UserTask CreateTask(int id = 42, string title = "Task title 42",
-        string description = "Description 42", Folder folder = default)
+                                string description = "Description 42")
     {
         var userTaskChangeData = new UserTaskChangeData
         {
             Id = id,
             Title = title,
             Description = description,
-            FolderId = folder?.Id ?? default,
         };
 
-        return UserTask.CreateTask(userTaskChangeData, folder);
+        return UserTask.CreateTask(userTaskChangeData);
     }
     #endregion
 }

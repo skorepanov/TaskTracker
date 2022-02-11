@@ -41,7 +41,7 @@ public class ApplicationContext : DbContext
             folder.Ignore(f => f.CompletedTasks);
             folder.Ignore(f => f.IncompleteTasks);
 
-            folder.HasMany(f => f.Tasks).WithOne(t => t.Folder);
+            folder.HasMany(f => f.Tasks).WithOne();
         });
     }
 }

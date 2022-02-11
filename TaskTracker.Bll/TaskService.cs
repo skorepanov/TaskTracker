@@ -19,9 +19,8 @@ public class TaskService
                                                     message: "Папка не обнаружена");
         }
 
-        var newTask = UserTask.CreateTask(changeData, folder);
-        _taskRepository.SaveNewTask(newTask);
-        _taskRepository.SaveChanges();
+        var newTask = UserTask.CreateTask(changeData);
+        _taskRepository.SaveNewTask(newTask, folder.Id);
         return newTask;
     }
 
@@ -107,7 +106,6 @@ public class TaskService
     {
         var newFolder = Folder.CreateFolder(changeData);
         _taskRepository.SaveNewFolder(newFolder);
-        _taskRepository.SaveChanges();
         return newFolder;
     }
 

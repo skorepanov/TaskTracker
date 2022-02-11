@@ -254,17 +254,16 @@ public class UserTaskTests
 
     #region helpers
     private UserTask CreateSut(int id = 42, string title = "Task title 42",
-        string description = "Description 42", Folder folder = default)
+                               string description = "Description 42")
     {
         var userTaskChangeData = new UserTaskChangeData
         {
             Id = id,
             Title = title,
             Description = description,
-            FolderId = folder?.Id ?? default,
         };
 
-        return UserTask.CreateTask(userTaskChangeData, folder);
+        return UserTask.CreateTask(userTaskChangeData);
     }
     #endregion
 }
