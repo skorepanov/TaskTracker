@@ -19,7 +19,7 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITaskCrea
     async createTask() {
         const { title, description, folderId } = this.state;
         await this.props.createTask(title, description, folderId);
-        this.setState({ title: '', description: '', folderId: 0 });
+        this.setState({ title: '', description: '' });
     }
 
     onTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
