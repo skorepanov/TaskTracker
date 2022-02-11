@@ -3,7 +3,6 @@ using TaskTracker.Bll;
 
 namespace TaskTracker.Dal;
 
-// TODO use real DB
 public class TaskRepository : ITaskRepository
 {
     private readonly ApplicationContext _db;
@@ -13,13 +12,14 @@ public class TaskRepository : ITaskRepository
         this._db = db;
     }
 
-    public UserTask GetTask(int taskId)
+    public async Task<UserTask> GetTask(int taskId)
     {
-        return this._db.Tasks.Find(taskId);
+        return await this._db.Tasks.FindAsync(taskId);
     }
 
-    public IReadOnlyCollection<UserTask> GetNonDeletedTasks()
+    public async Task<IReadOnlyCollection<UserTask>> GetNonDeletedTasks()
     {
+        // TODO use real DB
         var completedUserTaskChangeData = new UserTaskChangeData
         {
             Id = 3,
@@ -42,8 +42,9 @@ public class TaskRepository : ITaskRepository
         return tasks;
     }
 
-    public IReadOnlyCollection<UserTask> GetDeletedTasks()
+    public async Task<IReadOnlyCollection<UserTask>> GetDeletedTasks()
     {
+        // TODO use real DB
         var changeData = new UserTaskChangeData
         {
             Id = 66,
@@ -56,35 +57,35 @@ public class TaskRepository : ITaskRepository
         return tasks;
     }
 
-    public Folder GetFolder(int folderId)
+    public async Task<Folder> GetFolder(int folderId)
     {
-        return _db.Folders.Find(folderId);
+        return await _db.Folders.FindAsync(folderId);
     }
 
-    public IReadOnlyCollection<Folder> GetFolders()
+    public async Task<IReadOnlyCollection<Folder>> GetFolders()
     {
-        return _db.Folders.Include(f => f.Tasks).ToList();
+        return await _db.Folders.Include(f => f.Tasks).ToListAsync();
     }
 
-    public void SaveNewTask(UserTask task, int folderId)
+    public async Task SaveNewTask(UserTask task, int folderId)
     {
         _db.Tasks.Add(task);
         _db.Entry(task).Property("FolderId").CurrentValue = folderId;
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
     }
 
-    public void SaveNewFolder(Folder folder)
+    public async Task SaveNewFolder(Folder folder)
     {
         _db.Folders.Add(folder);
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
     }
 
-    public void UpdateTask(UserTask task)
+    public async Task UpdateTask(UserTask task)
     {
         throw new System.NotImplementedException();
     }
 
-    public void UpdateTaskFolder(int taskId, int folderId)
+    public async Task UpdateTaskFolder(int taskId, int folderId)
     {
         throw new System.NotImplementedException();
     }

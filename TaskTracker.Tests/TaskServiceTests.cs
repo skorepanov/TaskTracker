@@ -1,16 +1,18 @@
-﻿namespace TaskTracker.Tests;
+﻿using System.Threading.Tasks;
+
+namespace TaskTracker.Tests;
 
 // TODO rewrite to integration tests
 public class TaskServiceTests
 {
     #region Create task
     [Test]
-    public void CreateTaskInNonExistentFolder()
+    public async Task CreateTaskInNonExistentFolder()
     {
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetFolder(It.IsAny<int>()))
-                      .Returns((Folder)null);
+                      .Returns(Task.FromResult((Folder)null));
 
         var userTaskChangeData = new UserTaskChangeData();
 
@@ -20,15 +22,15 @@ public class TaskServiceTests
         var action = () => sut.CreateTask(userTaskChangeData);
 
         // Assert
-        action.Should().Throw<DomainEntityNotFoundException>()
-            .WithMessage("Папка не обнаружена")
-            .And.DomainEntityType.Should().Be(typeof(Folder));
+        var exception = await action.Should().ThrowAsync<DomainEntityNotFoundException>()
+                                             .WithMessage("Папка не обнаружена");
+        exception.And.DomainEntityType.Should().Be(typeof(Folder));
         mockRepository.Verify(r => r.SaveNewTask(It.IsAny<UserTask>(), It.IsAny<int>()),
                               Times.Never);
     }
 
     [Test]
-    public void CreateTaskInExistentFolder()
+    public async Task CreateTaskInExistentFolder()
     {
         // Arrange
         const string TITLE = "title 42";
@@ -39,7 +41,7 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
-                      .Returns(folder);
+                      .Returns(Task.FromResult(folder));
 
         var userTaskChangeData = new UserTaskChangeData
         {
@@ -51,7 +53,7 @@ public class TaskServiceTests
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        var task = sut.CreateTask(userTaskChangeData);
+        var task = await sut.CreateTask(userTaskChangeData);
 
         // Assert
         task.Title.Should().Be(TITLE);
@@ -63,12 +65,12 @@ public class TaskServiceTests
 
     #region Complete and incomplete task
     [Test]
-    public void CompleteNonexistentTask()
+    public async Task CompleteNonexistentTask()
     {
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
-                      .Returns((UserTask)null);
+                      .Returns(Task.FromResult((UserTask)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -76,15 +78,15 @@ public class TaskServiceTests
         var action = () => sut.CompleteTask(taskId: 42);
 
         // Assert
-        action.Should().Throw<DomainEntityNotFoundException>()
-                       .WithMessage("Задача не обнаружена")
-                       .And.DomainEntityType.Should().Be(typeof(UserTask));
+        var exception = await action.Should().ThrowAsync<DomainEntityNotFoundException>()
+                                             .WithMessage("Задача не обнаружена");
+        exception.And.DomainEntityType.Should().Be(typeof(UserTask));
         mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
                               Times.Never);
     }
 
     [Test]
-    public void CompleteExistentTask()
+    public async Task CompleteExistentTask()
     {
         // Arrange
         const int TASK_ID = 42;
@@ -92,12 +94,12 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(task);
+                      .Returns(Task.FromResult(task));
 
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        sut.CompleteTask(TASK_ID);
+        await sut.CompleteTask(TASK_ID);
 
         // Assert
         // TODO check date?
@@ -106,12 +108,12 @@ public class TaskServiceTests
     }
 
     [Test]
-    public void IncompleteNonexistentTask()
+    public async Task IncompleteNonexistentTask()
     {
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
-                      .Returns((UserTask)null);
+                      .Returns(Task.FromResult((UserTask)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -119,15 +121,15 @@ public class TaskServiceTests
         var action = () => sut.IncompleteTask(taskId: 42);
 
         // Assert
-        action.Should().Throw<DomainEntityNotFoundException>()
-                       .WithMessage("Задача не обнаружена")
-                       .And.DomainEntityType.Should().Be(typeof(UserTask));
+        var exception = await action.Should().ThrowAsync<DomainEntityNotFoundException>()
+                                             .WithMessage("Задача не обнаружена");
+        exception.And.DomainEntityType.Should().Be(typeof(UserTask));
         mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
                               Times.Never);
     }
 
     [Test]
-    public void IncompleteExistentTask()
+    public async Task IncompleteExistentTask()
     {
         // Arrange
         const int TASK_ID = 42;
@@ -135,12 +137,12 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(task);
+                      .Returns(Task.FromResult(task));
 
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        sut.IncompleteTask(TASK_ID);
+        await sut.IncompleteTask(TASK_ID);
 
         // Assert
         // TODO check date?
@@ -151,12 +153,12 @@ public class TaskServiceTests
 
     #region Delete task
     [Test]
-    public void DeleteNonexistentTask()
+    public async Task DeleteNonexistentTask()
     {
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
-                      .Returns((UserTask)null);
+                      .Returns(Task.FromResult((UserTask)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -164,15 +166,15 @@ public class TaskServiceTests
         var action = () => sut.DeleteTask(taskId: 42);
 
         // Assert
-        action.Should().Throw<DomainEntityNotFoundException>()
-                       .WithMessage("Задача не обнаружена")
-                       .And.DomainEntityType.Should().Be(typeof(UserTask));
+        var exception = await action.Should().ThrowAsync<DomainEntityNotFoundException>()
+                                             .WithMessage("Задача не обнаружена");
+        exception.And.DomainEntityType.Should().Be(typeof(UserTask));
         mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
                               Times.Never);
     }
 
     [Test]
-    public void DeleteExistentTask()
+    public async Task DeleteExistentTask()
     {
         // Arrange
         const int TASK_ID = 42;
@@ -180,23 +182,23 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(task);
+                      .Returns(Task.FromResult(task));
 
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        sut.DeleteTask(TASK_ID);
+        await sut.DeleteTask(TASK_ID);
 
         // Assert
         // TODO check date?
         mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
                               Times.Once);
     }
-    #endregion
+     #endregion
 
     #region Create folder
     [Test]
-    public void CreateFolder()
+    public async Task CreateFolder()
     {
         // Arrange
         const string TITLE = "title 42";
@@ -209,7 +211,7 @@ public class TaskServiceTests
         var taskService = new TaskService(mockRepository.Object);
 
         // Act
-        var sut = taskService.CreateFolder(folderChangeData);
+        var sut = await taskService.CreateFolder(folderChangeData);
 
         // Assert
         sut.Title.Should().Be(TITLE);
@@ -220,12 +222,12 @@ public class TaskServiceTests
 
     #region Move task to other folder
     [Test]
-    public void MoveNonExistentTaskToOtherFolder()
+    public async Task MoveNonExistentTaskToOtherFolder()
     {
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
-                      .Returns((UserTask)null);
+                      .Returns(Task.FromResult((UserTask)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -233,15 +235,15 @@ public class TaskServiceTests
         var action = () => sut.MoveTaskToOtherFolder(taskId: 42_1, destinationFolderId: 42_2);
 
         // Assert
-        action.Should().Throw<DomainEntityNotFoundException>()
-            .WithMessage("Задача не обнаружена")
-            .And.DomainEntityType.Should().Be(typeof(UserTask));
+        var exception = await action.Should().ThrowAsync<DomainEntityNotFoundException>()
+                                             .WithMessage("Задача не обнаружена");
+        exception.And.DomainEntityType.Should().Be(typeof(UserTask));
         mockRepository.Verify(r => r.UpdateTaskFolder(It.IsAny<int>(), It.IsAny<int>()),
                               Times.Never);
     }
 
     [Test]
-    public void MoveTaskToNonExistentFolder()
+    public async Task MoveTaskToNonExistentFolder()
     {
         // Arrange
         const int TASK_ID = 42_1;
@@ -249,9 +251,9 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(task);
+                      .Returns(Task.FromResult(task));
         mockRepository.Setup(r => r.GetFolder(It.IsAny<int>()))
-                      .Returns((Folder)null);
+                      .Returns(Task.FromResult((Folder)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -259,15 +261,15 @@ public class TaskServiceTests
         var action = () => sut.MoveTaskToOtherFolder(TASK_ID, destinationFolderId: 42_2);
 
         // Assert
-        action.Should().Throw<DomainEntityNotFoundException>()
-                       .WithMessage("Папка не обнаружена")
-                       .And.DomainEntityType.Should().Be(typeof(Folder));
+        var exception = await action.Should().ThrowAsync<DomainEntityNotFoundException>()
+                                             .WithMessage("Папка не обнаружена");
+        exception.And.DomainEntityType.Should().Be(typeof(Folder));
         mockRepository.Verify(r => r.UpdateTaskFolder(It.IsAny<int>(), It.IsAny<int>()),
                               Times.Never);
     }
 
     [Test]
-    public void MoveTaskToFolder()
+    public async Task MoveTaskToFolder()
     {
         // Arrange
         const int TASK_ID = 42_1;
@@ -278,14 +280,14 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(task);
+                      .Returns(Task.FromResult(task));
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
-                      .Returns(folder);
+                      .Returns(Task.FromResult(folder));
 
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        sut.MoveTaskToOtherFolder(TASK_ID, FOLDER_ID);
+        await sut.MoveTaskToOtherFolder(TASK_ID, FOLDER_ID);
 
         // Assert
         mockRepository.Verify(r => r.UpdateTaskFolder(TASK_ID, FOLDER_ID), Times.Once);

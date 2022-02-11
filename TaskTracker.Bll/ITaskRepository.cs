@@ -1,17 +1,19 @@
-﻿namespace TaskTracker.Bll;
+﻿using System.Threading.Tasks;
+
+namespace TaskTracker.Bll;
 
 public interface ITaskRepository
 {
-    UserTask GetTask(int taskId);
-    IReadOnlyCollection<UserTask> GetNonDeletedTasks();
-    IReadOnlyCollection<UserTask> GetDeletedTasks();
+    Task<UserTask> GetTask(int taskId);
+    Task<IReadOnlyCollection<UserTask>> GetNonDeletedTasks();
+    Task<IReadOnlyCollection<UserTask>> GetDeletedTasks();
 
-    Folder GetFolder(int folderId);
-    IReadOnlyCollection<Folder> GetFolders();
+    Task<Folder> GetFolder(int folderId);
+    Task<IReadOnlyCollection<Folder>> GetFolders();
 
-    void SaveNewTask(UserTask task, int folderId);
-    void SaveNewFolder(Folder folder);
+    Task SaveNewTask(UserTask task, int folderId);
+    Task SaveNewFolder(Folder folder);
 
-    void UpdateTask(UserTask task);
-    void UpdateTaskFolder(int taskId, int folderId);
+    Task UpdateTask(UserTask task);
+    Task UpdateTaskFolder(int taskId, int folderId);
 }

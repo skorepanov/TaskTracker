@@ -15,35 +15,35 @@ public class FolderController : ControllerBase
 
     // TODO method should returns folder id only
     [HttpPost]
-    public IActionResult CreateFolder([FromBody] FolderChangeData changeData)
+    public async Task<IActionResult> CreateFolder([FromBody] FolderChangeData changeData)
     {
-        var folder = _taskService.CreateFolder(changeData);
+        var folder = await _taskService.CreateFolder(changeData);
         var folderVm = new FolderVm(folder);
         return Ok(folderVm);
     }
 
     [HttpGet]
-    public IActionResult GetFolders()
+    public async Task<IActionResult> GetFolders()
     {
-        var folders = _taskService.GetFolders();
+        var folders = await _taskService.GetFolders();
         var folderVms = FolderVm.CreateCollectionFrom(folders);
         return Ok(folderVms);
     }
 
     [HttpGet]
     [Route("{folderId:int}/incompleteTasks")]
-    public IActionResult GetIncompleteTasks(int folderId)
+    public async Task<IActionResult> GetIncompleteTasks(int folderId)
     {
-        var tasks = _taskService.GetIncompleteTasks(folderId);
+        var tasks = await _taskService.GetIncompleteTasks(folderId);
         var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
         return Ok(taskVms);
     }
 
     [HttpGet]
     [Route("{folderId:int}/completedTasks")]
-    public IActionResult GetCompletedTasks(int folderId)
+    public async Task<IActionResult> GetCompletedTasks(int folderId)
     {
-        var tasks = _taskService.GetCompletedTasks(folderId);
+        var tasks = await _taskService.GetCompletedTasks(folderId);
         var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
         return Ok(taskVms);
     }
