@@ -19,42 +19,12 @@ public class TaskRepository : ITaskRepository
 
     public async Task<IReadOnlyCollection<UserTask>> GetNonDeletedTasks()
     {
-        // TODO use real DB
-        var completedUserTaskChangeData = new UserTaskChangeData
-        {
-            Id = 3,
-            Title = "Completed task",
-            Description = "Description",
-        };
-        var completedTask = UserTask.CreateTask(completedUserTaskChangeData);
-        completedTask.Complete(DateTime.Now);
-
-        var incompleteUserTaskChangeData = new UserTaskChangeData
-        {
-            Id = 4,
-            Title = "Overdue task",
-            Description = "Description",
-        };
-        var incompleteTask = UserTask.CreateTask(incompleteUserTaskChangeData);
-        incompleteTask.DueDate = DateTime.Now.AddDays(-1);
-
-        var tasks = new List<UserTask> { completedTask, incompleteTask };
-        return tasks;
+        return await _db.Tasks.Where(t => t.DeletionDate == null).ToListAsync();
     }
 
     public async Task<IReadOnlyCollection<UserTask>> GetDeletedTasks()
     {
-        // TODO use real DB
-        var changeData = new UserTaskChangeData
-        {
-            Id = 66,
-            Title = "Deleted task",
-            Description = "Description",
-        };
-        var deletedTask = UserTask.CreateTask(changeData);
-        deletedTask.Delete(DateTime.Now.AddDays(-1));
-        var tasks = new List<UserTask> { deletedTask };
-        return tasks;
+        return await _db.Tasks.Where(t => t.DeletionDate != null).ToListAsync();
     }
 
     public async Task<Folder> GetFolder(int folderId)

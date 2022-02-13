@@ -1,25 +1,28 @@
 import React from 'react';
-import { Input, Select, Button, Space } from 'antd';
+import moment, { Moment } from 'moment';
+import { Input, Select, DatePicker, Button, Space } from 'antd';
 import IFolder from '../interfaces/IFolder';
+import ITask from '../interfaces/ITask';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITaskCreationFormState> {
+class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
     constructor(props: ITaskCreationFormProps) {
         super (props);
 
         this.state = {
+            id: null,
             title: '',
             description: '',
+            dueDate: null,
             folderId: 0,
         }
     }
 
     async createTask() {
-        const { title, description, folderId } = this.state;
-        await this.props.createTask(title, description, folderId);
-        this.setState({ title: '', description: '' });
+        await this.props.createTask(this.state);
+        this.setState({ title: '', description: '', dueDate: null });
     }
 
     onTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -28,6 +31,11 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITaskCrea
 
     onDescriptionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         this.setState({ description: e.target.value });
+    }
+
+    onDueDateChange(date: Moment | null) {
+        const dueDate = date?.toDate() ?? null;
+        this.setState({ dueDate });
     }
 
     onFolderChange(id: number) {
@@ -40,6 +48,10 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITaskCrea
     }
 
     render() {
+        const dueDate = this.state.dueDate !== null
+            ? moment(this.state.dueDate)
+            : null;
+
         return (
             <Space direction='vertical'>
                 <strong>Новая задача</strong>
@@ -54,6 +66,11 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITaskCrea
                     value={this.state.description}
                     onChange={e => this.onDescriptionChange(e)}
                     style={{ width: 300 }}
+                />
+                <DatePicker
+                    placeholder='Дата'
+                    value={dueDate}
+                    onChange={date => this.onDueDateChange(date)}
                 />
                 <Select
                     placeholder='Папка'
@@ -79,11 +96,5 @@ export default TaskCreationForm;
 
 interface ITaskCreationFormProps {
     folders: IFolder[];
-    createTask: (title: string, description: string, folderId: number) => Promise<void>;
-}
-
-interface ITaskCreationFormState {
-    title: string;
-    description: string;
-    folderId: number;
+    createTask: (task: ITask) => Promise<void>;
 }

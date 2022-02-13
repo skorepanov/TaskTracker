@@ -38,9 +38,10 @@ class App extends React.Component<IAppProps, IAppState> {
         await this.loadFolders();
     }
 
-    createTask = async (title: string, description: string, folderId: number) => {
+    createTask = async (task: ITask) => {
         const url = `${AppUrl}/tasks`;
-        const params = { title: title, description: description, folderId: folderId };
+        const params = { title: task.title, description: task.description,
+                         dueDate: task.dueDate, folderId: task.folderId };
 
         await Api.post<ITask>(url, params);
         this.loadFolders();

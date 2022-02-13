@@ -16,21 +16,17 @@ public class UserTask : IComparable
 
     private UserTask () { }
 
-    private UserTask(int id, string title, string description)
+    private UserTask(string title, string description, DateTime? dueDate)
     {
-        this.Id = id;
         this.Title = title;
         this.Description = description;
+        this.DueDate = dueDate;
     }
-
-    private UserTask(string title, string description)
-        : this(id: default, title, description)
-    { }
 
     public static UserTask CreateTask(UserTaskChangeData changeData)
     {
         // TODO validate changeData
-        return new UserTask(changeData.Title, changeData.Description);
+        return new UserTask(changeData.Title, changeData.Description, changeData.DueDate);
     }
 
     public void Complete(DateTime completionDate)
