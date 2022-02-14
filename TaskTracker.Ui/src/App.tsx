@@ -35,7 +35,7 @@ class App extends React.Component<IAppProps, IAppState> {
         const folders = this.state.folders;
         const folder = folders.find(f => f.id === folderId);
 
-        if (folder === undefined) {
+        if (folder == null) {
             return;
         }
 

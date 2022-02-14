@@ -7,7 +7,7 @@ const { Panel } = Collapse;
 
 class FolderList extends React.Component<IFolderListProps> {
     onCollapseChange(folderIds: string | string[] | undefined) {
-        if (folderIds === undefined || folderIds.length === 0) {
+        if (folderIds == null || folderIds.length === 0) {
             return;
         }
 
