@@ -4,18 +4,20 @@ import IDeletedTask from '../interfaces/IDeletedTask';
 class DeletedTask extends React.Component<IDeletedTaskProps> {
     render() {
         const task = this.props.task;
+
+        const description = task.description?.length > 0
+            ? <><i>{task.description}</i><br /></>
+            : null;
+
         const deletionDate = task.deletionDate
             ? <span>Дата удаления: {task.deletionDate}</span>
             : null;
 
         return (
-            <div>
-                <span style={{ color: 'grey' }}>
-                    ID: {task.id}<br />
-                    Заголовок: {task.title}<br />
-                    Описание: {task.description}<br />
-                    {deletionDate}
-                </span>
+            <div style={{ color: 'grey', marginBottom: 10 }}>
+                [{task.id}] {task.title}<br />
+                {description}
+                {deletionDate}
             </div>
         );
     }

@@ -15,6 +15,7 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
             id: null,
             title: '',
             description: '',
+            completionDate: null,
             dueDate: null,
             folderId: 0,
         }

@@ -29,7 +29,9 @@ public class TaskRepository : ITaskRepository
 
     public async Task<Folder> GetFolder(int folderId)
     {
-        return await _db.Folders.FindAsync(folderId);
+        return await _db.Folders
+            .Include(f => f.Tasks)
+            .SingleOrDefaultAsync(f => f.Id == folderId);
     }
 
     public async Task<IReadOnlyCollection<Folder>> GetFolders()

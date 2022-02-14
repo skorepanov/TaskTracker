@@ -2,11 +2,11 @@ import React from 'react';
 import { Space } from 'antd';
 
 import { AppUrl, Api } from './api';
-import Folder from './components/Folder';
 import Task from './components/Task';
 import FolderCreationForm from './components/FolderCreationForm';
 import TaskCreationForm from './components/TaskCreationForm';
 import DeletedTask from './components/DeletedTask';
+import FolderList from './components/FolderList';
 import IFolder from './interfaces/IFolder';
 import ITask from './interfaces/ITask';
 import IDeletedTask from './interfaces/IDeletedTask';
@@ -31,6 +31,30 @@ class App extends React.Component<IAppProps, IAppState> {
         return this.setState({ folders: folders });
     }
 
+    loadFolderTasks = async (folderId: number, isForcedLoad: boolean = false) => {
+        const folders = this.state.folders;
+        const folder = folders.find(f => f.id === folderId);
+
+        if (folder === undefined) {
+            return;
+        }
+
+        if (!isForcedLoad && Array.isArray(folder.tasks) && folder.tasks.length > 0) {
+            return;
+        }
+
+        // TODO add paging for completed tasks
+        const incompleteTasksUrl = `${AppUrl}/folders/${folderId}/incompleteTasks`;
+        const incompleteTasks = await Api.get<ITask[]>(incompleteTasksUrl);
+
+        const completedTasksUrl = `${AppUrl}/folders/${folderId}/completedTasks`;
+        const completedTasks = await Api.get<ITask[]>(completedTasksUrl);
+
+        folder.tasks = [...incompleteTasks, ...completedTasks];
+        folder.incompleteTaskCount = incompleteTasks.length;
+        return this.setState({ folders: folders });
+    }
+
     createFolder = async (title: string) => {
         const url = `${AppUrl}/folders`;
 
@@ -46,6 +70,7 @@ class App extends React.Component<IAppProps, IAppState> {
         await Api.post<ITask>(url, params);
         this.loadFolders();
         this.loadTodayTasks();
+        this.loadFolderTasks(task.folderId, true);
     }
 
     async loadTodayTasks() {
@@ -77,12 +102,10 @@ class App extends React.Component<IAppProps, IAppState> {
                         folders={this.state.folders}
                         createTask={this.createTask}
                     />
-                    <strong>Папки</strong>
-                    {
-                        this.state.folders.map(f =>
-                            <Folder folder={f} key={f.id} />
-                        )
-                    }
+                    <FolderList
+                        folders={this.state.folders}
+                        loadTasks={this.loadFolderTasks}
+                    />
                     <strong>Задачи на сегодня</strong>
                     {
                         this.state.todayTasks.map(t =>
