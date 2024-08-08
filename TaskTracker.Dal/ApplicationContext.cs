@@ -13,13 +13,6 @@ public class ApplicationContext : DbContext
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options) { }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        // TODO get connection string from config file
-        var connectionString = "Host=localhost;Port=5432;Database=task_tracker;Username=postgres;Password=postgres";
-        optionsBuilder.UseNpgsql(connectionString);
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserTask>(task =>
