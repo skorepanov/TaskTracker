@@ -27,7 +27,7 @@ namespace TaskTracker.Dal.Migrations
 
                     b.Property<string>("Title")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -41,24 +41,24 @@ namespace TaskTracker.Dal.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("CompletionDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp");
 
                     b.Property<string>("Description")
                         .HasMaxLength(100000)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("varchar");
 
                     b.Property<DateTime?>("DueDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp");
 
                     b.Property<int?>("FolderId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 

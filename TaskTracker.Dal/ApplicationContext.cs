@@ -15,28 +15,28 @@ public class ApplicationContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // TODO get db name from config file
-        var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var sqlitePath = Path.Combine(folderPath, @"TaskTracker.db");
-
-        optionsBuilder.UseSqlite($"Data source={sqlitePath}");
+        // TODO get connection string from config file
+        var connectionString = "Host=localhost;Port=5432;Database=task_tracker;Username=postgres;Password=postgres";
+        optionsBuilder.UseNpgsql(connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserTask>(task =>
         {
-            task.Property(t => t.Title).HasColumnType("nvarchar").HasMaxLength(1000);
-            task.Property(t => t.Description).HasColumnType("nvarchar").HasMaxLength(100000);
+            task.Property(t => t.Id).UseSerialColumn();
+            task.Property(t => t.Title).HasColumnType("varchar").HasMaxLength(1000);
+            task.Property(t => t.Description).HasColumnType("varchar").HasMaxLength(100000);
 
-            task.Property(t => t.CompletionDate).HasColumnType("datetime");
-            task.Property(t => t.DueDate).HasColumnType("datetime");
-            task.Property(t => t.DeletionDate).HasColumnType("datetime");
+            task.Property(t => t.CompletionDate).HasColumnType("timestamp with time zone");
+            task.Property(t => t.DueDate).HasColumnType("timestamp with time zone");
+            task.Property(t => t.DeletionDate).HasColumnType("timestamp with time zone");
         });
 
         modelBuilder.Entity<Folder>(folder =>
         {
-            folder.Property(f => f.Title).HasColumnType("nvarchar").HasMaxLength(100);
+            folder.Property(f => f.Id).UseSerialColumn();
+            folder.Property(f => f.Title).HasColumnType("varchar").HasMaxLength(100);
 
             folder.Ignore(f => f.CompletedTasks);
             folder.Ignore(f => f.IncompleteTasks);

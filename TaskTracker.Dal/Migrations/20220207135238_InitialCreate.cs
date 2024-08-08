@@ -15,7 +15,7 @@ namespace TaskTracker.Dal.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "nvarchar", maxLength: 100, nullable: true)
+                    Title = table.Column<string>(type: "varchar", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -28,11 +28,11 @@ namespace TaskTracker.Dal.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "nvarchar", maxLength: 1000, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar", maxLength: 100000, nullable: true),
-                    CompletionDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    DueDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    DeletionDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Title = table.Column<string>(type: "varchar", maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(type: "varchar", maxLength: 100000, nullable: true),
+                    CompletionDate = table.Column<DateTime>(type: "timestamp", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "timestamp", nullable: true),
+                    DeletionDate = table.Column<DateTime>(type: "timestamp", nullable: true),
                     FolderId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
