@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskTracker.Bll;
+using TaskTracker.Bll.Models;
 
 namespace TaskTracker.Dal;
 

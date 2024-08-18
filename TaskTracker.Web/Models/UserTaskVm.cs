@@ -1,6 +1,4 @@
-﻿using TaskTracker.Bll;
-
-namespace TaskTracker.Web;
+﻿namespace TaskTracker.Web.Models;
 
 // TODO create several view models for completed and incomplete tasks
 public class UserTaskVm

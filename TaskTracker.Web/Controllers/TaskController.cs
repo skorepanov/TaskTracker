@@ -1,6 +1,6 @@
-﻿using TaskTracker.Bll;
+﻿using TaskTracker.Web.Models;
 
-namespace TaskTracker.Web;
+namespace TaskTracker.Web.Controllers;
 
 [ApiController]
 [Route("api/tasks")]

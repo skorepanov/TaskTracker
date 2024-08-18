@@ -1,4 +1,4 @@
-﻿namespace TaskTracker.Bll;
+﻿namespace TaskTracker.Bll.Models;
 
 public class UserTask : IComparable
 {
