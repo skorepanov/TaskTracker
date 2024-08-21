@@ -22,6 +22,7 @@ public class TaskController : ControllerBase
         return Ok(taskVm);
     }
 
+    [HttpGet]
     [Route("today")]
     public async Task<IActionResult> GetTodayTasks()
     {
@@ -30,6 +31,7 @@ public class TaskController : ControllerBase
         return Ok(taskVms);
     }
 
+    [HttpGet]
     [Route("deleted")]
     public async Task<IActionResult> GetDeletedTasks()
     {
