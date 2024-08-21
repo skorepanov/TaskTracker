@@ -2,6 +2,9 @@
 
 namespace TaskTracker.Web.Controllers;
 
+/// <summary>
+/// Работа с папками
+/// </summary>
 [ApiController]
 [Route("api/folders")]
 public class FolderController : ControllerBase
@@ -13,6 +16,10 @@ public class FolderController : ControllerBase
         _taskService = taskService;
     }
 
+    /// <summary>
+    /// Создать папку
+    /// </summary>
+    /// <param name="changeData">Данные создаваемой папки</param>
     // TODO method should returns folder id only
     [HttpPost]
     public async Task<IActionResult> CreateFolder([FromBody] FolderChangeData changeData)
@@ -22,6 +29,9 @@ public class FolderController : ControllerBase
         return Ok(folderVm);
     }
 
+    /// <summary>
+    /// Получить все папки
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetFolders()
     {
@@ -30,6 +40,10 @@ public class FolderController : ControllerBase
         return Ok(folderVms);
     }
 
+    /// <summary>
+    /// Получить невыполненные задачи для папки
+    /// </summary>
+    /// <param name="folderId">Id папки</param>
     [HttpGet]
     [Route("{folderId:int}/incompleteTasks")]
     public async Task<IActionResult> GetIncompleteTasks(int folderId)
@@ -39,6 +53,10 @@ public class FolderController : ControllerBase
         return Ok(taskVms);
     }
 
+    /// <summary>
+    /// Получить выполненные задачи для папки
+    /// </summary>
+    /// <param name="folderId">Id папки</param>
     [HttpGet]
     [Route("{folderId:int}/completedTasks")]
     public async Task<IActionResult> GetCompletedTasks(int folderId)

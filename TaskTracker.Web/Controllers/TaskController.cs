@@ -2,6 +2,9 @@
 
 namespace TaskTracker.Web.Controllers;
 
+/// <summary>
+/// Работа с задачами
+/// </summary>
 [ApiController]
 [Route("api/tasks")]
 public class TaskController : ControllerBase
@@ -13,6 +16,10 @@ public class TaskController : ControllerBase
         this._taskService = taskService;
     }
 
+    /// <summary>
+    /// Создать задачу
+    /// </summary>
+    /// <param name="changeData">Данные создаваемой задачи</param>
     // TODO method should returns task id only
     [HttpPost]
     public async Task<IActionResult> CreateTask([FromBody] UserTaskChangeData changeData)
@@ -22,6 +29,9 @@ public class TaskController : ControllerBase
         return Ok(taskVm);
     }
 
+    /// <summary>
+    /// Получить задачи на сегодня
+    /// </summary>
     [HttpGet]
     [Route("today")]
     public async Task<IActionResult> GetTodayTasks()
@@ -31,6 +41,9 @@ public class TaskController : ControllerBase
         return Ok(taskVms);
     }
 
+    /// <summary>
+    /// Получить удалённые задачи
+    /// </summary>
     [HttpGet]
     [Route("deleted")]
     public async Task<IActionResult> GetDeletedTasks()

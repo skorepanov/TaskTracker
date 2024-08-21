@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using TaskTracker.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,19 @@ builder.Services.ConfigureDbContext(connectionString);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Task Tracker"
+    });
+
+    var baseDirectory = AppContext.BaseDirectory;
+    var commentsPath = Path.Combine(baseDirectory, "TaskTrackerAPI.xml");
+    options.IncludeXmlComments(commentsPath);
+});
 
 var app = builder.Build();
 
