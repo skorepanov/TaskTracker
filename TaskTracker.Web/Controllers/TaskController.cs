@@ -48,7 +48,7 @@ public class TaskController : ControllerBase
     public async Task<IActionResult> GetDeletedTasks()
     {
         var tasks = await _taskService.GetDeletedTasks();
-        var taskVms = DeletedUserTaskVm.CreateCollectionFrom(tasks);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
         return Ok(taskVms);
     }
 }
