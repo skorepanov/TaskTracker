@@ -17,15 +17,15 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
+    options.SwaggerDoc(name: "v1", new OpenApiInfo
     {
-        Version = "v1",
+        Version = "0.0.1",
         Title = "Task Tracker"
     });
 
     var baseDirectory = AppContext.BaseDirectory;
-    var commentsPath = Path.Combine(baseDirectory, "TaskTrackerAPI.xml");
-    options.IncludeXmlComments(commentsPath);
+    var xmlCommentsPath = Path.Combine(baseDirectory, "TaskTrackerAPI.xml");
+    options.IncludeXmlComments(xmlCommentsPath);
 });
 
 var app = builder.Build();
