@@ -14,7 +14,8 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetFolder(It.IsAny<int>()))
                       .Returns(Task.FromResult((Folder)null));
 
-        var userTaskChangeData = new UserTaskChangeData();
+        var userTaskChangeData = new UserTaskChangeData(id: 42, title: "Task title 42",
+            description: "Description 42", null, folderId: 42);
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -43,12 +44,8 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
                       .Returns(Task.FromResult(folder));
 
-        var userTaskChangeData = new UserTaskChangeData
-        {
-            Title = TITLE,
-            Description = DESCRIPTION,
-            FolderId = FOLDER_ID,
-        };
+        var userTaskChangeData = new UserTaskChangeData(id: 42, TITLE, DESCRIPTION,
+            dueDate: null, FOLDER_ID);
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -301,12 +298,8 @@ public class TaskServiceTests
     private UserTask CreateTask(int id = 42, string title = "Task title 42",
                                 string description = "Description 42")
     {
-        var userTaskChangeData = new UserTaskChangeData
-        {
-            Id = id,
-            Title = title,
-            Description = description,
-        };
+        var userTaskChangeData = new UserTaskChangeData(id, title, description,
+            dueDate: null, folderId: 42);
 
         return UserTask.CreateTask(userTaskChangeData);
     }

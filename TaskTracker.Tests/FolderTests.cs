@@ -103,13 +103,8 @@ public class FolderTests
     private UserTask CreateTask(int id = 42, string title = "Task title 42",
                                 string description = "Description 42")
     {
-        var userTaskChangeData = new UserTaskChangeData
-        {
-            Id = id,
-            Title = title,
-            Description = description,
-        };
-
+        var userTaskChangeData = new UserTaskChangeData(id, title, description,
+            dueDate: null, folderId: 42);
         return UserTask.CreateTask(userTaskChangeData);
     }
     #endregion
