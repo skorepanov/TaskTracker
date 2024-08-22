@@ -20,7 +20,6 @@ public class FolderController : ControllerBase
     /// Создать папку
     /// </summary>
     /// <param name="changeData">Данные создаваемой папки</param>
-    // TODO method should returns folder id only
     [HttpPost]
     public async Task<IActionResult> CreateFolder([FromBody] FolderChangeData changeData)
     {

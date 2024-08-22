@@ -202,10 +202,7 @@ public class TaskServiceTests
     {
         // Arrange
         const string TITLE = "title 42";
-        var folderChangeData = new FolderChangeData()
-        {
-            Title = TITLE
-        };
+        var folderChangeData = new FolderChangeData(id: 42, TITLE);
 
         var mockRepository = new Mock<ITaskRepository>();
         var taskService = new TaskService(mockRepository.Object);
@@ -297,12 +294,7 @@ public class TaskServiceTests
     #region helpers
     private Folder CreateFolder(int id = default, string title = default)
     {
-        var folderChangeData = new FolderChangeData
-        {
-            Id = id,
-            Title = title,
-        };
-
+        var folderChangeData = new FolderChangeData(id, title);
         return Folder.CreateFolder(folderChangeData);
     }
 

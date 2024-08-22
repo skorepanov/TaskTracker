@@ -96,12 +96,7 @@ public class FolderTests
     #region helpers
     private Folder CreateSut(int id = 42, string title = "Folder title 42")
     {
-        var folderChangeData = new FolderChangeData
-        {
-            Id = id,
-            Title = title
-        };
-
+        var folderChangeData = new FolderChangeData(id, title);
         return Folder.CreateFolder(folderChangeData);
     }
 
