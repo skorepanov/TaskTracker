@@ -1,9 +1,23 @@
 ﻿namespace TaskTracker.Web.Models;
 
-public class FolderVm
+/// <summary>
+/// Папка
+/// </summary>
+public record FolderVm
 {
+    /// <summary>
+    /// Id папки
+    /// </summary>
     public int Id { get; }
+
+    /// <summary>
+    /// Наименование папки
+    /// </summary>
     public string Title { get; }
+
+    /// <summary>
+    /// Количество невыполненных задач в папке
+    /// </summary>
     public int IncompleteTaskCount { get; }
 
     public FolderVm(Folder folder)

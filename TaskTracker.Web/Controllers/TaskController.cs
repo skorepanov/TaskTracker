@@ -20,7 +20,6 @@ public class TaskController : ControllerBase
     /// Создать задачу
     /// </summary>
     /// <param name="changeData">Данные создаваемой задачи</param>
-    // TODO method should returns task id only
     [HttpPost]
     public async Task<IActionResult> CreateTask([FromBody] UserTaskChangeData changeData)
     {

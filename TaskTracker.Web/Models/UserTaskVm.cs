@@ -1,16 +1,53 @@
 ﻿namespace TaskTracker.Web.Models;
 
-// TODO create several view models for completed and incomplete tasks
+/// <summary>
+/// Задача
+/// </summary>
 public class UserTaskVm
 {
+    /// <summary>
+    /// Id задачи
+    /// </summary>
     public int Id { get; }
+
+    /// <summary>
+    /// Наименование задачи
+    /// </summary>
     public string Title { get; }
+
+    /// <summary>
+    /// Описание задачи
+    /// </summary>
     public string Description { get; }
+
+    /// <summary>
+    /// Фактическая дата выполнения задачи
+    /// </summary>
     public DateTime? CompletionDate { get; }
+
+    /// <summary>
+    /// Выполнена ли задача
+    /// </summary>
     public bool IsCompleted { get; }
+
+    /// <summary>
+    /// Планируемая дата выполнения задачи
+    /// </summary>
     public DateTime? DueDate { get; }
+
+    /// <summary>
+    /// Количество дней, на которое просрочена задача
+    /// </summary>
     public int OverdueDaysCount { get; }
+
+    /// <summary>
+    /// Дата удаления задачи
+    /// </summary>
     public DateTime? DeletionDate { get; }
+
+    /// <summary>
+    /// Удалена ли задача
+    /// </summary>
     public bool IsDeleted { get; }
 
     public UserTaskVm(UserTask task, DateTime today)
