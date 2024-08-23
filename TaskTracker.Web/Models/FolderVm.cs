@@ -1,7 +1,7 @@
 ﻿namespace TaskTracker.Web.Models;
 
 /// <summary>
-/// Папка
+/// Представление для папки
 /// </summary>
 public record FolderVm
 {
@@ -20,6 +20,9 @@ public record FolderVm
     /// </summary>
     public int IncompleteTaskCount { get; }
 
+    /// <summary>
+    /// Сконструировать представление для папки
+    /// </summary>
     public FolderVm(Folder folder)
     {
         this.Id = folder.Id;
@@ -27,6 +30,9 @@ public record FolderVm
         this.IncompleteTaskCount = folder.IncompleteTaskCount;
     }
 
+    /// <summary>
+    /// Сформировать коллекцию представлений для папок
+    /// </summary>
     public static IReadOnlyList<FolderVm> CreateCollectionFrom(IEnumerable<Folder> folders)
     {
         return folders.Select(f => new FolderVm(f)).ToList();

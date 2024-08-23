@@ -1,7 +1,7 @@
 ﻿namespace TaskTracker.Web.Models;
 
 /// <summary>
-/// Задача
+/// Представление для задачи
 /// </summary>
 public record UserTaskVm
 {
@@ -50,6 +50,9 @@ public record UserTaskVm
     /// </summary>
     public bool IsDeleted { get; }
 
+    /// <summary>
+    /// Сконструировать представление для задачи
+    /// </summary>
     public UserTaskVm(UserTask task, DateTime today)
     {
         this.Id = task.Id;
@@ -63,6 +66,9 @@ public record UserTaskVm
         this.IsDeleted = task.IsDeleted;
     }
 
+    /// <summary>
+    /// Сформировать коллекцию представлений для задач
+    /// </summary>
     public static IReadOnlyList<UserTaskVm> CreateCollectionFrom(
         IEnumerable<UserTask> tasks, DateTime today)
     {

@@ -11,6 +11,9 @@ public class FolderController : ControllerBase
 {
     private readonly TaskService _taskService;
 
+    /// <summary>
+    /// Сконструировать контроллер для работы с папками
+    /// </summary>
     public FolderController(TaskService taskService)
     {
         _taskService = taskService;
