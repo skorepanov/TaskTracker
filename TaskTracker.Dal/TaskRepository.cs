@@ -18,12 +18,12 @@ public class TaskRepository : ITaskRepository
         return await this._db.Tasks.FindAsync(taskId);
     }
 
-    public async Task<IReadOnlyCollection<UserTask>> GetNonDeletedTasks()
+    public async Task<IReadOnlyList<UserTask>> GetNonDeletedTasks()
     {
         return await _db.Tasks.Where(t => t.DeletionDate == null).ToListAsync();
     }
 
-    public async Task<IReadOnlyCollection<UserTask>> GetDeletedTasks()
+    public async Task<IReadOnlyList<UserTask>> GetDeletedTasks()
     {
         return await _db.Tasks.Where(t => t.DeletionDate != null).ToListAsync();
     }
@@ -35,7 +35,7 @@ public class TaskRepository : ITaskRepository
             .SingleOrDefaultAsync(f => f.Id == folderId);
     }
 
-    public async Task<IReadOnlyCollection<Folder>> GetFolders()
+    public async Task<IReadOnlyList<Folder>> GetFolders()
     {
         return await _db.Folders.Include(f => f.Tasks).ToListAsync();
     }

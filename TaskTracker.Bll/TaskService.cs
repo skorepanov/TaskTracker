@@ -68,21 +68,21 @@ public class TaskService
         await _taskRepository.UpdateTask(task);
     }
 
-    public async Task<IReadOnlyCollection<UserTask>> GetIncompleteTasks(int folderId)
+    public async Task<IReadOnlyList<UserTask>> GetIncompleteTasks(int folderId)
     {
         // TODO check folder for null
         var folder = await _taskRepository.GetFolder(folderId);
         return folder.IncompleteTasks;
     }
 
-    public async Task<IReadOnlyCollection<UserTask>> GetCompletedTasks(int folderId)
+    public async Task<IReadOnlyList<UserTask>> GetCompletedTasks(int folderId)
     {
         // TODO check folder for null
         var folder = await _taskRepository.GetFolder(folderId);
         return folder.CompletedTasks;
     }
 
-    public async Task<IReadOnlyCollection<UserTask>> GetTodayTasks()
+    public async Task<IReadOnlyList<UserTask>> GetTodayTasks()
     {
         var today = DateTime.Now;
         var tasks = await _taskRepository.GetNonDeletedTasks();
@@ -92,13 +92,13 @@ public class TaskService
         return todayTasks;
     }
 
-    public async Task<IReadOnlyCollection<UserTask>> GetDeletedTasks()
+    public async Task<IReadOnlyList<UserTask>> GetDeletedTasks()
     {
         var tasks = await _taskRepository.GetDeletedTasks();
         return tasks;
     }
 
-    public async Task<IReadOnlyCollection<Folder>> GetFolders()
+    public async Task<IReadOnlyList<Folder>> GetFolders()
     {
         var folders = await _taskRepository.GetFolders();
         return folders;

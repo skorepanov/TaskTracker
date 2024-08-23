@@ -63,7 +63,7 @@ public record UserTaskVm
         this.IsDeleted = task.IsDeleted;
     }
 
-    public static IReadOnlyCollection<UserTaskVm> CreateCollectionFrom(
+    public static IReadOnlyList<UserTaskVm> CreateCollectionFrom(
         IEnumerable<UserTask> tasks, DateTime today)
     {
         return tasks.Select(t => new UserTaskVm(t, today)).ToList();

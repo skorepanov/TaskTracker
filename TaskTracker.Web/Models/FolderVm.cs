@@ -27,7 +27,7 @@ public record FolderVm
         this.IncompleteTaskCount = folder.IncompleteTaskCount;
     }
 
-    public static IReadOnlyCollection<FolderVm> CreateCollectionFrom(IEnumerable<Folder> folders)
+    public static IReadOnlyList<FolderVm> CreateCollectionFrom(IEnumerable<Folder> folders)
     {
         return folders.Select(f => new FolderVm(f)).ToList();
     }
