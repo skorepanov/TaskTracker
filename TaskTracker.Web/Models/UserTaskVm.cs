@@ -3,7 +3,7 @@
 /// <summary>
 /// Задача
 /// </summary>
-public class UserTaskVm
+public record UserTaskVm
 {
     /// <summary>
     /// Id задачи
