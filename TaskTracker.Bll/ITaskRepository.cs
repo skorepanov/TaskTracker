@@ -4,11 +4,11 @@ namespace TaskTracker.Bll;
 
 public interface ITaskRepository
 {
-    Task<UserTask> GetTask(int taskId);
+    Task<UserTask?> GetTask(int taskId);
     Task<IReadOnlyList<UserTask>> GetNonDeletedTasks();
     Task<IReadOnlyList<UserTask>> GetDeletedTasks();
 
-    Task<Folder> GetFolder(int folderId);
+    Task<Folder?> GetFolder(int folderId);
     Task<IReadOnlyList<Folder>> GetFolders();
 
     Task SaveNewTask(UserTask task, int folderId);

@@ -12,7 +12,7 @@ public class TaskServiceTests
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetFolder(It.IsAny<int>()))
-                      .Returns(Task.FromResult((Folder)null));
+                      .Returns(Task.FromResult((Folder?)null));
 
         var userTaskChangeData = new UserTaskChangeData(id: 42, title: "Task title 42",
             description: "Description 42", null, folderId: 42);
@@ -42,7 +42,7 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
-                      .Returns(Task.FromResult(folder));
+                      .Returns(Task.FromResult<Folder?>(folder));
 
         var userTaskChangeData = new UserTaskChangeData(id: 42, TITLE, DESCRIPTION,
             dueDate: null, FOLDER_ID);
@@ -67,7 +67,7 @@ public class TaskServiceTests
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
-                      .Returns(Task.FromResult((UserTask)null));
+                      .Returns(Task.FromResult((UserTask?)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -91,7 +91,7 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(Task.FromResult(task));
+                      .Returns(Task.FromResult<UserTask?>(task));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -110,7 +110,7 @@ public class TaskServiceTests
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
-                      .Returns(Task.FromResult((UserTask)null));
+                      .Returns(Task.FromResult((UserTask?)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -134,7 +134,7 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(Task.FromResult(task));
+                      .Returns(Task.FromResult<UserTask?>(task));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -155,7 +155,7 @@ public class TaskServiceTests
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
-                      .Returns(Task.FromResult((UserTask)null));
+                      .Returns(Task.FromResult((UserTask?)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -179,7 +179,7 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(Task.FromResult(task));
+                      .Returns(Task.FromResult<UserTask?>(task));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -221,7 +221,7 @@ public class TaskServiceTests
         // Arrange
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(It.IsAny<int>()))
-                      .Returns(Task.FromResult((UserTask)null));
+                      .Returns(Task.FromResult((UserTask?)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -245,9 +245,9 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(Task.FromResult(task));
+                      .Returns(Task.FromResult<UserTask?>(task));
         mockRepository.Setup(r => r.GetFolder(It.IsAny<int>()))
-                      .Returns(Task.FromResult((Folder)null));
+                      .Returns(Task.FromResult((Folder?)null));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -274,9 +274,9 @@ public class TaskServiceTests
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(Task.FromResult(task));
+                      .Returns(Task.FromResult<UserTask?>(task));
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
-                      .Returns(Task.FromResult(folder));
+                      .Returns(Task.FromResult<Folder?>(folder));
 
         var sut = new TaskService(mockRepository.Object);
 
@@ -289,7 +289,7 @@ public class TaskServiceTests
     #endregion
 
     #region helpers
-    private Folder CreateFolder(int id = default, string title = default)
+    private Folder CreateFolder(int id = 42, string title = "Folder title 42")
     {
         var folderChangeData = new FolderChangeData(id, title);
         return Folder.CreateFolder(folderChangeData);

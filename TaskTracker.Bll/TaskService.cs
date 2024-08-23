@@ -70,15 +70,27 @@ public class TaskService
 
     public async Task<IReadOnlyList<UserTask>> GetIncompleteTasks(int folderId)
     {
-        // TODO check folder for null
         var folder = await _taskRepository.GetFolder(folderId);
+
+        if (folder is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(Folder),
+                                                    message: "Папка не обнаружена");
+        }
+
         return folder.IncompleteTasks;
     }
 
     public async Task<IReadOnlyList<UserTask>> GetCompletedTasks(int folderId)
     {
-        // TODO check folder for null
         var folder = await _taskRepository.GetFolder(folderId);
+
+        if (folder is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(Folder),
+                                                    message: "Папка не обнаружена");
+        }
+
         return folder.CompletedTasks;
     }
 

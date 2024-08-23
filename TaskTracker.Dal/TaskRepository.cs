@@ -13,7 +13,7 @@ public class TaskRepository : ITaskRepository
         this._db = db;
     }
 
-    public async Task<UserTask> GetTask(int taskId)
+    public async Task<UserTask?> GetTask(int taskId)
     {
         return await this._db.Tasks.FindAsync(taskId);
     }
@@ -28,7 +28,7 @@ public class TaskRepository : ITaskRepository
         return await _db.Tasks.Where(t => t.DeletionDate != null).ToListAsync();
     }
 
-    public async Task<Folder> GetFolder(int folderId)
+    public async Task<Folder?> GetFolder(int folderId)
     {
         return await _db.Folders
             .Include(f => f.Tasks)

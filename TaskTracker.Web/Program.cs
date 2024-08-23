@@ -10,6 +10,12 @@ builder.Services.AddServices();
 builder.Services.AddRepositories();
 
 var connectionString = builder.Configuration.GetConnectionString(name: "Default");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new Exception(message: "Не найдена строка подключения");
+}
+
 builder.Services.ConfigureDbContext(connectionString);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

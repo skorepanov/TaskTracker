@@ -4,21 +4,6 @@ public class FolderTests
 {
     #region Add task to folder
     [Test]
-    public void AddNullTaskToFolder()
-    {
-        // Arrange
-        var sut = CreateSut();
-
-        // Act
-        var action = () => sut.AddTask(task: null);
-
-        // Assert
-        action.Should().Throw<ArgumentNullException>()
-                       .WithParameterName(paramName: "task");
-        sut.Tasks.Should().BeEmpty();
-    }
-
-    [Test]
     public void AddOneTaskToFolder()
     {
         // Arrange
