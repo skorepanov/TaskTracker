@@ -22,6 +22,18 @@ public class FolderController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
+    /// Получить папку по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор папки</param>
+    [HttpGet("{id:int}", Name = "GetFolderById")]
+    public async Task<IActionResult> GetFolderById(int id)
+    {
+        var folder = await _taskService.GetFolderById(id);
+        var folderVm = new FolderVm(folder);
+        return Ok(folderVm);
+    }
+
+    /// <summary>
     /// Получить все папки
     /// </summary>
     [HttpGet]

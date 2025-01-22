@@ -116,6 +116,19 @@ public class TaskService(ITaskRepository _taskRepository)
         return tasks;
     }
 
+    public async Task<Folder> GetFolderById(int folderId)
+    {
+        var folder = await _taskRepository.GetFolder(folderId);
+
+        if (folder is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(Folder),
+                                                    message: "Папка не обнаружена");
+        }
+
+        return folder;
+    }
+
     public async Task<IReadOnlyList<Folder>> GetFolders()
     {
         var folders = await _taskRepository.GetFolders();
