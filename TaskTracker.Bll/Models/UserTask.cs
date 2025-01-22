@@ -14,8 +14,6 @@ public class UserTask : IComparable
     public DateTime? DeletionDate { get; private set; }
     public bool IsDeleted => DeletionDate is not null;
 
-    private UserTask () { }
-
     private UserTask(string title, string description, DateTime? dueDate)
     {
         this.Title = title;

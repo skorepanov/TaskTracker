@@ -16,8 +16,6 @@ public class Folder
 
     public int IncompleteTaskCount => this.IncompleteTasks.Count;
 
-    private Folder() { }
-
     private Folder(string title)
     {
         this.Title = title;
