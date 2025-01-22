@@ -2,15 +2,8 @@
 
 namespace TaskTracker.Bll;
 
-public class TaskService
+public class TaskService(ITaskRepository _taskRepository)
 {
-    private readonly ITaskRepository _taskRepository;
-
-    public TaskService(ITaskRepository taskRepository)
-    {
-        this._taskRepository = taskRepository;
-    }
-
     public async Task<UserTask> CreateTask(UserTaskChangeData changeData)
     {
         var folder = await _taskRepository.GetFolder(changeData.FolderId);

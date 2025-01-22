@@ -7,18 +7,8 @@ namespace TaskTracker.Web.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/folders")]
-public class FolderController : ControllerBase
+public class FolderController(TaskService _taskService) : ControllerBase
 {
-    private readonly TaskService _taskService;
-
-    /// <summary>
-    /// Сконструировать контроллер для работы с папками
-    /// </summary>
-    public FolderController(TaskService taskService)
-    {
-        _taskService = taskService;
-    }
-
     /// <summary>
     /// Создать папку
     /// </summary>

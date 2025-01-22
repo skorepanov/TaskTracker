@@ -4,18 +4,11 @@ using TaskTracker.Bll.Models;
 
 namespace TaskTracker.Dal;
 
-public class TaskRepository : ITaskRepository
+public class TaskRepository(ApplicationContext _db) : ITaskRepository
 {
-    private readonly ApplicationContext _db;
-
-    public TaskRepository(ApplicationContext db)
-    {
-        this._db = db;
-    }
-
     public async Task<UserTask?> GetTask(int taskId)
     {
-        return await this._db.Tasks.FindAsync(taskId);
+        return await _db.Tasks.FindAsync(taskId);
     }
 
     public async Task<IReadOnlyList<UserTask>> GetNonDeletedTasks()

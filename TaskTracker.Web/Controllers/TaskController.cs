@@ -7,18 +7,8 @@ namespace TaskTracker.Web.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/tasks")]
-public class TaskController : ControllerBase
+public class TaskController(TaskService _taskService) : ControllerBase
 {
-    private readonly TaskService _taskService;
-
-    /// <summary>
-    /// Сконструировать контроллер для работы с задачами
-    /// </summary>
-    public TaskController(TaskService taskService)
-    {
-        this._taskService = taskService;
-    }
-
     /// <summary>
     /// Создать задачу
     /// </summary>

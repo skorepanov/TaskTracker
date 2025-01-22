@@ -1,12 +1,7 @@
 ﻿namespace TaskTracker.Bll.DomainExceptions;
 
-public class DomainEntityNotFoundException : Exception
+public class DomainEntityNotFoundException(Type domainEntityType, string message)
+    : Exception(message)
 {
-    public Type DomainEntityType { get; }
-
-    public DomainEntityNotFoundException(Type domainEntityType, string message)
-        : base(message)
-    {
-        this.DomainEntityType = domainEntityType;
-    }
+    public Type DomainEntityType { get; } = domainEntityType;
 }
