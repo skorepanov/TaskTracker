@@ -22,6 +22,18 @@ public class TaskController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
+    /// Получить задачу по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор задачи</param>
+    [HttpGet("{id:int}", Name = "GetTaskById")]
+    public async Task<IActionResult> GetTaskById(int id)
+    {
+        var task = await _taskService.GetTaskById(id);
+        var taskVm = new UserTaskVm(task, DateTime.Now);
+        return Ok(taskVm);
+    }
+
+    /// <summary>
     /// Получить задачи на сегодня
     /// </summary>
     [HttpGet]

@@ -87,6 +87,19 @@ public class TaskService(ITaskRepository _taskRepository)
         return folder.CompletedTasks;
     }
 
+    public async Task<UserTask> GetTaskById(int taskId)
+    {
+        var task = await _taskRepository.GetTask(taskId);
+
+        if (task is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(UserTask),
+                                                    message: "Задача не обнаружена");
+        }
+
+        return task;
+    }
+
     public async Task<IReadOnlyList<UserTask>> GetTodayTasks()
     {
         var today = DateTime.Now;
