@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskTracker.Dal;
+using TaskTracker.Web.HealthChecks;
 
 namespace TaskTracker.Web;
 
@@ -32,5 +33,14 @@ public static class DiExtensions
     {
         collection.AddDbContext<ApplicationContext>(
             options => options.UseNpgsql(connectionString));
+    }
+
+    /// <summary>
+    /// Зарегистрировать Health Checks
+    /// </summary>
+    public static void AddCustomHealthChecks(this IServiceCollection collection)
+    {
+        collection.AddHealthChecks()
+            .AddCheck<DataBaseHealthCheck>(name: nameof(DataBaseHealthCheck));
     }
 }

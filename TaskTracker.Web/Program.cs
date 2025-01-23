@@ -18,9 +18,7 @@ if (string.IsNullOrWhiteSpace(connectionString))
 
 builder.Services.ConfigureDbContext(connectionString);
 
-builder.Services
-    .AddHealthChecks()
-    .AddNpgSql(connectionString);
+builder.Services.AddCustomHealthChecks();
 
 #endregion
 
@@ -61,7 +59,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseHealthChecks("/health");
+app.MapHealthChecks("api/health");
 
 #endregion
 
