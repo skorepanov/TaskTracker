@@ -43,7 +43,6 @@ class App extends React.Component<IAppProps, IAppState> {
             return;
         }
 
-        // TODO add paging for completed tasks
         const incompleteTasksUrl = `${AppUrl}/folders/${folderId}/incompleteTasks`;
         const incompleteTasks = await Api.get<ITask[]>(incompleteTasksUrl);
 

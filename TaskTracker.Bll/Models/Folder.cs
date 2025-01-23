@@ -24,7 +24,6 @@ public class Folder
 
     public static Folder CreateFolder(FolderChangeData changeData)
     {
-        // TODO validate changeData
         return new Folder(changeData.Title);
     }
 

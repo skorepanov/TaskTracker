@@ -2,7 +2,6 @@
 
 namespace TaskTracker.Tests;
 
-// TODO rewrite to integration tests
 public class TaskServiceTests
 {
     #region Create task
@@ -99,7 +98,6 @@ public class TaskServiceTests
         await sut.CompleteTask(TASK_ID);
 
         // Assert
-        // TODO check date?
         mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
                               Times.Once);
     }
@@ -142,7 +140,6 @@ public class TaskServiceTests
         await sut.IncompleteTask(TASK_ID);
 
         // Assert
-        // TODO check date?
         mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
                               Times.Once);
     }
@@ -187,7 +184,6 @@ public class TaskServiceTests
         await sut.DeleteTask(TASK_ID);
 
         // Assert
-        // TODO check date?
         mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
                               Times.Once);
     }

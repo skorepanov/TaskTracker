@@ -23,7 +23,6 @@ public class UserTask : IComparable
 
     public static UserTask CreateTask(UserTaskChangeData changeData)
     {
-        // TODO validate changeData
         return new UserTask(changeData.Title, changeData.Description, changeData.DueDate);
     }
 
