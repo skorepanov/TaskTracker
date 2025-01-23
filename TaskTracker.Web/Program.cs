@@ -3,7 +3,7 @@ using TaskTracker.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region Add services to the container
 
 builder.Services.AddControllers();
 builder.Services.AddServices();
@@ -18,7 +18,14 @@ if (string.IsNullOrWhiteSpace(connectionString))
 
 builder.Services.ConfigureDbContext(connectionString);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services
+    .AddHealthChecks()
+    .AddNpgSql(connectionString);
+
+#endregion
+
+#region Add Swagger
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
@@ -34,9 +41,12 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlCommentsPath);
 });
 
+#endregion
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+#region Configure the HTTP request pipeline
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -50,5 +60,9 @@ app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHealthChecks("/health");
+
+#endregion
 
 app.Run();
