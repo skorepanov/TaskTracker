@@ -4,6 +4,7 @@ public class FolderTests
 {
     #region Add task to folder
     [Test]
+    [Category("AddTask")]
     public void AddOneTaskToFolder()
     {
         // Arrange
@@ -20,6 +21,7 @@ public class FolderTests
     }
 
     [Test]
+    [Category("AddTask")]
     public void AddSeveralTasksWithSameIdToFolder()
     {
         // Arrange
@@ -40,6 +42,7 @@ public class FolderTests
 
     #region Get incomplete task count
     [Test]
+    [Category("IncompleteTaskCount")]
     public void GetIncompleteTaskCountWhenFolderIsEmpty()
     {
         // Arrange
@@ -53,6 +56,7 @@ public class FolderTests
     }
 
     [Test]
+    [Category("IncompleteTaskCount")]
     public void GetIncompleteTaskCountWhenFolderHasDifferentTasks()
     {
         // Arrange

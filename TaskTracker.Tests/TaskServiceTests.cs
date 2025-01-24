@@ -6,6 +6,7 @@ public class TaskServiceTests
 {
     #region Create task
     [Test]
+    [Category("CreateTask")]
     public async Task CreateTaskInNonExistentFolder()
     {
         // Arrange
@@ -30,6 +31,7 @@ public class TaskServiceTests
     }
 
     [Test]
+    [Category("CreateTask")]
     public async Task CreateTaskInExistentFolder()
     {
         // Arrange
@@ -59,8 +61,9 @@ public class TaskServiceTests
     }
     #endregion
 
-    #region Complete and incomplete task
+    #region Complete task
     [Test]
+    [Category("CompleteTask")]
     public async Task CompleteNonexistentTask()
     {
         // Arrange
@@ -82,6 +85,7 @@ public class TaskServiceTests
     }
 
     [Test]
+    [Category("CompleteTask")]
     public async Task CompleteExistentTask()
     {
         // Arrange
@@ -101,8 +105,11 @@ public class TaskServiceTests
         mockRepository.Verify(r => r.UpdateTask(It.IsAny<UserTask>()),
                               Times.Once);
     }
+    #endregion
 
+    #region Incomplete task
     [Test]
+    [Category("IncompleteTask")]
     public async Task IncompleteNonexistentTask()
     {
         // Arrange
@@ -124,6 +131,7 @@ public class TaskServiceTests
     }
 
     [Test]
+    [Category("IncompleteTask")]
     public async Task IncompleteExistentTask()
     {
         // Arrange
@@ -147,6 +155,7 @@ public class TaskServiceTests
 
     #region Delete task
     [Test]
+    [Category("DeleteTask")]
     public async Task DeleteNonexistentTask()
     {
         // Arrange
@@ -168,6 +177,7 @@ public class TaskServiceTests
     }
 
     [Test]
+    [Category("DeleteTask")]
     public async Task DeleteExistentTask()
     {
         // Arrange
@@ -191,6 +201,7 @@ public class TaskServiceTests
 
     #region Create folder
     [Test]
+    [Category("CreateFolder")]
     public async Task CreateFolder()
     {
         // Arrange
@@ -212,6 +223,7 @@ public class TaskServiceTests
 
     #region Move task to other folder
     [Test]
+    [Category("MoveTaskToOtherFolder")]
     public async Task MoveNonExistentTaskToOtherFolder()
     {
         // Arrange
@@ -233,6 +245,7 @@ public class TaskServiceTests
     }
 
     [Test]
+    [Category("MoveTaskToOtherFolder")]
     public async Task MoveTaskToNonExistentFolder()
     {
         // Arrange
@@ -259,6 +272,7 @@ public class TaskServiceTests
     }
 
     [Test]
+    [Category("MoveTaskToOtherFolder")]
     public async Task MoveTaskToFolder()
     {
         // Arrange

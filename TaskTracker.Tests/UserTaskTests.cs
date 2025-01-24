@@ -2,8 +2,9 @@ namespace TaskTracker.Tests;
 
 public class UserTaskTests
 {
-    #region Complete and incomplete task
+    #region Complete task
     [Test]
+    [Category("CompleteTask")]
     public void CompleteTask()
     {
         // Arrange
@@ -17,8 +18,11 @@ public class UserTaskTests
         sut.CompletionDate.Should().Be(completionDate);
         sut.IsCompleted.Should().BeTrue();
     }
+    #endregion
 
+    #region Incomplete task
     [Test]
+    [Category("IncompleteTask")]
     public void IncompleteTask()
     {
         // Arrange
@@ -37,6 +41,7 @@ public class UserTaskTests
 
     #region Calculate overdue days
     [Test]
+    [Category("CalculateOverdueDays")]
     public void CalculateOverdueDaysForTaskWithoutDueDate()
     {
         // Arrange
@@ -52,6 +57,7 @@ public class UserTaskTests
     }
 
     [Test]
+    [Category("CalculateOverdueDays")]
     public void CalculateOverdueDaysForTaskWithDueDate()
     {
         // Arrange
@@ -71,6 +77,7 @@ public class UserTaskTests
     }
 
     [Test]
+    [Category("CalculateOverdueDays")]
     public void CalculateOverdueDaysForNonOverdueTask()
     {
         // Arrange
@@ -90,6 +97,7 @@ public class UserTaskTests
     }
 
     [Test]
+    [Category("CalculateOverdueDays")]
     public void CalculateOverdueDaysForTodayTask()
     {
         // Arrange
@@ -109,6 +117,7 @@ public class UserTaskTests
     }
 
     [Test]
+    [Category("CalculateOverdueDays")]
     public void CalculateOverdueDaysForDeletedTask()
     {
         // Arrange
@@ -133,6 +142,7 @@ public class UserTaskTests
 
     #region Is today task
     [Test]
+    [Category("IsTodayTask")]
     public void IsTodayTaskThatCompletedToday()
     {
         // Arrange
@@ -150,6 +160,7 @@ public class UserTaskTests
     }
 
     [Test]
+    [Category("IsTodayTask")]
     public void IsTodayTaskThatCompletedEarlier()
     {
         // Arrange
@@ -167,6 +178,7 @@ public class UserTaskTests
     }
 
     [Test]
+    [Category("IsTodayTask")]
     public void IsTodayIncompleteTaskWithoutDueDate()
     {
         // Arrange
@@ -180,6 +192,8 @@ public class UserTaskTests
         isTodayTask.Should().BeFalse();
     }
 
+    [Test]
+    [Category("IsTodayTask")]
     [TestCaseSource(nameof(GetTestCasesForIsTodayTaskWithDueDate))]
     public void IsTodayIncompleteTaskWithDueDate(DateTime dueDate, DateTime today,
                                                  bool expectedResult)
@@ -210,6 +224,8 @@ public class UserTaskTests
                                       false);
     }
 
+    [Test]
+    [Category("IsTodayTask")]
     [TestCaseSource(nameof(GetTestCasesForIsTodayDeletedTask))]
     public void IsTodayDeletedTask(DateTime deletionDate, DateTime today)
     {
@@ -237,6 +253,7 @@ public class UserTaskTests
 
     #region Delete task
     [Test]
+    [Category("DeleteTask")]
     public void DeleteTask()
     {
         // Arrange
