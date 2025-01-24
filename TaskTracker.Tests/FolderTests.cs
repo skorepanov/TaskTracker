@@ -89,7 +89,7 @@ public class FolderTests
                                 string description = "Description 42")
     {
         var userTaskChangeData = new UserTaskChangeData(id, title, description,
-            dueDate: null, folderId: 42);
+            DueDate: null, FolderId: 42);
         return UserTask.CreateTask(userTaskChangeData);
     }
     #endregion
