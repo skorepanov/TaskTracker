@@ -26,13 +26,15 @@ public static class DiExtensions
     }
 
     /// <summary>
-    /// Зарегистрировать контексты БД
+    /// Сконфигурировать контекст БД
     /// </summary>
     public static void ConfigureDbContext(this IServiceCollection collection,
                                           string connectionString)
     {
         collection.AddDbContext<ApplicationContext>(
-            options => options.UseNpgsql(connectionString));
+            options => options
+                .UseNpgsql(connectionString)
+                .UseSnakeCaseNamingConvention());
     }
 
     /// <summary>
