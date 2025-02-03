@@ -19,7 +19,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
         var task = await _taskService.CreateTask(changeData);
         var taskVm = new UserTaskVm(task, DateTime.Now);
 
-        return CreatedAtRoute(routeName: "GetTaskById",
+        return CreatedAtRoute(routeName: nameof(GetTaskById),
                               routeValues: new { id = taskVm.Id },
                               value: taskVm);
     }
@@ -28,7 +28,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     /// Получить задачу по идентификатору
     /// </summary>
     /// <param name="id">Идентификатор задачи</param>
-    [HttpGet("{id:int}", Name = "GetTaskById")]
+    [HttpGet("{id:int}", Name = nameof(GetTaskById))]
     public async Task<IActionResult> GetTaskById(int id)
     {
         var task = await _taskService.GetTaskById(id);

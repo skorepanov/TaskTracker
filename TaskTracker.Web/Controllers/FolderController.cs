@@ -19,7 +19,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
         var folder = await _taskService.CreateFolder(changeData);
         var folderVm = new FolderVm(folder);
 
-        return CreatedAtRoute(routeName: "GetFolderById",
+        return CreatedAtRoute(routeName: nameof(GetFolderById),
                               routeValues: new { id = folderVm.Id },
                               value: folderVm);
     }
@@ -28,7 +28,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     /// Получить папку по идентификатору
     /// </summary>
     /// <param name="id">Идентификатор папки</param>
-    [HttpGet("{id:int}", Name = "GetFolderById")]
+    [HttpGet("{id:int}", Name = nameof(GetFolderById))]
     public async Task<IActionResult> GetFolderById(int id)
     {
         var folder = await _taskService.GetFolderById(id);
