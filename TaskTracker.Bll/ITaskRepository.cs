@@ -6,7 +6,7 @@ public interface ITaskRepository
 {
     Task<UserTask?> GetTask(int taskId);
     Task<IReadOnlyList<UserTask>> GetNonDeletedTasks();
-    Task<IReadOnlyList<UserTask>> GetDeletedTasks();
+    Task<IReadOnlyList<UserTask>> GetTasksInTrash();
 
     Task<Folder?> GetFolder(int folderId);
     Task<IReadOnlyList<Folder>> GetFolders();
@@ -16,4 +16,6 @@ public interface ITaskRepository
 
     Task UpdateTask(UserTask task);
     Task UpdateTaskFolder(int taskId, int folderId);
+
+    Task DeleteTaskPermanently(UserTask task);
 }

@@ -16,7 +16,7 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         return await _db.Tasks.Where(t => t.DeletionDate == null).ToListAsync();
     }
 
-    public async Task<IReadOnlyList<UserTask>> GetDeletedTasks()
+    public async Task<IReadOnlyList<UserTask>> GetTasksInTrash()
     {
         return await _db.Tasks.Where(t => t.DeletionDate != null).ToListAsync();
     }
@@ -54,5 +54,11 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
     public async Task UpdateTaskFolder(int taskId, int folderId)
     {
         throw new System.NotImplementedException();
+    }
+
+    public async Task DeleteTaskPermanently(UserTask task)
+    {
+        _db.Tasks.Remove(task);
+        await _db.SaveChangesAsync();
     }
 }

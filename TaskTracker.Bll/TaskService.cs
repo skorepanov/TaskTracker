@@ -53,9 +53,9 @@ public class TaskService(ITaskRepository _taskRepository)
         return todayTasks;
     }
 
-    public async Task<IReadOnlyList<UserTask>> GetDeletedTasks()
+    public async Task<IReadOnlyList<UserTask>> GetTasksInTrash()
     {
-        var tasks = await _taskRepository.GetDeletedTasks();
+        var tasks = await _taskRepository.GetTasksInTrash();
         return tasks;
     }
 
@@ -114,6 +114,28 @@ public class TaskService(ITaskRepository _taskRepository)
 
         task.Delete(new DateTime());
         await _taskRepository.UpdateTask(task);
+    }
+
+    public async Task DeleteTaskPermanently(int taskId)
+    {
+        var task = await _taskRepository.GetTask(taskId);
+
+        if (task is null)
+        {
+            throw new DomainEntityNotFoundException(
+                domainEntityType: typeof(UserTask),
+                message: "Задача не обнаружена");
+        }
+
+        if (task.DeletionDate is null)
+        {
+            throw new CannotDeleteDomainEntityException(
+                domainEntityType: typeof(UserTask),
+                domainEntityId: task.Id,
+                message: "Невозможно удалить задачу не из корзины");
+        }
+
+        await _taskRepository.DeleteTaskPermanently(task);
     }
 
     public async Task<Folder> GetFolderById(int folderId)
