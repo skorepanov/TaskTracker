@@ -24,7 +24,8 @@ public class Folder
 
     public static Folder CreateFolder(FolderForCreationDto folderDto)
     {
-        return new Folder(folderDto.Title);
+        var normalizedTitle = folderDto.Title.Trim();
+        return new Folder(normalizedTitle);
     }
 
     public void AddTask(UserTask task)

@@ -82,6 +82,26 @@ public class FolderTests
     }
     #endregion
 
+    #region Create folder
+    [Test]
+    [Category("CreateFolder")]
+    public void CreateFolderWithFieldNormalization()
+    {
+        // Arrange
+        const string TITLE = "Folder title 42";
+
+        var folderDtoWithSpaces = new FolderForCreationDto(
+            Title: $"   {TITLE}   "
+        );
+
+        // Act
+        var sut = Folder.CreateFolder(folderDtoWithSpaces);
+
+        // Assert
+        sut.Title.Should().Be(TITLE);
+    }
+    #endregion
+
     #region helpers
     private Folder CreateSut(string title = "Folder title 42")
     {

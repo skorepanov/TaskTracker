@@ -251,6 +251,31 @@ public class UserTaskTests
     }
     #endregion
 
+    #region Create task
+    [Test]
+    [Category("CreateTask")]
+    public void CreateTaskWithFieldNormalization()
+    {
+        // Arrange
+        const string TITLE = "Task title 42";
+        const string DESCRIPTION = "Task description 42";
+
+        var userTaskDtoWithSpaces = new UserTaskForCreationDto(
+            Title: $"   {TITLE}   ",
+            Description: $"    {DESCRIPTION}   ",
+            DueDate: It.IsAny<DateTime?>(),
+            FolderId: It.IsAny<int>()
+        );
+
+        // Act
+        var sut = UserTask.CreateTask(userTaskDtoWithSpaces);
+
+        // Assert
+        sut.Title.Should().Be(TITLE);
+        sut.Description.Should().Be(DESCRIPTION);
+    }
+    #endregion
+
     #region Delete task
     [Test]
     [Category("DeleteTask")]

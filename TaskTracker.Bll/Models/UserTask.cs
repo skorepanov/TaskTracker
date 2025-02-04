@@ -23,7 +23,9 @@ public class UserTask
 
     public static UserTask CreateTask(UserTaskForCreationDto userTaskDto)
     {
-        return new UserTask(userTaskDto.Title, userTaskDto.Description, userTaskDto.DueDate);
+        var normalizedTitle = userTaskDto.Title.Trim();
+        var normalizedDescription = userTaskDto.Description.Trim();
+        return new UserTask(normalizedTitle, normalizedDescription, userTaskDto.DueDate);
     }
 
     public void Complete(DateTime completionDate)
