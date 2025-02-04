@@ -10,21 +10,6 @@ namespace TaskTracker.Web.Controllers;
 public class TaskController(TaskService _taskService) : ControllerBase
 {
     /// <summary>
-    /// Создать задачу
-    /// </summary>
-    /// <param name="userTaskDto">Данные создаваемой задачи</param>
-    [HttpPost]
-    public async Task<IActionResult> CreateTask([FromBody] UserTaskForCreationDto userTaskDto)
-    {
-        var task = await _taskService.CreateTask(userTaskDto);
-        var taskVm = new UserTaskVm(task, DateTime.Now);
-
-        return CreatedAtRoute(routeName: nameof(GetTaskById),
-                              routeValues: new { id = taskVm.Id },
-                              value: taskVm);
-    }
-
-    /// <summary>
     /// Получить задачу по идентификатору
     /// </summary>
     /// <param name="id">Идентификатор задачи</param>
@@ -58,5 +43,20 @@ public class TaskController(TaskService _taskService) : ControllerBase
         var tasks = await _taskService.GetDeletedTasks();
         var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
         return Ok(taskVms);
+    }
+
+    /// <summary>
+    /// Создать задачу
+    /// </summary>
+    /// <param name="userTaskDto">Данные создаваемой задачи</param>
+    [HttpPost]
+    public async Task<IActionResult> CreateTask([FromBody] UserTaskForCreationDto userTaskDto)
+    {
+        var task = await _taskService.CreateTask(userTaskDto);
+        var taskVm = new UserTaskVm(task, DateTime.Now);
+
+        return CreatedAtRoute(routeName: nameof(GetTaskById),
+            routeValues: new { id = taskVm.Id },
+            value: taskVm);
     }
 }

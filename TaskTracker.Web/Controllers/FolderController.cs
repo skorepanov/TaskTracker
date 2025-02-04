@@ -10,21 +10,6 @@ namespace TaskTracker.Web.Controllers;
 public class FolderController(TaskService _taskService) : ControllerBase
 {
     /// <summary>
-    /// Создать папку
-    /// </summary>
-    /// <param name="folderDto">Данные создаваемой папки</param>
-    [HttpPost]
-    public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
-    {
-        var folder = await _taskService.CreateFolder(folderDto);
-        var folderVm = new FolderVm(folder);
-
-        return CreatedAtRoute(routeName: nameof(GetFolderById),
-                              routeValues: new { id = folderVm.Id },
-                              value: folderVm);
-    }
-
-    /// <summary>
     /// Получить папку по идентификатору
     /// </summary>
     /// <param name="id">Идентификатор папки</param>
@@ -71,5 +56,20 @@ public class FolderController(TaskService _taskService) : ControllerBase
         var tasks = await _taskService.GetCompletedTasks(folderId);
         var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
         return Ok(taskVms);
+    }
+
+    /// <summary>
+    /// Создать папку
+    /// </summary>
+    /// <param name="folderDto">Данные создаваемой папки</param>
+    [HttpPost]
+    public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
+    {
+        var folder = await _taskService.CreateFolder(folderDto);
+        var folderVm = new FolderVm(folder);
+
+        return CreatedAtRoute(routeName: nameof(GetFolderById),
+            routeValues: new { id = folderVm.Id },
+            value: folderVm);
     }
 }

@@ -4,6 +4,61 @@ namespace TaskTracker.Bll;
 
 public class TaskService(ITaskRepository _taskRepository)
 {
+    public async Task<UserTask> GetTaskById(int taskId)
+    {
+        var task = await _taskRepository.GetTask(taskId);
+
+        if (task is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(UserTask),
+                message: "Задача не обнаружена");
+        }
+
+        return task;
+    }
+
+    public async Task<IReadOnlyList<UserTask>> GetIncompleteTasks(int folderId)
+    {
+        var folder = await _taskRepository.GetFolder(folderId);
+
+        if (folder is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(Folder),
+                message: "Папка не обнаружена");
+        }
+
+        return folder.IncompleteTasks;
+    }
+
+    public async Task<IReadOnlyList<UserTask>> GetCompletedTasks(int folderId)
+    {
+        var folder = await _taskRepository.GetFolder(folderId);
+
+        if (folder is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(Folder),
+                message: "Папка не обнаружена");
+        }
+
+        return folder.CompletedTasks;
+    }
+
+    public async Task<IReadOnlyList<UserTask>> GetTodayTasks()
+    {
+        var today = DateTime.Now;
+        var tasks = await _taskRepository.GetNonDeletedTasks();
+
+        var todayTasks = tasks.Where(t => t.IsTodayTask(today)).ToList();
+
+        return todayTasks;
+    }
+
+    public async Task<IReadOnlyList<UserTask>> GetDeletedTasks()
+    {
+        var tasks = await _taskRepository.GetDeletedTasks();
+        return tasks;
+    }
+
     public async Task<UserTask> CreateTask(UserTaskForCreationDto userTaskDto)
     {
         var folder = await _taskRepository.GetFolder(userTaskDto.FolderId);
@@ -59,61 +114,6 @@ public class TaskService(ITaskRepository _taskRepository)
 
         task.Delete(new DateTime());
         await _taskRepository.UpdateTask(task);
-    }
-
-    public async Task<IReadOnlyList<UserTask>> GetIncompleteTasks(int folderId)
-    {
-        var folder = await _taskRepository.GetFolder(folderId);
-
-        if (folder is null)
-        {
-            throw new DomainEntityNotFoundException(domainEntityType: typeof(Folder),
-                                                    message: "Папка не обнаружена");
-        }
-
-        return folder.IncompleteTasks;
-    }
-
-    public async Task<IReadOnlyList<UserTask>> GetCompletedTasks(int folderId)
-    {
-        var folder = await _taskRepository.GetFolder(folderId);
-
-        if (folder is null)
-        {
-            throw new DomainEntityNotFoundException(domainEntityType: typeof(Folder),
-                                                    message: "Папка не обнаружена");
-        }
-
-        return folder.CompletedTasks;
-    }
-
-    public async Task<UserTask> GetTaskById(int taskId)
-    {
-        var task = await _taskRepository.GetTask(taskId);
-
-        if (task is null)
-        {
-            throw new DomainEntityNotFoundException(domainEntityType: typeof(UserTask),
-                                                    message: "Задача не обнаружена");
-        }
-
-        return task;
-    }
-
-    public async Task<IReadOnlyList<UserTask>> GetTodayTasks()
-    {
-        var today = DateTime.Now;
-        var tasks = await _taskRepository.GetNonDeletedTasks();
-
-        var todayTasks = tasks.Where(t => t.IsTodayTask(today)).ToList();
-
-        return todayTasks;
-    }
-
-    public async Task<IReadOnlyList<UserTask>> GetDeletedTasks()
-    {
-        var tasks = await _taskRepository.GetDeletedTasks();
-        return tasks;
     }
 
     public async Task<Folder> GetFolderById(int folderId)
