@@ -11,7 +11,7 @@ public interface ITaskRepository
     Task<Folder?> GetFolder(int folderId);
     Task<IReadOnlyList<Folder>> GetFolders();
 
-    Task SaveNewTask(UserTask task, int folderId);
+    Task CreateTask(UserTask task, int folderId);
     Task CreateFolder(Folder folder);
 
     Task UpdateTask(UserTask task);

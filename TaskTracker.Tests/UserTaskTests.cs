@@ -270,13 +270,13 @@ public class UserTaskTests
     #endregion
 
     #region helpers
-    private UserTask CreateSut(int id = 42, string title = "Task title 42",
+    private UserTask CreateSut(string title = "Task title 42",
                                string description = "Description 42")
     {
-        var userTaskChangeData = new UserTaskChangeData(id, title, description,
+        var userTaskDto = new UserTaskForCreationDto(title, description,
             DueDate: null, FolderId: 42);
 
-        return UserTask.CreateTask(userTaskChangeData);
+        return UserTask.CreateTask(userTaskDto);
     }
     #endregion
 }

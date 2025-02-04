@@ -33,7 +33,7 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         return await _db.Folders.Include(f => f.Tasks).ToListAsync();
     }
 
-    public async Task SaveNewTask(UserTask task, int folderId)
+    public async Task CreateTask(UserTask task, int folderId)
     {
         _db.Tasks.Add(task);
         _db.Entry(task).Property("FolderId").CurrentValue = folderId;

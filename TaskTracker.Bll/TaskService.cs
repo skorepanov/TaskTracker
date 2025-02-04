@@ -4,9 +4,9 @@ namespace TaskTracker.Bll;
 
 public class TaskService(ITaskRepository _taskRepository)
 {
-    public async Task<UserTask> CreateTask(UserTaskChangeData changeData)
+    public async Task<UserTask> CreateTask(UserTaskForCreationDto userTaskDto)
     {
-        var folder = await _taskRepository.GetFolder(changeData.FolderId);
+        var folder = await _taskRepository.GetFolder(userTaskDto.FolderId);
 
         if (folder is null)
         {
@@ -14,8 +14,8 @@ public class TaskService(ITaskRepository _taskRepository)
                                                     message: "Папка не обнаружена");
         }
 
-        var newTask = UserTask.CreateTask(changeData);
-        await _taskRepository.SaveNewTask(newTask, folder.Id);
+        var newTask = UserTask.CreateTask(userTaskDto);
+        await _taskRepository.CreateTask(newTask, folder.Id);
         return newTask;
     }
 

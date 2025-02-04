@@ -22,11 +22,10 @@ public class FolderTests
 
     [Test]
     [Category("AddTask")]
-    public void AddSeveralTasksWithSameIdToFolder()
+    public void AddSeveralTasksToFolder()
     {
         // Arrange
-        const int TASK_ID = 42;
-        var task = CreateTask(TASK_ID);
+        var task = CreateTask();
 
         var sut = CreateSut();
 
@@ -34,9 +33,10 @@ public class FolderTests
         sut.AddTask(task);
         sut.Tasks.Should().ContainSingle(t => t.Equals(task));
 
-        var otherTask = CreateTask(TASK_ID);
+        var otherTask = CreateTask();
         sut.AddTask(otherTask);
         sut.Tasks.Should().ContainSingle(t => t.Equals(task));
+        sut.Tasks.Should().ContainSingle(t => t.Equals(otherTask));
     }
     #endregion
 
@@ -62,12 +62,12 @@ public class FolderTests
         // Arrange
         var sut = CreateSut();
 
-        var incompleteTask = CreateTask(id: 42_1);
+        var incompleteTask = CreateTask();
 
-        var completedTask = CreateTask(id: 42_2);
+        var completedTask = CreateTask();
         completedTask.Complete(new DateTime(year: 2022, month: 1, day: 10));
 
-        var deletedTask = CreateTask(id: 42_3);
+        var deletedTask = CreateTask();
         deletedTask.Delete(new DateTime(year: 2022, month: 2, day: 20));
 
         sut.AddTask(incompleteTask);
@@ -89,12 +89,12 @@ public class FolderTests
         return Folder.CreateFolder(folderDto);
     }
 
-    private UserTask CreateTask(int id = 42, string title = "Task title 42",
+    private UserTask CreateTask(string title = "Task title 42",
                                 string description = "Description 42")
     {
-        var userTaskChangeData = new UserTaskChangeData(id, title, description,
+        var userTaskDto = new UserTaskForCreationDto(title, description,
             DueDate: null, FolderId: 42);
-        return UserTask.CreateTask(userTaskChangeData);
+        return UserTask.CreateTask(userTaskDto);
     }
     #endregion
 }

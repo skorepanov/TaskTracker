@@ -14,19 +14,19 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetFolder(It.IsAny<int>()))
                       .Returns(Task.FromResult((Folder?)null));
 
-        var userTaskChangeData = new UserTaskChangeData(Id: 42, Title: "Task title 42",
+        var userTaskDto = new UserTaskForCreationDto(Title: "Task title 42",
             Description: "Description 42", null, FolderId: 42);
 
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        var action = () => sut.CreateTask(userTaskChangeData);
+        var action = () => sut.CreateTask(userTaskDto);
 
         // Assert
         var exception = await action.Should().ThrowAsync<DomainEntityNotFoundException>()
                                              .WithMessage("Папка не обнаружена");
         exception.And.DomainEntityType.Should().Be(typeof(Folder));
-        mockRepository.Verify(r => r.SaveNewTask(It.IsAny<UserTask>(), It.IsAny<int>()),
+        mockRepository.Verify(r => r.CreateTask(It.IsAny<UserTask>(), It.IsAny<int>()),
                               Times.Never);
     }
 
@@ -45,18 +45,18 @@ public class TaskServiceTests
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
                       .Returns(Task.FromResult<Folder?>(folder));
 
-        var userTaskChangeData = new UserTaskChangeData(Id: 42, TITLE, DESCRIPTION,
+        var userTaskDto = new UserTaskForCreationDto(TITLE, DESCRIPTION,
             DueDate: null, FOLDER_ID);
 
         var sut = new TaskService(mockRepository.Object);
 
         // Act
-        var task = await sut.CreateTask(userTaskChangeData);
+        var task = await sut.CreateTask(userTaskDto);
 
         // Assert
         task.Title.Should().Be(TITLE);
         task.Description.Should().Be(DESCRIPTION);
-        mockRepository.Verify(r => r.SaveNewTask(It.IsAny<UserTask>(), It.IsAny<int>()),
+        mockRepository.Verify(r => r.CreateTask(It.IsAny<UserTask>(), It.IsAny<int>()),
                               Times.Once);
     }
     #endregion
@@ -90,7 +90,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42;
-        var task = CreateTask(TASK_ID);
+        var task = CreateTask();
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -136,7 +136,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42;
-        var task = CreateTask(TASK_ID);
+        var task = CreateTask();
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -182,7 +182,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42;
-        var task = CreateTask(TASK_ID);
+        var task = CreateTask();
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -206,13 +206,13 @@ public class TaskServiceTests
     {
         // Arrange
         const string TITLE = "title 42";
-        var folderForCreationDto = new FolderForCreationDto(TITLE);
+        var folderDto = new FolderForCreationDto(TITLE);
 
         var mockRepository = new Mock<ITaskRepository>();
         var taskService = new TaskService(mockRepository.Object);
 
         // Act
-        var sut = await taskService.CreateFolder(folderForCreationDto);
+        var sut = await taskService.CreateFolder(folderDto);
 
         // Assert
         sut.Title.Should().Be(TITLE);
@@ -250,7 +250,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42_1;
-        var task = CreateTask(TASK_ID);
+        var task = CreateTask();
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -277,7 +277,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42_1;
-        var task = CreateTask(TASK_ID);
+        var task = CreateTask();
 
         const int FOLDER_ID = 42_2;
         var folder = CreateFolder(title: "Folder title 42");
@@ -301,17 +301,17 @@ public class TaskServiceTests
     #region helpers
     private Folder CreateFolder(string title = "Folder title 42")
     {
-        var folderForCreationDto = new FolderForCreationDto(title);
-        return Folder.CreateFolder(folderForCreationDto);
+        var folderDto = new FolderForCreationDto(title);
+        return Folder.CreateFolder(folderDto);
     }
 
-    private UserTask CreateTask(int id = 42, string title = "Task title 42",
+    private UserTask CreateTask(string title = "Task title 42",
                                 string description = "Description 42")
     {
-        var userTaskChangeData = new UserTaskChangeData(id, title, description,
+        var userTaskDto = new UserTaskForCreationDto(title, description,
             DueDate: null, FolderId: 42);
 
-        return UserTask.CreateTask(userTaskChangeData);
+        return UserTask.CreateTask(userTaskDto);
     }
     #endregion
 }

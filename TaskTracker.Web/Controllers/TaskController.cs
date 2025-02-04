@@ -12,11 +12,11 @@ public class TaskController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Создать задачу
     /// </summary>
-    /// <param name="changeData">Данные создаваемой задачи</param>
+    /// <param name="userTaskDto">Данные создаваемой задачи</param>
     [HttpPost]
-    public async Task<IActionResult> CreateTask([FromBody] UserTaskChangeData changeData)
+    public async Task<IActionResult> CreateTask([FromBody] UserTaskForCreationDto userTaskDto)
     {
-        var task = await _taskService.CreateTask(changeData);
+        var task = await _taskService.CreateTask(userTaskDto);
         var taskVm = new UserTaskVm(task, DateTime.Now);
 
         return CreatedAtRoute(routeName: nameof(GetTaskById),

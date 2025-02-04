@@ -1,6 +1,6 @@
 ﻿namespace TaskTracker.Bll.Models;
 
-public class UserTask : IComparable
+public class UserTask
 {
     public int Id { get; private set; }
     public string Title { get; private set; }
@@ -21,9 +21,9 @@ public class UserTask : IComparable
         this.DueDate = dueDate;
     }
 
-    public static UserTask CreateTask(UserTaskChangeData changeData)
+    public static UserTask CreateTask(UserTaskForCreationDto userTaskDto)
     {
-        return new UserTask(changeData.Title, changeData.Description, changeData.DueDate);
+        return new UserTask(userTaskDto.Title, userTaskDto.Description, userTaskDto.DueDate);
     }
 
     public void Complete(DateTime completionDate)
@@ -61,22 +61,4 @@ public class UserTask : IComparable
     {
         this.DeletionDate = deletionDate;
     }
-
-    #region Comparisons
-    public override bool Equals(object? obj)
-    {
-        UserTask? task = (UserTask?)obj;
-        return this.Id == task?.Id;
-    }
-
-    public int CompareTo(object? obj)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
-    #endregion
 }

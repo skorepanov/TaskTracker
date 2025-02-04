@@ -1,9 +1,9 @@
 ﻿namespace TaskTracker.Bll.Models;
 
 /// <summary>
-/// Данные создаваемой или редактируемой задачи
+/// Данные для редактирования задачи
 /// </summary>
-public record UserTaskChangeData(
+public record UserTaskForUpdateDto(
     int Id,
     string Title,
     string Description,
