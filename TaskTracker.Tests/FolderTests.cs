@@ -83,10 +83,10 @@ public class FolderTests
     #endregion
 
     #region helpers
-    private Folder CreateSut(int id = 42, string title = "Folder title 42")
+    private Folder CreateSut(string title = "Folder title 42")
     {
-        var folderChangeData = new FolderChangeData(id, title);
-        return Folder.CreateFolder(folderChangeData);
+        var folderDto = new FolderForCreationDto(title);
+        return Folder.CreateFolder(folderDto);
     }
 
     private UserTask CreateTask(int id = 42, string title = "Task title 42",

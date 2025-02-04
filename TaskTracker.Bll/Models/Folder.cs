@@ -22,9 +22,9 @@ public class Folder
         this._tasks = new List<UserTask>();
     }
 
-    public static Folder CreateFolder(FolderChangeData changeData)
+    public static Folder CreateFolder(FolderForCreationDto folderDto)
     {
-        return new Folder(changeData.Title);
+        return new Folder(folderDto.Title);
     }
 
     public void AddTask(UserTask task)

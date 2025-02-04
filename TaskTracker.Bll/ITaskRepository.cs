@@ -12,7 +12,7 @@ public interface ITaskRepository
     Task<IReadOnlyList<Folder>> GetFolders();
 
     Task SaveNewTask(UserTask task, int folderId);
-    Task SaveNewFolder(Folder folder);
+    Task CreateFolder(Folder folder);
 
     Task UpdateTask(UserTask task);
     Task UpdateTaskFolder(int taskId, int folderId);

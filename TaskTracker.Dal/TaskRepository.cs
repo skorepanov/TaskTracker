@@ -40,7 +40,7 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task SaveNewFolder(Folder folder)
+    public async Task CreateFolder(Folder folder)
     {
         _db.Folders.Add(folder);
         await _db.SaveChangesAsync();

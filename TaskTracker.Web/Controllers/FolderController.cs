@@ -12,11 +12,11 @@ public class FolderController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Создать папку
     /// </summary>
-    /// <param name="changeData">Данные создаваемой папки</param>
+    /// <param name="folderDto">Данные создаваемой папки</param>
     [HttpPost]
-    public async Task<IActionResult> CreateFolder([FromBody] FolderChangeData changeData)
+    public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
     {
-        var folder = await _taskService.CreateFolder(changeData);
+        var folder = await _taskService.CreateFolder(folderDto);
         var folderVm = new FolderVm(folder);
 
         return CreatedAtRoute(routeName: nameof(GetFolderById),

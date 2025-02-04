@@ -135,10 +135,10 @@ public class TaskService(ITaskRepository _taskRepository)
         return folders;
     }
 
-    public async Task<Folder> CreateFolder(FolderChangeData changeData)
+    public async Task<Folder> CreateFolder(FolderForCreationDto folderDto)
     {
-        var newFolder = Folder.CreateFolder(changeData);
-        await _taskRepository.SaveNewFolder(newFolder);
+        var newFolder = Folder.CreateFolder(folderDto);
+        await _taskRepository.CreateFolder(newFolder);
         return newFolder;
     }
 

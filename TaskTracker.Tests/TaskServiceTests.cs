@@ -39,7 +39,7 @@ public class TaskServiceTests
         const string DESCRIPTION = "description 42";
         const int FOLDER_ID = 42;
 
-        var folder = CreateFolder(FOLDER_ID);
+        var folder = CreateFolder(title: "Folder title 42");
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetFolder(FOLDER_ID))
@@ -206,17 +206,17 @@ public class TaskServiceTests
     {
         // Arrange
         const string TITLE = "title 42";
-        var folderChangeData = new FolderChangeData(Id: 42, TITLE);
+        var folderForCreationDto = new FolderForCreationDto(TITLE);
 
         var mockRepository = new Mock<ITaskRepository>();
         var taskService = new TaskService(mockRepository.Object);
 
         // Act
-        var sut = await taskService.CreateFolder(folderChangeData);
+        var sut = await taskService.CreateFolder(folderForCreationDto);
 
         // Assert
         sut.Title.Should().Be(TITLE);
-        mockRepository.Verify(r => r.SaveNewFolder(It.IsAny<Folder>()),
+        mockRepository.Verify(r => r.CreateFolder(It.IsAny<Folder>()),
                               Times.Once());
     }
     #endregion
@@ -280,7 +280,7 @@ public class TaskServiceTests
         var task = CreateTask(TASK_ID);
 
         const int FOLDER_ID = 42_2;
-        var folder = CreateFolder(FOLDER_ID);
+        var folder = CreateFolder(title: "Folder title 42");
 
         var mockRepository = new Mock<ITaskRepository>();
         mockRepository.Setup(r => r.GetTask(TASK_ID))
@@ -299,10 +299,10 @@ public class TaskServiceTests
     #endregion
 
     #region helpers
-    private Folder CreateFolder(int id = 42, string title = "Folder title 42")
+    private Folder CreateFolder(string title = "Folder title 42")
     {
-        var folderChangeData = new FolderChangeData(id, title);
-        return Folder.CreateFolder(folderChangeData);
+        var folderForCreationDto = new FolderForCreationDto(title);
+        return Folder.CreateFolder(folderForCreationDto);
     }
 
     private UserTask CreateTask(int id = 42, string title = "Task title 42",
