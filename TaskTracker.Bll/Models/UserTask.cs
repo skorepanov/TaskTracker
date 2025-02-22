@@ -16,9 +16,9 @@ public class UserTask
 
     private UserTask(string title, string description, DateTime? dueDate)
     {
-        this.Title = title;
-        this.Description = description;
-        this.DueDate = dueDate;
+        Title = title;
+        Description = description;
+        DueDate = dueDate;
     }
 
     public static UserTask CreateTask(UserTaskForCreationDto userTaskDto)
@@ -30,44 +30,44 @@ public class UserTask
 
     public void UpdateTask(UserTaskForUpdateDto userTaskDto)
     {
-        this.Title = userTaskDto.Title.Trim();
-        this.Description = userTaskDto.Description.Trim();
-        this.DueDate = userTaskDto.DueDate;
+        Title = userTaskDto.Title.Trim();
+        Description = userTaskDto.Description.Trim();
+        DueDate = userTaskDto.DueDate;
     }
 
     public void Complete(DateTime completionDate)
     {
-        this.CompletionDate = completionDate;
+        CompletionDate = completionDate;
     }
 
     public void Incomplete()
     {
-        this.CompletionDate = null;
+        CompletionDate = null;
     }
 
     public int CalculateOverdueDays(DateTime today)
     {
-        if (this.IsDeleted || this.DueDate is null || this.DueDate >= today)
+        if (IsDeleted || DueDate is null || DueDate >= today)
         {
             return 0;
         }
 
-        return (this.DueDate.Value - today).Duration().Days;
+        return (DueDate.Value - today).Duration().Days;
     }
 
     public bool IsTodayTask(DateTime today)
     {
-        if (this.IsDeleted)
+        if (IsDeleted)
         {
             return false;
         }
 
-        return this.CompletionDate?.Date == today.Date
-           || !this.IsCompleted && this.DueDate?.Date <= today.Date;
+        return CompletionDate?.Date == today.Date
+           || !IsCompleted && DueDate?.Date <= today.Date;
     }
 
     public void Delete(DateTime deletionDate)
     {
-        this.DeletionDate = deletionDate;
+        DeletionDate = deletionDate;
     }
 }

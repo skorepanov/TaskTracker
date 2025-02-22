@@ -25,9 +25,9 @@ public record FolderVm
     /// </summary>
     public FolderVm(Folder folder)
     {
-        this.Id = folder.Id;
-        this.Title = folder.Title;
-        this.IncompleteTaskCount = folder.IncompleteTaskCount;
+        Id = folder.Id;
+        Title = folder.Title;
+        IncompleteTaskCount = folder.IncompleteTaskCount;
     }
 
     /// <summary>

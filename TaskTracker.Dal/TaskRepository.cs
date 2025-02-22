@@ -36,7 +36,7 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
 
     public async Task UpdateTaskFolder(int taskId, int folderId)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public async Task DeleteTaskPermanently(UserTask task)

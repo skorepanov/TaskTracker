@@ -9,17 +9,17 @@ public class Folder
     public IReadOnlyList<UserTask> Tasks => _tasks;
 
     public IReadOnlyList<UserTask> CompletedTasks
-        => this._tasks.Where(t => !t.IsDeleted && t.IsCompleted).ToList();
+        => _tasks.Where(t => !t.IsDeleted && t.IsCompleted).ToList();
 
     public IReadOnlyList<UserTask> IncompleteTasks
-        => this._tasks.Where(t => !t.IsCompleted && !t.IsDeleted).ToList();
+        => _tasks.Where(t => !t.IsCompleted && !t.IsDeleted).ToList();
 
-    public int IncompleteTaskCount => this.IncompleteTasks.Count;
+    public int IncompleteTaskCount => IncompleteTasks.Count;
 
     private Folder(string title)
     {
-        this.Title = title;
-        this._tasks = new List<UserTask>();
+        Title = title;
+        _tasks = new List<UserTask>();
     }
 
     public static Folder CreateFolder(FolderForCreationDto folderDto)
@@ -30,7 +30,7 @@ public class Folder
 
     public void UpdateFolder(FolderForUpdateDto folderDto)
     {
-        this.Title = folderDto.Title.Trim();
+        Title = folderDto.Title.Trim();
     }
 
     public void AddTask(UserTask task)
@@ -40,9 +40,9 @@ public class Folder
             throw new ArgumentNullException(paramName: nameof(task));
         }
 
-        if (!this._tasks.Contains(task))
+        if (!_tasks.Contains(task))
         {
-            this._tasks.Add(task);
+            _tasks.Add(task);
         }
     }
 }

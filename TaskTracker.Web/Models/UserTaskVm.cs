@@ -55,15 +55,15 @@ public record UserTaskVm
     /// </summary>
     public UserTaskVm(UserTask task, DateTime today)
     {
-        this.Id = task.Id;
-        this.Title = task.Title;
-        this.Description = task.Description;
-        this.CompletionDate = task.CompletionDate;
-        this.IsCompleted = task.IsCompleted;
-        this.DueDate = task.DueDate;
-        this.OverdueDaysCount = task.CalculateOverdueDays(today);
-        this.DeletionDate = task.DeletionDate;
-        this.IsDeleted = task.IsDeleted;
+        Id = task.Id;
+        Title = task.Title;
+        Description = task.Description;
+        CompletionDate = task.CompletionDate;
+        IsCompleted = task.IsCompleted;
+        DueDate = task.DueDate;
+        OverdueDaysCount = task.CalculateOverdueDays(today);
+        DeletionDate = task.DeletionDate;
+        IsDeleted = task.IsDeleted;
     }
 
     /// <summary>
