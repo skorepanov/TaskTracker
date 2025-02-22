@@ -61,6 +61,21 @@ public class TaskController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
+    /// Обновить задачу
+    /// </summary>
+    /// <param name="taskId">Id задачи</param>
+    /// <param name="userTaskDto">Данные для обновления задачи</param>
+    [HttpPut("{taskId:int}")]
+    public async Task<IActionResult> UpdateTask(
+        int taskId, [FromBody] UserTaskForUpdateDto userTaskDto)
+    {
+        var task = await _taskService.UpdateTask(taskId, userTaskDto);
+        var taskVm = new UserTaskVm(task, DateTime.Now);
+
+        return Ok(taskVm);
+    }
+
+    /// <summary>
     /// Удалить задачу перманентно
     /// </summary>
     /// <param name="taskId">Идентификатор задачи</param>

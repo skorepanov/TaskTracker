@@ -113,7 +113,7 @@ public class FolderTests
         const string NEW_TITLE = "Folder new title";
 
         var folderDtoWithSpaces = new FolderForUpdateDto(
-            Id: 42,
+            Id: It.IsAny<int>(),
             Title: $"   {NEW_TITLE}    "
         );
 

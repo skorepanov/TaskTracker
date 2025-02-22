@@ -30,7 +30,8 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
 
     public async Task UpdateTask(UserTask task)
     {
-        throw new System.NotImplementedException();
+        _db.Tasks.Update(task);
+        await _db.SaveChangesAsync();
     }
 
     public async Task UpdateTaskFolder(int taskId, int folderId)

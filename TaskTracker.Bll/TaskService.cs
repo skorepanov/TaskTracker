@@ -75,6 +75,22 @@ public class TaskService(ITaskRepository _taskRepository,
         return newTask;
     }
 
+    public async Task<UserTask> UpdateTask(int taskId, UserTaskForUpdateDto userTaskDto)
+    {
+        var task = await _taskRepository.GetTask(taskId);
+
+        if (task is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(UserTask),
+                                                    message: "Задача не обнаружена");
+        }
+
+        task.UpdateTask(userTaskDto);
+        await _taskRepository.UpdateTask(task);
+
+        return task;
+    }
+
     public async Task CompleteTask(int taskId)
     {
         var task = await _taskRepository.GetTask(taskId);
@@ -165,9 +181,9 @@ public class TaskService(ITaskRepository _taskRepository,
         return newFolder;
     }
 
-    public async Task<Folder> UpdateFolder(int id, FolderForUpdateDto folderDto)
+    public async Task<Folder> UpdateFolder(int folderId, FolderForUpdateDto folderDto)
     {
-        var folder = await _folderRepository.GetFolder(id);
+        var folder = await _folderRepository.GetFolder(folderId);
 
         if (folder is null)
         {
@@ -176,8 +192,8 @@ public class TaskService(ITaskRepository _taskRepository,
         }
 
         folder.UpdateFolder(folderDto);
-
         await _folderRepository.UpdateFolder(folder);
+
         return folder;
     }
 

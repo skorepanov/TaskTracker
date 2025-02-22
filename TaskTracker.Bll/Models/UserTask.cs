@@ -2,7 +2,7 @@
 
 public class UserTask
 {
-    public int Id { get; private set; }
+    public int Id { get; }
     public string Title { get; private set; }
     public string Description { get; private set; }
 
@@ -26,6 +26,13 @@ public class UserTask
         var normalizedTitle = userTaskDto.Title.Trim();
         var normalizedDescription = userTaskDto.Description.Trim();
         return new UserTask(normalizedTitle, normalizedDescription, userTaskDto.DueDate);
+    }
+
+    public void UpdateTask(UserTaskForUpdateDto userTaskDto)
+    {
+        this.Title = userTaskDto.Title.Trim();
+        this.Description = userTaskDto.Description.Trim();
+        this.DueDate = userTaskDto.DueDate;
     }
 
     public void Complete(DateTime completionDate)

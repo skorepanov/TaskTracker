@@ -257,12 +257,12 @@ public class UserTaskTests
     public void CreateTaskWithFieldNormalization()
     {
         // Arrange
-        const string TITLE = "Task title 42";
-        const string DESCRIPTION = "Task description 42";
+        const string TITLE = "Task title";
+        const string DESCRIPTION = "Task description";
 
         var userTaskDtoWithSpaces = new UserTaskForCreationDto(
-            Title: $"   {TITLE}   ",
-            Description: $"    {DESCRIPTION}   ",
+            Title: $"   {TITLE}    ",
+            Description: $"    {DESCRIPTION}    ",
             DueDate: It.IsAny<DateTime?>(),
             FolderId: It.IsAny<int>()
         );
@@ -273,6 +273,40 @@ public class UserTaskTests
         // Assert
         sut.Title.Should().Be(TITLE);
         sut.Description.Should().Be(DESCRIPTION);
+    }
+    #endregion
+
+    #region Update task
+    [Test]
+    [Category("UpdateTask")]
+    public void UpdateTaskWithFieldNormalization()
+    {
+        // Arrange
+        var sut = CreateSut(
+            title: "Task old title",
+            description: "Task old description",
+            dueDate: new DateTime(year: 2025, month: 1, day: 1)
+        );
+
+        const string NEW_TITLE = "Task new title";
+        const string NEW_DESCRIPTION = "Task new description";
+        var newDueDate = new DateTime(year: 2025, month: 1, day: 2);
+
+        var userTaskDtoWithSpaces = new UserTaskForUpdateDto(
+            Id: It.IsAny<int>(),
+            Title: $"   {NEW_TITLE}    ",
+            Description: $"   {NEW_DESCRIPTION}    ",
+            DueDate: newDueDate,
+            FolderId: It.IsAny<int>()
+        );
+
+        // Act
+        sut.UpdateTask(userTaskDtoWithSpaces);
+
+        // Assert
+        sut.Title.Should().Be(NEW_TITLE);
+        sut.Description.Should().Be(NEW_DESCRIPTION);
+        sut.DueDate.Should().Be(newDueDate);
     }
     #endregion
 
@@ -296,7 +330,8 @@ public class UserTaskTests
 
     #region helpers
     private UserTask CreateSut(string title = "Task title 42",
-                               string description = "Description 42")
+                               string description = "Description 42",
+                               DateTime? dueDate = null)
     {
         var userTaskDto = new UserTaskForCreationDto(title, description,
             DueDate: null, FolderId: 42);
