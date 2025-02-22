@@ -21,28 +21,10 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         return await _db.Tasks.Where(t => t.DeletionDate != null).ToListAsync();
     }
 
-    public async Task<Folder?> GetFolder(int folderId)
-    {
-        return await _db.Folders
-            .Include(f => f.Tasks)
-            .SingleOrDefaultAsync(f => f.Id == folderId);
-    }
-
-    public async Task<IReadOnlyList<Folder>> GetFolders()
-    {
-        return await _db.Folders.Include(f => f.Tasks).ToListAsync();
-    }
-
     public async Task CreateTask(UserTask task, int folderId)
     {
         _db.Tasks.Add(task);
         _db.Entry(task).Property("FolderId").CurrentValue = folderId;
-        await _db.SaveChangesAsync();
-    }
-
-    public async Task CreateFolder(Folder folder)
-    {
-        _db.Folders.Add(folder);
         await _db.SaveChangesAsync();
     }
 
@@ -54,12 +36,6 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
     public async Task UpdateTaskFolder(int taskId, int folderId)
     {
         throw new System.NotImplementedException();
-    }
-
-    public async Task UpdateFolder(Folder folder)
-    {
-        _db.Folders.Update(folder);
-        await _db.SaveChangesAsync();
     }
 
     public async Task DeleteTaskPermanently(UserTask task)

@@ -2,7 +2,8 @@
 
 namespace TaskTracker.Bll;
 
-public class TaskService(ITaskRepository _taskRepository)
+public class TaskService(ITaskRepository _taskRepository,
+                         IFolderRepository _folderRepository)
 {
     public async Task<UserTask> GetTaskById(int taskId)
     {
@@ -19,7 +20,7 @@ public class TaskService(ITaskRepository _taskRepository)
 
     public async Task<IReadOnlyList<UserTask>> GetIncompleteTasks(int folderId)
     {
-        var folder = await _taskRepository.GetFolder(folderId);
+        var folder = await _folderRepository.GetFolder(folderId);
 
         if (folder is null)
         {
@@ -32,7 +33,7 @@ public class TaskService(ITaskRepository _taskRepository)
 
     public async Task<IReadOnlyList<UserTask>> GetCompletedTasks(int folderId)
     {
-        var folder = await _taskRepository.GetFolder(folderId);
+        var folder = await _folderRepository.GetFolder(folderId);
 
         if (folder is null)
         {
@@ -61,7 +62,7 @@ public class TaskService(ITaskRepository _taskRepository)
 
     public async Task<UserTask> CreateTask(UserTaskForCreationDto userTaskDto)
     {
-        var folder = await _taskRepository.GetFolder(userTaskDto.FolderId);
+        var folder = await _folderRepository.GetFolder(userTaskDto.FolderId);
 
         if (folder is null)
         {
@@ -140,7 +141,7 @@ public class TaskService(ITaskRepository _taskRepository)
 
     public async Task<Folder> GetFolderById(int folderId)
     {
-        var folder = await _taskRepository.GetFolder(folderId);
+        var folder = await _folderRepository.GetFolder(folderId);
 
         if (folder is null)
         {
@@ -153,20 +154,20 @@ public class TaskService(ITaskRepository _taskRepository)
 
     public async Task<IReadOnlyList<Folder>> GetFolders()
     {
-        var folders = await _taskRepository.GetFolders();
+        var folders = await _folderRepository.GetFolders();
         return folders;
     }
 
     public async Task<Folder> CreateFolder(FolderForCreationDto folderDto)
     {
         var newFolder = Folder.CreateFolder(folderDto);
-        await _taskRepository.CreateFolder(newFolder);
+        await _folderRepository.CreateFolder(newFolder);
         return newFolder;
     }
 
     public async Task<Folder> UpdateFolder(int id, FolderForUpdateDto folderDto)
     {
-        var folder = await _taskRepository.GetFolder(id);
+        var folder = await _folderRepository.GetFolder(id);
 
         if (folder is null)
         {
@@ -176,7 +177,7 @@ public class TaskService(ITaskRepository _taskRepository)
 
         folder.UpdateFolder(folderDto);
 
-        await _taskRepository.UpdateFolder(folder);
+        await _folderRepository.UpdateFolder(folder);
         return folder;
     }
 
@@ -189,7 +190,7 @@ public class TaskService(ITaskRepository _taskRepository)
                                                     message: "Задача не обнаружена");
         }
 
-        var folder = await _taskRepository.GetFolder(destinationFolderId);
+        var folder = await _folderRepository.GetFolder(destinationFolderId);
         if (folder is null)
         {
             throw new DomainEntityNotFoundException(typeof(Folder),
