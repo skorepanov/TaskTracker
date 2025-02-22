@@ -164,6 +164,22 @@ public class TaskService(ITaskRepository _taskRepository)
         return newFolder;
     }
 
+    public async Task<Folder> UpdateFolder(int id, FolderForUpdateDto folderDto)
+    {
+        var folder = await _taskRepository.GetFolder(id);
+
+        if (folder is null)
+        {
+            throw new DomainEntityNotFoundException(domainEntityType: typeof(Folder),
+                                                    message: "Папка не обнаружена");
+        }
+
+        folder.UpdateFolder(folderDto);
+
+        await _taskRepository.UpdateFolder(folder);
+        return folder;
+    }
+
     public async Task MoveTaskToOtherFolder(int taskId, int destinationFolderId)
     {
         var task = await _taskRepository.GetTask(taskId);

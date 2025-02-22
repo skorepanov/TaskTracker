@@ -12,11 +12,11 @@ public class FolderController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Получить папку по идентификатору
     /// </summary>
-    /// <param name="id">Идентификатор папки</param>
-    [HttpGet("{id:int}", Name = nameof(GetFolderById))]
-    public async Task<IActionResult> GetFolderById(int id)
+    /// <param name="folderId">Идентификатор папки</param>
+    [HttpGet("{folderId:int}", Name = nameof(GetFolderById))]
+    public async Task<IActionResult> GetFolderById(int folderId)
     {
-        var folder = await _taskService.GetFolderById(id);
+        var folder = await _taskService.GetFolderById(folderId);
         var folderVm = new FolderVm(folder);
         return Ok(folderVm);
     }
@@ -61,7 +61,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Создать папку
     /// </summary>
-    /// <param name="folderDto">Данные создаваемой папки</param>
+    /// <param name="folderDto">Данные для создания папки</param>
     [HttpPost]
     public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
     {
@@ -71,5 +71,20 @@ public class FolderController(TaskService _taskService) : ControllerBase
         return CreatedAtRoute(routeName: nameof(GetFolderById),
             routeValues: new { id = folderVm.Id },
             value: folderVm);
+    }
+
+    /// <summary>
+    /// Обновить папку
+    /// </summary>
+    /// <param name="folderId">Id папки</param>
+    /// <param name="folderDto">Данные для обновления папки</param>
+    [HttpPut("{folderId:int}")]
+    public async Task<IActionResult> UpdateFolder(
+        int folderId, [FromBody] FolderForUpdateDto folderDto)
+    {
+        var folder = await _taskService.UpdateFolder(folderId, folderDto);
+        var folderVm = new FolderVm(folder);
+
+        return Ok(folderVm);
     }
 }

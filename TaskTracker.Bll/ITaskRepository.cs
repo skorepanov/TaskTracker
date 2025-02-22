@@ -16,6 +16,7 @@ public interface ITaskRepository
 
     Task UpdateTask(UserTask task);
     Task UpdateTaskFolder(int taskId, int folderId);
+    Task UpdateFolder(Folder folder);
 
     Task DeleteTaskPermanently(UserTask task);
 }

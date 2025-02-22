@@ -88,10 +88,10 @@ public class FolderTests
     public void CreateFolderWithFieldNormalization()
     {
         // Arrange
-        const string TITLE = "Folder title 42";
+        const string TITLE = "Folder title";
 
         var folderDtoWithSpaces = new FolderForCreationDto(
-            Title: $"   {TITLE}   "
+            Title: $"   {TITLE}    "
         );
 
         // Act
@@ -99,6 +99,29 @@ public class FolderTests
 
         // Assert
         sut.Title.Should().Be(TITLE);
+    }
+    #endregion
+
+    #region Update folder
+    [Test]
+    [Category("UpdateFolder")]
+    public void UpdateFolderWithFieldNormalization()
+    {
+        // Arrange
+        var sut = CreateSut(title: "Folder old title");
+
+        const string NEW_TITLE = "Folder new title";
+
+        var folderDtoWithSpaces = new FolderForUpdateDto(
+            Id: 42,
+            Title: $"   {NEW_TITLE}    "
+        );
+
+        // Act
+        sut.UpdateFolder(folderDtoWithSpaces);
+
+        // Assert
+        sut.Title.Should().Be(NEW_TITLE);
     }
     #endregion
 

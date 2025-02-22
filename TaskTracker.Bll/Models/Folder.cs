@@ -2,7 +2,7 @@
 
 public class Folder
 {
-    public int Id { get; private set; }
+    public int Id { get; }
     public string Title { get; private set; }
 
     private readonly List<UserTask> _tasks;
@@ -26,6 +26,11 @@ public class Folder
     {
         var normalizedTitle = folderDto.Title.Trim();
         return new Folder(normalizedTitle);
+    }
+
+    public void UpdateFolder(FolderForUpdateDto folderDto)
+    {
+        this.Title = folderDto.Title.Trim();
     }
 
     public void AddTask(UserTask task)

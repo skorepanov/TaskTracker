@@ -56,6 +56,12 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         throw new System.NotImplementedException();
     }
 
+    public async Task UpdateFolder(Folder folder)
+    {
+        _db.Folders.Update(folder);
+        await _db.SaveChangesAsync();
+    }
+
     public async Task DeleteTaskPermanently(UserTask task)
     {
         _db.Tasks.Remove(task);

@@ -1,6 +1,6 @@
 ﻿namespace TaskTracker.Bll.Models;
 
 /// <summary>
-/// Данные для редактирования папки
+/// Данные для обновления папки
 /// </summary>
 public record FolderForUpdateDto(int Id, string Title);
