@@ -90,8 +90,17 @@ public class TaskService(ITaskRepository _taskRepository,
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
+        var folder = await _folderRepository.GetFolder(userTaskDto.FolderId);
+
+        if (folder is null)
+        {
+            throw new DomainEntityNotFoundException(
+                domainEntityType: typeof(Folder),
+                message: $"Папка не обнаружена (id = {userTaskDto.FolderId})");
+        }
+
         task.UpdateTask(userTaskDto);
-        await _taskRepository.UpdateTask(task);
+        await _taskRepository.UpdateTaskWithFolder(task, folder.Id);
 
         return task;
     }
@@ -107,7 +116,7 @@ public class TaskService(ITaskRepository _taskRepository,
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        task.Complete(new DateTime());
+        task.Complete(DateTime.Now);
         await _taskRepository.UpdateTask(task);
     }
 
@@ -205,28 +214,5 @@ public class TaskService(ITaskRepository _taskRepository,
         await _folderRepository.UpdateFolder(folder);
 
         return folder;
-    }
-
-    public async Task MoveTaskToOtherFolder(int taskId, int destinationFolderId)
-    {
-        var task = await _taskRepository.GetTask(taskId);
-
-        if (task is null)
-        {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(UserTask),
-                message: $"Задача не обнаружена (id = {taskId})");
-        }
-
-        var folder = await _folderRepository.GetFolder(destinationFolderId);
-
-        if (folder is null)
-        {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Folder),
-                message: $"Папка не обнаружена (id = {destinationFolderId})");
-        }
-
-        await _taskRepository.UpdateTaskFolder(taskId, destinationFolderId);
     }
 }

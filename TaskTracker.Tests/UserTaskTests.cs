@@ -293,7 +293,6 @@ public class UserTaskTests
         var newDueDate = new DateTime(year: 2025, month: 1, day: 2);
 
         var userTaskDtoWithSpaces = new UserTaskForUpdateDto(
-            Id: It.IsAny<int>(),
             Title: $"   {NEW_TITLE}    ",
             Description: $"   {NEW_DESCRIPTION}    ",
             DueDate: newDueDate,
@@ -334,7 +333,7 @@ public class UserTaskTests
                                DateTime? dueDate = null)
     {
         var userTaskDto = new UserTaskForCreationDto(title, description,
-            DueDate: null, FolderId: 42);
+            dueDate, FolderId: 42);
 
         return UserTask.CreateTask(userTaskDto);
     }

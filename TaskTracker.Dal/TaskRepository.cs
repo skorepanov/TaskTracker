@@ -34,9 +34,11 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task UpdateTaskFolder(int taskId, int folderId)
+    public async Task UpdateTaskWithFolder(UserTask task, int folderId)
     {
-        throw new NotImplementedException();
+        _db.Tasks.Update(task);
+        _db.Entry(task).Property("FolderId").CurrentValue = folderId;
+        await _db.SaveChangesAsync();
     }
 
     public async Task DeleteTaskPermanently(UserTask task)
