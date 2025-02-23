@@ -24,6 +24,11 @@ public class ApplicationContext : DbContext
             task.Property(t => t.CompletionDate).HasColumnType("timestamp with time zone");
             task.Property(t => t.DueDate).HasColumnType("timestamp with time zone");
             task.Property(t => t.DeletionDate).HasColumnType("timestamp with time zone");
+
+            task.HasOne(t => t.Folder)
+                .WithMany(f => f.Tasks)
+                .HasForeignKey(t => t.FolderId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Folder>(folder =>
@@ -33,10 +38,6 @@ public class ApplicationContext : DbContext
 
             folder.Ignore(f => f.CompletedTasks);
             folder.Ignore(f => f.IncompleteTasks);
-
-            folder.HasMany(f => f.Tasks)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

@@ -6,6 +6,9 @@ public class UserTask
     public string Title { get; private set; }
     public string Description { get; private set; }
 
+    public int? FolderId { get; private set; }
+    public Folder? Folder { get; private set; }
+
     public DateTime? CompletionDate { get; private set; }
     public bool IsCompleted => CompletionDate is not null;
 
