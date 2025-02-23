@@ -20,6 +20,7 @@ class App extends React.Component<IAppProps, IAppState> {
         this.state = {
             folders: [],
             todayTasks: [],
+            tasksInInbox: [],
             deletedTasks: [],
         };
     }
@@ -51,6 +52,7 @@ class App extends React.Component<IAppProps, IAppState> {
 
         folder.tasks = [...incompleteTasks, ...completedTasks];
         folder.incompleteTaskCount = incompleteTasks.length;
+
         return this.setState({ folders: folders });
     }
 
@@ -63,13 +65,22 @@ class App extends React.Component<IAppProps, IAppState> {
 
     createTask = async (task: ITask) => {
         const url = `${AppUrl}/tasks`;
-        const params = { title: task.title, description: task.description,
-                         dueDate: task.dueDate, folderId: task.folderId };
+        const params = {
+            title: task.title,
+            description: task.description,
+            dueDate: task.dueDate,
+            folderId: task.folderId
+        };
 
         await Api.post<ITask>(url, params);
         this.loadFolders();
         this.loadTodayTasks();
-        this.loadFolderTasks(task.folderId, true);
+
+        if (task.folderId != null) {
+            this.loadFolderTasks(task.folderId, true);
+        } else {
+            this.loadTasksInInbox();
+        }
     }
 
     async loadTodayTasks() {
@@ -77,6 +88,13 @@ class App extends React.Component<IAppProps, IAppState> {
 
         const tasks = await Api.get<ITask[]>(url);
         return this.setState({ todayTasks: tasks });
+    }
+
+    async loadTasksInInbox() {
+        const url = `${AppUrl}/tasks/inbox`;
+
+        const tasks = await Api.get<ITask[]>(url);
+        return this.setState({ tasksInInbox: tasks });
     }
 
     async loadDeletedTasks() {
@@ -89,6 +107,7 @@ class App extends React.Component<IAppProps, IAppState> {
     componentDidMount() {
         this.loadFolders();
         this.loadTodayTasks();
+        this.loadTasksInInbox();
         this.loadDeletedTasks();
     }
 
@@ -111,6 +130,12 @@ class App extends React.Component<IAppProps, IAppState> {
                             <Task task={t} key={t.id} />
                         )
                     }
+                    <strong>Inbox</strong>
+                    {
+                        this.state.tasksInInbox.map(t =>
+                            <Task task={t} key={t.id} />
+                        )
+                    }
                     <strong>Удалённые задачи</strong>
                     {
                         this.state.deletedTasks.map(t =>
@@ -129,6 +154,7 @@ interface IAppProps {
 interface IAppState {
     folders: IFolder[];
     todayTasks: ITask[];
+    tasksInInbox: ITask[];
     deletedTasks: IDeletedTask[];
 }
 

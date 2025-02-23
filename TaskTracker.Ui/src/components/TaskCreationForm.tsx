@@ -16,14 +16,14 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
             title: '',
             description: '',
             completionDate: null,
+            folderId: null,
             dueDate: null,
-            folderId: 0,
         }
     }
 
     async createTask() {
         await this.props.createTask(this.state);
-        this.setState({ title: '', description: '', dueDate: null });
+        this.setState({ title: '', description: '', folderId: null, dueDate: null });
     }
 
     onTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -44,8 +44,8 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
     }
 
     isButtonDisabled() {
-        const { title, folderId } = this.state;
-        return title.trim() === '' || folderId === 0;
+        const { title } = this.state;
+        return title.trim() === '';
     }
 
     render() {
