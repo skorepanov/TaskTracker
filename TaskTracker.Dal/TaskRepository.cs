@@ -13,12 +13,23 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
 
     public async Task<IReadOnlyList<UserTask>> GetNonDeletedTasks()
     {
-        return await _db.Tasks.Where(t => t.DeletionDate == null).ToListAsync();
+        return await _db.Tasks
+            .Where(t => t.DeletionDate == null)
+            .ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<UserTask>> GetTasksInInbox()
+    {
+        return await _db.Tasks
+            .Where(t => t.FolderId == null)
+            .ToListAsync();
     }
 
     public async Task<IReadOnlyList<UserTask>> GetTasksInTrash()
     {
-        return await _db.Tasks.Where(t => t.DeletionDate != null).ToListAsync();
+        return await _db.Tasks
+            .Where(t => t.DeletionDate != null)
+            .ToListAsync();
     }
 
     public async Task CreateTask(UserTask task)

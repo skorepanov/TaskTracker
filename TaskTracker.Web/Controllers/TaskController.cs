@@ -34,6 +34,18 @@ public class TaskController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
+    /// Получить задачи из инбокса
+    /// </summary>
+    [HttpGet]
+    [Route("inbox")]
+    public async Task<IActionResult> GetTasksInInbox()
+    {
+        var tasks = await _taskService.GetTasksInInbox();
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
+        return Ok(taskVms);
+    }
+
+    /// <summary>
     /// Получить задачи из корзины
     /// </summary>
     [HttpGet]

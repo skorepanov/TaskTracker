@@ -5,7 +5,9 @@ namespace TaskTracker.Bll;
 public interface ITaskRepository
 {
     Task<UserTask?> GetTask(int taskId);
+
     Task<IReadOnlyList<UserTask>> GetNonDeletedTasks();
+    Task<IReadOnlyList<UserTask>> GetTasksInInbox();
     Task<IReadOnlyList<UserTask>> GetTasksInTrash();
 
     Task CreateTask(UserTask task);
