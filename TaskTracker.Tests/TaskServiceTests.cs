@@ -35,7 +35,7 @@ public class TaskServiceTests
             .WithMessage($"Папка не обнаружена (id = {FOLDER_ID})");
         exception.And.DomainEntityType.Should().Be(typeof(Folder));
         mockTaskRepository
-            .Verify(r => r.CreateTask(It.IsAny<UserTask>(), It.IsAny<int>()),
+            .Verify(r => r.CreateTask(It.IsAny<UserTask>(), It.IsAny<int?>()),
                     Times.Never);
     }
 
@@ -71,7 +71,7 @@ public class TaskServiceTests
         task.Title.Should().Be(TITLE);
         task.Description.Should().Be(DESCRIPTION);
         mockTaskRepository
-            .Verify(r => r.CreateTask(It.IsAny<UserTask>(), It.IsAny<int>()),
+            .Verify(r => r.CreateTask(It.IsAny<UserTask>(), It.IsAny<int?>()),
                     Times.Once);
     }
     #endregion

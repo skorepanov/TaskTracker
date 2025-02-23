@@ -7,4 +7,4 @@ public record UserTaskForCreationDto(
     string Title,
     string Description,
     DateTime? DueDate,
-    int FolderId);
+    int? FolderId);

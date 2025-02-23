@@ -65,17 +65,22 @@ public class TaskService(ITaskRepository _taskRepository,
 
     public async Task<UserTask> CreateTask(UserTaskForCreationDto userTaskDto)
     {
-        var folder = await _folderRepository.GetFolder(userTaskDto.FolderId);
+        var folderId = userTaskDto.FolderId;
 
-        if (folder is null)
+        if (folderId is not null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Folder),
-                message: $"Папка не обнаружена (id = {userTaskDto.FolderId})");
+            var folder = await _folderRepository.GetFolder(folderId.Value);
+
+            if (folder is null)
+            {
+                throw new DomainEntityNotFoundException(
+                    domainEntityType: typeof(Folder),
+                    message: $"Папка не обнаружена (id = {folderId.Value})");
+            }
         }
 
         var newTask = UserTask.CreateTask(userTaskDto);
-        await _taskRepository.CreateTask(newTask, folder.Id);
+        await _taskRepository.CreateTask(newTask, folderId);
         return newTask;
     }
 
@@ -90,17 +95,22 @@ public class TaskService(ITaskRepository _taskRepository,
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        var folder = await _folderRepository.GetFolder(userTaskDto.FolderId);
+        var folderId = userTaskDto.FolderId;
 
-        if (folder is null)
+        if (folderId is not null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Folder),
-                message: $"Папка не обнаружена (id = {userTaskDto.FolderId})");
+            var folder = await _folderRepository.GetFolder(folderId.Value);
+
+            if (folder is null)
+            {
+                throw new DomainEntityNotFoundException(
+                    domainEntityType: typeof(Folder),
+                    message: $"Папка не обнаружена (id = {folderId.Value})");
+            }
         }
 
         task.UpdateTask(userTaskDto);
-        await _taskRepository.UpdateTaskWithFolder(task, folder.Id);
+        await _taskRepository.UpdateTaskWithFolder(task, folderId);
 
         return task;
     }
