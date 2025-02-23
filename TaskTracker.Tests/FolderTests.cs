@@ -91,8 +91,7 @@ public class FolderTests
         const string TITLE = "Folder title";
 
         var folderDtoWithSpaces = new FolderForCreationDto(
-            Title: $"   {TITLE}    "
-        );
+            Title: $"   {TITLE}    ");
 
         // Act
         var sut = Folder.CreateFolder(folderDtoWithSpaces);
@@ -114,8 +113,7 @@ public class FolderTests
 
         var folderDtoWithSpaces = new FolderForUpdateDto(
             Id: It.IsAny<int>(),
-            Title: $"   {NEW_TITLE}    "
-        );
+            Title: $"   {NEW_TITLE}    ");
 
         // Act
         sut.UpdateFolder(folderDtoWithSpaces);
@@ -135,8 +133,8 @@ public class FolderTests
     private UserTask CreateTask(string title = "Task title 42",
                                 string description = "Description 42")
     {
-        var userTaskDto = new UserTaskForCreationDto(title, description,
-            DueDate: null, FolderId: 42);
+        var userTaskDto = new UserTaskForCreationDto(title,
+            description, FolderId: 42, DueDate: null);
         return UserTask.CreateTask(userTaskDto);
     }
     #endregion

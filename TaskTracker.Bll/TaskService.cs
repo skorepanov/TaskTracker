@@ -80,7 +80,7 @@ public class TaskService(ITaskRepository _taskRepository,
         }
 
         var newTask = UserTask.CreateTask(userTaskDto);
-        await _taskRepository.CreateTask(newTask, folderId);
+        await _taskRepository.CreateTask(newTask);
         return newTask;
     }
 
@@ -110,7 +110,7 @@ public class TaskService(ITaskRepository _taskRepository,
         }
 
         task.UpdateTask(userTaskDto);
-        await _taskRepository.UpdateTaskWithFolder(task, folderId);
+        await _taskRepository.UpdateTask(task);
 
         return task;
     }

@@ -8,10 +8,9 @@ public interface ITaskRepository
     Task<IReadOnlyList<UserTask>> GetNonDeletedTasks();
     Task<IReadOnlyList<UserTask>> GetTasksInTrash();
 
-    Task CreateTask(UserTask task, int? folderId);
+    Task CreateTask(UserTask task);
 
     Task UpdateTask(UserTask task);
-    Task UpdateTaskWithFolder(UserTask task, int? folderId);
 
     Task DeleteTaskPermanently(UserTask task);
 }

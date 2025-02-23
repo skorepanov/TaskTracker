@@ -259,12 +259,14 @@ public class UserTaskTests
         // Arrange
         const string TITLE = "Task title";
         const string DESCRIPTION = "Task description";
+        const int FOLDER_ID = 42;
+        var dueDate = new DateTime(year: 2022, month: 2, day: 23);
 
         var userTaskDtoWithSpaces = new UserTaskForCreationDto(
             Title: $"   {TITLE}    ",
             Description: $"    {DESCRIPTION}    ",
-            DueDate: It.IsAny<DateTime?>(),
-            FolderId: It.IsAny<int>()
+            FolderId: FOLDER_ID,
+            DueDate: dueDate
         );
 
         // Act
@@ -273,6 +275,8 @@ public class UserTaskTests
         // Assert
         sut.Title.Should().Be(TITLE);
         sut.Description.Should().Be(DESCRIPTION);
+        sut.FolderId.Should().Be(FOLDER_ID);
+        sut.DueDate.Should().Be(dueDate);
     }
     #endregion
 
@@ -285,18 +289,20 @@ public class UserTaskTests
         var sut = CreateSut(
             title: "Task old title",
             description: "Task old description",
+            folderId: 42_1,
             dueDate: new DateTime(year: 2025, month: 1, day: 1)
         );
 
         const string NEW_TITLE = "Task new title";
         const string NEW_DESCRIPTION = "Task new description";
+        const int NEW_FOLDER_ID = 42_2;
         var newDueDate = new DateTime(year: 2025, month: 1, day: 2);
 
         var userTaskDtoWithSpaces = new UserTaskForUpdateDto(
             Title: $"   {NEW_TITLE}    ",
             Description: $"   {NEW_DESCRIPTION}    ",
-            DueDate: newDueDate,
-            FolderId: It.IsAny<int>()
+            FolderId: NEW_FOLDER_ID,
+            DueDate: newDueDate
         );
 
         // Act
@@ -305,6 +311,7 @@ public class UserTaskTests
         // Assert
         sut.Title.Should().Be(NEW_TITLE);
         sut.Description.Should().Be(NEW_DESCRIPTION);
+        sut.FolderId.Should().Be(NEW_FOLDER_ID);
         sut.DueDate.Should().Be(newDueDate);
     }
     #endregion
@@ -328,12 +335,14 @@ public class UserTaskTests
     #endregion
 
     #region helpers
-    private UserTask CreateSut(string title = "Task title 42",
-                               string description = "Description 42",
-                               DateTime? dueDate = null)
+    private UserTask CreateSut(
+        string title = "Task title 42",
+        string description = "Description 42",
+        int? folderId = 42,
+        DateTime? dueDate = null)
     {
-        var userTaskDto = new UserTaskForCreationDto(title, description,
-            dueDate, FolderId: 42);
+        var userTaskDto = new UserTaskForCreationDto(
+            title, description, folderId, dueDate);
 
         return UserTask.CreateTask(userTaskDto);
     }

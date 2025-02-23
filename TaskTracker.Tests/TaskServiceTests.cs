@@ -20,7 +20,7 @@ public class TaskServiceTests
         const int FOLDER_ID = 42;
 
         var userTaskDto = new UserTaskForCreationDto(Title: "Task title 42",
-            Description: "Description 42", null, FolderId: FOLDER_ID);
+            Description: "Description 42", FOLDER_ID, DueDate: null);
 
         var sut = new TaskService(
             mockTaskRepository.Object,
@@ -35,7 +35,7 @@ public class TaskServiceTests
             .WithMessage($"Папка не обнаружена (id = {FOLDER_ID})");
         exception.And.DomainEntityType.Should().Be(typeof(Folder));
         mockTaskRepository
-            .Verify(r => r.CreateTask(It.IsAny<UserTask>(), It.IsAny<int?>()),
+            .Verify(r => r.CreateTask(It.IsAny<UserTask>()),
                     Times.Never);
     }
 
@@ -57,8 +57,8 @@ public class TaskServiceTests
             .Setup(r => r.GetFolder(FOLDER_ID))
             .Returns(Task.FromResult<Folder?>(folder));
 
-        var userTaskDto = new UserTaskForCreationDto(TITLE, DESCRIPTION,
-            DueDate: null, FOLDER_ID);
+        var userTaskDto = new UserTaskForCreationDto(TITLE,
+            DESCRIPTION, FOLDER_ID, DueDate: null);
 
         var sut = new TaskService(
             mockTaskRepository.Object,
@@ -71,7 +71,7 @@ public class TaskServiceTests
         task.Title.Should().Be(TITLE);
         task.Description.Should().Be(DESCRIPTION);
         mockTaskRepository
-            .Verify(r => r.CreateTask(It.IsAny<UserTask>(), It.IsAny<int?>()),
+            .Verify(r => r.CreateTask(It.IsAny<UserTask>()),
                     Times.Once);
     }
     #endregion
@@ -172,8 +172,9 @@ public class TaskServiceTests
         var task = CreateTask();
 
         var mockTaskRepository = new Mock<ITaskRepository>();
-        mockTaskRepository.Setup(r => r.GetTask(TASK_ID))
-                      .Returns(Task.FromResult<UserTask?>(task));
+        mockTaskRepository
+            .Setup(r => r.GetTask(TASK_ID))
+            .Returns(Task.FromResult<UserTask?>(task));
 
         var sut = new TaskService(
             mockTaskRepository.Object,
@@ -198,8 +199,9 @@ public class TaskServiceTests
         const int TASK_ID = 42;
 
         var mockTaskRepository = new Mock<ITaskRepository>();
-        mockTaskRepository.Setup(r => r.GetTask(It.IsAny<int>()))
-                      .Returns(Task.FromResult((UserTask?)null));
+        mockTaskRepository
+            .Setup(r => r.GetTask(It.IsAny<int>()))
+            .Returns(Task.FromResult((UserTask?)null));
 
         var sut = new TaskService(
             mockTaskRepository.Object,
@@ -281,8 +283,8 @@ public class TaskServiceTests
     private UserTask CreateTask(string title = "Task title 42",
                                 string description = "Description 42")
     {
-        var userTaskDto = new UserTaskForCreationDto(title, description,
-            DueDate: null, FolderId: 42);
+        var userTaskDto = new UserTaskForCreationDto(title,
+            description, FolderId: 42, DueDate: null);
 
         return UserTask.CreateTask(userTaskDto);
     }

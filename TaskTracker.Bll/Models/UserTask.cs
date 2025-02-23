@@ -17,10 +17,11 @@ public class UserTask
     public DateTime? DeletionDate { get; private set; }
     public bool IsDeleted => DeletionDate is not null;
 
-    private UserTask(string title, string description, DateTime? dueDate)
+    private UserTask(string title, string description, int? folderId, DateTime? dueDate)
     {
         Title = title;
         Description = description;
+        FolderId = folderId;
         DueDate = dueDate;
     }
 
@@ -28,13 +29,17 @@ public class UserTask
     {
         var normalizedTitle = userTaskDto.Title.Trim();
         var normalizedDescription = userTaskDto.Description.Trim();
-        return new UserTask(normalizedTitle, normalizedDescription, userTaskDto.DueDate);
+
+        return new UserTask(
+            normalizedTitle, normalizedDescription,
+            userTaskDto.FolderId, userTaskDto.DueDate);
     }
 
     public void UpdateTask(UserTaskForUpdateDto userTaskDto)
     {
         Title = userTaskDto.Title.Trim();
         Description = userTaskDto.Description.Trim();
+        FolderId = userTaskDto.FolderId;
         DueDate = userTaskDto.DueDate;
     }
 

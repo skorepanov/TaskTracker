@@ -21,23 +21,15 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         return await _db.Tasks.Where(t => t.DeletionDate != null).ToListAsync();
     }
 
-    public async Task CreateTask(UserTask task, int? folderId)
+    public async Task CreateTask(UserTask task)
     {
         _db.Tasks.Add(task);
-        _db.Entry(task).Property("FolderId").CurrentValue = folderId;
         await _db.SaveChangesAsync();
     }
 
     public async Task UpdateTask(UserTask task)
     {
         _db.Tasks.Update(task);
-        await _db.SaveChangesAsync();
-    }
-
-    public async Task UpdateTaskWithFolder(UserTask task, int? folderId)
-    {
-        _db.Tasks.Update(task);
-        _db.Entry(task).Property("FolderId").CurrentValue = folderId;
         await _db.SaveChangesAsync();
     }
 
