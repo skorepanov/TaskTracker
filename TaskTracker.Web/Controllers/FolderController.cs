@@ -87,4 +87,15 @@ public class FolderController(TaskService _taskService) : ControllerBase
 
         return Ok(folderVm);
     }
+
+    /// <summary>
+    /// Удалить папку
+    /// </summary>
+    /// <param name="folderId">Id папки</param>
+    [HttpDelete("{folderId:int}")]
+    public async Task<IActionResult> DeleteFolder(int folderId)
+    {
+        await _taskService.DeleteFolder(folderId);
+        return NoContent();
+    }
 }

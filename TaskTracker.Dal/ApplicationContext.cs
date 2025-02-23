@@ -34,7 +34,9 @@ public class ApplicationContext : DbContext
             folder.Ignore(f => f.CompletedTasks);
             folder.Ignore(f => f.IncompleteTasks);
 
-            folder.HasMany(f => f.Tasks).WithOne();
+            folder.HasMany(f => f.Tasks)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

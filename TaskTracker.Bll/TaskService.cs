@@ -215,4 +215,18 @@ public class TaskService(ITaskRepository _taskRepository,
 
         return folder;
     }
+
+    public async Task DeleteFolder(int folderId)
+    {
+        var folder = await _folderRepository.GetFolder(folderId);
+
+        if (folder is null)
+        {
+            throw new DomainEntityNotFoundException(
+                domainEntityType: typeof(Folder),
+                message: $"Папка не обнаружена (id = {folderId})");
+        }
+
+        await _folderRepository.DeleteFolder(folder);
+    }
 }

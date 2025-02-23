@@ -10,4 +10,6 @@ public interface IFolderRepository
     Task CreateFolder(Folder folder);
 
     Task UpdateFolder(Folder folder);
+
+    Task DeleteFolder(Folder folder);
 }

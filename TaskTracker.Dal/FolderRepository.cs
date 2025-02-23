@@ -29,4 +29,10 @@ public class FolderRepository(ApplicationContext _db) : IFolderRepository
         _db.Folders.Update(folder);
         await _db.SaveChangesAsync();
     }
+
+    public async Task DeleteFolder(Folder folder)
+    {
+        _db.Folders.Remove(folder);
+        await _db.SaveChangesAsync();
+    }
 }
