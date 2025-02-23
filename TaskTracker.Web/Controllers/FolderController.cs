@@ -68,8 +68,9 @@ public class FolderController(TaskService _taskService) : ControllerBase
         var folder = await _taskService.CreateFolder(folderDto);
         var folderVm = new FolderVm(folder);
 
-        return CreatedAtRoute(routeName: nameof(GetFolderById),
-            routeValues: new { id = folderVm.Id },
+        return CreatedAtRoute(
+            routeName: nameof(GetFolderById),
+            routeValues: new { folderId = folderVm.Id },
             value: folderVm);
     }
 

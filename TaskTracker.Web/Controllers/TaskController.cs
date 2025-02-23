@@ -67,8 +67,9 @@ public class TaskController(TaskService _taskService) : ControllerBase
         var task = await _taskService.CreateTask(userTaskDto);
         var taskVm = new UserTaskVm(task, DateTime.Now);
 
-        return CreatedAtRoute(routeName: nameof(GetTaskById),
-            routeValues: new { id = taskVm.Id },
+        return CreatedAtRoute(
+            routeName: nameof(GetTaskById),
+            routeValues: new { taskId = taskVm.Id },
             value: taskVm);
     }
 
