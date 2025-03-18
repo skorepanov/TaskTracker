@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TaskTracker.Bll.Models;
 
 namespace TaskTracker.Dal;
@@ -15,29 +16,49 @@ public class ApplicationContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserTask>(task =>
-        {
-            task.Property(t => t.Id).UseSerialColumn();
-            task.Property(t => t.Title).HasColumnType("varchar").HasMaxLength(1000);
-            task.Property(t => t.Description).HasColumnType("varchar").HasMaxLength(100000);
+        modelBuilder.Entity<UserTask>(ConfigureUserTask);
+        modelBuilder.Entity<Folder>(ConfigureFolder);
+    }
 
-            task.Property(t => t.CompletionDate).HasColumnType("timestamp with time zone");
-            task.Property(t => t.DueDate).HasColumnType("timestamp with time zone");
-            task.Property(t => t.DeletionDate).HasColumnType("timestamp with time zone");
+    private void ConfigureUserTask(EntityTypeBuilder<UserTask> builder)
+    {
+        builder.Property(t => t.Id)
+            .UseSerialColumn();
 
-            task.HasOne(t => t.Folder)
-                .WithMany(f => f.Tasks)
-                .HasForeignKey(t => t.FolderId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
+        builder.Property(t => t.Title)
+            .HasColumnType("varchar")
+            .HasMaxLength(1000);
 
-        modelBuilder.Entity<Folder>(folder =>
-        {
-            folder.Property(f => f.Id).UseSerialColumn();
-            folder.Property(f => f.Title).HasColumnType("varchar").HasMaxLength(100);
+        builder.Property(t => t.Description)
+            .HasColumnType("varchar")
+            .HasMaxLength(100000);
 
-            folder.Ignore(f => f.CompletedTasks);
-            folder.Ignore(f => f.IncompleteTasks);
-        });
+        builder.Property(t => t.CompletionDate)
+            .HasColumnType("timestamp with time zone");
+
+        builder.Property(t => t.DueDate)
+            .HasColumnType("timestamp with time zone");
+
+        builder.Property(t => t.DeletionDate)
+            .HasColumnType("timestamp with time zone");
+
+        builder.HasOne(t => t.Folder)
+            .WithMany(f => f.Tasks)
+            .HasForeignKey(t => t.FolderId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    private void ConfigureFolder(EntityTypeBuilder<Folder> builder)
+    {
+        builder.Property(f => f.Id)
+            .UseSerialColumn();
+
+        builder.Property(f => f.Title)
+            .HasColumnType("varchar")
+            .HasMaxLength(100);
+
+        builder.Ignore(f => f.CompletedTasks);
+
+        builder.Ignore(f => f.IncompleteTasks);
     }
 }
