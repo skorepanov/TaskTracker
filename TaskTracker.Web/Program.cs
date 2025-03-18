@@ -1,4 +1,3 @@
-using Microsoft.OpenApi.Models;
 using TaskTracker.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,21 +21,11 @@ builder.Services.AddCustomHealthChecks();
 
 #endregion
 
-#region Add Swagger
+#region Configure OpenApi
 
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddOpenApi(options =>
 {
-    options.SwaggerDoc(name: "v1", new OpenApiInfo
-    {
-        Version = "0.0.1",
-        Title = "Task Tracker"
-    });
-
-    var baseDirectory = AppContext.BaseDirectory;
-    var xmlCommentsPath = Path.Combine(baseDirectory, "TaskTrackerAPI.xml");
-    options.IncludeXmlComments(xmlCommentsPath);
+    options.AddDocumentTransformer<TaskTrackerApiTransformer>();
 });
 
 #endregion
@@ -47,13 +36,18 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint(url: "/openapi/v1.json", name: "OpenAPI v1");
+    });
 }
 
 app.UseHttpsRedirection();
 
-app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(corsPolicyBuilder
+    => corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseAuthorization();
 
