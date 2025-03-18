@@ -1,3 +1,4 @@
+using Scalar.AspNetCore;
 using TaskTracker.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,8 @@ if (app.Environment.IsDevelopment())
     {
         options.SwaggerEndpoint(url: "/openapi/v1.json", name: "OpenAPI v1");
     });
+
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
