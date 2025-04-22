@@ -49,7 +49,7 @@ public class TaskService(ITaskRepository _taskRepository,
 
     public async Task<IReadOnlyList<UserTask>> GetTodayTasks()
     {
-        var today = DateTime.Now;
+        var today = DateTime.UtcNow;
         var tasks = await _taskRepository.GetNonDeletedTasks();
 
         var todayTasks = tasks.Where(t => t.IsTodayTask(today)).ToList();
@@ -132,7 +132,7 @@ public class TaskService(ITaskRepository _taskRepository,
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        task.Complete(DateTime.Now);
+        task.Complete(DateTime.UtcNow);
         await _taskRepository.UpdateTask(task);
     }
 

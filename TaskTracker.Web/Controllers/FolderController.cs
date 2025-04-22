@@ -41,7 +41,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetIncompleteTasks(int folderId)
     {
         var tasks = await _taskService.GetIncompleteTasks(folderId);
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
         return Ok(taskVms);
     }
 
@@ -54,7 +54,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetCompletedTasks(int folderId)
     {
         var tasks = await _taskService.GetCompletedTasks(folderId);
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
         return Ok(taskVms);
     }
 

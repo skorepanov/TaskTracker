@@ -17,7 +17,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetTaskById(int taskId)
     {
         var task = await _taskService.GetTaskById(taskId);
-        var taskVm = new UserTaskVm(task, DateTime.Now);
+        var taskVm = new UserTaskVm(task, DateTime.UtcNow);
         return Ok(taskVm);
     }
 
@@ -29,7 +29,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetTodayTasks()
     {
         var tasks = await _taskService.GetTodayTasks();
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
         return Ok(taskVms);
     }
 
@@ -41,7 +41,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetTasksInInbox()
     {
         var tasks = await _taskService.GetTasksInInbox();
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
         return Ok(taskVms);
     }
 
@@ -53,7 +53,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetTasksInTrash()
     {
         var tasks = await _taskService.GetTasksInTrash();
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.Now);
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
         return Ok(taskVms);
     }
 
@@ -65,7 +65,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> CreateTask([FromBody] UserTaskForCreationDto userTaskDto)
     {
         var task = await _taskService.CreateTask(userTaskDto);
-        var taskVm = new UserTaskVm(task, DateTime.Now);
+        var taskVm = new UserTaskVm(task, DateTime.UtcNow);
 
         return CreatedAtRoute(
             routeName: nameof(GetTaskById),
@@ -83,7 +83,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
         int taskId, [FromBody] UserTaskForUpdateDto userTaskDto)
     {
         var task = await _taskService.UpdateTask(taskId, userTaskDto);
-        var taskVm = new UserTaskVm(task, DateTime.Now);
+        var taskVm = new UserTaskVm(task, DateTime.UtcNow);
 
         return Ok(taskVm);
     }
