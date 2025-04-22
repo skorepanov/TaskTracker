@@ -21,9 +21,9 @@ public record UserTaskVm
     public string Description { get; }
 
     /// <summary>
-    /// Фактическая дата выполнения задачи
+    /// Фактическая дата и время выполнения задачи
     /// </summary>
-    public DateTime? CompletionDate { get; }
+    public DateTime? CompletedDateTime { get; }
 
     /// <summary>
     /// Выполнена ли задача
@@ -58,7 +58,7 @@ public record UserTaskVm
         Id = task.Id;
         Title = task.Title;
         Description = task.Description;
-        CompletionDate = task.CompletionDate;
+        CompletedDateTime = task.CompletedDateTime;
         IsCompleted = task.IsCompleted;
         DueDate = task.DueDate;
         OverdueDaysCount = task.CalculateOverdueDays(today);

@@ -9,13 +9,13 @@ public class UserTaskTests
     {
         // Arrange
         var sut = CreateSut();
-        var completionDate = new DateTime(year: 2022, month: 2, day: 10);
+        var completedDateTime = new DateTime(year: 2022, month: 2, day: 10);
 
         // Act
-        sut.Complete(completionDate);
+        sut.Complete(completedDateTime);
 
         // Assert
-        sut.CompletionDate.Should().Be(completionDate);
+        sut.CompletedDateTime.Should().Be(completedDateTime);
         sut.IsCompleted.Should().BeTrue();
     }
     #endregion
@@ -27,14 +27,14 @@ public class UserTaskTests
     {
         // Arrange
         var sut = CreateSut();
-        var completionDate = new DateTime(year: 2022, month: 2, day: 10);
-        sut.Complete(completionDate);
+        var completedDateTime = new DateTime(year: 2022, month: 2, day: 10);
+        sut.Complete(completedDateTime);
 
         // Act
         sut.Incomplete();
 
         // Assert
-        sut.CompletionDate.Should().BeNull();
+        sut.CompletedDateTime.Should().BeNull();
         sut.IsCompleted.Should().BeFalse();
     }
     #endregion
@@ -149,8 +149,8 @@ public class UserTaskTests
         var today = new DateTime(year: 2022, month: 2, day: 5);
 
         var sut = CreateSut();
-        var completionDate = today;
-        sut.Complete(completionDate);
+        var completedDateTime = today;
+        sut.Complete(completedDateTime);
 
         // Act
         var isTodayTask = sut.IsTodayTask(today);
@@ -165,8 +165,8 @@ public class UserTaskTests
     {
         // Arrange
         var sut = CreateSut();
-        var completionDate = new DateTime(year: 2022, month: 2, day: 5);
-        sut.Complete(completionDate);
+        var completedDateTime = new DateTime(year: 2022, month: 2, day: 5);
+        sut.Complete(completedDateTime);
 
         var today = new DateTime(year: 2022, month: 2, day: 7);
 

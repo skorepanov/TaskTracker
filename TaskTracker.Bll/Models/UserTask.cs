@@ -9,8 +9,8 @@ public class UserTask
     public int? FolderId { get; private set; }
     public Folder? Folder { get; private set; }
 
-    public DateTime? CompletionDate { get; private set; }
-    public bool IsCompleted => CompletionDate is not null;
+    public DateTime? CompletedDateTime { get; private set; }
+    public bool IsCompleted => CompletedDateTime is not null;
 
     public DateTime? DueDate { get; set; }
 
@@ -43,14 +43,14 @@ public class UserTask
         DueDate = userTaskDto.DueDate;
     }
 
-    public void Complete(DateTime completionDate)
+    public void Complete(DateTime completedDateTime)
     {
-        CompletionDate = completionDate;
+        CompletedDateTime = completedDateTime;
     }
 
     public void Incomplete()
     {
-        CompletionDate = null;
+        CompletedDateTime = null;
     }
 
     public int CalculateOverdueDays(DateTime today)
@@ -70,7 +70,7 @@ public class UserTask
             return false;
         }
 
-        return CompletionDate?.Date == today.Date
+        return CompletedDateTime?.Date == today.Date
            || !IsCompleted && DueDate?.Date <= today.Date;
     }
 
