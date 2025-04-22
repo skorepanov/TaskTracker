@@ -12,17 +12,17 @@ public class UserTask
     public DateTime? CompletedDateTime { get; private set; }
     public bool IsCompleted => CompletedDateTime is not null;
 
-    public DateTime? DueDate { get; set; }
+    public DateTime? DueDateTime { get; set; }
 
     public DateTime? DeletionDate { get; private set; }
     public bool IsDeleted => DeletionDate is not null;
 
-    private UserTask(string title, string description, int? folderId, DateTime? dueDate)
+    private UserTask(string title, string description, int? folderId, DateTime? dueDateTime)
     {
         Title = title;
         Description = description;
         FolderId = folderId;
-        DueDate = dueDate;
+        DueDateTime = dueDateTime;
     }
 
     public static UserTask CreateTask(UserTaskForCreationDto userTaskDto)
@@ -32,7 +32,7 @@ public class UserTask
 
         return new UserTask(
             normalizedTitle, normalizedDescription,
-            userTaskDto.FolderId, userTaskDto.DueDate);
+            userTaskDto.FolderId, userTaskDto.DueDateTime);
     }
 
     public void UpdateTask(UserTaskForUpdateDto userTaskDto)
@@ -40,7 +40,7 @@ public class UserTask
         Title = userTaskDto.Title.Trim();
         Description = userTaskDto.Description.Trim();
         FolderId = userTaskDto.FolderId;
-        DueDate = userTaskDto.DueDate;
+        DueDateTime = userTaskDto.DueDateTime;
     }
 
     public void Complete(DateTime completedDateTime)
@@ -55,12 +55,12 @@ public class UserTask
 
     public int CalculateOverdueDays(DateTime today)
     {
-        if (IsDeleted || DueDate is null || DueDate >= today)
+        if (IsDeleted || DueDateTime is null || DueDateTime >= today)
         {
             return 0;
         }
 
-        return (DueDate.Value - today).Duration().Days;
+        return (DueDateTime.Value - today).Duration().Days;
     }
 
     public bool IsTodayTask(DateTime today)
@@ -71,7 +71,7 @@ public class UserTask
         }
 
         return CompletedDateTime?.Date == today.Date
-           || !IsCompleted && DueDate?.Date <= today.Date;
+           || !IsCompleted && DueDateTime?.Date <= today.Date;
     }
 
     public void Delete(DateTime deletionDate)

@@ -20,7 +20,7 @@ public class TaskServiceTests
         const int FOLDER_ID = 42;
 
         var userTaskDto = new UserTaskForCreationDto(Title: "Task title 42",
-            Description: "Description 42", FOLDER_ID, DueDate: null);
+            Description: "Description 42", FOLDER_ID, DueDateTime: null);
 
         var sut = new TaskService(
             mockTaskRepository.Object,
@@ -58,7 +58,7 @@ public class TaskServiceTests
             .Returns(Task.FromResult<Folder?>(folder));
 
         var userTaskDto = new UserTaskForCreationDto(TITLE,
-            DESCRIPTION, FOLDER_ID, DueDate: null);
+            DESCRIPTION, FOLDER_ID, DueDateTime: null);
 
         var sut = new TaskService(
             mockTaskRepository.Object,
@@ -284,7 +284,7 @@ public class TaskServiceTests
                                 string description = "Description 42")
     {
         var userTaskDto = new UserTaskForCreationDto(title,
-            description, FolderId: 42, DueDate: null);
+            description, FolderId: 42, DueDateTime: null);
 
         return UserTask.CreateTask(userTaskDto);
     }

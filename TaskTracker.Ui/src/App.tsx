@@ -68,7 +68,7 @@ class App extends React.Component<IAppProps, IAppState> {
         const params = {
             title: task.title,
             description: task.description,
-            dueDate: task.dueDate,
+            dueDateTime: task.dueDateTime,
             folderId: task.folderId
         };
 

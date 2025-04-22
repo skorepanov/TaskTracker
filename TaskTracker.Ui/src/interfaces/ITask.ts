@@ -4,5 +4,5 @@ export default interface ITask {
     description: string,
     folderId: number | null,
     completionDate: Date | null,
-    dueDate: Date | null,
+    dueDateTime: Date | null,
 }

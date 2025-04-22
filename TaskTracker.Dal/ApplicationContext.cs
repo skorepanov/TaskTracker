@@ -36,7 +36,7 @@ public class ApplicationContext : DbContext
         builder.Property(t => t.CompletedDateTime)
             .HasColumnType("timestamp with time zone");
 
-        builder.Property(t => t.DueDate)
+        builder.Property(t => t.DueDateTime)
             .HasColumnType("timestamp with time zone");
 
         builder.Property(t => t.DeletionDate)

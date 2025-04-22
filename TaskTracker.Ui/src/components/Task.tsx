@@ -15,8 +15,8 @@ class Task extends React.Component<ITaskProps> {
             ? <>Выполнено: {task.completionDate}<br /></>
             : null;
 
-        const dueDate = task.dueDate !== null
-            ? <span>Срок выполнения: {task.dueDate}</span>
+        const dueDateTime = task.dueDateTime !== null
+            ? <span>Срок выполнения: {task.dueDateTime}</span>
             : null;
 
         return (
@@ -24,7 +24,7 @@ class Task extends React.Component<ITaskProps> {
                 [{task.id}] {task.title}<br />
                 {description}
                 {completionDate}
-                {dueDate}
+                {dueDateTime}
             </div>
         );
     }

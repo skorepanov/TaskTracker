@@ -134,7 +134,7 @@ public class FolderTests
                                 string description = "Description 42")
     {
         var userTaskDto = new UserTaskForCreationDto(title,
-            description, FolderId: 42, DueDate: null);
+            description, FolderId: 42, DueDateTime: null);
         return UserTask.CreateTask(userTaskDto);
     }
     #endregion

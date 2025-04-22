@@ -31,9 +31,9 @@ public record UserTaskVm
     public bool IsCompleted { get; }
 
     /// <summary>
-    /// Планируемая дата выполнения задачи
+    /// Планируемая дата и время выполнения задачи
     /// </summary>
-    public DateTime? DueDate { get; }
+    public DateTime? DueDateTime { get; }
 
     /// <summary>
     /// Количество дней, на которое просрочена задача
@@ -60,7 +60,7 @@ public record UserTaskVm
         Description = task.Description;
         CompletedDateTime = task.CompletedDateTime;
         IsCompleted = task.IsCompleted;
-        DueDate = task.DueDate;
+        DueDateTime = task.DueDateTime;
         OverdueDaysCount = task.CalculateOverdueDays(today);
         DeletionDate = task.DeletionDate;
         IsDeleted = task.IsDeleted;

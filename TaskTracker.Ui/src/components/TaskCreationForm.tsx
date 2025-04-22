@@ -17,13 +17,13 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
             description: '',
             completionDate: null,
             folderId: null,
-            dueDate: null,
+            dueDateTime: null,
         }
     }
 
     async createTask() {
         await this.props.createTask(this.state);
-        this.setState({ title: '', description: '', folderId: null, dueDate: null });
+        this.setState({ title: '', description: '', folderId: null, dueDateTime: null });
     }
 
     onTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -34,9 +34,9 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
         this.setState({ description: e.target.value });
     }
 
-    onDueDateChange(date: Moment | null) {
-        const dueDate = date?.toDate() ?? null;
-        this.setState({ dueDate });
+    onDueDateTimeChange(date: Moment | null) {
+        const dueDateTime = date?.toDate() ?? null;
+        this.setState({ dueDateTime: dueDateTime });
     }
 
     onFolderChange(id: number) {
@@ -49,8 +49,8 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
     }
 
     render() {
-        const dueDate = this.state.dueDate !== null
-            ? moment(this.state.dueDate)
+        const dueDateTime = this.state.dueDateTime !== null
+            ? moment(this.state.dueDateTime)
             : null;
 
         return (
@@ -70,8 +70,8 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
                 />
                 <DatePicker
                     placeholder='Дата'
-                    value={dueDate}
-                    onChange={date => this.onDueDateChange(date)}
+                    value={dueDateTime}
+                    onChange={date => this.onDueDateTimeChange(date)}
                 />
                 <Select
                     placeholder='Папка'

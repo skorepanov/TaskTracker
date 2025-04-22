@@ -42,7 +42,7 @@ public class UserTaskTests
     #region Calculate overdue days
     [Test]
     [Category("CalculateOverdueDays")]
-    public void CalculateOverdueDaysForTaskWithoutDueDate()
+    public void CalculateOverdueDaysForTaskWithoutDueDateTime()
     {
         // Arrange
         var sut = CreateSut();
@@ -52,19 +52,19 @@ public class UserTaskTests
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDate.Should().BeNull();
+        sut.DueDateTime.Should().BeNull();
         overdueDayCount.Should().Be(0);
     }
 
     [Test]
     [Category("CalculateOverdueDays")]
-    public void CalculateOverdueDaysForTaskWithDueDate()
+    public void CalculateOverdueDaysForTaskWithDueDateTime()
     {
         // Arrange
         var sut = CreateSut();
 
-        var dueDate = new DateTime(year: 2022, month: 2, day: 5);
-        sut.DueDate = dueDate;
+        var dueDateTime = new DateTime(year: 2022, month: 2, day: 5);
+        sut.DueDateTime = dueDateTime;
 
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
@@ -72,7 +72,7 @@ public class UserTaskTests
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDate.Should().Be(dueDate);
+        sut.DueDateTime.Should().Be(dueDateTime);
         overdueDayCount.Should().Be(2);
     }
 
@@ -83,8 +83,8 @@ public class UserTaskTests
         // Arrange
         var sut = CreateSut();
 
-        var dueDate = new DateTime(year: 2022, month: 2, day: 5);
-        sut.DueDate = dueDate;
+        var dueDateTime = new DateTime(year: 2022, month: 2, day: 5);
+        sut.DueDateTime = dueDateTime;
 
         var today = new DateTime(year: 2022, month: 2, day: 3);
 
@@ -92,7 +92,7 @@ public class UserTaskTests
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDate.Should().Be(dueDate);
+        sut.DueDateTime.Should().Be(dueDateTime);
         overdueDayCount.Should().Be(0);
     }
 
@@ -103,16 +103,16 @@ public class UserTaskTests
         // Arrange
         var sut = CreateSut();
 
-        var dueDate = new DateTime(year: 2022, month: 2, day: 5);
-        sut.DueDate = dueDate;
+        var dueDateTime = new DateTime(year: 2022, month: 2, day: 5);
+        sut.DueDateTime = dueDateTime;
 
-        var today = dueDate;
+        var today = dueDateTime;
 
         // Act
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDate.Should().Be(dueDate);
+        sut.DueDateTime.Should().Be(dueDateTime);
         overdueDayCount.Should().Be(0);
     }
 
@@ -123,8 +123,8 @@ public class UserTaskTests
         // Arrange
         var sut = CreateSut();
 
-        var dueDate = new DateTime(year: 2022, month: 2, day: 5);
-        sut.DueDate = dueDate;
+        var dueDateTime = new DateTime(year: 2022, month: 2, day: 5);
+        sut.DueDateTime = dueDateTime;
 
         var deletionDate = new DateTime(year: 2022, month: 2, day: 6);
         sut.Delete(deletionDate);
@@ -135,7 +135,7 @@ public class UserTaskTests
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDate.Should().Be(dueDate);
+        sut.DueDateTime.Should().Be(dueDateTime);
         overdueDayCount.Should().Be(0);
     }
     #endregion
@@ -179,7 +179,7 @@ public class UserTaskTests
 
     [Test]
     [Category("IsTodayTask")]
-    public void IsTodayIncompleteTaskWithoutDueDate()
+    public void IsTodayIncompleteTaskWithoutDueDateTime()
     {
         // Arrange
         var sut = CreateSut();
@@ -194,13 +194,13 @@ public class UserTaskTests
 
     [Test]
     [Category("IsTodayTask")]
-    [TestCaseSource(nameof(GetTestCasesForIsTodayTaskWithDueDate))]
-    public void IsTodayIncompleteTaskWithDueDate(DateTime dueDate, DateTime today,
-                                                 bool expectedResult)
+    [TestCaseSource(nameof(GetTestCasesForIsTodayTaskWithDueDateTime))]
+    public void IsTodayIncompleteTaskWithDueDateTime(
+        DateTime dueDateTime, DateTime today, bool expectedResult)
     {
         // Arrange
         var sut = CreateSut();
-        sut.DueDate = dueDate;
+        sut.DueDateTime = dueDateTime;
 
         // Act
         var isTodayTask = sut.IsTodayTask(today);
@@ -209,7 +209,7 @@ public class UserTaskTests
         isTodayTask.Should().Be(expectedResult);
     }
 
-    private static IEnumerable<TestCaseData> GetTestCasesForIsTodayTaskWithDueDate()
+    private static IEnumerable<TestCaseData> GetTestCasesForIsTodayTaskWithDueDateTime()
     {
         yield return new TestCaseData(new DateTime(year: 2022, month: 2, day: 6),
                                       new DateTime(year: 2022, month: 2, day: 7),
@@ -231,7 +231,7 @@ public class UserTaskTests
     {
         // Arrange
         var sut = CreateSut();
-        sut.DueDate = today;
+        sut.DueDateTime = today;
         sut.Delete(deletionDate);
 
         // Act
@@ -260,13 +260,13 @@ public class UserTaskTests
         const string TITLE = "Task title";
         const string DESCRIPTION = "Task description";
         const int FOLDER_ID = 42;
-        var dueDate = new DateTime(year: 2022, month: 2, day: 23);
+        var dueDateTime = new DateTime(year: 2022, month: 2, day: 23);
 
         var userTaskDtoWithSpaces = new UserTaskForCreationDto(
             Title: $"   {TITLE}    ",
             Description: $"    {DESCRIPTION}    ",
             FolderId: FOLDER_ID,
-            DueDate: dueDate
+            DueDateTime: dueDateTime
         );
 
         // Act
@@ -276,7 +276,7 @@ public class UserTaskTests
         sut.Title.Should().Be(TITLE);
         sut.Description.Should().Be(DESCRIPTION);
         sut.FolderId.Should().Be(FOLDER_ID);
-        sut.DueDate.Should().Be(dueDate);
+        sut.DueDateTime.Should().Be(dueDateTime);
     }
     #endregion
 
@@ -290,19 +290,19 @@ public class UserTaskTests
             title: "Task old title",
             description: "Task old description",
             folderId: 42_1,
-            dueDate: new DateTime(year: 2025, month: 1, day: 1)
+            dueDateTime: new DateTime(year: 2025, month: 1, day: 1)
         );
 
         const string NEW_TITLE = "Task new title";
         const string NEW_DESCRIPTION = "Task new description";
         const int NEW_FOLDER_ID = 42_2;
-        var newDueDate = new DateTime(year: 2025, month: 1, day: 2);
+        var newDueDateTime = new DateTime(year: 2025, month: 1, day: 2);
 
         var userTaskDtoWithSpaces = new UserTaskForUpdateDto(
             Title: $"   {NEW_TITLE}    ",
             Description: $"   {NEW_DESCRIPTION}    ",
             FolderId: NEW_FOLDER_ID,
-            DueDate: newDueDate
+            DueDateTime: newDueDateTime
         );
 
         // Act
@@ -312,7 +312,7 @@ public class UserTaskTests
         sut.Title.Should().Be(NEW_TITLE);
         sut.Description.Should().Be(NEW_DESCRIPTION);
         sut.FolderId.Should().Be(NEW_FOLDER_ID);
-        sut.DueDate.Should().Be(newDueDate);
+        sut.DueDateTime.Should().Be(newDueDateTime);
     }
     #endregion
 
@@ -339,10 +339,10 @@ public class UserTaskTests
         string title = "Task title 42",
         string description = "Description 42",
         int? folderId = 42,
-        DateTime? dueDate = null)
+        DateTime? dueDateTime = null)
     {
         var userTaskDto = new UserTaskForCreationDto(
-            title, description, folderId, dueDate);
+            title, description, folderId, dueDateTime);
 
         return UserTask.CreateTask(userTaskDto);
     }
