@@ -19,7 +19,7 @@ public class Folder
     private Folder(string title)
     {
         Title = title;
-        _tasks = new List<UserTask>();
+        _tasks = [];
     }
 
     public static Folder CreateFolder(FolderForCreationDto folderDto)
@@ -35,11 +35,6 @@ public class Folder
 
     public void AddTask(UserTask task)
     {
-        if (task is null)
-        {
-            throw new ArgumentNullException(paramName: nameof(task));
-        }
-
         if (!_tasks.Contains(task))
         {
             _tasks.Add(task);
