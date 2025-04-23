@@ -104,6 +104,19 @@ public class TaskController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
+    /// Отметить задачу как невыполненную
+    /// </summary>
+    /// <param name="taskId">Id задачи</param>
+    [HttpPut("{taskId:int}/incompleted")]
+    public async Task<IActionResult> IncompleteTask(int taskId)
+    {
+        var task = await _taskService.IncompleteTask(taskId);
+        var taskVm = new UserTaskVm(task, DateTime.UtcNow);
+
+        return Ok(taskVm);
+    }
+
+    /// <summary>
     /// Удалить задачу перманентно
     /// </summary>
     /// <param name="taskId">Идентификатор задачи</param>

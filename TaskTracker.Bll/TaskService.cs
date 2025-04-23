@@ -140,7 +140,7 @@ public class TaskService(ITaskRepository _taskRepository,
         return task;
     }
 
-    public async Task IncompleteTask(int taskId)
+    public async Task<UserTask> IncompleteTask(int taskId)
     {
         var task = await _taskRepository.GetTask(taskId);
 
@@ -153,6 +153,8 @@ public class TaskService(ITaskRepository _taskRepository,
 
         task.Incomplete();
         await _taskRepository.UpdateTask(task);
+
+        return task;
     }
 
     public async Task DeleteTask(int taskId)
