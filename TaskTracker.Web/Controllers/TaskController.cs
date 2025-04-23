@@ -89,6 +89,21 @@ public class TaskController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
+    /// Отметить задачу как выполненную
+    /// </summary>
+    /// <param name="taskId">Id задачи</param>
+    /// <param name="userTaskDto">Данные для отметки задачи как выполненной</param>
+    [HttpPut("{taskId:int}/completed")]
+    public async Task<IActionResult> CompleteTask(
+        int taskId, [FromBody] UserTaskForCompleteDto userTaskDto)
+    {
+        var task = await _taskService.CompleteTask(taskId, userTaskDto);
+        var taskVm = new UserTaskVm(task, DateTime.UtcNow);
+
+        return Ok(taskVm);
+    }
+
+    /// <summary>
     /// Удалить задачу перманентно
     /// </summary>
     /// <param name="taskId">Идентификатор задачи</param>

@@ -121,7 +121,7 @@ public class TaskService(ITaskRepository _taskRepository,
         return task;
     }
 
-    public async Task CompleteTask(int taskId)
+    public async Task<UserTask> CompleteTask(int taskId, UserTaskForCompleteDto userTaskDto)
     {
         var task = await _taskRepository.GetTask(taskId);
 
@@ -132,8 +132,12 @@ public class TaskService(ITaskRepository _taskRepository,
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        task.Complete(DateTime.UtcNow);
+        var completedDateTime = userTaskDto.CompletedDateTime ?? DateTime.UtcNow;
+
+        task.Complete(completedDateTime);
         await _taskRepository.UpdateTask(task);
+
+        return task;
     }
 
     public async Task IncompleteTask(int taskId)

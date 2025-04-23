@@ -21,7 +21,7 @@ public record UserTaskVm
     public string Description { get; }
 
     /// <summary>
-    /// Фактическая дата и время выполнения задачи
+    /// Дата и время выполнения задачи
     /// </summary>
     public DateTime? CompletedDateTime { get; }
 
