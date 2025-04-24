@@ -16,16 +16,23 @@ public class Folder
 
     public int IncompleteTaskCount => IncompleteTasks.Count;
 
-    private Folder(string title)
+    public DateTime CreatedDateTime { get; private set; }
+
+    private Folder(string title, DateTime createdDateTime)
     {
         Title = title;
         _tasks = [];
+        CreatedDateTime = createdDateTime;
     }
 
-    public static Folder CreateFolder(FolderForCreationDto folderDto)
+    public static Folder CreateFolder(
+        FolderForCreationDto folderDto,
+        DateTime now)
     {
         var normalizedTitle = folderDto.Title.Trim();
-        return new Folder(normalizedTitle);
+        var createdDateTime = folderDto.CreatedDateTime ?? now;
+
+        return new Folder(normalizedTitle, createdDateTime);
     }
 
     public void UpdateFolder(FolderForUpdateDto folderDto)

@@ -50,7 +50,7 @@ public class TaskServiceTests
 
         var mockTaskRepository = new Mock<ITaskRepository>();
 
-        var folder = CreateFolder(title: "Folder title 42");
+        var folder = CreateTestFolder(title: "Folder title 42");
 
         var mockFolderRepository = new Mock<IFolderRepository>();
         mockFolderRepository
@@ -256,7 +256,8 @@ public class TaskServiceTests
     {
         // Arrange
         const string TITLE = "title 42";
-        var folderDto = new FolderForCreationDto(TITLE);
+        var createdDateTime = new DateTime(year: 2025, month: 4, day: 24);
+        var folderDto = new FolderForCreationDto(TITLE, createdDateTime);
 
         var mockFolderRepository = new Mock<IFolderRepository>();
 
@@ -269,6 +270,7 @@ public class TaskServiceTests
 
         // Assert
         sut.Title.Should().Be(TITLE);
+        sut.CreatedDateTime.Should().Be(createdDateTime);
         mockFolderRepository
             .Verify(r => r.CreateFolder(It.IsAny<Folder>()),
                     Times.Once());
@@ -276,14 +278,22 @@ public class TaskServiceTests
     #endregion
 
     #region helpers
-    private Folder CreateFolder(string title = "Folder title 42")
+    private Folder CreateTestFolder(
+        string title = "Folder title 42",
+        DateTime? createdDateTime = null,
+        DateTime? now = null)
     {
-        var folderDto = new FolderForCreationDto(title);
-        return Folder.CreateFolder(folderDto);
+        createdDateTime ??= new DateTime(year: 2025, month: 1, day: 1);
+        var folderDto = new FolderForCreationDto(title, createdDateTime.Value);
+
+        now ??= new DateTime(year: 2025, month: 1, day: 2);
+
+        return Folder.CreateFolder(folderDto, now.Value);
     }
 
-    private UserTask CreateTask(string title = "Task title 42",
-                                string description = "Description 42")
+    private UserTask CreateTask(
+        string title = "Task title 42",
+        string description = "Description 42")
     {
         var userTaskDto = new UserTaskForCreationDto(title,
             description, FolderId: 42, DueDateTime: null);

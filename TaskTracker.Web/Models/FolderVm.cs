@@ -21,6 +21,11 @@ public record FolderVm
     public int IncompleteTaskCount { get; }
 
     /// <summary>
+    /// Дата создания папки
+    /// </summary>
+    public DateTime CreatedDateTime { get; }
+
+    /// <summary>
     /// Сконструировать представление для папки
     /// </summary>
     public FolderVm(Folder folder)
@@ -28,6 +33,7 @@ public record FolderVm
         Id = folder.Id;
         Title = folder.Title;
         IncompleteTaskCount = folder.IncompleteTaskCount;
+        CreatedDateTime = folder.CreatedDateTime;
     }
 
     /// <summary>

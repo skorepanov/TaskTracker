@@ -216,8 +216,10 @@ public class TaskService(ITaskRepository _taskRepository,
 
     public async Task<Folder> CreateFolder(FolderForCreationDto folderDto)
     {
-        var newFolder = Folder.CreateFolder(folderDto);
+        var now = DateTime.UtcNow;
+        var newFolder = Folder.CreateFolder(folderDto, now);
         await _folderRepository.CreateFolder(newFolder);
+
         return newFolder;
     }
 
