@@ -260,23 +260,68 @@ public class UserTaskTests
         const string TITLE = "Task title";
         const string DESCRIPTION = "Task description";
         const int FOLDER_ID = 42;
-        var dueDateTime = new DateTime(year: 2022, month: 2, day: 23);
+        var dueDateTime = new DateTime(year: 2025, month: 4, day: 30);
+        var createdDateTime = new DateTime(year: 2025, month: 4, day: 20);
 
-        var userTaskDtoWithSpaces = new UserTaskForCreationDto(
+        var userTaskDto = new UserTaskForCreationDto(
             Title: $"   {TITLE}    ",
             Description: $"    {DESCRIPTION}    ",
             FolderId: FOLDER_ID,
-            DueDateTime: dueDateTime
-        );
+            DueDateTime: dueDateTime,
+            createdDateTime);
 
         // Act
-        var sut = UserTask.CreateTask(userTaskDtoWithSpaces);
+        var sut = UserTask.CreateTask(userTaskDto, now: It.IsAny<DateTime>());
 
         // Assert
         sut.Title.Should().Be(TITLE);
         sut.Description.Should().Be(DESCRIPTION);
         sut.FolderId.Should().Be(FOLDER_ID);
         sut.DueDateTime.Should().Be(dueDateTime);
+        sut.CreatedDateTime.Should().Be(createdDateTime);
+    }
+
+    [Test]
+    [Category("CreateTask")]
+    public void CreateTaskWithoutCreatedDateTime()
+    {
+        // arrange
+        var userTaskDto = new UserTaskForCreationDto(
+            Title: "Folder Title 42",
+            Description: "Folder description 42",
+            FolderId: 42,
+            DueDateTime: null,
+            CreatedDateTime: null);
+
+        var now = new DateTime(year: 2025, month: 4, day: 24);
+
+        // act
+        var sut = UserTask.CreateTask(userTaskDto, now);
+
+        // assert
+        sut.CreatedDateTime.Should().Be(now);
+    }
+
+    [Test]
+    [Category("CreateTask")]
+    public void CreateTaskWithCreatedDateTimeNotEqualsToNow()
+    {
+        // arrange
+        var createdDateTime = new DateTime(year: 2025, month: 1, day: 1);
+        var now = new DateTime(year: 2025, month: 1, day: 2);
+
+        var userTaskDto = new UserTaskForCreationDto(
+            Title: "Task Title 42",
+            Description: "Task Description 42",
+            FolderId: 42,
+            DueDateTime: null,
+            createdDateTime);
+
+        // act
+        var sut = UserTask.CreateTask(userTaskDto, now);
+
+        // assert
+        sut.CreatedDateTime.Should().Be(createdDateTime);
     }
     #endregion
 
@@ -339,12 +384,21 @@ public class UserTaskTests
         string title = "Task title 42",
         string description = "Description 42",
         int? folderId = 42,
-        DateTime? dueDateTime = null)
+        DateTime? dueDateTime = null,
+        DateTime? createdDateTime = null,
+        DateTime? now = null)
     {
-        var userTaskDto = new UserTaskForCreationDto(
-            title, description, folderId, dueDateTime);
+        createdDateTime ??= new DateTime(year: 2025, month: 1, day: 1);
+        now ??= new DateTime(year: 2025, month: 1, day: 2);
 
-        return UserTask.CreateTask(userTaskDto);
+        var userTaskDto = new UserTaskForCreationDto(
+            title,
+            description,
+            folderId,
+            dueDateTime,
+            createdDateTime);
+
+        return UserTask.CreateTask(userTaskDto, now.Value);
     }
     #endregion
 }

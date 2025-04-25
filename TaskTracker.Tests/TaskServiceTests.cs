@@ -19,8 +19,12 @@ public class TaskServiceTests
 
         const int FOLDER_ID = 42;
 
-        var userTaskDto = new UserTaskForCreationDto(Title: "Task title 42",
-            Description: "Description 42", FOLDER_ID, DueDateTime: null);
+        var userTaskDto = new UserTaskForCreationDto(
+            Title: "Task title 42",
+            Description: "Description 42",
+            FOLDER_ID,
+            DueDateTime: null,
+            CreatedDateTime: null);
 
         var sut = new TaskService(
             mockTaskRepository.Object,
@@ -57,8 +61,12 @@ public class TaskServiceTests
             .Setup(r => r.GetFolder(FOLDER_ID))
             .Returns(Task.FromResult<Folder?>(folder));
 
-        var userTaskDto = new UserTaskForCreationDto(TITLE,
-            DESCRIPTION, FOLDER_ID, DueDateTime: null);
+        var userTaskDto = new UserTaskForCreationDto(
+            TITLE,
+            DESCRIPTION,
+            FOLDER_ID,
+            DueDateTime: null,
+            CreatedDateTime: null);
 
         var sut = new TaskService(
             mockTaskRepository.Object,
@@ -284,21 +292,30 @@ public class TaskServiceTests
         DateTime? now = null)
     {
         createdDateTime ??= new DateTime(year: 2025, month: 1, day: 1);
-        var folderDto = new FolderForCreationDto(title, createdDateTime.Value);
-
         now ??= new DateTime(year: 2025, month: 1, day: 2);
+
+        var folderDto = new FolderForCreationDto(title, createdDateTime.Value);
 
         return Folder.CreateFolder(folderDto, now.Value);
     }
 
     private UserTask CreateTask(
         string title = "Task title 42",
-        string description = "Description 42")
+        string description = "Description 42",
+        DateTime? createdDateTime = null,
+        DateTime? now = null)
     {
-        var userTaskDto = new UserTaskForCreationDto(title,
-            description, FolderId: 42, DueDateTime: null);
+        createdDateTime ??= new DateTime(year: 2025, month: 1, day: 1);
+        now ??= new DateTime(year: 2025, month: 1, day: 2);
 
-        return UserTask.CreateTask(userTaskDto);
+        var userTaskDto = new UserTaskForCreationDto(
+            title,
+            description,
+            FolderId: 42,
+            DueDateTime: null,
+            createdDateTime);
+
+        return UserTask.CreateTask(userTaskDto, now.Value);
     }
     #endregion
 }

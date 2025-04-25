@@ -85,8 +85,10 @@ public class TaskService(ITaskRepository _taskRepository,
             }
         }
 
-        var newTask = UserTask.CreateTask(userTaskDto);
+        var now = DateTime.UtcNow;
+        var newTask = UserTask.CreateTask(userTaskDto, now);
         await _taskRepository.CreateTask(newTask);
+
         return newTask;
     }
 

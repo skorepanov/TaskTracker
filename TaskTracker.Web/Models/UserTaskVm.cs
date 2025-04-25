@@ -51,6 +51,11 @@ public record UserTaskVm
     public bool IsDeleted { get; }
 
     /// <summary>
+    /// Дата создания задачи
+    /// </summary>
+    public DateTime CreatedDateTime { get; }
+
+    /// <summary>
     /// Сконструировать представление для задачи
     /// </summary>
     public UserTaskVm(UserTask task, DateTime today)
@@ -64,6 +69,7 @@ public record UserTaskVm
         OverdueDaysCount = task.CalculateOverdueDays(today);
         DeletionDate = task.DeletionDate;
         IsDeleted = task.IsDeleted;
+        CreatedDateTime = task.CreatedDateTime;
     }
 
     /// <summary>

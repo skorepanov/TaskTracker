@@ -108,8 +108,9 @@ public class FolderTests
     public void CreateFolderWithoutCreatedDateTime()
     {
         // arrange
-        const string TITLE = "Folder title";
-        var folderDto = new FolderForCreationDto(TITLE, CreatedDateTime: null);
+        var folderDto = new FolderForCreationDto(
+            Title: "Folder Title 42",
+            CreatedDateTime: null);
 
         var now = new DateTime(year: 2025, month: 4, day: 24);
 
@@ -117,27 +118,25 @@ public class FolderTests
         var sut = Folder.CreateFolder(folderDto, now);
 
         // assert
-        sut.Title.Should().Be(TITLE);
         sut.CreatedDateTime.Should().Be(now);
     }
 
     [Test]
     [Category("CreateFolder")]
-    public void CreateFolderWithCreatedDateTimeNotEqualsNow()
+    public void CreateFolderWithCreatedDateTimeNotEqualsToNow()
     {
         // arrange
-        const string TITLE = "Folder title";
-
         var createdDateTime = new DateTime(year: 2025, month: 1, day: 1);
         var now = new DateTime(year: 2025, month: 1, day: 2);
 
-        var folderDto = new FolderForCreationDto(TITLE, createdDateTime);
+        var folderDto = new FolderForCreationDto(
+            Title: "Folder Title 42",
+            createdDateTime);
 
         // act
         var sut = Folder.CreateFolder(folderDto, now);
 
         // assert
-        sut.Title.Should().Be(TITLE);
         sut.CreatedDateTime.Should().Be(createdDateTime);
     }
     #endregion
@@ -167,22 +166,34 @@ public class FolderTests
     #region helpers
     private Folder CreateSut(
         string title = "Folder title 42",
-        DateTime? createdDateTime = null)
+        DateTime? createdDateTime = null,
+        DateTime? now = null)
     {
-        createdDateTime ??= new DateTime(year: 2025, month: 4, day: 24);
+        createdDateTime ??= new DateTime(year: 2025, month: 1, day: 1);
+        now ??= new DateTime(year: 2025, month: 1, day: 2);
+
         var folderDto = new FolderForCreationDto(title, createdDateTime.Value);
 
-        return Folder.CreateFolder(folderDto, createdDateTime.Value);
+        return Folder.CreateFolder(folderDto, now.Value);
     }
 
     private UserTask CreateTask(
         string title = "Task title 42",
-        string description = "Description 42")
+        string description = "Description 42",
+        DateTime? createdDateTime = null,
+        DateTime? now = null)
     {
-        var userTaskDto = new UserTaskForCreationDto(title,
-            description, FolderId: 42, DueDateTime: null);
+        createdDateTime ??= new DateTime(year: 2025, month: 1, day: 1);
+        now ??= new DateTime(year: 2025, month: 1, day: 2);
 
-        return UserTask.CreateTask(userTaskDto);
+        var userTaskDto = new UserTaskForCreationDto(
+            title,
+            description,
+            FolderId: 42,
+            DueDateTime: null,
+            createdDateTime);
+
+        return UserTask.CreateTask(userTaskDto, now.Value);
     }
     #endregion
 }
