@@ -3,4 +3,6 @@
 /// <summary>
 /// Данные для обновления папки
 /// </summary>
-public record FolderForUpdateDto(int Id, string Title);
+public record FolderForUpdateDto(
+    string Title,
+    DateTime? ModifiedDateTime);

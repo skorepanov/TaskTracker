@@ -101,6 +101,7 @@ public class FolderTests
         // Assert
         sut.Title.Should().Be(TITLE);
         sut.CreatedDateTime.Should().Be(createdDateTime);
+        sut.ModifiedDateTime.Should().BeNull();
     }
 
     [Test]
@@ -147,19 +148,62 @@ public class FolderTests
     public void UpdateFolderWithFieldNormalization()
     {
         // Arrange
-        var sut = CreateSut(title: "Folder old title");
+        var sut = CreateSut(title: "Old folder title");
 
-        const string NEW_TITLE = "Folder new title";
+        const string NEW_TITLE = "New folder title";
+        var modifiedDateTime = new DateTime(year: 2025, month: 4, day: 28);
 
-        var folderDtoWithSpaces = new FolderForUpdateDto(
-            Id: It.IsAny<int>(),
-            Title: $"   {NEW_TITLE}    ");
+        var folderDto = new FolderForUpdateDto(
+            Title: $"   {NEW_TITLE}    ",
+            modifiedDateTime);
 
         // Act
-        sut.UpdateFolder(folderDtoWithSpaces);
+        sut.UpdateFolder(folderDto, modifiedDateTime);
 
         // Assert
         sut.Title.Should().Be(NEW_TITLE);
+        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+    }
+
+    [Test]
+    [Category("UpdateFolder")]
+    public void UpdateFolderWithoutModifiedDateTime()
+    {
+        // Arrange
+        var sut = CreateSut();
+
+        var now = new DateTime(year: 2025, month: 4, day: 28);
+
+        var folderDto = new FolderForUpdateDto(
+            Title: "Folder title 42",
+            ModifiedDateTime: null);
+
+        // Act
+        sut.UpdateFolder(folderDto, now);
+
+        // Assert
+        sut.ModifiedDateTime.Should().Be(now);
+    }
+
+    [Test]
+    [Category("UpdateFolder")]
+    public void UpdateFolderWithModifiedDateTimeNotEqualsToNow()
+    {
+        // Arrange
+        var modifiedDateTime = new DateTime(year: 2025, month: 1, day: 1);
+        var now = new DateTime(year: 2025, month: 1, day: 2);
+
+        var sut = CreateSut();
+
+        var folderDto = new FolderForUpdateDto(
+            Title: "Folder title 42",
+            modifiedDateTime);
+
+        // Act
+        sut.UpdateFolder(folderDto, now);
+
+        // Assert
+        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
     #endregion
 

@@ -236,7 +236,8 @@ public class TaskService(ITaskRepository _taskRepository,
                 message: $"Папка не обнаружена (id = {folderId})");
         }
 
-        folder.UpdateFolder(folderDto);
+        var now =  DateTime.UtcNow;
+        folder.UpdateFolder(folderDto, now);
         await _folderRepository.UpdateFolder(folder);
 
         return folder;

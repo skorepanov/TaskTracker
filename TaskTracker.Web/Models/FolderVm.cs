@@ -26,6 +26,11 @@ public record FolderVm
     public DateTime CreatedDateTime { get; }
 
     /// <summary>
+    /// Дата изменения папки
+    /// </summary>
+    public DateTime? ModifiedDateTime { get; }
+
+    /// <summary>
     /// Сконструировать представление для папки
     /// </summary>
     public FolderVm(Folder folder)
@@ -34,6 +39,7 @@ public record FolderVm
         Title = folder.Title;
         IncompleteTaskCount = folder.IncompleteTaskCount;
         CreatedDateTime = folder.CreatedDateTime;
+        ModifiedDateTime = folder.ModifiedDateTime;
     }
 
     /// <summary>

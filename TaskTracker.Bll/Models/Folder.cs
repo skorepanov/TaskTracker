@@ -18,6 +18,8 @@ public class Folder
 
     public DateTime CreatedDateTime { get; private set; }
 
+    public DateTime? ModifiedDateTime { get; private set; }
+
     private Folder(string title, DateTime createdDateTime)
     {
         Title = title;
@@ -35,9 +37,12 @@ public class Folder
         return new Folder(normalizedTitle, createdDateTime);
     }
 
-    public void UpdateFolder(FolderForUpdateDto folderDto)
+    public void UpdateFolder(
+        FolderForUpdateDto folderDto,
+        DateTime now)
     {
         Title = folderDto.Title.Trim();
+        ModifiedDateTime = folderDto.ModifiedDateTime ?? now;
     }
 
     public void AddTask(UserTask task)
