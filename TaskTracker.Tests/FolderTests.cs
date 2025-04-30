@@ -3,8 +3,7 @@
 public class FolderTests
 {
     #region Add task to folder
-    [Test]
-    [Category("AddTask")]
+    [Fact]
     public void AddOneTaskToFolder()
     {
         // Arrange
@@ -20,8 +19,7 @@ public class FolderTests
         sut.Tasks.Should().Equal(expectedTasks);
     }
 
-    [Test]
-    [Category("AddTask")]
+    [Fact]
     public void AddSeveralTasksToFolder()
     {
         // Arrange
@@ -41,8 +39,7 @@ public class FolderTests
     #endregion
 
     #region Get incomplete task count
-    [Test]
-    [Category("IncompleteTaskCount")]
+    [Fact]
     public void GetIncompleteTaskCountWhenFolderIsEmpty()
     {
         // Arrange
@@ -55,8 +52,7 @@ public class FolderTests
         incompleteTaskCount.Should().Be(0);
     }
 
-    [Test]
-    [Category("IncompleteTaskCount")]
+    [Fact]
     public void GetIncompleteTaskCountWhenFolderHasDifferentTasks()
     {
         // Arrange
@@ -83,8 +79,7 @@ public class FolderTests
     #endregion
 
     #region Create folder
-    [Test]
-    [Category("CreateFolder")]
+    [Fact]
     public void CreateFolderWithFieldNormalization()
     {
         // Arrange
@@ -104,8 +99,7 @@ public class FolderTests
         sut.ModifiedDateTime.Should().BeNull();
     }
 
-    [Test]
-    [Category("CreateFolder")]
+    [Fact]
     public void CreateFolderWithoutCreatedDateTime()
     {
         // arrange
@@ -122,8 +116,7 @@ public class FolderTests
         sut.CreatedDateTime.Should().Be(now);
     }
 
-    [Test]
-    [Category("CreateFolder")]
+    [Fact]
     public void CreateFolderWithCreatedDateTimeNotEqualsToNow()
     {
         // arrange
@@ -143,8 +136,7 @@ public class FolderTests
     #endregion
 
     #region Update folder
-    [Test]
-    [Category("UpdateFolder")]
+    [Fact]
     public void UpdateFolderWithFieldNormalization()
     {
         // Arrange
@@ -165,8 +157,7 @@ public class FolderTests
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
 
-    [Test]
-    [Category("UpdateFolder")]
+    [Fact]
     public void UpdateFolderWithoutModifiedDateTime()
     {
         // Arrange
@@ -185,8 +176,7 @@ public class FolderTests
         sut.ModifiedDateTime.Should().Be(now);
     }
 
-    [Test]
-    [Category("UpdateFolder")]
+    [Fact]
     public void UpdateFolderWithModifiedDateTimeNotEqualsToNow()
     {
         // Arrange

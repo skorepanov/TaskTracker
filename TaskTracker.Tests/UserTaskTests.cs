@@ -3,8 +3,7 @@ namespace TaskTracker.Tests;
 public class UserTaskTests
 {
     #region Complete task
-    [Test]
-    [Category("CompleteTask")]
+    [Fact]
     public void CompleteTask()
     {
         // Arrange
@@ -21,8 +20,7 @@ public class UserTaskTests
     #endregion
 
     #region Incomplete task
-    [Test]
-    [Category("IncompleteTask")]
+    [Fact]
     public void IncompleteTask()
     {
         // Arrange
@@ -40,8 +38,7 @@ public class UserTaskTests
     #endregion
 
     #region Calculate overdue days
-    [Test]
-    [Category("CalculateOverdueDays")]
+    [Fact]
     public void CalculateOverdueDaysForTaskWithoutDueDateTime()
     {
         // Arrange
@@ -56,8 +53,7 @@ public class UserTaskTests
         overdueDayCount.Should().Be(0);
     }
 
-    [Test]
-    [Category("CalculateOverdueDays")]
+    [Fact]
     public void CalculateOverdueDaysForTaskWithDueDateTime()
     {
         // Arrange
@@ -76,8 +72,7 @@ public class UserTaskTests
         overdueDayCount.Should().Be(2);
     }
 
-    [Test]
-    [Category("CalculateOverdueDays")]
+    [Fact]
     public void CalculateOverdueDaysForNonOverdueTask()
     {
         // Arrange
@@ -96,8 +91,7 @@ public class UserTaskTests
         overdueDayCount.Should().Be(0);
     }
 
-    [Test]
-    [Category("CalculateOverdueDays")]
+    [Fact]
     public void CalculateOverdueDaysForTodayTask()
     {
         // Arrange
@@ -116,8 +110,7 @@ public class UserTaskTests
         overdueDayCount.Should().Be(0);
     }
 
-    [Test]
-    [Category("CalculateOverdueDays")]
+    [Fact]
     public void CalculateOverdueDaysForDeletedTask()
     {
         // Arrange
@@ -141,8 +134,7 @@ public class UserTaskTests
     #endregion
 
     #region Is today task
-    [Test]
-    [Category("IsTodayTask")]
+    [Fact]
     public void IsTodayTaskThatCompletedToday()
     {
         // Arrange
@@ -159,8 +151,7 @@ public class UserTaskTests
         isTodayTask.Should().BeTrue();
     }
 
-    [Test]
-    [Category("IsTodayTask")]
+    [Fact]
     public void IsTodayTaskThatCompletedEarlier()
     {
         // Arrange
@@ -177,8 +168,7 @@ public class UserTaskTests
         isTodayTask.Should().BeFalse();
     }
 
-    [Test]
-    [Category("IsTodayTask")]
+    [Fact]
     public void IsTodayIncompleteTaskWithoutDueDateTime()
     {
         // Arrange
@@ -192,9 +182,27 @@ public class UserTaskTests
         isTodayTask.Should().BeFalse();
     }
 
-    [Test]
-    [Category("IsTodayTask")]
-    [TestCaseSource(nameof(GetTestCasesForIsTodayTaskWithDueDateTime))]
+    public static TheoryData<DateTime, DateTime, bool> IsTodayTaskWithDueDateTimeCases
+        = new()
+        {
+            {
+                new DateTime(year: 2022, month: 2, day: 6),
+                new DateTime(year: 2022, month: 2, day: 7),
+                true
+            },
+            {
+                new DateTime(year: 2022, month: 2, day: 7),
+                new DateTime(year: 2022, month: 2, day: 7),
+                true
+            },
+            {
+                new DateTime(year: 2022, month: 2, day: 8),
+                new DateTime(year: 2022, month: 2, day: 7),
+                false
+            }
+        };
+
+    [Theory, MemberData(nameof(IsTodayTaskWithDueDateTimeCases))]
     public void IsTodayIncompleteTaskWithDueDateTime(
         DateTime dueDateTime, DateTime today, bool expectedResult)
     {
@@ -209,24 +217,20 @@ public class UserTaskTests
         isTodayTask.Should().Be(expectedResult);
     }
 
-    private static IEnumerable<TestCaseData> GetTestCasesForIsTodayTaskWithDueDateTime()
-    {
-        yield return new TestCaseData(new DateTime(year: 2022, month: 2, day: 6),
-                                      new DateTime(year: 2022, month: 2, day: 7),
-                                      true);
+    public static TheoryData<DateTime, DateTime> IsTodayDeletedTaskCases
+        = new()
+        {
+            {
+                new DateTime(year: 2022, month: 2, day: 6),
+                new DateTime(year: 2022, month: 2, day: 7)
+            },
+            {
+                new DateTime(year: 2022, month: 2, day: 7),
+                new DateTime(year: 2022, month: 2, day: 7)
+            }
+        };
 
-        yield return new TestCaseData(new DateTime(year: 2022, month: 2, day: 7),
-                                      new DateTime(year: 2022, month: 2, day: 7),
-                                      true);
-
-        yield return new TestCaseData(new DateTime(year: 2022, month: 2, day: 8),
-                                      new DateTime(year: 2022, month: 2, day: 7),
-                                      false);
-    }
-
-    [Test]
-    [Category("IsTodayTask")]
-    [TestCaseSource(nameof(GetTestCasesForIsTodayDeletedTask))]
+    [Theory, MemberData(nameof(IsTodayDeletedTaskCases))]
     public void IsTodayDeletedTask(DateTime deletionDate, DateTime today)
     {
         // Arrange
@@ -240,20 +244,10 @@ public class UserTaskTests
         // Assert
         isTodayTask.Should().BeFalse();
     }
-
-    private static IEnumerable<TestCaseData> GetTestCasesForIsTodayDeletedTask()
-    {
-        yield return new TestCaseData(new DateTime(year: 2022, month: 2, day: 6),
-                                      new DateTime(year: 2022, month: 2, day: 7));
-
-        yield return new TestCaseData(new DateTime(year: 2022, month: 2, day: 7),
-                                      new DateTime(year: 2022, month: 2, day: 7));
-    }
     #endregion
 
     #region Create task
-    [Test]
-    [Category("CreateTask")]
+    [Fact]
     public void CreateTaskWithFieldNormalization()
     {
         // Arrange
@@ -281,8 +275,7 @@ public class UserTaskTests
         sut.CreatedDateTime.Should().Be(createdDateTime);
     }
 
-    [Test]
-    [Category("CreateTask")]
+    [Fact]
     public void CreateTaskWithoutCreatedDateTime()
     {
         // arrange
@@ -302,8 +295,7 @@ public class UserTaskTests
         sut.CreatedDateTime.Should().Be(now);
     }
 
-    [Test]
-    [Category("CreateTask")]
+    [Fact]
     public void CreateTaskWithCreatedDateTimeNotEqualsToNow()
     {
         // arrange
@@ -326,8 +318,7 @@ public class UserTaskTests
     #endregion
 
     #region Update task
-    [Test]
-    [Category("UpdateTask")]
+    [Fact]
     public void UpdateTaskWithFieldNormalization()
     {
         // Arrange
@@ -362,8 +353,7 @@ public class UserTaskTests
     #endregion
 
     #region Delete task
-    [Test]
-    [Category("DeleteTask")]
+    [Fact]
     public void DeleteTask()
     {
         // Arrange

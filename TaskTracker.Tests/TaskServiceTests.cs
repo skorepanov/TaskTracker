@@ -5,8 +5,7 @@ namespace TaskTracker.Tests;
 public class TaskServiceTests
 {
     #region Create task
-    [Test]
-    [Category("CreateTask")]
+    [Fact]
     public async Task CreateTaskInNonExistentFolder()
     {
         // Arrange
@@ -43,8 +42,7 @@ public class TaskServiceTests
                     Times.Never);
     }
 
-    [Test]
-    [Category("CreateTask")]
+    [Fact]
     public async Task CreateTaskInExistentFolder()
     {
         // Arrange
@@ -85,8 +83,7 @@ public class TaskServiceTests
     #endregion
 
     #region Complete task
-    [Test]
-    [Category("CompleteTask")]
+    [Fact]
     public async Task CompleteNonexistentTask()
     {
         // Arrange
@@ -115,8 +112,7 @@ public class TaskServiceTests
                     Times.Never);
     }
 
-    [Test]
-    [Category("CompleteTask")]
+    [Fact]
     public async Task CompleteExistentTask()
     {
         // Arrange
@@ -144,8 +140,7 @@ public class TaskServiceTests
     #endregion
 
     #region Incomplete task
-    [Test]
-    [Category("IncompleteTask")]
+    [Fact]
     public async Task IncompleteNonexistentTask()
     {
         // Arrange
@@ -173,8 +168,7 @@ public class TaskServiceTests
                     Times.Never);
     }
 
-    [Test]
-    [Category("IncompleteTask")]
+    [Fact]
     public async Task IncompleteExistentTask()
     {
         // Arrange
@@ -201,8 +195,7 @@ public class TaskServiceTests
     #endregion
 
     #region Delete task
-    [Test]
-    [Category("DeleteTask")]
+    [Fact]
     public async Task DeleteNonexistentTask()
     {
         // Arrange
@@ -230,8 +223,7 @@ public class TaskServiceTests
                     Times.Never);
     }
 
-    [Test]
-    [Category("DeleteTask")]
+    [Fact]
     public async Task DeleteExistentTask()
     {
         // Arrange
@@ -258,8 +250,7 @@ public class TaskServiceTests
      #endregion
 
     #region Create folder
-    [Test]
-    [Category("CreateFolder")]
+    [Fact]
     public async Task CreateFolder()
     {
         // Arrange
