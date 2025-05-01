@@ -56,6 +56,11 @@ public record UserTaskVm
     public DateTime CreatedDateTime { get; }
 
     /// <summary>
+    /// Дата изменения задачи
+    /// </summary>
+    public DateTime? ModifiedDateTime { get; }
+
+    /// <summary>
     /// Сконструировать представление для задачи
     /// </summary>
     public UserTaskVm(UserTask task, DateTime today)
@@ -70,6 +75,7 @@ public record UserTaskVm
         DeletionDate = task.DeletionDate;
         IsDeleted = task.IsDeleted;
         CreatedDateTime = task.CreatedDateTime;
+        ModifiedDateTime = task.ModifiedDateTime;
     }
 
     /// <summary>

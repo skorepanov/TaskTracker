@@ -19,6 +19,8 @@ public class UserTask
 
     public DateTime CreatedDateTime { get; private set; }
 
+    public DateTime? ModifiedDateTime { get; private set; }
+
     private UserTask(
         string title,
         string description,
@@ -49,22 +51,27 @@ public class UserTask
             createdDateTime);
     }
 
-    public void UpdateTask(UserTaskForUpdateDto userTaskDto)
+    public void UpdateTask(
+        UserTaskForUpdateDto userTaskDto,
+        DateTime now)
     {
         Title = userTaskDto.Title.Trim();
         Description = userTaskDto.Description.Trim();
         FolderId = userTaskDto.FolderId;
         DueDateTime = userTaskDto.DueDateTime;
+        ModifiedDateTime = userTaskDto.ModifiedDateTime ?? now;
     }
 
     public void Complete(DateTime completedDateTime)
     {
         CompletedDateTime = completedDateTime;
+        ModifiedDateTime = completedDateTime;
     }
 
-    public void Incomplete()
+    public void Incomplete(DateTime modifiedDateTime)
     {
         CompletedDateTime = null;
+        ModifiedDateTime = modifiedDateTime;
     }
 
     public int CalculateOverdueDays(DateTime today)
@@ -91,5 +98,6 @@ public class UserTask
     public void Delete(DateTime deletionDate)
     {
         DeletionDate = deletionDate;
+        ModifiedDateTime = deletionDate;
     }
 }

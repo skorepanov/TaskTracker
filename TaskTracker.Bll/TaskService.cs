@@ -117,13 +117,15 @@ public class TaskService(ITaskRepository _taskRepository,
             }
         }
 
-        task.UpdateTask(userTaskDto);
+        var now = DateTime.UtcNow;
+        task.UpdateTask(userTaskDto, now);
         await _taskRepository.UpdateTask(task);
 
         return task;
     }
 
-    public async Task<UserTask> CompleteTask(int taskId, UserTaskForCompleteDto userTaskDto)
+    public async Task<UserTask> CompleteTask(
+        int taskId, UserTaskForCompleteDto userTaskDto)
     {
         var task = await _taskRepository.GetTask(taskId);
 
@@ -142,7 +144,8 @@ public class TaskService(ITaskRepository _taskRepository,
         return task;
     }
 
-    public async Task<UserTask> IncompleteTask(int taskId)
+    public async Task<UserTask> IncompleteTask(
+        int taskId, UserTaskForIncompleteDto userTaskDto)
     {
         var task = await _taskRepository.GetTask(taskId);
 
@@ -153,7 +156,9 @@ public class TaskService(ITaskRepository _taskRepository,
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        task.Incomplete();
+        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? DateTime.UtcNow;
+
+        task.Incomplete(modifiedDateTime);
         await _taskRepository.UpdateTask(task);
 
         return task;

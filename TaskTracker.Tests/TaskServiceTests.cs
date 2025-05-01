@@ -145,6 +145,7 @@ public class TaskServiceTests
     {
         // Arrange
         const int TASK_ID = 42;
+        var userTaskDto = new UserTaskForIncompleteDto(ModifiedDateTime: null);
 
         var mockTaskRepository = new Mock<ITaskRepository>();
         mockTaskRepository
@@ -156,7 +157,7 @@ public class TaskServiceTests
             _folderRepository: new Mock<IFolderRepository>().Object);
 
         // Act
-        var action = () => sut.IncompleteTask(TASK_ID);
+        var action = () => sut.IncompleteTask(TASK_ID, userTaskDto);
 
         // Assert
         var exception = await action.Should()
@@ -174,6 +175,7 @@ public class TaskServiceTests
         // Arrange
         const int TASK_ID = 42;
         var task = CreateTask();
+        var userTaskDto = new UserTaskForIncompleteDto(ModifiedDateTime: null);
 
         var mockTaskRepository = new Mock<ITaskRepository>();
         mockTaskRepository
@@ -185,7 +187,7 @@ public class TaskServiceTests
             _folderRepository: new Mock<IFolderRepository>().Object);
 
         // Act
-        await sut.IncompleteTask(TASK_ID);
+        await sut.IncompleteTask(TASK_ID, userTaskDto);
 
         // Assert
         mockTaskRepository

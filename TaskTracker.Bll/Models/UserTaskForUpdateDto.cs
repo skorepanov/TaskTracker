@@ -7,4 +7,5 @@ public record UserTaskForUpdateDto(
     string Title,
     string Description,
     int? FolderId,
-    DateTime? DueDateTime);
+    DateTime? DueDateTime,
+    DateTime? ModifiedDateTime);

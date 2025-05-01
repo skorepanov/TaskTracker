@@ -107,10 +107,12 @@ public class TaskController(TaskService _taskService) : ControllerBase
     /// Отметить задачу как невыполненную
     /// </summary>
     /// <param name="taskId">Id задачи</param>
+    /// <param name="userTaskDto">Данные для отметки задачи как невыполненной</param>
     [HttpPut("{taskId:int}/incompleted")]
-    public async Task<IActionResult> IncompleteTask(int taskId)
+    public async Task<IActionResult> IncompleteTask(
+        int taskId, [FromBody] UserTaskForIncompleteDto userTaskDto)
     {
-        var task = await _taskService.IncompleteTask(taskId);
+        var task = await _taskService.IncompleteTask(taskId, userTaskDto);
         var taskVm = new UserTaskVm(task, DateTime.UtcNow);
 
         return Ok(taskVm);

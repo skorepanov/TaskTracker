@@ -16,6 +16,7 @@ public class UserTaskTests
         // Assert
         sut.CompletedDateTime.Should().Be(completedDateTime);
         sut.IsCompleted.Should().BeTrue();
+        sut.ModifiedDateTime.Should().Be(completedDateTime);
     }
     #endregion
 
@@ -28,12 +29,15 @@ public class UserTaskTests
         var completedDateTime = new DateTime(year: 2022, month: 2, day: 10);
         sut.Complete(completedDateTime);
 
+        var modifiedDateTime = new DateTime(year: 2022, month: 2, day: 15);
+
         // Act
-        sut.Incomplete();
+        sut.Incomplete(modifiedDateTime);
 
         // Assert
         sut.CompletedDateTime.Should().BeNull();
         sut.IsCompleted.Should().BeFalse();
+        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
     #endregion
 
@@ -323,32 +327,80 @@ public class UserTaskTests
     {
         // Arrange
         var sut = CreateSut(
-            title: "Task old title",
-            description: "Task old description",
-            folderId: 42_1,
+            title: "Old task title",
+            description: "Old task description",
+            folderId: 1,
             dueDateTime: new DateTime(year: 2025, month: 1, day: 1)
         );
 
-        const string NEW_TITLE = "Task new title";
-        const string NEW_DESCRIPTION = "Task new description";
-        const int NEW_FOLDER_ID = 42_2;
+        const string NEW_TITLE = "New task title";
+        const string NEW_DESCRIPTION = "New task description";
+        const int NEW_FOLDER_ID = 2;
         var newDueDateTime = new DateTime(year: 2025, month: 1, day: 2);
+        var modifiedDateTime =  new DateTime(year: 2025, month: 1, day: 3);
 
-        var userTaskDtoWithSpaces = new UserTaskForUpdateDto(
+        var userTaskDto = new UserTaskForUpdateDto(
             Title: $"   {NEW_TITLE}    ",
             Description: $"   {NEW_DESCRIPTION}    ",
-            FolderId: NEW_FOLDER_ID,
-            DueDateTime: newDueDateTime
+            NEW_FOLDER_ID,
+            newDueDateTime,
+            modifiedDateTime
         );
 
         // Act
-        sut.UpdateTask(userTaskDtoWithSpaces);
+        sut.UpdateTask(userTaskDto, modifiedDateTime);
 
         // Assert
         sut.Title.Should().Be(NEW_TITLE);
         sut.Description.Should().Be(NEW_DESCRIPTION);
         sut.FolderId.Should().Be(NEW_FOLDER_ID);
         sut.DueDateTime.Should().Be(newDueDateTime);
+        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+    }
+
+    [Fact]
+    public void UpdateTaskWithoutModifiedDateTime()
+    {
+        // Arrange
+        var sut = CreateSut();
+
+        var now = new DateTime(year: 2025, month: 5, day: 1);
+
+        var userTaskDto = new UserTaskForUpdateDto(
+            Title: "Task title 42",
+            Description: "Task description 42",
+            FolderId: 42,
+            DueDateTime: new DateTime(),
+            ModifiedDateTime: null);
+
+        // Act
+        sut.UpdateTask(userTaskDto, now);
+
+        // Assert
+        sut.ModifiedDateTime.Should().Be(now);
+    }
+
+    [Fact]
+    public void UpdateTaskWithModifiedDateTimeNotEqualsToNow()
+    {
+        // Arrange
+        var modifiedDateTime = new DateTime(year: 2025, month: 1, day: 1);
+        var now = new DateTime(year: 2025, month: 1, day: 2);
+
+        var sut = CreateSut();
+
+        var userTaskDto = new UserTaskForUpdateDto(
+            Title: "Task title 42",
+            Description: "Task description 42",
+            FolderId: 42,
+            DueDateTime: new DateTime(),
+            modifiedDateTime);
+
+        // Act
+        sut.UpdateTask(userTaskDto, now);
+
+        // Assert
+        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
     #endregion
 
@@ -366,6 +418,7 @@ public class UserTaskTests
         // Assert
         sut.DeletionDate.Should().Be(deletionDate);
         sut.IsDeleted.Should().BeTrue();
+        sut.ModifiedDateTime.Should().Be(deletionDate);
     }
     #endregion
 
