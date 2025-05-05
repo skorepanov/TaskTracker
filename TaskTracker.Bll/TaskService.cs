@@ -178,7 +178,27 @@ public class TaskService(ITaskRepository _taskRepository,
 
         var movedToTrashDateTime = userTaskDto.MovedToTrashDateTime ?? DateTime.UtcNow;
 
-        task.MoveTaskToTrash(movedToTrashDateTime);
+        task.MoveToTrash(movedToTrashDateTime);
+        await _taskRepository.UpdateTask(task);
+
+        return task;
+    }
+
+    public async Task<UserTask> MoveTaskFromTrash(
+        int taskId, UserTaskForMoveFromTrashDto userTaskDto)
+    {
+        var task = await _taskRepository.GetTask(taskId);
+
+        if (task is null)
+        {
+            throw new DomainEntityNotFoundException(
+                domainEntityType: typeof(UserTask),
+                message: $"Задача не обнаружена (id = {taskId})");
+        }
+
+        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? DateTime.UtcNow;
+
+        task.MoveFromTrash(modifiedDateTime);
         await _taskRepository.UpdateTask(task);
 
         return task;

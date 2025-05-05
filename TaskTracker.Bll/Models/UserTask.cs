@@ -95,7 +95,7 @@ public class UserTask
            || !IsCompleted && DueDateTime?.Date <= today.Date;
     }
 
-    public void MoveTaskToTrash(DateTime movedToTrashDateTime)
+    public void MoveToTrash(DateTime movedToTrashDateTime)
     {
         if (IsInTrash)
         {
@@ -105,5 +105,16 @@ public class UserTask
         MovedToTrashDateTime = movedToTrashDateTime;
         ModifiedDateTime = movedToTrashDateTime;
         FolderId = null;
+    }
+
+    public void MoveFromTrash(DateTime modifiedDateTime)
+    {
+        if (!IsInTrash)
+        {
+            return;
+        }
+
+        MovedToTrashDateTime = null;
+        ModifiedDateTime = modifiedDateTime;
     }
 }

@@ -64,7 +64,7 @@ public class FolderTests
         completedTask.Complete(new DateTime(year: 2022, month: 1, day: 10));
 
         var taskInTrash = CreateTask();
-        taskInTrash.MoveTaskToTrash(new DateTime(year: 2022, month: 2, day: 20));
+        taskInTrash.MoveToTrash(new DateTime(year: 2022, month: 2, day: 20));
 
         sut.AddTask(incompleteTask);
         sut.AddTask(completedTask);

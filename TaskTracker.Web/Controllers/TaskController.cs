@@ -135,6 +135,21 @@ public class TaskController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
+    /// Переместить задачу из корзины
+    /// </summary>
+    /// <param name="taskId">Id задачи</param>
+    /// <param name="userTaskDto">Данные для перемещения задачи из корзины</param>
+    [HttpPut("{taskId:int}/movedFromTrash")]
+    public async Task<IActionResult> MoveTaskFromTrash(
+        int taskId, [FromBody] UserTaskForMoveFromTrashDto userTaskDto)
+    {
+        var task = await _taskService.MoveTaskFromTrash(taskId, userTaskDto);
+        var taskVm = new UserTaskVm(task, DateTime.UtcNow);
+
+        return Ok(taskVm);
+    }
+
+    /// <summary>
     /// Удалить задачу
     /// </summary>
     /// <param name="taskId">Идентификатор задачи</param>

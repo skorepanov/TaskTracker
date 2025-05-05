@@ -124,7 +124,7 @@ public class UserTaskTests
         sut.DueDateTime = dueDateTime;
 
         var movedToTrashDateTime = new DateTime(year: 2022, month: 2, day: 6);
-        sut.MoveTaskToTrash(movedToTrashDateTime);
+        sut.MoveToTrash(movedToTrashDateTime);
 
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
@@ -240,7 +240,7 @@ public class UserTaskTests
         // Arrange
         var sut = CreateSut();
         sut.DueDateTime = today;
-        sut.MoveTaskToTrash(movedToTrashDateTime);
+        sut.MoveToTrash(movedToTrashDateTime);
 
         // Act
         var isTodayTask = sut.IsTodayTask(today);
@@ -413,7 +413,7 @@ public class UserTaskTests
          var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 5);
 
          // Act
-         sut.MoveTaskToTrash(movedToTrashDateTime);
+         sut.MoveToTrash(movedToTrashDateTime);
 
          // Assert
          sut.MovedToTrashDateTime.Should().Be(movedToTrashDateTime);
@@ -430,7 +430,7 @@ public class UserTaskTests
         var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 5);
 
         // Act
-        sut.MoveTaskToTrash(movedToTrashDateTime);
+        sut.MoveToTrash(movedToTrashDateTime);
 
         // Assert
         sut.MovedToTrashDateTime.Should().Be(movedToTrashDateTime);
@@ -440,7 +440,7 @@ public class UserTaskTests
     }
 
     [Fact]
-    public void MoveTaskToTrashThatInTrashAlready()
+    public void MoveTaskToTrashThatIsInTrashAlready()
     {
         // Arrange
         var sut = CreateSut();
@@ -448,14 +448,58 @@ public class UserTaskTests
         var newMovedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 2);
 
         // Act
-        sut.MoveTaskToTrash(oldMovedToTrashDateTime);
-        sut.MoveTaskToTrash(newMovedToTrashDateTime);
+        sut.MoveToTrash(oldMovedToTrashDateTime);
+        sut.MoveToTrash(newMovedToTrashDateTime);
 
         // Assert
         sut.MovedToTrashDateTime.Should().Be(oldMovedToTrashDateTime);
         sut.IsInTrash.Should().BeTrue();
         sut.ModifiedDateTime.Should().Be(oldMovedToTrashDateTime);
         sut.FolderId.Should().BeNull();
+    }
+    #endregion
+
+    #region Move task from trash
+    [Fact]
+    public void MoveTaskFromTrash()
+    {
+        // Arrange
+        var sut = CreateSut();
+
+        var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 1);
+        var movedFromTrashDateTime = new DateTime(year: 2025, month: 5, day: 2);
+
+        sut.MoveToTrash(movedToTrashDateTime);
+
+        // Act
+        sut.MoveFromTrash(movedFromTrashDateTime);
+
+        // Assert
+        sut.MovedToTrashDateTime.Should().BeNull();
+        sut.IsInTrash.Should().BeFalse();
+        sut.ModifiedDateTime.Should().Be(movedFromTrashDateTime);
+    }
+
+    [Fact]
+    public void MoveTaskFromTrashThatIsNotInTrashAlready()
+    {
+        // Arrange
+        var sut = CreateSut();
+
+        var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 1);
+        var oldMovedFromTrashDateTime = new DateTime(year: 2025, month: 5, day: 2);
+        var newMovedFromTrashDateTime = new DateTime(year: 2025, month: 5, day: 3);
+
+        sut.MoveToTrash(movedToTrashDateTime);
+
+        // Act
+        sut.MoveFromTrash(oldMovedFromTrashDateTime);
+        sut.MoveFromTrash(newMovedFromTrashDateTime);
+
+        // Assert
+        sut.MovedToTrashDateTime.Should().BeNull();
+        sut.IsInTrash.Should().BeFalse();
+        sut.ModifiedDateTime.Should().Be(oldMovedFromTrashDateTime);
     }
     #endregion
 
