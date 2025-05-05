@@ -14,8 +14,8 @@ public class UserTask
 
     public DateTime? DueDateTime { get; set; }
 
-    public DateTime? DeletionDate { get; private set; }
-    public bool IsDeleted => DeletionDate is not null;
+    public DateTime? MovedToTrashDateTime { get; private set; }
+    public bool IsInTrash => MovedToTrashDateTime is not null;
 
     public DateTime CreatedDateTime { get; private set; }
 
@@ -76,7 +76,7 @@ public class UserTask
 
     public int CalculateOverdueDays(DateTime today)
     {
-        if (IsDeleted || DueDateTime is null || DueDateTime >= today)
+        if (IsInTrash || DueDateTime is null || DueDateTime >= today)
         {
             return 0;
         }
@@ -86,7 +86,7 @@ public class UserTask
 
     public bool IsTodayTask(DateTime today)
     {
-        if (IsDeleted)
+        if (IsInTrash)
         {
             return false;
         }
@@ -95,9 +95,15 @@ public class UserTask
            || !IsCompleted && DueDateTime?.Date <= today.Date;
     }
 
-    public void Delete(DateTime deletionDate)
+    public void MoveTaskToTrash(DateTime movedToTrashDateTime)
     {
-        DeletionDate = deletionDate;
-        ModifiedDateTime = deletionDate;
+        if (IsInTrash)
+        {
+            return;
+        }
+
+        MovedToTrashDateTime = movedToTrashDateTime;
+        ModifiedDateTime = movedToTrashDateTime;
+        FolderId = null;
     }
 }

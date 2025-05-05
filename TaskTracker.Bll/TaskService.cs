@@ -50,7 +50,7 @@ public class TaskService(ITaskRepository _taskRepository,
     public async Task<IReadOnlyList<UserTask>> GetTodayTasks()
     {
         var today = DateTime.UtcNow;
-        var tasks = await _taskRepository.GetNonDeletedTasks();
+        var tasks = await _taskRepository.GetNonMovedToTrashTasks();
 
         var todayTasks = tasks.Where(t => t.IsTodayTask(today)).ToList();
 
@@ -164,6 +164,26 @@ public class TaskService(ITaskRepository _taskRepository,
         return task;
     }
 
+    public async Task<UserTask> MoveTaskToTrash(
+        int taskId, UserTaskForMoveToTrashDto userTaskDto)
+    {
+        var task = await _taskRepository.GetTask(taskId);
+
+        if (task is null)
+        {
+            throw new DomainEntityNotFoundException(
+                domainEntityType: typeof(UserTask),
+                message: $"Задача не обнаружена (id = {taskId})");
+        }
+
+        var movedToTrashDateTime = userTaskDto.MovedToTrashDateTime ?? DateTime.UtcNow;
+
+        task.MoveTaskToTrash(movedToTrashDateTime);
+        await _taskRepository.UpdateTask(task);
+
+        return task;
+    }
+
     public async Task DeleteTask(int taskId)
     {
         var task = await _taskRepository.GetTask(taskId);
@@ -175,30 +195,15 @@ public class TaskService(ITaskRepository _taskRepository,
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        task.Delete(new DateTime());
-        await _taskRepository.UpdateTask(task);
-    }
-
-    public async Task DeleteTaskPermanently(int taskId)
-    {
-        var task = await _taskRepository.GetTask(taskId);
-
-        if (task is null)
-        {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(UserTask),
-                message: $"Задача не обнаружена (id = {taskId})");
-        }
-
-        if (task.DeletionDate is null)
+        if (task.MovedToTrashDateTime is null)
         {
             throw new CannotDeleteDomainEntityException(
                 domainEntityType: typeof(UserTask),
                 domainEntityId: task.Id,
-                message: "Невозможно удалить задачу не из корзины");
+                message: $"Невозможно удалить задачу не из корзины (id = {taskId})");
         }
 
-        await _taskRepository.DeleteTaskPermanently(task);
+        await _taskRepository.DeleteTask(task);
     }
 
     public async Task<Folder> GetFolderById(int folderId)

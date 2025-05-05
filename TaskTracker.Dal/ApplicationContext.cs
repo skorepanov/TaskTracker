@@ -39,7 +39,7 @@ public class ApplicationContext : DbContext
         builder.Property(t => t.DueDateTime)
             .HasColumnType("timestamp with time zone");
 
-        builder.Property(t => t.DeletionDate)
+        builder.Property(t => t.MovedToTrashDateTime)
             .HasColumnType("timestamp with time zone");
 
         builder.HasOne(t => t.Folder)

@@ -49,7 +49,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     /// Получить задачи из корзины
     /// </summary>
     [HttpGet]
-    [Route("deleted")]
+    [Route("trash")]
     public async Task<IActionResult> GetTasksInTrash()
     {
         var tasks = await _taskService.GetTasksInTrash();
@@ -119,13 +119,29 @@ public class TaskController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
-    /// Удалить задачу перманентно
+    /// Переместить задачу в корзину
+    /// </summary>
+    /// <param name="taskId">Id задачи</param>
+    /// <param name="userTaskDto">Данные для перемещения задачи в корзину</param>
+    /// <returns></returns>
+    [HttpPut("{taskId:int}/movedToTrash")]
+    public async Task<IActionResult> MoveTaskToTrash(
+        int taskId, [FromBody] UserTaskForMoveToTrashDto userTaskDto)
+    {
+        var task = await _taskService.MoveTaskToTrash(taskId, userTaskDto);
+        var taskVm = new UserTaskVm(task, DateTime.UtcNow);
+
+        return Ok(taskVm);
+    }
+
+    /// <summary>
+    /// Удалить задачу
     /// </summary>
     /// <param name="taskId">Идентификатор задачи</param>
     [HttpDelete("{taskId:int}")]
-    public async Task<IActionResult> DeleteTaskPermanently(int taskId)
+    public async Task<IActionResult> DeleteTask(int taskId)
     {
-        await _taskService.DeleteTaskPermanently(taskId);
+        await _taskService.DeleteTask(taskId);
         return NoContent();
     }
 }

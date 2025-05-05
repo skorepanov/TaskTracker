@@ -115,7 +115,7 @@ public class UserTaskTests
     }
 
     [Fact]
-    public void CalculateOverdueDaysForDeletedTask()
+    public void CalculateOverdueDaysForTaskInTrash()
     {
         // Arrange
         var sut = CreateSut();
@@ -123,8 +123,8 @@ public class UserTaskTests
         var dueDateTime = new DateTime(year: 2022, month: 2, day: 5);
         sut.DueDateTime = dueDateTime;
 
-        var deletionDate = new DateTime(year: 2022, month: 2, day: 6);
-        sut.Delete(deletionDate);
+        var movedToTrashDateTime = new DateTime(year: 2022, month: 2, day: 6);
+        sut.MoveTaskToTrash(movedToTrashDateTime);
 
         var today = new DateTime(year: 2022, month: 2, day: 7);
 
@@ -221,7 +221,7 @@ public class UserTaskTests
         isTodayTask.Should().Be(expectedResult);
     }
 
-    public static TheoryData<DateTime, DateTime> IsTodayDeletedTaskCases
+    public static TheoryData<DateTime, DateTime> IsTodayTaskInTrashCases
         = new()
         {
             {
@@ -234,13 +234,13 @@ public class UserTaskTests
             }
         };
 
-    [Theory, MemberData(nameof(IsTodayDeletedTaskCases))]
-    public void IsTodayDeletedTask(DateTime deletionDate, DateTime today)
+    [Theory, MemberData(nameof(IsTodayTaskInTrashCases))]
+    public void IsTodayTaskInTrash(DateTime movedToTrashDateTime, DateTime today)
     {
         // Arrange
         var sut = CreateSut();
         sut.DueDateTime = today;
-        sut.Delete(deletionDate);
+        sut.MoveTaskToTrash(movedToTrashDateTime);
 
         // Act
         var isTodayTask = sut.IsTodayTask(today);
@@ -404,21 +404,58 @@ public class UserTaskTests
     }
     #endregion
 
-    #region Delete task
+    #region Move task to trash
     [Fact]
-    public void DeleteTask()
+     public void MoveTaskWithoutFolderToTrash()
+     {
+         // Arrange
+         var sut = CreateSut(folderId: null);
+         var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 5);
+
+         // Act
+         sut.MoveTaskToTrash(movedToTrashDateTime);
+
+         // Assert
+         sut.MovedToTrashDateTime.Should().Be(movedToTrashDateTime);
+         sut.IsInTrash.Should().BeTrue();
+         sut.ModifiedDateTime.Should().Be(movedToTrashDateTime);
+         sut.FolderId.Should().BeNull();
+     }
+
+    [Fact]
+    public void MoveTaskWithFolderToTrash()
+    {
+        // Arrange
+        var sut = CreateSut(folderId: 42);
+        var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 5);
+
+        // Act
+        sut.MoveTaskToTrash(movedToTrashDateTime);
+
+        // Assert
+        sut.MovedToTrashDateTime.Should().Be(movedToTrashDateTime);
+        sut.IsInTrash.Should().BeTrue();
+        sut.ModifiedDateTime.Should().Be(movedToTrashDateTime);
+        sut.FolderId.Should().BeNull();
+    }
+
+    [Fact]
+    public void MoveTaskToTrashThatInTrashAlready()
     {
         // Arrange
         var sut = CreateSut();
-        var deletionDate = new DateTime(year: 2022, month: 2, day: 10);
+        var oldMovedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 1);
+        var newMovedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 2);
 
         // Act
-        sut.Delete(deletionDate);
+        sut.MoveTaskToTrash(oldMovedToTrashDateTime);
+        sut.MoveTaskToTrash(newMovedToTrashDateTime);
 
         // Assert
-        sut.DeletionDate.Should().Be(deletionDate);
-        sut.IsDeleted.Should().BeTrue();
-        sut.ModifiedDateTime.Should().Be(deletionDate);
+        sut.MovedToTrashDateTime.Should().Be(oldMovedToTrashDateTime);
+        sut.IsInTrash.Should().BeTrue();
+        sut.ModifiedDateTime.Should().Be(oldMovedToTrashDateTime);
+        sut.FolderId.Should().BeNull();
     }
     #endregion
 
@@ -426,7 +463,7 @@ public class UserTaskTests
     private UserTask CreateSut(
         string title = "Task title 42",
         string description = "Description 42",
-        int? folderId = 42,
+        int? folderId = null,
         DateTime? dueDateTime = null,
         DateTime? createdDateTime = null,
         DateTime? now = null)

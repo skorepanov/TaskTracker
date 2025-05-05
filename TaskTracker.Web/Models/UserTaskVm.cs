@@ -41,14 +41,14 @@ public record UserTaskVm
     public int OverdueDaysCount { get; }
 
     /// <summary>
-    /// Дата удаления задачи
+    /// Дата перемещения задачи в корзину
     /// </summary>
-    public DateTime? DeletionDate { get; }
+    public DateTime? MovedToTrashDateTime { get; }
 
     /// <summary>
-    /// Удалена ли задача
+    /// Находится ли задача в корзине
     /// </summary>
-    public bool IsDeleted { get; }
+    public bool IsInTrash { get; }
 
     /// <summary>
     /// Дата создания задачи
@@ -72,8 +72,8 @@ public record UserTaskVm
         IsCompleted = task.IsCompleted;
         DueDateTime = task.DueDateTime;
         OverdueDaysCount = task.CalculateOverdueDays(today);
-        DeletionDate = task.DeletionDate;
-        IsDeleted = task.IsDeleted;
+        MovedToTrashDateTime = task.MovedToTrashDateTime;
+        IsInTrash = task.IsInTrash;
         CreatedDateTime = task.CreatedDateTime;
         ModifiedDateTime = task.ModifiedDateTime;
     }

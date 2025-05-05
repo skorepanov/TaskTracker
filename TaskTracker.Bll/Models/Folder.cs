@@ -9,10 +9,14 @@ public class Folder
     public IReadOnlyList<UserTask> Tasks => _tasks;
 
     public IReadOnlyList<UserTask> CompletedTasks
-        => _tasks.Where(t => !t.IsDeleted && t.IsCompleted).ToList();
+        => _tasks
+            .Where(t => t is { IsInTrash: false, IsCompleted: true })
+            .ToList();
 
     public IReadOnlyList<UserTask> IncompleteTasks
-        => _tasks.Where(t => !t.IsCompleted && !t.IsDeleted).ToList();
+        => _tasks
+            .Where(t => t is { IsInTrash: false, IsCompleted: false })
+            .ToList();
 
     public int IncompleteTaskCount => IncompleteTasks.Count;
 

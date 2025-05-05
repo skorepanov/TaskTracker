@@ -11,10 +11,10 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         return await _db.Tasks.FindAsync(taskId);
     }
 
-    public async Task<IReadOnlyList<UserTask>> GetNonDeletedTasks()
+    public async Task<IReadOnlyList<UserTask>> GetNonMovedToTrashTasks()
     {
         return await _db.Tasks
-            .Where(t => t.DeletionDate == null)
+            .Where(t => t.MovedToTrashDateTime == null)
             .ToListAsync();
     }
 
@@ -28,7 +28,7 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
     public async Task<IReadOnlyList<UserTask>> GetTasksInTrash()
     {
         return await _db.Tasks
-            .Where(t => t.DeletionDate != null)
+            .Where(t => t.MovedToTrashDateTime != null)
             .ToListAsync();
     }
 
@@ -44,7 +44,7 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteTaskPermanently(UserTask task)
+    public async Task DeleteTask(UserTask task)
     {
         _db.Tasks.Remove(task);
         await _db.SaveChangesAsync();

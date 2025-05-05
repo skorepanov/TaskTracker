@@ -196,12 +196,14 @@ public class TaskServiceTests
     }
     #endregion
 
-    #region Delete task
+    #region Move task to trash
     [Fact]
-    public async Task DeleteNonexistentTask()
+    public async Task MoveNonexistentTaskToTrash()
     {
         // Arrange
         const int TASK_ID = 42;
+
+        var userTaskDto = new UserTaskForMoveToTrashDto(It.IsAny<DateTime?>());
 
         var mockTaskRepository = new Mock<ITaskRepository>();
         mockTaskRepository
@@ -213,7 +215,7 @@ public class TaskServiceTests
             _folderRepository: new Mock<IFolderRepository>().Object);
 
         // Act
-        var action = () => sut.DeleteTask(TASK_ID);
+        var action = () => sut.MoveTaskToTrash(TASK_ID, userTaskDto);
 
         // Assert
         var exception = await action.Should()
@@ -226,11 +228,13 @@ public class TaskServiceTests
     }
 
     [Fact]
-    public async Task DeleteExistentTask()
+    public async Task MoveExistentTaskToTrash()
     {
         // Arrange
         const int TASK_ID = 42;
         var task = CreateTask();
+
+        var userTaskDto = new UserTaskForMoveToTrashDto(It.IsAny<DateTime?>());
 
         var mockTaskRepository = new Mock<ITaskRepository>();
         mockTaskRepository
@@ -242,7 +246,7 @@ public class TaskServiceTests
             _folderRepository: new Mock<IFolderRepository>().Object);
 
         // Act
-        await sut.DeleteTask(TASK_ID);
+        await sut.MoveTaskToTrash(TASK_ID, userTaskDto);
 
         // Assert
         mockTaskRepository
