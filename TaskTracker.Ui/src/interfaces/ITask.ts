@@ -3,6 +3,6 @@ export default interface ITask {
     title: string,
     description: string,
     folderId: number | null,
-    completionDate: Date | null,
+    completedDateTime: Date | null,
     dueDateTime: Date | null,
 }

@@ -5,14 +5,14 @@ class Task extends React.Component<ITaskProps> {
     render() {
         const task = this.props.task;
 
-        const textColor = task.completionDate !== null ? 'green' : 'black';
+        const textColor = task.completedDateTime !== null ? 'green' : 'black';
 
         const description = task.description?.length > 0
             ? <><i>{task.description}</i><br /></>
             : null;
 
-        const completionDate = task.completionDate !== null
-            ? <>Выполнено: {task.completionDate}<br /></>
+        const completedDateTime = task.completedDateTime !== null
+            ? <>Выполнено: {task.completedDateTime}<br /></>
             : null;
 
         const dueDateTime = task.dueDateTime !== null
@@ -23,7 +23,7 @@ class Task extends React.Component<ITaskProps> {
             <div style={{ color: textColor, marginBottom: 10 }}>
                 [{task.id}] {task.title}<br />
                 {description}
-                {completionDate}
+                {completedDateTime}
                 {dueDateTime}
             </div>
         );
