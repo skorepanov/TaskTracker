@@ -1,23 +1,35 @@
 export const AppUrl = 'https://localhost:7265/api';
 
 export const Api : IApi = {
-    get: url => {
-        return fetch(url).then(response => response.json());
+    get: async (url: string) => {
+        const response = await fetch(url);
+        return await response.json();
     },
 
-    post: (url, params) => {
-        return fetch(url, {
-                headers,
-                method: 'POST',
-                body: JSON.stringify(params),
-            })
-            .then(response => response.json());
+    post: async (url: string, params: object) => {
+        const response = await fetch(url, {
+            headers,
+            method: 'POST',
+            body: JSON.stringify(params),
+        });
+        return await response.json();
+    },
+
+    put: async (url: string, params: object) => {
+        const response = await fetch(url, {
+            headers,
+            method: 'PUT',
+            body: JSON.stringify(params),
+        });
+
+        return await response.json();
     }
 }
 
 interface IApi {
     get: <T>(url: string) => Promise<T>;
     post: <T>(url: string, params: object) => Promise<T>;
+    put: <T>(url: string, params: object) => Promise<T>;
 }
 
 const headers = {

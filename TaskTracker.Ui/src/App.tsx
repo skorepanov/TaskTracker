@@ -29,6 +29,7 @@ class App extends React.Component<IAppProps, IAppState> {
         const url = `${AppUrl}/folders`;
 
         const folders = await Api.get<IFolder[]>(url);
+
         return this.setState({ folders: folders });
     }
 
@@ -60,6 +61,7 @@ class App extends React.Component<IAppProps, IAppState> {
         const url = `${AppUrl}/folders`;
 
         await Api.post<IFolder>(url, { title: title });
+
         await this.loadFolders();
     }
 
@@ -73,6 +75,7 @@ class App extends React.Component<IAppProps, IAppState> {
         };
 
         await Api.post<ITask>(url, params);
+
         this.loadFolders();
         this.loadTodayTasks();
 
@@ -87,6 +90,7 @@ class App extends React.Component<IAppProps, IAppState> {
         const url = `${AppUrl}/tasks/today`;
 
         const tasks = await Api.get<ITask[]>(url);
+
         return this.setState({ todayTasks: tasks });
     }
 
@@ -94,6 +98,7 @@ class App extends React.Component<IAppProps, IAppState> {
         const url = `${AppUrl}/tasks/inbox`;
 
         const tasks = await Api.get<ITask[]>(url);
+
         return this.setState({ tasksInInbox: tasks });
     }
 
@@ -101,7 +106,38 @@ class App extends React.Component<IAppProps, IAppState> {
         const url = `${AppUrl}/tasks/trash`;
 
         const tasks = await Api.get<ITaskMovedToTrash[]>(url);
+
         return this.setState({ tasksMovedToTrash: tasks });
+    }
+
+    completeTask = async (task: ITask) => {
+        const url = `${AppUrl}/tasks/${task.id}/completed`;
+        const params = {
+            completedDateTime: new Date().toISOString()
+        };
+
+        await Api.put<ITask>(url, params);
+
+        if (task.folderId != null) {
+            await this.loadFolderTasks(task.folderId, true);
+        } else {
+            await this.loadTasksInInbox();
+        }
+    }
+
+    incompleteTask = async (task: ITask) => {
+        const url = `${AppUrl}/tasks/${task.id}/incompleted`;
+        const params = {
+            modifiedDateTime: new Date().toISOString()
+        };
+
+        await Api.put<ITask>(url, params);
+
+        if (task.folderId != null) {
+            await this.loadFolderTasks(task.folderId, true);
+        } else {
+            await this.loadTasksInInbox();
+        }
     }
 
     componentDidMount() {
@@ -115,7 +151,9 @@ class App extends React.Component<IAppProps, IAppState> {
         return (
             <>
                 <Space direction='vertical'>
-                    <FolderCreationForm createFolder={this.createFolder} />
+                    <FolderCreationForm
+                        createFolder={this.createFolder}
+                    />
                     <TaskCreationForm
                         folders={this.state.folders}
                         createTask={this.createTask}
@@ -123,23 +161,38 @@ class App extends React.Component<IAppProps, IAppState> {
                     <FolderList
                         folders={this.state.folders}
                         loadTasks={this.loadFolderTasks}
+                        completeTask={this.completeTask}
+                        incompleteTask={this.incompleteTask}
                     />
                     <strong>Задачи на сегодня</strong>
                     {
                         this.state.todayTasks.map(t =>
-                            <Task task={t} key={t.id} />
+                            <Task
+                                key={t.id}
+                                task={t}
+                                completeTask={this.completeTask}
+                                incompleteTask={this.incompleteTask}
+                            />
                         )
                     }
                     <strong>Inbox</strong>
                     {
                         this.state.tasksInInbox.map(t =>
-                            <Task task={t} key={t.id} />
+                            <Task
+                                key={t.id}
+                                task={t}
+                                completeTask={this.completeTask}
+                                incompleteTask={this.incompleteTask}
+                            />
                         )
                     }
                     <strong>Корзина</strong>
                     {
                         this.state.tasksMovedToTrash.map(t =>
-                            <TaskMovedToTrash task={t} key={t.id} />
+                            <TaskMovedToTrash
+                                key={t.id}
+                                task={t}
+                            />
                         )
                     }
                 </Space>

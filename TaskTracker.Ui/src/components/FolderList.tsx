@@ -2,6 +2,7 @@ import React from 'react';
 import { Collapse } from 'antd';
 import IFolder from '../interfaces/IFolder';
 import Task from './Task';
+import ITask from "../interfaces/ITask";
 
 const { Panel } = Collapse;
 
@@ -21,15 +22,26 @@ class FolderList extends React.Component<IFolderListProps> {
 
     render() {
         return (
-            <Collapse accordion onChange={ids => this.onCollapseChange(ids)}>
+            <Collapse
+                accordion
+                onChange={ids => this.onCollapseChange(ids)}
+            >
             {
                 this.props.folders.map(f => {
                     const header = `[${f.id}] ${f.title} (не выполнено: ${f.incompleteTaskCount} задач)`;
                     return (
-                        <Panel header={header} key={f.id}>
+                        <Panel
+                            key={f.id}
+                            header={header}
+                        >
                         {
                             f.tasks?.map(t =>
-                                <Task task={t} key={t.id}></Task>)
+                                <Task
+                                    key={t.id}
+                                    task={t}
+                                    completeTask={this.props.completeTask}
+                                    incompleteTask={this.props.incompleteTask}
+                                />)
                         }
                         </Panel>
                     );
@@ -43,6 +55,8 @@ class FolderList extends React.Component<IFolderListProps> {
 interface IFolderListProps {
     folders: IFolder[];
     loadTasks: (folderId: number) => Promise<void>;
+    completeTask: (task: ITask) => Promise<void>;
+    incompleteTask: (task: ITask) => Promise<void>;
 }
 
 export default FolderList;
