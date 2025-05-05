@@ -5,11 +5,11 @@ import { AppUrl, Api } from './api';
 import Task from './components/Task';
 import FolderCreationForm from './components/FolderCreationForm';
 import TaskCreationForm from './components/TaskCreationForm';
-import DeletedTask from './components/DeletedTask';
+import TaskMovedToTrash from './components/TaskMovedToTrash';
 import FolderList from './components/FolderList';
 import IFolder from './interfaces/IFolder';
 import ITask from './interfaces/ITask';
-import IDeletedTask from './interfaces/IDeletedTask';
+import ITaskMovedToTrash from './interfaces/ITaskMovedToTrash';
 
 import 'antd/dist/antd.css';
 
@@ -21,7 +21,7 @@ class App extends React.Component<IAppProps, IAppState> {
             folders: [],
             todayTasks: [],
             tasksInInbox: [],
-            deletedTasks: [],
+            tasksMovedToTrash: [],
         };
     }
 
@@ -97,18 +97,18 @@ class App extends React.Component<IAppProps, IAppState> {
         return this.setState({ tasksInInbox: tasks });
     }
 
-    async loadDeletedTasks() {
-        const url = `${AppUrl}/tasks/deleted`;
+    async loadTasksInTrash() {
+        const url = `${AppUrl}/tasks/trash`;
 
-        const tasks = await Api.get<IDeletedTask[]>(url);
-        return this.setState({ deletedTasks: tasks });
+        const tasks = await Api.get<ITaskMovedToTrash[]>(url);
+        return this.setState({ tasksMovedToTrash: tasks });
     }
 
     componentDidMount() {
         this.loadFolders();
         this.loadTodayTasks();
         this.loadTasksInInbox();
-        this.loadDeletedTasks();
+        this.loadTasksInTrash();
     }
 
     render() {
@@ -136,10 +136,10 @@ class App extends React.Component<IAppProps, IAppState> {
                             <Task task={t} key={t.id} />
                         )
                     }
-                    <strong>Удалённые задачи</strong>
+                    <strong>Корзина</strong>
                     {
-                        this.state.deletedTasks.map(t =>
-                            <DeletedTask task={t} key={t.id} />
+                        this.state.tasksMovedToTrash.map(t =>
+                            <TaskMovedToTrash task={t} key={t.id} />
                         )
                     }
                 </Space>
@@ -155,7 +155,7 @@ interface IAppState {
     folders: IFolder[];
     todayTasks: ITask[];
     tasksInInbox: ITask[];
-    deletedTasks: IDeletedTask[];
+    tasksMovedToTrash: ITaskMovedToTrash[];
 }
 
 export default App;
