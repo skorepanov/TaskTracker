@@ -13,7 +13,7 @@ class TaskMovedToTrash extends React.Component<ITaskMovedToTrashProps> {
             : null;
 
         const movedToTrashDateTime = task.movedToTrashDateTime
-            ? <span>Дата перемещения в корзину: {task.movedToTrashDateTime}</span>
+            ? <>Дата перемещения в корзину: {task.movedToTrashDateTime}</>
             : null;
 
         return (

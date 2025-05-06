@@ -38,7 +38,7 @@ class Task extends React.Component<ITaskProps, ITaskState> {
             : null;
 
         const dueDateTime = task.dueDateTime !== null
-            ? <span>Срок выполнения: {task.dueDateTime}</span>
+            ? <>Срок выполнения: {task.dueDateTime}</>
             : null;
 
         return (
