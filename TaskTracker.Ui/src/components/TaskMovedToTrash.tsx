@@ -15,6 +15,7 @@ class TaskMovedToTrash extends React.Component<ITaskMovedToTrashProps> {
         const movedToTrashDateTime = task.movedToTrashDateTime
             ? <span>Дата перемещения в корзину: {task.movedToTrashDateTime}</span>
             : null;
+
         return (
             <div style={{ color: 'grey', marginBottom: 10 }}>
                 <Checkbox

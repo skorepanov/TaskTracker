@@ -59,8 +59,12 @@ class App extends React.Component<IAppProps, IAppState> {
 
     createFolder = async (title: string) => {
         const url = `${AppUrl}/folders`;
+        const params = {
+            title: title,
+            createdDateTime: new Date().toISOString()
+        };
 
-        await Api.post<IFolder>(url, { title: title });
+        await Api.post<IFolder>(url, params);
 
         await this.loadFolders();
     }
@@ -71,7 +75,8 @@ class App extends React.Component<IAppProps, IAppState> {
             title: task.title,
             description: task.description,
             dueDateTime: task.dueDateTime,
-            folderId: task.folderId
+            folderId: task.folderId,
+            createdDateTime: new Date().toISOString()
         };
 
         await Api.post<ITask>(url, params);

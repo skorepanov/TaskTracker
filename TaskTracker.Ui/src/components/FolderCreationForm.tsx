@@ -10,13 +10,13 @@ class FolderCreationForm extends React.Component<IFolderCreationFormProps, IFold
         };
     }
 
-    async createFolder() {
+    createFolder = async () => {
         const { title } = this.state;
         await this.props.createFolder(title);
         this.setState({ title: '' });
     }
 
-    onTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    onTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ title: e.target.value });
     }
 
@@ -31,11 +31,11 @@ class FolderCreationForm extends React.Component<IFolderCreationFormProps, IFold
                 <Input
                     placeholder='Название папки'
                     value={this.state.title}
-                    onChange={e => this.onTitleChange(e)}
+                    onChange={this.onTitleChange}
                     style={{ width: 300 }}
                 />
                 <Button
-                    onClick={() => this.createFolder()}
+                    onClick={this.createFolder}
                     disabled={this.isButtonDisabled()}
                 >Добавить</Button>
             </Space>
