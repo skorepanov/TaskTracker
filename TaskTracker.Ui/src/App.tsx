@@ -25,7 +25,7 @@ class App extends React.Component<IAppProps, IAppState> {
         };
     }
 
-    async loadFolders() {
+    loadFolders = async () => {
         const url = `${AppUrl}/folders`;
 
         const folders = await Api.get<IFolder[]>(url);
@@ -86,7 +86,7 @@ class App extends React.Component<IAppProps, IAppState> {
         }
     }
 
-    async loadTodayTasks() {
+    loadTodayTasks = async () => {
         const url = `${AppUrl}/tasks/today`;
 
         const tasks = await Api.get<ITask[]>(url);
@@ -94,7 +94,7 @@ class App extends React.Component<IAppProps, IAppState> {
         return this.setState({ todayTasks: tasks });
     }
 
-    async loadTasksInInbox() {
+    loadTasksInInbox = async () => {
         const url = `${AppUrl}/tasks/inbox`;
 
         const tasks = await Api.get<ITask[]>(url);
@@ -102,7 +102,7 @@ class App extends React.Component<IAppProps, IAppState> {
         return this.setState({ tasksInInbox: tasks });
     }
 
-    async loadTasksInTrash() {
+    loadTasksInTrash = async () => {
         const url = `${AppUrl}/tasks/trash`;
 
         const tasks = await Api.get<ITaskMovedToTrash[]>(url);

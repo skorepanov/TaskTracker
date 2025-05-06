@@ -12,6 +12,7 @@ export const Api : IApi = {
             method: 'POST',
             body: JSON.stringify(params),
         });
+
         return await response.json();
     },
 

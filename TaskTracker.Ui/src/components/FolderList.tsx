@@ -7,7 +7,7 @@ import ITask from "../interfaces/ITask";
 const { Panel } = Collapse;
 
 class FolderList extends React.Component<IFolderListProps> {
-    onCollapseChange(folderIds: string | string[] | undefined) {
+    onCollapseChange = (folderIds: string | string[] | undefined) => {
         if (folderIds == null || folderIds.length === 0) {
             return;
         }
@@ -24,7 +24,7 @@ class FolderList extends React.Component<IFolderListProps> {
         return (
             <Collapse
                 accordion
-                onChange={ids => this.onCollapseChange(ids)}
+                onChange={this.onCollapseChange}
             >
             {
                 this.props.folders.map(f => {

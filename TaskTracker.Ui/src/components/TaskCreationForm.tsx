@@ -21,29 +21,35 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
         }
     }
 
-    async createTask() {
+    createTask = async () => {
         await this.props.createTask(this.state);
-        this.setState({ title: '', description: '', folderId: null, dueDateTime: null });
+
+        this.setState({
+            title: '',
+            description: '',
+            folderId: null,
+            dueDateTime: null
+        });
     }
 
-    onTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ title: e.target.value });
     }
 
-    onDescriptionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         this.setState({ description: e.target.value });
     }
 
-    onDueDateTimeChange(date: Moment | null) {
+    onDueDateTimeChange = (date: Moment | null) => {
         const dueDateTime = date?.toDate() ?? null;
         this.setState({ dueDateTime: dueDateTime });
     }
 
-    onFolderChange(id: number) {
+    onFolderChange = (id: number) => {
         this.setState({ folderId: id});
     }
 
-    isButtonDisabled() {
+    isButtonDisabled = () => {
         const { title } = this.state;
         return title.trim() === '';
     }
@@ -59,33 +65,38 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
                 <Input
                     placeholder='Название задачи'
                     value={this.state.title}
-                    onChange={e => this.onTitleChange(e)}
+                    onChange={this.onTitleChange}
                     style={{ width: 300 }}
                 />
                 <TextArea
                     placeholder='Описание задачи'
                     value={this.state.description}
-                    onChange={e => this.onDescriptionChange(e)}
+                    onChange={this.onDescriptionChange}
                     style={{ width: 300 }}
                 />
                 <DatePicker
                     placeholder='Дата'
                     value={dueDateTime}
-                    onChange={date => this.onDueDateTimeChange(date)}
+                    onChange={this.onDueDateTimeChange}
                 />
                 <Select
                     placeholder='Папка'
-                    onChange={id => this.onFolderChange(id)}
+                    onChange={this.onFolderChange}
                     style={{ width: 300 }}
                 >
                 {
                     this.props.folders.map(f =>
-                        <Option key={f.id} value={f.id}>{f.title}</Option>
+                        <Option
+                            key={f.id}
+                            value={f.id}
+                        >
+                            {f.title}
+                        </Option>
                     )
                 }
                 </Select>
                 <Button
-                    onClick={() => this.createTask()}
+                    onClick={this.createTask}
                     disabled={this.isButtonDisabled()}
                 >Добавить</Button>
             </Space>

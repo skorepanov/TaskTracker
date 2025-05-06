@@ -12,7 +12,7 @@ class Task extends React.Component<ITaskProps, ITaskState> {
         }
     }
 
-    async onCompletedChange(e: CheckboxChangeEvent) {
+    onCompletedChange = async (e: CheckboxChangeEvent) => {
         const isCompleted = e.target.checked;
 
         this.setState({ isCompleted: isCompleted });
@@ -45,7 +45,7 @@ class Task extends React.Component<ITaskProps, ITaskState> {
             <div style={{ color: textColor, marginBottom: 10 }}>
                 <Checkbox
                     checked={this.state.isCompleted}
-                    onChange={e => this.onCompletedChange(e)}
+                    onChange={this.onCompletedChange}
                     style={{ marginRight: 5 }}
                 />
                 [{task.id}] {task.title}<br />
