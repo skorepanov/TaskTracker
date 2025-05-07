@@ -79,14 +79,17 @@ class App extends React.Component<IAppProps, IAppState> {
 
         await Api.post<ITask>(url, params);
 
-        this.loadFolders();
-        this.loadTodayTasks();
+        const loadFolders = this.loadFolders();
+        const loadTodayTasks = this.loadTodayTasks();
+        const loadCurrentTasks = task.folderId != null
+            ? this.loadFolderTasks(task.folderId, true)
+            : this.loadTasksInInbox();
 
-        if (task.folderId != null) {
-            this.loadFolderTasks(task.folderId, true);
-        } else {
-            this.loadTasksInInbox();
-        }
+        await Promise.all([
+            loadFolders,
+            loadTodayTasks,
+            loadCurrentTasks
+        ]);
     }
 
     loadTodayTasks = async () => {
@@ -143,11 +146,13 @@ class App extends React.Component<IAppProps, IAppState> {
         }
     }
 
-    componentDidMount() {
-        this.loadFolders();
-        this.loadTodayTasks();
-        this.loadTasksInInbox();
-        this.loadTasksInTrash();
+    componentDidMount = async () => {
+        return Promise.all([
+            this.loadFolders(),
+            this.loadTodayTasks(),
+            this.loadTasksInInbox(),
+            this.loadTasksInTrash()
+        ]);
     }
 
     render() {
@@ -171,7 +176,7 @@ class App extends React.Component<IAppProps, IAppState> {
                     {
                         this.state.todayTasks.map(t =>
                             <Task
-                                key={t.id}
+                                key={`today-${t.id}`}
                                 task={t}
                                 completeTask={this.completeTask}
                                 incompleteTask={this.incompleteTask}
@@ -182,7 +187,7 @@ class App extends React.Component<IAppProps, IAppState> {
                     {
                         this.state.tasksInInbox.map(t =>
                             <Task
-                                key={t.id}
+                                key={`inbox-${t.id}`}
                                 task={t}
                                 completeTask={this.completeTask}
                                 incompleteTask={this.incompleteTask}
@@ -193,7 +198,7 @@ class App extends React.Component<IAppProps, IAppState> {
                     {
                         this.state.tasksMovedToTrash.map(t =>
                             <TaskMovedToTrash
-                                key={t.id}
+                                key={`trash-${t.id}`}
                                 task={t}
                             />
                         )
