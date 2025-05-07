@@ -11,8 +11,6 @@ import IFolder from './interfaces/IFolder';
 import ITask from './interfaces/ITask';
 import ITaskMovedToTrash from './interfaces/ITaskMovedToTrash';
 
-import 'antd/dist/antd.css';
-
 class App extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);

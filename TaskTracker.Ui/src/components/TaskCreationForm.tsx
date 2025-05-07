@@ -1,5 +1,5 @@
 import React from 'react';
-import moment, { Moment } from 'moment';
+import dayjs, { Dayjs } from 'dayjs';
 import { Input, Select, DatePicker, Button, Space } from 'antd';
 import IFolder from '../interfaces/IFolder';
 import ITask from '../interfaces/ITask';
@@ -40,7 +40,7 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
         this.setState({ description: e.target.value });
     }
 
-    onDueDateTimeChange = (date: Moment | null) => {
+    onDueDateTimeChange = (date: Dayjs | null) => {
         const dueDateTime = date?.toDate() ?? null;
         this.setState({ dueDateTime: dueDateTime });
     }
@@ -56,7 +56,7 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
 
     render() {
         const dueDateTime = this.state.dueDateTime !== null
-            ? moment(this.state.dueDateTime)
+            ? dayjs(this.state.dueDateTime)
             : null;
 
         return (
