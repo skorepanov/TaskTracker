@@ -1,12 +1,16 @@
 import React from 'react';
-import { Checkbox } from 'antd';
+import { Checkbox, Button } from 'antd';
 import ITaskMovedToTrash from '../interfaces/ITaskMovedToTrash';
+import ITask from "../interfaces/ITask";
 
 interface ITaskMovedToTrashProps {
     task: ITaskMovedToTrash;
+    deleteTask: (task: ITask) => Promise<void>;
 }
 
-const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = ({ task }) => {
+const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
+    const { task } = props;
+
     const isCompleted = task.completedDateTime !== null;
 
     const description = task.description?.length > 0
@@ -17,6 +21,10 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = ({ task }) => {
         ? <>Дата перемещения в корзину: {task.movedToTrashDateTime}</>
         : null;
 
+    const handleDeleteTaskButtonClick = async () => {
+        await props.deleteTask(task);
+    }
+
     return (
         <div style={{ color: 'grey', marginBottom: 10 }}>
             <Checkbox
@@ -26,7 +34,12 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = ({ task }) => {
             />
             [{task.id}] {task.title}<br />
             {description}<br />
-            {movedToTrashDateTime}
+            {movedToTrashDateTime}<br />
+            <Button
+                onClick={handleDeleteTaskButtonClick}
+            >
+                Удалить
+            </Button>
         </div>
     );
 }

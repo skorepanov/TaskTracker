@@ -152,6 +152,14 @@ const App: React.FC = () => {
         }
     }
 
+    const deleteTask = async (task: ITask) => {
+        const url = `${AppUrl}/tasks/${task.id}`;
+
+        await Api.delete(url);
+
+        await loadTasksInTrash();
+    }
+
     useEffect(() => {
         const loadData = async () => {
             await Promise.all([
@@ -209,6 +217,7 @@ const App: React.FC = () => {
                         <TaskMovedToTrash
                             key={`trash-${t.id}`}
                             task={t}
+                            deleteTask={deleteTask}
                         />
                     )
                 }

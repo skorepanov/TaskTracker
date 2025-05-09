@@ -24,6 +24,13 @@ export const Api : IApi = {
         });
 
         return await response.json();
+    },
+
+    delete: async (url: string) => {
+        await fetch(url, {
+            headers,
+            method: 'DELETE'
+        });
     }
 }
 
@@ -31,6 +38,7 @@ interface IApi {
     get: <T>(url: string) => Promise<T>;
     post: <T>(url: string, params: object) => Promise<T>;
     put: <T>(url: string, params: object) => Promise<T>;
+    delete: (url: string) => Promise<void>;
 }
 
 const headers = {
