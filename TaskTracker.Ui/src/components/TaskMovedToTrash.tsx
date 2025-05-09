@@ -12,11 +12,11 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
 
     const isCompleted = task.completedDateTime !== null;
 
-    const description = task.description?.length > 0
+    const description = task.description !== null && task.description.length > 0
         ? <i>{task.description}</i>
         : null;
 
-    const movedToTrashDateTime = task.movedToTrashDateTime
+    const movedToTrashDateTime = task.movedToTrashDateTime !== null
         ? <>Дата перемещения в корзину: {task.movedToTrashDateTime}</>
         : null;
 

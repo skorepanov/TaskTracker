@@ -1,9 +1,9 @@
 export default interface ITask {
-    id: number | null,
+    id: number,
     title: string,
-    description: string,
+    description: string | null,
     folderId: number | null,
     completedDateTime: Date | null,
     dueDateTime: Date | null,
-    movedToTrashDateTime: Date
+    movedToTrashDateTime: Date | null
 }
