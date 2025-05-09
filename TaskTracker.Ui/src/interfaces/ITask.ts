@@ -5,4 +5,5 @@ export default interface ITask {
     folderId: number | null,
     completedDateTime: Date | null,
     dueDateTime: Date | null,
+    movedToTrashDateTime: Date
 }

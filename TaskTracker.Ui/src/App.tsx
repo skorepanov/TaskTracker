@@ -9,13 +9,12 @@ import TaskMovedToTrash from './components/TaskMovedToTrash';
 import FolderList from './components/FolderList';
 import IFolder from './interfaces/IFolder';
 import ITask from './interfaces/ITask';
-import ITaskMovedToTrash from './interfaces/ITaskMovedToTrash';
 
 const App: React.FC = () => {
     const [folders, setFolders] = useState<IFolder[]>([]);
     const [todayTasks, setTodayTasks] = useState<ITask[]>([]);
     const [tasksInInbox, setTasksInInbox] = useState<ITask[]>([]);
-    const [tasksMovedToTrash, setTasksMovedToTrash] = useState<ITaskMovedToTrash[]>([]);
+    const [tasksMovedToTrash, setTasksMovedToTrash] = useState<ITask[]>([]);
 
     const loadFolders = async () => {
         const url = `${AppUrl}/folders`;
@@ -115,7 +114,7 @@ const App: React.FC = () => {
     const loadTasksInTrash = async () => {
         const url = `${AppUrl}/tasks/trash`;
 
-        const tasks = await Api.get<ITaskMovedToTrash[]>(url);
+        const tasks = await Api.get<ITask[]>(url);
 
         setTasksMovedToTrash(tasks);
     }

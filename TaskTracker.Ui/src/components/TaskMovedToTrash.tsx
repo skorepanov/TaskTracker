@@ -1,10 +1,9 @@
 import React from 'react';
 import { Checkbox, Button } from 'antd';
-import ITaskMovedToTrash from '../interfaces/ITaskMovedToTrash';
 import ITask from "../interfaces/ITask";
 
 interface ITaskMovedToTrashProps {
-    task: ITaskMovedToTrash;
+    task: ITask;
     deleteTask: (task: ITask) => Promise<void>;
 }
 
