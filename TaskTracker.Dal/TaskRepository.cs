@@ -21,7 +21,7 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
     public async Task<IReadOnlyList<UserTask>> GetTasksInInbox()
     {
         return await _db.Tasks
-            .Where(t => t.FolderId == null)
+            .Where(t => t.FolderId == null && t.MovedToTrashDateTime == null)
             .ToListAsync();
     }
 
