@@ -298,7 +298,7 @@ public class TaskServiceTests
 
     private UserTask CreateTask(
         string title = "Task title 42",
-        string description = "Description 42",
+        string? description = null,
         DateTime? createdDateTime = null,
         DateTime? now = null)
     {

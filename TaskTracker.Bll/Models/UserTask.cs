@@ -4,7 +4,7 @@ public class UserTask
 {
     public int Id { get; }
     public string Title { get; private set; }
-    public string Description { get; private set; }
+    public string? Description { get; private set; }
 
     public int? FolderId { get; private set; }
     public Folder? Folder { get; private set; }
@@ -23,7 +23,7 @@ public class UserTask
 
     private UserTask(
         string title,
-        string description,
+        string? description,
         int? folderId,
         DateTime? dueDateTime,
         DateTime createdDateTime)
@@ -40,7 +40,7 @@ public class UserTask
         DateTime now)
     {
         var normalizedTitle = userTaskDto.Title.Trim();
-        var normalizedDescription = userTaskDto.Description.Trim();
+        var normalizedDescription = userTaskDto.Description?.Trim();
         var createdDateTime = userTaskDto.CreatedDateTime ?? now;
 
         return new UserTask(
@@ -56,7 +56,7 @@ public class UserTask
         DateTime now)
     {
         Title = userTaskDto.Title.Trim();
-        Description = userTaskDto.Description.Trim();
+        Description = userTaskDto.Description?.Trim();
         FolderId = userTaskDto.FolderId;
         DueDateTime = userTaskDto.DueDateTime;
         ModifiedDateTime = userTaskDto.ModifiedDateTime ?? now;

@@ -5,7 +5,7 @@
 /// </summary>
 public record UserTaskForUpdateDto(
     string Title,
-    string Description,
+    string? Description,
     int? FolderId,
     DateTime? DueDateTime,
     DateTime? ModifiedDateTime);

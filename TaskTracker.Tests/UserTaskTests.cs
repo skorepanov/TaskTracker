@@ -506,7 +506,7 @@ public class UserTaskTests
     #region helpers
     private UserTask CreateSut(
         string title = "Task title 42",
-        string description = "Description 42",
+        string? description = null,
         int? folderId = null,
         DateTime? dueDateTime = null,
         DateTime? createdDateTime = null,
