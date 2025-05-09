@@ -6,9 +6,16 @@ import ITask from "../interfaces/ITask";
 
 const { Panel } = Collapse;
 
-class FolderList extends React.Component<IFolderListProps> {
-    onCollapseChange = (folderIds: string | string[] | undefined) => {
-        if (folderIds == null || folderIds.length === 0) {
+interface IFolderListProps {
+    folders: IFolder[];
+    loadTasks: (folderId: number) => Promise<void>;
+    completeTask: (task: ITask) => Promise<void>;
+    incompleteTask: (task: ITask) => Promise<void>;
+}
+
+const FolderList: React.FC<IFolderListProps> = (props) => {
+    const handleCollapseChange = (folderIds: string[]) => {
+        if (folderIds.length === 0) {
             return;
         }
 
@@ -17,46 +24,37 @@ class FolderList extends React.Component<IFolderListProps> {
             : folderIds;
 
         const parsedFolderId = Number.parseInt(folderId);
-        this.props.loadTasks(parsedFolderId);
+        props.loadTasks(parsedFolderId);
     }
 
-    render() {
-        return (
-            <Collapse
-                accordion
-                onChange={this.onCollapseChange}
-            >
+    return (
+        <Collapse
+            accordion
+            onChange={handleCollapseChange}
+        >
             {
-                this.props.folders.map(f => {
+                props.folders.map(f => {
                     const header = `[${f.id}] ${f.title} (не выполнено: ${f.incompleteTaskCount} задач)`;
                     return (
                         <Panel
                             key={f.id}
                             header={header}
                         >
-                        {
-                            f.tasks?.map(t =>
-                                <Task
-                                    key={t.id}
-                                    task={t}
-                                    completeTask={this.props.completeTask}
-                                    incompleteTask={this.props.incompleteTask}
-                                />)
-                        }
+                            {
+                                f.tasks?.map(t =>
+                                    <Task
+                                        key={t.id}
+                                        task={t}
+                                        completeTask={props.completeTask}
+                                        incompleteTask={props.incompleteTask}
+                                    />)
+                            }
                         </Panel>
                     );
                 })
             }
-            </Collapse>
-        );
-    }
-}
-
-interface IFolderListProps {
-    folders: IFolder[];
-    loadTasks: (folderId: number) => Promise<void>;
-    completeTask: (task: ITask) => Promise<void>;
-    incompleteTask: (task: ITask) => Promise<void>;
+        </Collapse>
+    );
 }
 
 export default FolderList;

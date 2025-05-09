@@ -1,91 +1,87 @@
-import React from 'react';
+import React, { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { Input, Select, DatePicker, Button, Space } from 'antd';
 import IFolder from '../interfaces/IFolder';
-import ITask from '../interfaces/ITask';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
-    constructor(props: ITaskCreationFormProps) {
-        super (props);
+interface ITaskCreationFormProps {
+    folders: IFolder[];
+    createTask: (
+        title: string,
+        description: string,
+        dueDateTime: Date | null,
+        folderId: number | null
+    ) => Promise<void>;
+}
 
-        this.state = {
-            id: null,
-            title: '',
-            description: '',
-            completedDateTime: null,
-            folderId: null,
-            dueDateTime: null,
-        }
+const TaskCreationForm: React.FC<ITaskCreationFormProps> = (props) => {
+    const [title, setTitle] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [dueDateTime, setDueDateTime] = useState<Date | null>(null);
+    const [folderId, setFolderId] = useState<number | null>(null);
+
+    const dayjsDueDateTime = dueDateTime !== null
+        ? dayjs(dueDateTime)
+        : null;
+
+    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(event.target.value);
     }
 
-    createTask = async () => {
-        await this.props.createTask(this.state);
-
-        this.setState({
-            title: '',
-            description: '',
-            folderId: null,
-            dueDateTime: null
-        });
+    const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setDescription(event.target.value);
     }
 
-    onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ title: e.target.value });
+    const handleDueDateTimeChange = (date: Dayjs | null) => {
+        setDueDateTime(date?.toDate() ?? null);
     }
 
-    onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        this.setState({ description: e.target.value });
+    const handleFolderChange = (folderId: number) => {
+        setFolderId(folderId);
     }
 
-    onDueDateTimeChange = (date: Dayjs | null) => {
-        const dueDateTime = date?.toDate() ?? null;
-        this.setState({ dueDateTime: dueDateTime });
-    }
-
-    onFolderChange = (id: number) => {
-        this.setState({ folderId: id});
-    }
-
-    isButtonDisabled = () => {
-        const { title } = this.state;
+    const isCreateTaskButtonDisabled = () => {
         return title.trim() === '';
     }
 
-    render() {
-        const dueDateTime = this.state.dueDateTime !== null
-            ? dayjs(this.state.dueDateTime)
-            : null;
+    const handleCreateTaskButtonClick = async () => {
+        await props.createTask(title, description, dueDateTime, folderId);
 
-        return (
-            <Space direction='vertical'>
-                <strong>Новая задача</strong>
-                <Input
-                    placeholder='Название задачи'
-                    value={this.state.title}
-                    onChange={this.onTitleChange}
-                    style={{ width: 300 }}
-                />
-                <TextArea
-                    placeholder='Описание задачи'
-                    value={this.state.description}
-                    onChange={this.onDescriptionChange}
-                    style={{ width: 300 }}
-                />
-                <DatePicker
-                    placeholder='Дата'
-                    value={dueDateTime}
-                    onChange={this.onDueDateTimeChange}
-                />
-                <Select
-                    placeholder='Папка'
-                    onChange={this.onFolderChange}
-                    style={{ width: 300 }}
-                >
+        setTitle('');
+        setDescription('');
+        setDueDateTime(null);
+        setFolderId(null);
+    }
+
+    return (
+        <Space direction='vertical'>
+            <strong>Новая задача</strong>
+            <Input
+                placeholder='Название задачи'
+                value={title}
+                onChange={handleTitleChange}
+                style={{ width: 300 }}
+            />
+            <TextArea
+                placeholder='Описание задачи'
+                value={description}
+                onChange={handleDescriptionChange}
+                style={{ width: 300 }}
+            />
+            <DatePicker
+                placeholder='Дата'
+                defaultValue={dayjsDueDateTime}
+                onChange={handleDueDateTimeChange}
+            />
+            <Select
+                placeholder='Папка'
+                onChange={handleFolderChange}
+                style={{ width: 300 }}
+            >
                 {
-                    this.props.folders.map(f =>
+                    props.folders.map(f =>
                         <Option
                             key={f.id}
                             value={f.id}
@@ -94,19 +90,13 @@ class TaskCreationForm extends React.Component<ITaskCreationFormProps, ITask> {
                         </Option>
                     )
                 }
-                </Select>
-                <Button
-                    onClick={this.createTask}
-                    disabled={this.isButtonDisabled()}
-                >Добавить</Button>
-            </Space>
-        );
-    }
+            </Select>
+            <Button
+                onClick={handleCreateTaskButtonClick}
+                disabled={isCreateTaskButtonDisabled()}
+            >Добавить</Button>
+        </Space>
+    );
 }
 
 export default TaskCreationForm;
-
-interface ITaskCreationFormProps {
-    folders: IFolder[];
-    createTask: (task: ITask) => Promise<void>;
-}

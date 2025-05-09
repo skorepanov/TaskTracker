@@ -1,63 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Checkbox } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import ITask from '../interfaces/ITask';
-
-class Task extends React.Component<ITaskProps, ITaskState> {
-    constructor(props: ITaskProps) {
-        super(props);
-
-        this.state = {
-            isCompleted: props.task.completedDateTime !== null,
-        }
-    }
-
-    onCompletedChange = async (e: CheckboxChangeEvent) => {
-        const isCompleted = e.target.checked;
-
-        this.setState({ isCompleted: isCompleted });
-
-        if (isCompleted) {
-            await this.props.completeTask(this.props.task);
-        } else {
-            await this.props.incompleteTask(this.props.task);
-        }
-    }
-
-    render() {
-        const task = this.props.task;
-
-        const textColor = this.state.isCompleted ? 'green' : 'black';
-
-        const description = task.description?.length > 0
-            ? <><i>{task.description}</i><br /></>
-            : null;
-
-        const completedDateTime = this.state.isCompleted
-            ? <>Выполнено: {task.completedDateTime}<br /></>
-            : null;
-
-        const dueDateTime = task.dueDateTime !== null
-            ? <>Срок выполнения: {task.dueDateTime}</>
-            : null;
-
-        return (
-            <div style={{ color: textColor, marginBottom: 10 }}>
-                <Checkbox
-                    checked={this.state.isCompleted}
-                    onChange={this.onCompletedChange}
-                    style={{ marginRight: 5 }}
-                />
-                [{task.id}] {task.title}<br />
-                {description}
-                {completedDateTime}
-                {dueDateTime}
-            </div>
-        );
-    }
-}
-
-export default Task;
 
 interface ITaskProps {
     task: ITask;
@@ -65,6 +9,48 @@ interface ITaskProps {
     incompleteTask: (task: ITask) => Promise<void>;
 }
 
-interface ITaskState {
-    isCompleted: boolean;
+const Task: React.FC<ITaskProps> = (props) => {
+    const isTaskCompleted = props.task.completedDateTime !== null;
+
+    const [isCompleted, setIsCompleted] = useState<boolean>(isTaskCompleted);
+
+    const textColor = isTaskCompleted
+        ? 'green'
+        : 'black';
+
+    const completedDateTimeAsText = isTaskCompleted
+        ? <>Выполнено: {props.task.completedDateTime}<br /></>
+        : null;
+
+    const dueDateTimeAsText = props.task.dueDateTime !== null
+        ? <>Срок выполнения: {props.task.dueDateTime}</>
+        : null;
+
+    const handleCompletedChange = async (event: CheckboxChangeEvent) => {
+        const isCompletedNew = event.target.checked;
+
+        setIsCompleted(isCompletedNew);
+
+        if (isCompletedNew) {
+            await props.completeTask(props.task);
+        } else {
+            await props.incompleteTask(props.task);
+        }
+    }
+
+    return (
+        <div style={{ color: textColor, marginBottom: 10 }}>
+            <Checkbox
+                checked={isCompleted}
+                onChange={handleCompletedChange}
+                style={{ marginRight: 5 }}
+            />
+            [{props.task.id}] {props.task.title}<br />
+            <i>{props.task.description}</i><br />
+            {completedDateTimeAsText}
+            {dueDateTimeAsText}
+        </div>
+    );
 }
+
+export default Task;
