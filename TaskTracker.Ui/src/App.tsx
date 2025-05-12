@@ -51,7 +51,7 @@ const App: React.FC = () => {
                         ...f,
                         tasks: newTasks,
                         incompleteTaskCount: newIncompleteTaskCount }
-                    : folder));
+                    : f));
     }
 
     const createFolder = async (title: string) => {
