@@ -11,6 +11,7 @@ interface IFolderListProps {
     loadTasks: (folderId: number) => Promise<void>;
     completeTask: (task: ITask) => Promise<void>;
     incompleteTask: (task: ITask) => Promise<void>;
+    moveTaskToTrash: (task: ITask) => Promise<void>;
 }
 
 const FolderList: React.FC<IFolderListProps> = (props) => {
@@ -47,6 +48,7 @@ const FolderList: React.FC<IFolderListProps> = (props) => {
                                         task={t}
                                         completeTask={props.completeTask}
                                         incompleteTask={props.incompleteTask}
+                                        moveTaskToTrash={props.moveTaskToTrash}
                                     />)
                             }
                         </Panel>

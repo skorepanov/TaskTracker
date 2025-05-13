@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Checkbox } from 'antd';
+import { Checkbox, Button } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import ITask from '../interfaces/ITask';
 
@@ -7,10 +7,12 @@ interface ITaskProps {
     task: ITask;
     completeTask: (task: ITask) => Promise<void>;
     incompleteTask: (task: ITask) => Promise<void>;
+    moveTaskToTrash: (task: ITask) => Promise<void>;
 }
 
 const Task: React.FC<ITaskProps> = (props) => {
-    const isTaskCompleted = props.task.completedDateTime !== null;
+    const { task } = props;
+    const isTaskCompleted = task.completedDateTime !== null;
 
     const [isCompleted, setIsCompleted] = useState<boolean>(isTaskCompleted);
 
@@ -19,15 +21,15 @@ const Task: React.FC<ITaskProps> = (props) => {
         : 'black';
 
     const completedDateTimeAsText = isTaskCompleted
-        ? <>Выполнено: {props.task.completedDateTime}<br /></>
+        ? <>Выполнено: {task.completedDateTime}<br /></>
         : null;
 
-    const dueDateTimeAsText = props.task.dueDateTime !== null
-        ? <>Срок выполнения: {props.task.dueDateTime}</>
+    const dueDateTimeAsText = task.dueDateTime !== null
+        ? <>Срок выполнения: {task.dueDateTime}</>
         : null;
 
-    const overdueDaysAsText = props.task.overdueDaysCount > 0
-        ? <>({props.task.overdueDaysCount} дней назад)</>
+    const overdueDaysAsText = task.overdueDaysCount > 0
+        ? <>({task.overdueDaysCount} дней назад)</>
         : null;
 
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
@@ -36,10 +38,14 @@ const Task: React.FC<ITaskProps> = (props) => {
         setIsCompleted(isCompletedNew);
 
         if (isCompletedNew) {
-            await props.completeTask(props.task);
+            await props.completeTask(task);
         } else {
-            await props.incompleteTask(props.task);
+            await props.incompleteTask(task);
         }
+    }
+
+    const handleMoveToTrashButtonClick = async () => {
+        await props.moveTaskToTrash(task);
     }
 
     return (
@@ -49,10 +55,15 @@ const Task: React.FC<ITaskProps> = (props) => {
                 onChange={handleCompletedChange}
                 style={{ marginRight: 5 }}
             />
-            [{props.task.id}] {props.task.title}<br />
-            <i>{props.task.description}</i><br />
+            [{task.id}] {task.title}<br />
+            <i>{task.description}</i><br />
             {completedDateTimeAsText}
-            {dueDateTimeAsText} {overdueDaysAsText}
+            {dueDateTimeAsText} {overdueDaysAsText}<br />
+            <Button
+                onClick={handleMoveToTrashButtonClick}
+            >
+                В корзину
+            </Button>
         </div>
     );
 }
