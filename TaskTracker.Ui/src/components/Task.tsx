@@ -26,6 +26,10 @@ const Task: React.FC<ITaskProps> = (props) => {
         ? <>Срок выполнения: {props.task.dueDateTime}</>
         : null;
 
+    const overdueDaysAsText = props.task.overdueDaysCount > 0
+        ? <>({props.task.overdueDaysCount} дней назад)</>
+        : null;
+
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
         const isCompletedNew = event.target.checked;
 
@@ -48,7 +52,7 @@ const Task: React.FC<ITaskProps> = (props) => {
             [{props.task.id}] {props.task.title}<br />
             <i>{props.task.description}</i><br />
             {completedDateTimeAsText}
-            {dueDateTimeAsText}
+            {dueDateTimeAsText} {overdueDaysAsText}
         </div>
     );
 }
