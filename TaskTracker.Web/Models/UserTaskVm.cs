@@ -18,7 +18,12 @@ public record UserTaskVm
     /// <summary>
     /// Описание задачи
     /// </summary>
-    public string Description { get; }
+    public string? Description { get; }
+
+    /// <summary>
+    /// Id папки
+    /// </summary>
+    public int? FolderId { get; }
 
     /// <summary>
     /// Дата и время выполнения задачи
@@ -68,6 +73,7 @@ public record UserTaskVm
         Id = task.Id;
         Title = task.Title;
         Description = task.Description;
+        FolderId = task.FolderId;
         CompletedDateTime = task.CompletedDateTime;
         IsCompleted = task.IsCompleted;
         DueDateTime = task.DueDateTime;
