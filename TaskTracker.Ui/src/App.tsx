@@ -169,6 +169,24 @@ const App: React.FC = () => {
         }
     }
 
+    const moveTaskFromTrash = async (task: ITask) => {
+        const url = `${AppUrl}/tasks/${task.id}/movedFromTrash`;
+
+        const params = {
+            modifiedDateTime: new Date().toISOString()
+        };
+
+        await Api.put<ITask>(url, params);
+
+        await loadTasksInTrash();
+
+        if (task.folderId !== null) {
+            await loadFolderTasks(task.folderId, true);
+        } else {
+            await loadTasksInInbox();
+        }
+    }
+
     const deleteTask = async (task: ITask) => {
         const url = `${AppUrl}/tasks/${task.id}`;
 
@@ -237,6 +255,7 @@ const App: React.FC = () => {
                         <TaskMovedToTrash
                             key={`trash-${t.id}`}
                             task={t}
+                            moveTaskFromTrash={moveTaskFromTrash}
                             deleteTask={deleteTask}
                         />
                     )

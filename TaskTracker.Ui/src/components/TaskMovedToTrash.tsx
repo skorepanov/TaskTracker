@@ -4,6 +4,7 @@ import ITask from "../interfaces/ITask";
 
 interface ITaskMovedToTrashProps {
     task: ITask;
+    moveTaskFromTrash: (task: ITask) => Promise<void>;
     deleteTask: (task: ITask) => Promise<void>;
 }
 
@@ -20,6 +21,10 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
         ? <>Дата перемещения в корзину: {task.movedToTrashDateTime}</>
         : null;
 
+    const handleRestoreTaskButtonClick = async () => {
+        await props.moveTaskFromTrash(task);
+    }
+
     const handleDeleteTaskButtonClick = async () => {
         await props.deleteTask(task);
     }
@@ -34,6 +39,11 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
             [{task.id}] {task.title}<br />
             {description}<br />
             {movedToTrashDateTime}<br />
+            <Button
+                onClick={handleRestoreTaskButtonClick}
+            >
+                Восстановить
+            </Button>
             <Button
                 onClick={handleDeleteTaskButtonClick}
             >
