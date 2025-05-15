@@ -38,6 +38,10 @@ const Task: React.FC<ITaskProps> = (props) => {
         ? <>{dueDateTimeAsText} {overdueDaysAsText}<br /></>
         : null;
 
+    const modifiedDateTimeAsText = task.modifiedDateTime !== null
+        ? <><i>Изменена: {task.modifiedDateTime.toString()}</i><br /></>
+        : null;
+
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
         const isCompletedNew = event.target.checked;
 
@@ -65,6 +69,8 @@ const Task: React.FC<ITaskProps> = (props) => {
             {descriptionAsText}
             {completedDateTimeAsText}
             {overdueAsText}
+            {modifiedDateTimeAsText}
+            <i>Создана: {task.createdDateTime.toString()}</i><br />
             <Button
                 onClick={handleMoveToTrashButtonClick}
             >

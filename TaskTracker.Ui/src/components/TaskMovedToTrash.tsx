@@ -21,6 +21,10 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
         ? <>Дата перемещения в корзину: {task.movedToTrashDateTime}</>
         : null;
 
+    const modifiedDateTimeAsText = task.modifiedDateTime !== null
+        ? <><i>Изменена: {task.modifiedDateTime.toString()}</i><br /></>
+        : null;
+
     const handleRestoreTaskButtonClick = async () => {
         await props.moveTaskFromTrash(task);
     }
@@ -39,6 +43,8 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
             [{task.id}] {task.title}<br />
             {description}<br />
             {movedToTrashDateTime}<br />
+            {modifiedDateTimeAsText}
+            <i>Создана: {task.createdDateTime.toString()}</i><br />
             <Button
                 onClick={handleRestoreTaskButtonClick}
             >
