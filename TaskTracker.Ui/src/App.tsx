@@ -97,6 +97,15 @@ const App: React.FC = () => {
         setFolders(prevFolders => [...prevFolders, createdFolder]);
     }
 
+    const deleteFolder = async (folder: IFolder) => {
+        const url = `${AppUrl}/folders/${folder.id}`;
+
+        await Api.delete(url);
+
+        setFolders(prevFolders =>
+            prevFolders.filter(f => f.id !== folder.id));
+    }
+
     const createTask = async (
         title: string,
         description: string,
@@ -231,6 +240,7 @@ const App: React.FC = () => {
                     folders={folders}
                     incompletedTasks={incompletedTasks}
                     completedTasks={completedTasks}
+                    deleteFolder={deleteFolder}
                     completeTask={completeTask}
                     incompleteTask={incompleteTask}
                     moveTaskToTrash={moveTaskToTrash}

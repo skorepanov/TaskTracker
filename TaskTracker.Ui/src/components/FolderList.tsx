@@ -1,5 +1,5 @@
 import React from 'react';
-import { Collapse } from 'antd';
+import { Button, Collapse } from 'antd';
 import IFolder from '../interfaces/IFolder';
 import Task from './Task';
 import ITask from "../interfaces/ITask";
@@ -10,6 +10,7 @@ interface IFolderListProps {
     folders: IFolder[];
     incompletedTasks: ITask[];
     completedTasks: ITask[];
+    deleteFolder: (folder: IFolder) => Promise<void>;
     completeTask: (task: ITask) => Promise<void>;
     incompleteTask: (task: ITask) => Promise<void>;
     moveTaskToTrash: (task: ITask) => Promise<void>;
@@ -33,11 +34,20 @@ const FolderList: React.FC<IFolderListProps> = (props) => {
                         ? <><i>Изменена: {f.modifiedDateTime.toString()}</i><br /></>
                         : null;
 
+                    const handleDeleteButtonClick = async () => {
+                        await props.deleteFolder(f);
+                    }
+
                     const header =
                         <>
                             [{f.id}] {f.title} {incompleteTaskCountAsText}<br />
                             {modifiedDateTimeAsText}
-                            <i>Создана: {f.createdDateTime.toString()}</i>
+                            <i>Создана: {f.createdDateTime.toString()}</i><br />
+                            <Button
+                                onClick={handleDeleteButtonClick}
+                            >
+                                Удалить
+                            </Button>
                         </>;
 
                     return (
