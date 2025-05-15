@@ -33,6 +33,18 @@ public class TaskService(ITaskRepository _taskRepository,
         return folder.IncompleteTasks;
     }
 
+    public async Task<IReadOnlyList<UserTask>> GetIncompletedTasks()
+    {
+        var tasks = await _taskRepository.GetIncompletedTasks();
+        return tasks;
+    }
+
+    public async Task<IReadOnlyList<UserTask>> GetCompletedTasks()
+    {
+        var tasks = await _taskRepository.GetCompletedTasks();
+        return tasks;
+    }
+
     public async Task<IReadOnlyList<UserTask>> GetCompletedTasks(int folderId)
     {
         var folder = await _folderRepository.GetFolder(folderId);

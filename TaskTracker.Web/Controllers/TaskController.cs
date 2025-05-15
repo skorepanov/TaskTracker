@@ -22,6 +22,30 @@ public class TaskController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
+    /// Получить невыполненные задачи
+    /// </summary>
+    [HttpGet]
+    [Route("incomplete")]
+    public async Task<IActionResult> GetIncompletedTasks()
+    {
+        var tasks = await _taskService.GetIncompletedTasks();
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
+        return Ok(taskVms);
+    }
+
+    /// <summary>
+    /// Получить выполненные задачи
+    /// </summary>
+    [HttpGet]
+    [Route("complete")]
+    public async Task<ActionResult> GetCompletedTasks()
+    {
+        var tasks = await _taskService.GetCompletedTasks();
+        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
+        return Ok(taskVms);
+    }
+
+    /// <summary>
     /// Получить задачи на сегодня
     /// </summary>
     [HttpGet]

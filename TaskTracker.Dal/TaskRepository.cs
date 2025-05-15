@@ -11,6 +11,22 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
         return await _db.Tasks.FindAsync(taskId);
     }
 
+    public async Task<IReadOnlyList<UserTask>> GetIncompletedTasks()
+    {
+        return await _db.Tasks
+            .Where(t => t.MovedToTrashDateTime == null
+                     && t.CompletedDateTime == null)
+            .ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<UserTask>> GetCompletedTasks()
+    {
+        return await _db.Tasks
+            .Where(t => t.MovedToTrashDateTime == null
+                     && t.CompletedDateTime != null)
+            .ToListAsync();
+    }
+
     public async Task<IReadOnlyList<UserTask>> GetNonMovedToTrashTasks()
     {
         return await _db.Tasks

@@ -8,41 +8,46 @@ const { Panel } = Collapse;
 
 interface IFolderListProps {
     folders: IFolder[];
-    loadTasks: (folderId: number) => Promise<void>;
+    incompletedTasks: ITask[];
+    completedTasks: ITask[];
     completeTask: (task: ITask) => Promise<void>;
     incompleteTask: (task: ITask) => Promise<void>;
     moveTaskToTrash: (task: ITask) => Promise<void>;
 }
 
 const FolderList: React.FC<IFolderListProps> = (props) => {
-    const handleCollapseChange = (folderIds: string[]) => {
-        if (folderIds.length === 0) {
-            return;
-        }
-
-        const folderId = Array.isArray(folderIds)
-            ? folderIds[0]
-            : folderIds;
-
-        const parsedFolderId = Number.parseInt(folderId);
-        props.loadTasks(parsedFolderId);
-    }
-
     return (
-        <Collapse
-            accordion
-            onChange={handleCollapseChange}
-        >
+        <Collapse accordion>
             {
                 props.folders.map(f => {
-                    const header = `[${f.id}] ${f.title} (не выполнено: ${f.incompleteTaskCount} задач)`;
+                    const incompletedTasks = props.incompletedTasks
+                        .filter(task => task.folderId === f.id);
+
+                    const completedTasks = props.completedTasks
+                        .filter(task => task.folderId === f.id);
+
+                    const incompleteTaskCountAsText =
+                        `(не выполнено: ${incompletedTasks.length} задач)`;
+
+                    const header = `[${f.id}] ${f.title} ${incompleteTaskCountAsText}`;
+
                     return (
                         <Panel
                             key={f.id}
                             header={header}
                         >
                             {
-                                f.tasks?.map(t =>
+                                incompletedTasks.map(t =>
+                                    <Task
+                                        key={t.id}
+                                        task={t}
+                                        completeTask={props.completeTask}
+                                        incompleteTask={props.incompleteTask}
+                                        moveTaskToTrash={props.moveTaskToTrash}
+                                    />)
+                            }
+                            {
+                                completedTasks.map(t =>
                                     <Task
                                         key={t.id}
                                         task={t}

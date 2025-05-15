@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import dayjs, { Dayjs } from 'dayjs';
 import { Space } from 'antd';
 
 import { AppUrl, Api } from './api';
@@ -11,10 +12,70 @@ import IFolder from './interfaces/IFolder';
 import ITask from './interfaces/ITask';
 
 const App: React.FC = () => {
+    const [incompletedTasks, setIncompletedTasks] = useState<ITask[]>([]);
+    const [completedTasks, setCompletedTasks] = useState<ITask[]>([]);
     const [folders, setFolders] = useState<IFolder[]>([]);
-    const [todayTasks, setTodayTasks] = useState<ITask[]>([]);
-    const [tasksInInbox, setTasksInInbox] = useState<ITask[]>([]);
     const [tasksMovedToTrash, setTasksMovedToTrash] = useState<ITask[]>([]);
+
+    const todayIncompletedTasks = () => {
+        const todayDate = dayjs(new Date()).startOf('day');
+
+        return incompletedTasks
+            .filter(t => isTodayIncompletedTask(t, todayDate));
+    }
+
+    const isTodayIncompletedTask = (task: ITask, todayDate: Dayjs) => {
+        if (task.dueDateTime === null) {
+            return false;
+        }
+
+        const dueDateTime = dayjs(task.dueDateTime).startOf('day');
+
+        if (dueDateTime.isSame(todayDate) || dueDateTime.isBefore(todayDate)) {
+            return true;
+        }
+    }
+
+    const todayCompletedTasks = () => {
+        const todayDate = dayjs(new Date()).startOf('day');
+
+        return completedTasks
+            .filter(t => isTodayCompletedTask(t, todayDate));
+    }
+
+    const isTodayCompletedTask = (task: ITask, todayDate: Dayjs) => {
+        const completedDateTime = dayjs(task.completedDateTime).startOf('day');
+
+        if (completedDateTime.isSame(todayDate)) {
+            return true;
+        }
+    }
+
+    const inboxIncompletedTasks = () => {
+        return incompletedTasks
+            .filter(task => task.folderId === null);
+    }
+
+    const inboxCompletedTasks = () => {
+        return completedTasks
+            .filter(task => task.folderId === null);
+    }
+
+    const loadIncompleteTasks = async () => {
+        const url = `${AppUrl}/tasks/incomplete`;
+
+        const incompletedTasks = await Api.get<ITask[]>(url);
+
+        setIncompletedTasks(incompletedTasks);
+    }
+
+    const loadCompletedTasks = async () => {
+        const url = `${AppUrl}/tasks/complete`;
+
+        const completedTasks = await Api.get<ITask[]>(url);
+
+        setCompletedTasks(completedTasks);
+    }
 
     const loadFolders = async () => {
         const url = `${AppUrl}/folders`;
@@ -24,36 +85,6 @@ const App: React.FC = () => {
         setFolders(folders);
     }
 
-    const loadFolderTasks = async (folderId: number, isForcedLoad: boolean = false) => {
-        const folder = folders.find(f => f.id === folderId);
-
-        if (folder == null) {
-            return;
-        }
-
-        if (!isForcedLoad && Array.isArray(folder.tasks) && folder.tasks.length > 0) {
-            return;
-        }
-
-        const incompleteTasksUrl = `${AppUrl}/folders/${folderId}/incompleteTasks`;
-        const incompleteTasks = await Api.get<ITask[]>(incompleteTasksUrl);
-
-        const completedTasksUrl = `${AppUrl}/folders/${folderId}/completedTasks`;
-        const completedTasks = await Api.get<ITask[]>(completedTasksUrl);
-
-        const newTasks = [...incompleteTasks, ...completedTasks];
-        const newIncompleteTaskCount = incompleteTasks.length;
-
-        setFolders(prev =>
-            prev.map(f =>
-                f.id === folder.id
-                    ? {
-                        ...f,
-                        tasks: newTasks,
-                        incompleteTaskCount: newIncompleteTaskCount }
-                    : f));
-    }
-
     const createFolder = async (title: string) => {
         const url = `${AppUrl}/folders`;
         const params = {
@@ -61,9 +92,9 @@ const App: React.FC = () => {
             createdDateTime: new Date().toISOString()
         };
 
-        await Api.post<IFolder>(url, params);
+        const createdFolder = await Api.post<IFolder>(url, params);
 
-        await loadFolders();
+        setFolders(prevFolders => [...prevFolders, createdFolder]);
     }
 
     const createTask = async (
@@ -82,33 +113,9 @@ const App: React.FC = () => {
             createdDateTime: new Date().toISOString()
         };
 
-        await Api.post<ITask>(url, params);
+        const createdTask = await Api.post<ITask>(url, params);
 
-        const loadCurrentTasks = folderId !== null
-            ? () => loadFolderTasks(folderId, true)
-            : () => loadTasksInInbox();
-
-        await Promise.all([
-            loadFolders,
-            loadTodayTasks,
-            loadCurrentTasks
-        ]);
-    }
-
-    const loadTodayTasks = async () => {
-        const url = `${AppUrl}/tasks/today`;
-
-        const tasks = await Api.get<ITask[]>(url);
-
-        setTodayTasks(tasks);
-    }
-
-    const loadTasksInInbox = async () => {
-        const url = `${AppUrl}/tasks/inbox`;
-
-        const tasks = await Api.get<ITask[]>(url);
-
-        setTasksInInbox(tasks);
+        setIncompletedTasks(prevTasks => [...prevTasks, createdTask]);
     }
 
     const loadTasksInTrash = async () => {
@@ -126,13 +133,12 @@ const App: React.FC = () => {
             completedDateTime: new Date().toISOString()
         };
 
-        await Api.put<ITask>(url, params);
+        const updatedTask = await Api.put<ITask>(url, params);
 
-        if (task.folderId !== null) {
-            await loadFolderTasks(task.folderId, true);
-        } else {
-            await loadTasksInInbox();
-        }
+        setIncompletedTasks(prevTasks =>
+            prevTasks.filter(t => t.id !== updatedTask.id));
+
+        setCompletedTasks(prevTasks => [...prevTasks, updatedTask]);
     }
 
     const incompleteTask = async (task: ITask) => {
@@ -142,13 +148,12 @@ const App: React.FC = () => {
             modifiedDateTime: new Date().toISOString()
         };
 
-        await Api.put<ITask>(url, params);
+        const updatedTask = await Api.put<ITask>(url, params);
 
-        if (task.folderId !== null) {
-            await loadFolderTasks(task.folderId, true);
-        } else {
-            await loadTasksInInbox();
-        }
+        setCompletedTasks(prevTasks =>
+            prevTasks.filter(t => t.id !== updatedTask.id));
+
+        setIncompletedTasks(prevTasks => [...prevTasks, updatedTask]);
     }
 
     const moveTaskToTrash = async (task: ITask) => {
@@ -158,15 +163,17 @@ const App: React.FC = () => {
             movedToTrashDateTime: new Date().toISOString()
         };
 
-        await Api.put<ITask>(url, params);
+        const taskMovedToTrash = await Api.put<ITask>(url, params);
 
-        await loadTasksInTrash();
-
-        if (task.folderId !== null) {
-            await loadFolderTasks(task.folderId, true);
+        if (taskMovedToTrash.completedDateTime !== null) {
+            setCompletedTasks(prevTasks =>
+                prevTasks.filter(t => t.id !== taskMovedToTrash.id));
         } else {
-            await loadTasksInInbox();
+            setIncompletedTasks(prevTasks =>
+                prevTasks.filter(t => t.id !== taskMovedToTrash.id));
         }
+
+        setTasksMovedToTrash(prevTasks => [...prevTasks, taskMovedToTrash]);
     }
 
     const moveTaskFromTrash = async (task: ITask) => {
@@ -176,15 +183,16 @@ const App: React.FC = () => {
             modifiedDateTime: new Date().toISOString()
         };
 
-        await Api.put<ITask>(url, params);
+        const taskMovedFromTrash = await Api.put<ITask>(url, params);
 
-        await loadTasksInTrash();
-
-        if (task.folderId !== null) {
-            await loadFolderTasks(task.folderId, true);
+        if (taskMovedFromTrash.completedDateTime !== null){
+            setCompletedTasks(prevTasks => [...prevTasks, taskMovedFromTrash]);
         } else {
-            await loadTasksInInbox();
+            setIncompletedTasks(prevTasks => [...prevTasks, taskMovedFromTrash]);
         }
+
+        setTasksMovedToTrash(prevTasks =>
+            prevTasks.filter(t => t.id !== taskMovedFromTrash.id));
     }
 
     const deleteTask = async (task: ITask) => {
@@ -192,15 +200,16 @@ const App: React.FC = () => {
 
         await Api.delete(url);
 
-        await loadTasksInTrash();
+        setTasksMovedToTrash(prevTasks =>
+            prevTasks.filter(t => t.id !== task.id));
     }
 
     useEffect(() => {
         const loadData = async () => {
             await Promise.all([
+                loadIncompleteTasks(),
+                loadCompletedTasks(),
                 loadFolders(),
-                loadTodayTasks(),
-                loadTasksInInbox(),
                 loadTasksInTrash()
             ]);
         };
@@ -220,14 +229,26 @@ const App: React.FC = () => {
                 />
                 <FolderList
                     folders={folders}
-                    loadTasks={loadFolderTasks}
+                    incompletedTasks={incompletedTasks}
+                    completedTasks={completedTasks}
                     completeTask={completeTask}
                     incompleteTask={incompleteTask}
                     moveTaskToTrash={moveTaskToTrash}
                 />
                 <strong>Задачи на сегодня</strong>
                 {
-                    todayTasks.map(t =>
+                    todayIncompletedTasks().map(t =>
+                        <Task
+                            key={`today-${t.id}`}
+                            task={t}
+                            completeTask={completeTask}
+                            incompleteTask={incompleteTask}
+                            moveTaskToTrash={moveTaskToTrash}
+                        />
+                    )
+                }
+                {
+                    todayCompletedTasks().map(t =>
                         <Task
                             key={`today-${t.id}`}
                             task={t}
@@ -239,7 +260,18 @@ const App: React.FC = () => {
                 }
                 <strong>Inbox</strong>
                 {
-                    tasksInInbox.map(t =>
+                    inboxIncompletedTasks().map(t =>
+                        <Task
+                            key={`inbox-${t.id}`}
+                            task={t}
+                            completeTask={completeTask}
+                            incompleteTask={incompleteTask}
+                            moveTaskToTrash={moveTaskToTrash}
+                        />
+                    )
+                }
+                {
+                    inboxCompletedTasks().map(t =>
                         <Task
                             key={`inbox-${t.id}`}
                             task={t}
