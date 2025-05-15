@@ -29,7 +29,16 @@ const FolderList: React.FC<IFolderListProps> = (props) => {
                     const incompleteTaskCountAsText =
                         `(не выполнено: ${incompletedTasks.length} задач)`;
 
-                    const header = `[${f.id}] ${f.title} ${incompleteTaskCountAsText}`;
+                    const modifiedDateTimeAsText = f.modifiedDateTime !== null
+                        ? <><i>Изменена: {f.modifiedDateTime.toString()}</i><br /></>
+                        : null;
+
+                    const header =
+                        <>
+                            [{f.id}] {f.title} {incompleteTaskCountAsText}<br />
+                            {modifiedDateTimeAsText}
+                            <i>Создана: {f.createdDateTime.toString()}</i>
+                        </>;
 
                     return (
                         <Panel
