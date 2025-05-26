@@ -1,15 +1,17 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import { Checkbox, Button } from 'antd';
+import { useStore } from '../stores/RootStore';
 import { formatDateTime } from '../utils';
 import ITask from "../interfaces/ITask";
 
 interface ITaskMovedToTrashProps {
     task: ITask;
-    moveTaskFromTrash: (task: ITask) => Promise<void>;
-    deleteTask: (task: ITask) => Promise<void>;
 }
 
-const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
+const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = observer((props) => {
+    const { taskStore } = useStore();
+
     const { task } = props;
 
     const isCompleted = task.completedDateTime !== null;
@@ -27,11 +29,11 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
         : null;
 
     const handleRestoreTaskButtonClick = async () => {
-        await props.moveTaskFromTrash(task);
+        await taskStore.moveTaskFromTrash(task);
     }
 
     const handleDeleteTaskButtonClick = async () => {
-        await props.deleteTask(task);
+        await taskStore.deleteTask(task);
     }
 
     return (
@@ -58,6 +60,6 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
             </Button>
         </div>
     );
-}
+});
 
 export default TaskMovedToTrash;

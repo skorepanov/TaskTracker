@@ -1,32 +1,24 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import { Button, Collapse } from 'antd';
+import { useStore } from '../stores/RootStore';
 import { formatDateTime } from '../utils';
-import IFolder from '../interfaces/IFolder';
 import Task from './Task';
-import ITask from "../interfaces/ITask";
 
 const { Panel } = Collapse;
 
-interface IFolderListProps {
-    folders: IFolder[];
-    incompletedTasks: ITask[];
-    completedTasks: ITask[];
-    deleteFolder: (folder: IFolder) => Promise<void>;
-    completeTask: (task: ITask) => Promise<void>;
-    incompleteTask: (task: ITask) => Promise<void>;
-    moveTaskToTrash: (task: ITask) => Promise<void>;
-}
+const FolderList: React.FC = observer(() => {
+    const { taskStore, folderStore } = useStore();
 
-const FolderList: React.FC<IFolderListProps> = (props) => {
     return (
         <Collapse accordion>
             {
-                props.folders.map(f => {
-                    const incompletedTasks = props.incompletedTasks
-                        .filter(task => task.folderId === f.id);
+                folderStore.folders.map(f => {
+                    const incompletedTasks = taskStore.incompletedTasks
+                        .filter(t => t.folderId === f.id);
 
-                    const completedTasks = props.completedTasks
-                        .filter(task => task.folderId === f.id);
+                    const completedTasks = taskStore.completedTasks
+                        .filter(t => t.folderId === f.id);
 
                     const incompleteTaskCountAsText =
                         `(не выполнено: ${incompletedTasks.length} задач)`;
@@ -36,7 +28,7 @@ const FolderList: React.FC<IFolderListProps> = (props) => {
                         : null;
 
                     const handleDeleteButtonClick = async () => {
-                        await props.deleteFolder(f);
+                        await folderStore.deleteFolder(f);
                     }
 
                     const header =
@@ -61,9 +53,6 @@ const FolderList: React.FC<IFolderListProps> = (props) => {
                                     <Task
                                         key={t.id}
                                         task={t}
-                                        completeTask={props.completeTask}
-                                        incompleteTask={props.incompleteTask}
-                                        moveTaskToTrash={props.moveTaskToTrash}
                                     />)
                             }
                             {
@@ -71,9 +60,6 @@ const FolderList: React.FC<IFolderListProps> = (props) => {
                                     <Task
                                         key={t.id}
                                         task={t}
-                                        completeTask={props.completeTask}
-                                        incompleteTask={props.incompleteTask}
-                                        moveTaskToTrash={props.moveTaskToTrash}
                                     />)
                             }
                         </Panel>
@@ -82,6 +68,6 @@ const FolderList: React.FC<IFolderListProps> = (props) => {
             }
         </Collapse>
     );
-}
+});
 
 export default FolderList;

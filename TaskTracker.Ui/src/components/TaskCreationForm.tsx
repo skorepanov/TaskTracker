@@ -1,26 +1,19 @@
 import React, { useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import dayjs, { Dayjs } from 'dayjs';
 import { Input, Select, DatePicker, Button, Space } from 'antd';
-import IFolder from '../interfaces/IFolder';
+import { useStore } from '../stores/RootStore';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-interface ITaskCreationFormProps {
-    folders: IFolder[];
-    createTask: (
-        title: string,
-        description: string,
-        dueDateTime: Date | null,
-        folderId: number | null
-    ) => Promise<void>;
-}
-
-const TaskCreationForm: React.FC<ITaskCreationFormProps> = (props) => {
+const TaskCreationForm: React.FC = observer(() => {
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [dueDateTime, setDueDateTime] = useState<Date | null>(null);
     const [folderId, setFolderId] = useState<number | null>(null);
+
+    const { taskStore, folderStore } = useStore();
 
     const dayjsDueDateTime = dueDateTime !== null
         ? dayjs(dueDateTime)
@@ -47,7 +40,7 @@ const TaskCreationForm: React.FC<ITaskCreationFormProps> = (props) => {
     }
 
     const handleCreateTaskButtonClick = async () => {
-        await props.createTask(title, description, dueDateTime, folderId);
+        await taskStore.createTask(title, description, dueDateTime, folderId);
 
         setTitle('');
         setDescription('');
@@ -81,7 +74,7 @@ const TaskCreationForm: React.FC<ITaskCreationFormProps> = (props) => {
                 style={{ width: 300 }}
             >
                 {
-                    props.folders.map(f =>
+                    folderStore.folders.map(f =>
                         <Option
                             key={f.id}
                             value={f.id}
@@ -97,6 +90,6 @@ const TaskCreationForm: React.FC<ITaskCreationFormProps> = (props) => {
             >Добавить</Button>
         </Space>
     );
-}
+});
 
 export default TaskCreationForm;

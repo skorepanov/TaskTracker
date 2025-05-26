@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Checkbox, Button } from 'antd';
+import { useStore } from '../stores/RootStore';
 import { formatDateTime } from '../utils';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import ITask from '../interfaces/ITask';
 
 interface ITaskProps {
     task: ITask;
-    completeTask: (task: ITask) => Promise<void>;
-    incompleteTask: (task: ITask) => Promise<void>;
-    moveTaskToTrash: (task: ITask) => Promise<void>;
 }
 
-const Task: React.FC<ITaskProps> = (props) => {
+const Task: React.FC<ITaskProps> = observer((props) => {
+    const { taskStore } = useStore();
+
     const { task } = props;
     const isTaskCompleted = task.completedDateTime !== null;
 
@@ -49,14 +50,14 @@ const Task: React.FC<ITaskProps> = (props) => {
         setIsCompleted(isCompletedNew);
 
         if (isCompletedNew) {
-            await props.completeTask(task);
+            await taskStore.completeTask(task);
         } else {
-            await props.incompleteTask(task);
+            await taskStore.incompleteTask(task);
         }
     }
 
     const handleMoveToTrashButtonClick = async () => {
-        await props.moveTaskToTrash(task);
+        await taskStore.moveTaskToTrash(task);
     }
 
     return (
@@ -79,6 +80,6 @@ const Task: React.FC<ITaskProps> = (props) => {
             </Button>
         </div>
     );
-}
+});
 
 export default Task;

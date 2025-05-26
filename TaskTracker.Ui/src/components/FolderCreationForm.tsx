@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import { observer } from 'mobx-react-lite';
 import { Input, Button, Space } from 'antd';
+import { useStore } from "../stores/RootStore";
 
-interface IFolderCreationFormProps {
-    createFolder: (title: string) => Promise<void>;
-}
-
-const FolderCreationForm: React.FC<IFolderCreationFormProps> = (props) => {
+const FolderCreationForm: React.FC = observer(() => {
     const [title, setTitle] = useState<string>('');
+
+    const { folderStore } = useStore();
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
@@ -17,7 +17,7 @@ const FolderCreationForm: React.FC<IFolderCreationFormProps> = (props) => {
     }
 
     const handleCreateFolderButtonClick = async () => {
-        await props.createFolder(title);
+        await folderStore.createFolder(title);
         setTitle('');
     }
 
@@ -38,7 +38,7 @@ const FolderCreationForm: React.FC<IFolderCreationFormProps> = (props) => {
             </Button>
         </Space>
     );
-}
+});
 
 export default FolderCreationForm;
 

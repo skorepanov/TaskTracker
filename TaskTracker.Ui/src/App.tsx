@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { useStore } from './stores/RootStore';
 import { Space } from 'antd';
-
+import { useStore } from './stores/RootStore';
 import Task from './components/Task';
 import FolderCreationForm from './components/FolderCreationForm';
 import TaskCreationForm from './components/TaskCreationForm';
@@ -23,36 +22,20 @@ const App: React.FC = observer(() => {
         };
 
         loadData();
-    }, []);
+    }, [taskStore, folderStore]);
 
     return (
         <>
             <Space direction='vertical'>
-                <FolderCreationForm
-                    createFolder={folderStore.createFolder}
-                />
-                <TaskCreationForm
-                    folders={folderStore.folders}
-                    createTask={taskStore.createTask}
-                />
-                <FolderList
-                    folders={folderStore.folders}
-                    incompletedTasks={taskStore.incompletedTasks}
-                    completedTasks={taskStore.completedTasks}
-                    deleteFolder={folderStore.deleteFolder}
-                    completeTask={taskStore.completeTask}
-                    incompleteTask={taskStore.incompleteTask}
-                    moveTaskToTrash={taskStore.moveTaskToTrash}
-                />
+                <FolderCreationForm />
+                <TaskCreationForm />
+                <FolderList />
                 <strong>Задачи на сегодня</strong>
                 {
                     taskStore.getTodayIncompletedTasks().map(t =>
                         <Task
                             key={`today-${t.id}`}
                             task={t}
-                            completeTask={taskStore.completeTask}
-                            incompleteTask={taskStore.incompleteTask}
-                            moveTaskToTrash={taskStore.moveTaskToTrash}
                         />
                     )
                 }
@@ -61,9 +44,6 @@ const App: React.FC = observer(() => {
                         <Task
                             key={`today-${t.id}`}
                             task={t}
-                            completeTask={taskStore.completeTask}
-                            incompleteTask={taskStore.incompleteTask}
-                            moveTaskToTrash={taskStore.moveTaskToTrash}
                         />
                     )
                 }
@@ -73,9 +53,6 @@ const App: React.FC = observer(() => {
                         <Task
                             key={`inbox-${t.id}`}
                             task={t}
-                            completeTask={taskStore.completeTask}
-                            incompleteTask={taskStore.incompleteTask}
-                            moveTaskToTrash={taskStore.moveTaskToTrash}
                         />
                     )
                 }
@@ -84,9 +61,6 @@ const App: React.FC = observer(() => {
                         <Task
                             key={`inbox-${t.id}`}
                             task={t}
-                            completeTask={taskStore.completeTask}
-                            incompleteTask={taskStore.incompleteTask}
-                            moveTaskToTrash={taskStore.moveTaskToTrash}
                         />
                     )
                 }
@@ -96,8 +70,6 @@ const App: React.FC = observer(() => {
                         <TaskMovedToTrash
                             key={`trash-${t.id}`}
                             task={t}
-                            moveTaskFromTrash={taskStore.moveTaskFromTrash}
-                            deleteTask={taskStore.deleteTask}
                         />
                     )
                 }
