@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Collapse } from 'antd';
+import { formatDateTime } from '../utils';
 import IFolder from '../interfaces/IFolder';
 import Task from './Task';
 import ITask from "../interfaces/ITask";
@@ -31,7 +32,7 @@ const FolderList: React.FC<IFolderListProps> = (props) => {
                         `(не выполнено: ${incompletedTasks.length} задач)`;
 
                     const modifiedDateTimeAsText = f.modifiedDateTime !== null
-                        ? <><i>Изменена: {f.modifiedDateTime.toString()}</i><br /></>
+                        ? <><i>Изменена: {formatDateTime(f.modifiedDateTime)}</i><br /></>
                         : null;
 
                     const handleDeleteButtonClick = async () => {
@@ -42,7 +43,7 @@ const FolderList: React.FC<IFolderListProps> = (props) => {
                         <>
                             [{f.id}] {f.title} {incompleteTaskCountAsText}<br />
                             {modifiedDateTimeAsText}
-                            <i>Создана: {f.createdDateTime.toString()}</i><br />
+                            <i>Создана: {formatDateTime(f.createdDateTime)}</i><br />
                             <Button
                                 onClick={handleDeleteButtonClick}
                             >

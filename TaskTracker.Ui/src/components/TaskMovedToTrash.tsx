@@ -1,5 +1,6 @@
 import React from 'react';
 import { Checkbox, Button } from 'antd';
+import { formatDateTime } from '../utils';
 import ITask from "../interfaces/ITask";
 
 interface ITaskMovedToTrashProps {
@@ -18,11 +19,11 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
         : null;
 
     const movedToTrashDateTime = task.movedToTrashDateTime !== null
-        ? <>Дата перемещения в корзину: {task.movedToTrashDateTime}</>
+        ? <>Дата перемещения в корзину: {formatDateTime(task.movedToTrashDateTime)}</>
         : null;
 
     const modifiedDateTimeAsText = task.modifiedDateTime !== null
-        ? <><i>Изменена: {task.modifiedDateTime.toString()}</i><br /></>
+        ? <><i>Изменена: {formatDateTime(task.modifiedDateTime)}</i><br /></>
         : null;
 
     const handleRestoreTaskButtonClick = async () => {
@@ -44,7 +45,7 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = (props) => {
             {description}<br />
             {movedToTrashDateTime}<br />
             {modifiedDateTimeAsText}
-            <i>Создана: {task.createdDateTime.toString()}</i><br />
+            <i>Создана: {formatDateTime(task.createdDateTime)}</i><br />
             <Button
                 onClick={handleRestoreTaskButtonClick}
             >

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Checkbox, Button } from 'antd';
+import { formatDateTime } from '../utils';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import ITask from '../interfaces/ITask';
 
@@ -23,11 +24,11 @@ const Task: React.FC<ITaskProps> = (props) => {
     const descriptionAsText = <><i>{task.description}</i><br /></>;
 
     const completedDateTimeAsText = isTaskCompleted
-        ? <>Выполнено: {task.completedDateTime}<br /></>
+        ? <>Выполнено: {formatDateTime(task.completedDateTime)}<br /></>
         : null;
 
     const dueDateTimeAsText = task.dueDateTime !== null
-        ? <>Срок выполнения: {task.dueDateTime}</>
+        ? <>Срок выполнения: {formatDateTime(task.dueDateTime)}</>
         : null;
 
     const overdueDaysAsText = task.overdueDaysCount > 0
@@ -39,7 +40,7 @@ const Task: React.FC<ITaskProps> = (props) => {
         : null;
 
     const modifiedDateTimeAsText = task.modifiedDateTime !== null
-        ? <><i>Изменена: {task.modifiedDateTime.toString()}</i><br /></>
+        ? <><i>Изменена: {formatDateTime(task.modifiedDateTime)}</i><br /></>
         : null;
 
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
@@ -70,7 +71,7 @@ const Task: React.FC<ITaskProps> = (props) => {
             {completedDateTimeAsText}
             {overdueAsText}
             {modifiedDateTimeAsText}
-            <i>Создана: {task.createdDateTime.toString()}</i><br />
+            <i>Создана: {formatDateTime(task.createdDateTime)}</i><br />
             <Button
                 onClick={handleMoveToTrashButtonClick}
             >
