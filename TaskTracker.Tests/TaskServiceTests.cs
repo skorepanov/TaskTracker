@@ -27,7 +27,8 @@ public class TaskServiceTests
 
         var sut = new TaskService(
             mockTaskRepository.Object,
-            mockFolderRepository.Object);
+            mockFolderRepository.Object,
+            _tagRepository: new Mock<ITagRepository>().Object);
 
         // Act
         var action = () => sut.CreateTask(userTaskDto);
@@ -68,7 +69,8 @@ public class TaskServiceTests
 
         var sut = new TaskService(
             mockTaskRepository.Object,
-            mockFolderRepository.Object);
+            mockFolderRepository.Object,
+            _tagRepository: new Mock<ITagRepository>().Object);
 
         // Act
         var task = await sut.CreateTask(userTaskDto);
@@ -97,7 +99,8 @@ public class TaskServiceTests
 
         var sut = new TaskService(
             mockTaskRepository.Object,
-            _folderRepository: new Mock<IFolderRepository>().Object);
+            _folderRepository: new Mock<IFolderRepository>().Object,
+            _tagRepository: new Mock<ITagRepository>().Object);
 
         // Act
         var action = () => sut.CompleteTask(TASK_ID, userTaskDto);
@@ -127,7 +130,8 @@ public class TaskServiceTests
 
         var sut = new TaskService(
             mockTaskRepository.Object,
-            _folderRepository: new Mock<IFolderRepository>().Object);
+            _folderRepository: new Mock<IFolderRepository>().Object,
+            _tagRepository: new Mock<ITagRepository>().Object);
 
         // Act
         await sut.CompleteTask(TASK_ID, userTaskDto);
@@ -154,7 +158,8 @@ public class TaskServiceTests
 
         var sut = new TaskService(
             mockTaskRepository.Object,
-            _folderRepository: new Mock<IFolderRepository>().Object);
+            _folderRepository: new Mock<IFolderRepository>().Object,
+            _tagRepository: new Mock<ITagRepository>().Object);
 
         // Act
         var action = () => sut.IncompleteTask(TASK_ID, userTaskDto);
@@ -184,7 +189,8 @@ public class TaskServiceTests
 
         var sut = new TaskService(
             mockTaskRepository.Object,
-            _folderRepository: new Mock<IFolderRepository>().Object);
+            _folderRepository: new Mock<IFolderRepository>().Object,
+            _tagRepository: new Mock<ITagRepository>().Object);
 
         // Act
         await sut.IncompleteTask(TASK_ID, userTaskDto);
@@ -212,7 +218,8 @@ public class TaskServiceTests
 
         var sut = new TaskService(
             mockTaskRepository.Object,
-            _folderRepository: new Mock<IFolderRepository>().Object);
+            _folderRepository: new Mock<IFolderRepository>().Object,
+            _tagRepository: new Mock<ITagRepository>().Object);
 
         // Act
         var action = () => sut.MoveTaskToTrash(TASK_ID, userTaskDto);
@@ -243,7 +250,8 @@ public class TaskServiceTests
 
         var sut = new TaskService(
             mockTaskRepository.Object,
-            _folderRepository: new Mock<IFolderRepository>().Object);
+            _folderRepository: new Mock<IFolderRepository>().Object,
+            _tagRepository: new Mock<ITagRepository>().Object);
 
         // Act
         await sut.MoveTaskToTrash(TASK_ID, userTaskDto);
@@ -268,7 +276,8 @@ public class TaskServiceTests
 
         var taskService = new TaskService(
             _taskRepository: new Mock<ITaskRepository>().Object,
-            mockFolderRepository.Object);
+            mockFolderRepository.Object,
+            _tagRepository: new Mock<ITagRepository>().Object);
 
         // Act
         var sut = await taskService.CreateFolder(folderDto);

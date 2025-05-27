@@ -8,6 +8,7 @@ public class ApplicationContext : DbContext
 {
     public DbSet<UserTask> Tasks { get; set; }
     public DbSet<Folder> Folders { get; set; }
+    public DbSet<Tag> Tags { get; set; }
 
     public ApplicationContext() { }
 
@@ -18,6 +19,7 @@ public class ApplicationContext : DbContext
     {
         modelBuilder.Entity<UserTask>(ConfigureUserTask);
         modelBuilder.Entity<Folder>(ConfigureFolder);
+        modelBuilder.Entity<Tag>(ConfigureTag);
     }
 
     private void ConfigureUserTask(EntityTypeBuilder<UserTask> builder)
@@ -60,5 +62,15 @@ public class ApplicationContext : DbContext
         builder.Ignore(f => f.CompletedTasks);
 
         builder.Ignore(f => f.IncompleteTasks);
+    }
+
+    private void ConfigureTag(EntityTypeBuilder<Tag> builder)
+    {
+        builder.Property(t => t.Id)
+            .UseSerialColumn();
+
+        builder.Property(t => t.Title)
+            .HasColumnType("varchar")
+            .HasMaxLength(100);
     }
 }

@@ -2,8 +2,10 @@
 
 namespace TaskTracker.Bll;
 
-public class TaskService(ITaskRepository _taskRepository,
-                         IFolderRepository _folderRepository)
+public class TaskService(
+    ITaskRepository _taskRepository,
+    IFolderRepository _folderRepository,
+    ITagRepository _tagRepository)
 {
     public async Task<UserTask> GetTaskById(int taskId)
     {
@@ -297,5 +299,11 @@ public class TaskService(ITaskRepository _taskRepository,
         }
 
         await _folderRepository.DeleteFolder(folder);
+    }
+
+    public async Task<IReadOnlyList<Tag>> GetTags()
+    {
+        var tags = await _tagRepository.GetTags();
+        return tags;
     }
 }

@@ -24,6 +24,7 @@ public static class DiExtensions
     {
         collection.AddTransient<ITaskRepository, TaskRepository>();
         collection.AddTransient<IFolderRepository, FolderRepository>();
+        collection.AddTransient<ITagRepository, TagRepository>();
     }
 
     /// <summary>
