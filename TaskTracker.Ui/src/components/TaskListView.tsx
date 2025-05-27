@@ -41,7 +41,9 @@ const TaskListView: React.FC<ITaskListViewProps> = observer(props => {
 
     const overdueDaysAsText =
         task.overdueDaysCount > 0 ? (
-            <>({task.overdueDaysCount} дней назад)</>
+            <span style={{ color: isTaskCompleted ? "" : "red" }}>
+                ({task.overdueDaysCount} дней назад)
+            </span>
         ) : null;
 
     const overdueAsText =
