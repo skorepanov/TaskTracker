@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { observer } from 'mobx-react-lite';
-import { Checkbox, Button } from 'antd';
-import { useStore } from '../stores/RootStore';
-import { formatDateTime } from '../utils';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import ITask from '../interfaces/ITask';
+import React, { useState } from "react";
+import { observer } from "mobx-react-lite";
+import { Checkbox, Button } from "antd";
+import { useStore } from "../stores/RootStore";
+import { formatDateTime } from "../utils";
+import type { CheckboxChangeEvent } from "antd/es/checkbox";
+import ITask from "../interfaces/ITask";
 
 interface ITaskListViewProps {
     task: ITask;
@@ -19,8 +19,8 @@ const TaskListView: React.FC<ITaskListViewProps> = observer((props) => {
     const [isCompleted, setIsCompleted] = useState<boolean>(isTaskCompleted);
 
     const textColor = isTaskCompleted
-        ? 'green'
-        : 'black';
+        ? "green"
+        : "black";
 
     const descriptionAsText = <><i>{task.description}</i><br /></>;
 

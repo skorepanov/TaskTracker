@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { observer } from 'mobx-react-lite';
-import { Input, Button, Space } from 'antd';
+import { observer } from "mobx-react-lite";
+import { Input, Button, Space } from "antd";
 import { useStore } from "../stores/RootStore";
 
 const FolderCreationForm: React.FC = observer(() => {
-    const [title, setTitle] = useState<string>('');
+    const [title, setTitle] = useState<string>("");
 
     const { folderStore } = useStore();
 
@@ -13,19 +13,19 @@ const FolderCreationForm: React.FC = observer(() => {
     }
 
     const isCreateFolderButtonDisabled = () => {
-        return title.trim() === '';
+        return title.trim() === "";
     }
 
     const handleCreateFolderButtonClick = async () => {
         await folderStore.createFolder(title);
-        setTitle('');
+        setTitle("");
     }
 
     return (
-        <Space direction='vertical'>
+        <Space direction="vertical">
             <strong>Новая папка</strong>
             <Input
-                placeholder='Название папки'
+                placeholder="Название папки"
                 value={title}
                 onChange={handleTitleChange}
                 style={{ width: 300 }}

@@ -1,8 +1,8 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
-import { Checkbox, Button } from 'antd';
-import { useStore } from '../stores/RootStore';
-import { formatDateTime } from '../utils';
+import React from "react";
+import { observer } from "mobx-react-lite";
+import { Checkbox, Button } from "antd";
+import { useStore } from "../stores/RootStore";
+import { formatDateTime } from "../utils";
 import ITask from "../interfaces/ITask";
 
 interface ITaskMovedToTrashListViewProps {
@@ -37,7 +37,7 @@ const TaskMovedToTrashListView: React.FC<ITaskMovedToTrashListViewProps> = obser
     }
 
     return (
-        <div style={{ color: 'grey', marginBottom: 10 }}>
+        <div style={{ color: "grey", marginBottom: 10 }}>
             <Checkbox
                 checked={isCompleted}
                 disabled={true}

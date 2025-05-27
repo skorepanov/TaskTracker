@@ -1,4 +1,4 @@
-export const AppUrl = 'https://localhost:7265/api';
+export const AppUrl = "https://localhost:7265/api";
 
 export const Api : IApi = {
     get: async (url: string) => {
@@ -9,7 +9,7 @@ export const Api : IApi = {
     post: async (url: string, params: object) => {
         const response = await fetch(url, {
             headers,
-            method: 'POST',
+            method: "POST",
             body: JSON.stringify(params),
         });
 
@@ -19,7 +19,7 @@ export const Api : IApi = {
     put: async (url: string, params: object) => {
         const response = await fetch(url, {
             headers,
-            method: 'PUT',
+            method: "PUT",
             body: JSON.stringify(params),
         });
 
@@ -29,7 +29,7 @@ export const Api : IApi = {
     delete: async (url: string) => {
         await fetch(url, {
             headers,
-            method: 'DELETE'
+            method: "DELETE"
         });
     }
 }
@@ -42,6 +42,6 @@ interface IApi {
 }
 
 const headers = {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
+    Accept: "application/json",
+    "Content-Type": "application/json",
 };

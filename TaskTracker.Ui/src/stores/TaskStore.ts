@@ -152,7 +152,7 @@ class TaskStore {
     }
 
     getTodayIncompletedTasks = () => {
-        const todayDate = dayjs(new Date()).startOf('day');
+        const todayDate = dayjs(new Date()).startOf("day");
 
         return this.incompletedTasks
             .filter(t => this.isTodayIncompletedTask(t, todayDate));
@@ -163,7 +163,7 @@ class TaskStore {
             return false;
         }
 
-        const dueDateTime = dayjs(task.dueDateTime).startOf('day');
+        const dueDateTime = dayjs(task.dueDateTime).startOf("day");
 
         if (dueDateTime.isSame(todayDate) || dueDateTime.isBefore(todayDate)) {
             return true;
@@ -171,14 +171,14 @@ class TaskStore {
     }
 
     getTodayCompletedTasks = () => {
-        const todayDate = dayjs(new Date()).startOf('day');
+        const todayDate = dayjs(new Date()).startOf("day");
 
         return this.completedTasks
             .filter(t => this.isTodayCompletedTask(t, todayDate));
     }
 
     isTodayCompletedTask = (task: ITask, todayDate: Dayjs) => {
-        const completedDateTime = dayjs(task.completedDateTime).startOf('day');
+        const completedDateTime = dayjs(task.completedDateTime).startOf("day");
 
         if (completedDateTime.isSame(todayDate)) {
             return true;

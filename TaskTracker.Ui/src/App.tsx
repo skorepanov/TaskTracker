@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
-import { Space } from 'antd';
-import { useStore } from './stores/RootStore';
-import TaskListView from './components/TaskListView';
-import TaskMovedToTrashListView from './components/TaskMovedToTrashListView';
-import TaskCreationForm from './components/TaskCreationForm';
-import FolderList from './components/FolderList';
-import FolderCreationForm from './components/FolderCreationForm';
+import React, { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { Space } from "antd";
+import { useStore } from "./stores/RootStore";
+import TaskListView from "./components/TaskListView";
+import TaskMovedToTrashListView from "./components/TaskMovedToTrashListView";
+import TaskCreationForm from "./components/TaskCreationForm";
+import FolderList from "./components/FolderList";
+import FolderCreationForm from "./components/FolderCreationForm";
 
 const App: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
@@ -26,7 +26,7 @@ const App: React.FC = observer(() => {
 
     return (
         <>
-            <Space direction='vertical'>
+            <Space direction="vertical">
                 <FolderCreationForm />
                 <TaskCreationForm />
                 <FolderList />

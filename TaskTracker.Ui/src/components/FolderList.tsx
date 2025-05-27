@@ -1,9 +1,9 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
-import { Button, Collapse } from 'antd';
-import { useStore } from '../stores/RootStore';
-import { formatDateTime } from '../utils';
-import TaskListView from './TaskListView';
+import React from "react";
+import { observer } from "mobx-react-lite";
+import { Button, Collapse } from "antd";
+import { useStore } from "../stores/RootStore";
+import { formatDateTime } from "../utils";
+import TaskListView from "./TaskListView";
 
 const FolderList: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
