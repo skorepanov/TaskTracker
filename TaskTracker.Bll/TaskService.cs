@@ -21,20 +21,6 @@ public class TaskService(
         return task;
     }
 
-    public async Task<IReadOnlyList<UserTask>> GetIncompleteTasks(int folderId)
-    {
-        var folder = await _folderRepository.GetFolder(folderId);
-
-        if (folder is null)
-        {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Folder),
-                message: $"Папка не обнаружена (id = {folderId})");
-        }
-
-        return folder.IncompleteTasks;
-    }
-
     public async Task<IReadOnlyList<UserTask>> GetIncompletedTasks()
     {
         var tasks = await _taskRepository.GetIncompletedTasks();
@@ -45,20 +31,6 @@ public class TaskService(
     {
         var tasks = await _taskRepository.GetCompletedTasks();
         return tasks;
-    }
-
-    public async Task<IReadOnlyList<UserTask>> GetCompletedTasks(int folderId)
-    {
-        var folder = await _folderRepository.GetFolder(folderId);
-
-        if (folder is null)
-        {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Folder),
-                message: $"Папка не обнаружена (id = {folderId})");
-        }
-
-        return folder.CompletedTasks;
     }
 
     public async Task<IReadOnlyList<UserTask>> GetTodayTasks()

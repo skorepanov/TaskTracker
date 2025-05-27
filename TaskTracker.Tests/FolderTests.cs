@@ -38,46 +38,6 @@ public class FolderTests
     }
     #endregion
 
-    #region Get incomplete task count
-    [Fact]
-    public void GetIncompleteTaskCountWhenFolderIsEmpty()
-    {
-        // Arrange
-        var sut = CreateSut();
-
-        // Act
-        var incompleteTaskCount = sut.IncompleteTaskCount;
-
-        // Assert
-        incompleteTaskCount.Should().Be(0);
-    }
-
-    [Fact]
-    public void GetIncompleteTaskCountWhenFolderHasDifferentTasks()
-    {
-        // Arrange
-        var sut = CreateSut();
-
-        var incompleteTask = CreateTask();
-
-        var completedTask = CreateTask();
-        completedTask.Complete(new DateTime(year: 2022, month: 1, day: 10));
-
-        var taskInTrash = CreateTask();
-        taskInTrash.MoveToTrash(new DateTime(year: 2022, month: 2, day: 20));
-
-        sut.AddTask(incompleteTask);
-        sut.AddTask(completedTask);
-        sut.AddTask(taskInTrash);
-
-        // Act
-        var incompleteTaskCount = sut.IncompleteTaskCount;
-
-        // Assert
-        incompleteTaskCount.Should().Be(1);
-    }
-    #endregion
-
     #region Create folder
     [Fact]
     public void CreateFolderWithFieldNormalization()

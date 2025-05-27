@@ -58,10 +58,6 @@ public class ApplicationContext : DbContext
         builder.Property(f => f.Title)
             .HasColumnType("varchar")
             .HasMaxLength(100);
-
-        builder.Ignore(f => f.CompletedTasks);
-
-        builder.Ignore(f => f.IncompleteTasks);
     }
 
     private void ConfigureTag(EntityTypeBuilder<Tag> builder)

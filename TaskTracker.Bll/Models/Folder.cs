@@ -8,18 +8,6 @@ public class Folder
     private readonly List<UserTask> _tasks;
     public IReadOnlyList<UserTask> Tasks => _tasks;
 
-    public IReadOnlyList<UserTask> CompletedTasks
-        => _tasks
-            .Where(t => t is { IsInTrash: false, IsCompleted: true })
-            .ToList();
-
-    public IReadOnlyList<UserTask> IncompleteTasks
-        => _tasks
-            .Where(t => t is { IsInTrash: false, IsCompleted: false })
-            .ToList();
-
-    public int IncompleteTaskCount => IncompleteTasks.Count;
-
     public DateTime CreatedDateTime { get; private set; }
 
     public DateTime? ModifiedDateTime { get; private set; }

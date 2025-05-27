@@ -33,32 +33,6 @@ public class FolderController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
-    /// Получить невыполненные задачи для папки
-    /// </summary>
-    /// <param name="folderId">Id папки</param>
-    [HttpGet]
-    [Route("{folderId:int}/incompleteTasks")]
-    public async Task<IActionResult> GetIncompleteTasks(int folderId)
-    {
-        var tasks = await _taskService.GetIncompleteTasks(folderId);
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
-        return Ok(taskVms);
-    }
-
-    /// <summary>
-    /// Получить выполненные задачи для папки
-    /// </summary>
-    /// <param name="folderId">Id папки</param>
-    [HttpGet]
-    [Route("{folderId:int}/completedTasks")]
-    public async Task<IActionResult> GetCompletedTasks(int folderId)
-    {
-        var tasks = await _taskService.GetCompletedTasks(folderId);
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
-        return Ok(taskVms);
-    }
-
-    /// <summary>
     /// Создать папку
     /// </summary>
     /// <param name="folderDto">Данные для создания папки</param>

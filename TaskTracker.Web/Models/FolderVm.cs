@@ -16,11 +16,6 @@ public record FolderVm
     public string Title { get; }
 
     /// <summary>
-    /// Количество невыполненных задач в папке
-    /// </summary>
-    public int IncompleteTaskCount { get; }
-
-    /// <summary>
     /// Дата создания папки
     /// </summary>
     public DateTime CreatedDateTime { get; }
@@ -37,7 +32,6 @@ public record FolderVm
     {
         Id = folder.Id;
         Title = folder.Title;
-        IncompleteTaskCount = folder.IncompleteTaskCount;
         CreatedDateTime = folder.CreatedDateTime;
         ModifiedDateTime = folder.ModifiedDateTime;
     }
