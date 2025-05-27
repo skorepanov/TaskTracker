@@ -6,8 +6,19 @@ namespace TaskTracker.Dal;
 
 public class TagRepository(ApplicationContext _db) : ITagRepository
 {
+    public async Task<Tag?> GetTag(int tagId)
+    {
+        return await _db.Tags.SingleOrDefaultAsync(t => t.Id == tagId);
+    }
+
     public async Task<IReadOnlyList<Tag>> GetTags()
     {
         return await _db.Tags.ToListAsync();
+    }
+
+    public async Task DeleteTag(Tag tag)
+    {
+        _db.Tags.Remove(tag);
+        await _db.SaveChangesAsync();
     }
 }

@@ -306,4 +306,18 @@ public class TaskService(
         var tags = await _tagRepository.GetTags();
         return tags;
     }
+
+    public async Task DeleteTag(int tagId)
+    {
+        var tag = await _tagRepository.GetTag(tagId);
+
+        if (tag is null)
+        {
+            throw new DomainEntityNotFoundException(
+                domainEntityType: typeof(Tag),
+                message: $"Тег не обнаружен (id = {tagId})");
+        }
+
+        await _tagRepository.DeleteTag(tag);
+    }
 }

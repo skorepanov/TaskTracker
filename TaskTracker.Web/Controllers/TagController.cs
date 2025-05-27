@@ -19,4 +19,15 @@ public class TagController(TaskService _taskService) : ControllerBase
         var tagVms = TagVm.CreateCollectionFrom(tags);
         return Ok(tagVms);
     }
+
+    /// <summary>
+    /// Удалить тег
+    /// </summary>
+    /// <param name="tagId">Id тега</param>
+    [HttpDelete("{tagId:int}")]
+    public async Task<IActionResult> DeleteTag(int tagId)
+    {
+        await _taskService.DeleteTag(tagId);
+        return NoContent();
+    }
 }
