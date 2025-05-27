@@ -15,29 +15,29 @@ const TaskCreationForm: React.FC = observer(() => {
 
     const { taskStore, folderStore } = useStore();
 
-    const dayjsDueDateTime = dueDateTime !== null
-        ? dayjs(dueDateTime)
-        : null;
+    const dayjsDueDateTime = dueDateTime !== null ? dayjs(dueDateTime) : null;
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
-    }
+    };
 
-    const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleDescriptionChange = (
+        event: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
         setDescription(event.target.value);
-    }
+    };
 
     const handleDueDateTimeChange = (date: Dayjs | null) => {
         setDueDateTime(date?.toDate() ?? null);
-    }
+    };
 
     const handleFolderChange = (folderId: number) => {
         setFolderId(folderId);
-    }
+    };
 
     const isCreateTaskButtonDisabled = () => {
         return title.trim() === "";
-    }
+    };
 
     const handleCreateTaskButtonClick = async () => {
         await taskStore.createTask(title, description, dueDateTime, folderId);
@@ -46,7 +46,7 @@ const TaskCreationForm: React.FC = observer(() => {
         setDescription("");
         setDueDateTime(null);
         setFolderId(null);
-    }
+    };
 
     return (
         <Space direction="vertical">
@@ -71,23 +71,20 @@ const TaskCreationForm: React.FC = observer(() => {
             <Select
                 placeholder="Папка"
                 onChange={handleFolderChange}
-                style={{ width: 300 }}
-            >
-                {
-                    folderStore.folders.map(f =>
-                        <Option
-                            key={f.id}
-                            value={f.id}
-                        >
-                            {f.title}
-                        </Option>
-                    )
-                }
+                style={{ width: 300 }}>
+                {folderStore.folders.map(f => (
+                    <Option
+                        key={f.id}
+                        value={f.id}>
+                        {f.title}
+                    </Option>
+                ))}
             </Select>
             <Button
                 onClick={handleCreateTaskButtonClick}
-                disabled={isCreateTaskButtonDisabled()}
-            >Добавить</Button>
+                disabled={isCreateTaskButtonDisabled()}>
+                Добавить
+            </Button>
         </Space>
     );
 });

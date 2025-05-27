@@ -1,6 +1,6 @@
 export const AppUrl = "https://localhost:7265/api";
 
-export const Api : IApi = {
+export const Api: IApi = {
     get: async (url: string) => {
         const response = await fetch(url);
         return await response.json();
@@ -29,10 +29,10 @@ export const Api : IApi = {
     delete: async (url: string) => {
         await fetch(url, {
             headers,
-            method: "DELETE"
+            method: "DELETE",
         });
-    }
-}
+    },
+};
 
 interface IApi {
     get: <T>(url: string) => Promise<T>;

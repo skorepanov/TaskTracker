@@ -10,7 +10,7 @@ interface ITaskListViewProps {
     task: ITask;
 }
 
-const TaskListView: React.FC<ITaskListViewProps> = observer((props) => {
+const TaskListView: React.FC<ITaskListViewProps> = observer(props => {
     const { taskStore } = useStore();
 
     const { task } = props;
@@ -18,31 +18,47 @@ const TaskListView: React.FC<ITaskListViewProps> = observer((props) => {
 
     const [isCompleted, setIsCompleted] = useState<boolean>(isTaskCompleted);
 
-    const textColor = isTaskCompleted
-        ? "green"
-        : "black";
+    const textColor = isTaskCompleted ? "green" : "black";
 
-    const descriptionAsText = <><i>{task.description}</i><br /></>;
+    const descriptionAsText = (
+        <>
+            <i>{task.description}</i>
+            <br />
+        </>
+    );
 
-    const completedDateTimeAsText = isTaskCompleted
-        ? <>Выполнено: {formatDateTime(task.completedDateTime)}<br /></>
-        : null;
+    const completedDateTimeAsText = isTaskCompleted ? (
+        <>
+            Выполнено: {formatDateTime(task.completedDateTime)}
+            <br />
+        </>
+    ) : null;
 
-    const dueDateTimeAsText = task.dueDateTime !== null
-        ? <>Срок выполнения: {formatDateTime(task.dueDateTime)}</>
-        : null;
+    const dueDateTimeAsText =
+        task.dueDateTime !== null ? (
+            <>Срок выполнения: {formatDateTime(task.dueDateTime)}</>
+        ) : null;
 
-    const overdueDaysAsText = task.overdueDaysCount > 0
-        ? <>({task.overdueDaysCount} дней назад)</>
-        : null;
+    const overdueDaysAsText =
+        task.overdueDaysCount > 0 ? (
+            <>({task.overdueDaysCount} дней назад)</>
+        ) : null;
 
-    const overdueAsText = task.dueDateTime !== null
-        ? <>{dueDateTimeAsText} {overdueDaysAsText}<br /></>
-        : null;
+    const overdueAsText =
+        task.dueDateTime !== null ? (
+            <>
+                {dueDateTimeAsText} {overdueDaysAsText}
+                <br />
+            </>
+        ) : null;
 
-    const modifiedDateTimeAsText = task.modifiedDateTime !== null
-        ? <><i>Изменена: {formatDateTime(task.modifiedDateTime)}</i><br /></>
-        : null;
+    const modifiedDateTimeAsText =
+        task.modifiedDateTime !== null ? (
+            <>
+                <i>Изменена: {formatDateTime(task.modifiedDateTime)}</i>
+                <br />
+            </>
+        ) : null;
 
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
         const isCompletedNew = event.target.checked;
@@ -54,11 +70,11 @@ const TaskListView: React.FC<ITaskListViewProps> = observer((props) => {
         } else {
             await taskStore.incompleteTask(task);
         }
-    }
+    };
 
     const handleMoveToTrashButtonClick = async () => {
         await taskStore.moveTaskToTrash(task);
-    }
+    };
 
     return (
         <div style={{ color: textColor, marginBottom: 10 }}>
@@ -67,17 +83,15 @@ const TaskListView: React.FC<ITaskListViewProps> = observer((props) => {
                 onChange={handleCompletedChange}
                 style={{ marginRight: 5 }}
             />
-            [{task.id}] {task.title}<br />
+            [{task.id}] {task.title}
+            <br />
             {descriptionAsText}
             {completedDateTimeAsText}
             {overdueAsText}
             {modifiedDateTimeAsText}
-            <i>Создана: {formatDateTime(task.createdDateTime)}</i><br />
-            <Button
-                onClick={handleMoveToTrashButtonClick}
-            >
-                В корзину
-            </Button>
+            <i>Создана: {formatDateTime(task.createdDateTime)}</i>
+            <br />
+            <Button onClick={handleMoveToTrashButtonClick}>В корзину</Button>
         </div>
     );
 });

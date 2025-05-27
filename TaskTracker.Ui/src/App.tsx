@@ -17,7 +17,7 @@ const App: React.FC = observer(() => {
                 taskStore.fetchIncompleteTasks(),
                 taskStore.fetchCompletedTasks(),
                 folderStore.fetchFolders(),
-                taskStore.fetchTasksInTrash()
+                taskStore.fetchTasksInTrash(),
             ]);
         };
 
@@ -31,48 +31,38 @@ const App: React.FC = observer(() => {
                 <TaskCreationForm />
                 <FolderList />
                 <strong>Задачи на сегодня</strong>
-                {
-                    taskStore.getTodayIncompletedTasks().map(t =>
-                        <TaskListView
-                            key={`today-${t.id}`}
-                            task={t}
-                        />
-                    )
-                }
-                {
-                    taskStore.getTodayCompletedTasks().map(t =>
-                        <TaskListView
-                            key={`today-${t.id}`}
-                            task={t}
-                        />
-                    )
-                }
+                {taskStore.getTodayIncompletedTasks().map(t => (
+                    <TaskListView
+                        key={`today-${t.id}`}
+                        task={t}
+                    />
+                ))}
+                {taskStore.getTodayCompletedTasks().map(t => (
+                    <TaskListView
+                        key={`today-${t.id}`}
+                        task={t}
+                    />
+                ))}
                 <strong>Inbox</strong>
-                {
-                    taskStore.getInboxIncompletedTasks().map(t =>
-                        <TaskListView
-                            key={`inbox-${t.id}`}
-                            task={t}
-                        />
-                    )
-                }
-                {
-                    taskStore.getInboxCompletedTasks().map(t =>
-                        <TaskListView
-                            key={`inbox-${t.id}`}
-                            task={t}
-                        />
-                    )
-                }
+                {taskStore.getInboxIncompletedTasks().map(t => (
+                    <TaskListView
+                        key={`inbox-${t.id}`}
+                        task={t}
+                    />
+                ))}
+                {taskStore.getInboxCompletedTasks().map(t => (
+                    <TaskListView
+                        key={`inbox-${t.id}`}
+                        task={t}
+                    />
+                ))}
                 <strong>Корзина</strong>
-                {
-                    taskStore.tasksMovedToTrash.map(t =>
-                        <TaskMovedToTrashListView
-                            key={`trash-${t.id}`}
-                            task={t}
-                        />
-                    )
-                }
+                {taskStore.tasksMovedToTrash.map(t => (
+                    <TaskMovedToTrashListView
+                        key={`trash-${t.id}`}
+                        task={t}
+                    />
+                ))}
             </Space>
         </>
     );

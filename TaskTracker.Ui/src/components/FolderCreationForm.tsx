@@ -10,16 +10,16 @@ const FolderCreationForm: React.FC = observer(() => {
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
-    }
+    };
 
     const isCreateFolderButtonDisabled = () => {
         return title.trim() === "";
-    }
+    };
 
     const handleCreateFolderButtonClick = async () => {
         await folderStore.createFolder(title);
         setTitle("");
-    }
+    };
 
     return (
         <Space direction="vertical">
@@ -32,8 +32,7 @@ const FolderCreationForm: React.FC = observer(() => {
             />
             <Button
                 onClick={handleCreateFolderButtonClick}
-                disabled={isCreateFolderButtonDisabled()}
-            >
+                disabled={isCreateFolderButtonDisabled()}>
                 Добавить
             </Button>
         </Space>
@@ -41,4 +40,3 @@ const FolderCreationForm: React.FC = observer(() => {
 });
 
 export default FolderCreationForm;
-

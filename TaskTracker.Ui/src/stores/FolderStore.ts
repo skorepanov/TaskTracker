@@ -17,14 +17,14 @@ class FolderStore {
         runInAction(() => {
             this.folders = folders;
         });
-    }
+    };
 
     createFolder = async (title: string) => {
         const url = `${AppUrl}/folders`;
 
         const params = {
             title: title,
-            createdDateTime: new Date().toISOString()
+            createdDateTime: new Date().toISOString(),
         };
 
         const createdFolder = await Api.post<IFolder>(url, params);
@@ -32,7 +32,7 @@ class FolderStore {
         runInAction(() => {
             this.folders.push(createdFolder);
         });
-    }
+    };
 
     deleteFolder = async (folder: IFolder) => {
         const url = `${AppUrl}/folders/${folder.id}`;
@@ -42,7 +42,7 @@ class FolderStore {
         runInAction(() => {
             this.folders = this.folders.filter(f => f.id !== folder.id);
         });
-    }
+    };
 }
 
 export default FolderStore;

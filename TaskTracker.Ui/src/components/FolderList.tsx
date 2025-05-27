@@ -9,58 +9,72 @@ const FolderList: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
 
     const folderCollapseItems = folderStore.folders.map(f => {
-        const incompletedTasks = taskStore.incompletedTasks
-            .filter(t => t.folderId === f.id);
+        const incompletedTasks = taskStore.incompletedTasks.filter(
+            t => t.folderId === f.id
+        );
 
-        const completedTasks = taskStore.completedTasks
-            .filter(t => t.folderId === f.id);
+        const completedTasks = taskStore.completedTasks.filter(
+            t => t.folderId === f.id
+        );
 
-        const incompleteTaskCountAsText =
-            `(не выполнено: ${incompletedTasks.length} задач)`;
+        const incompleteTaskCountAsText = `(не выполнено: ${incompletedTasks.length} задач)`;
 
-        const modifiedDateTimeAsText = f.modifiedDateTime !== null
-            ? <><i>Изменена: {formatDateTime(f.modifiedDateTime)}</i><br /></>
-            : null;
+        const modifiedDateTimeAsText =
+            f.modifiedDateTime !== null ? (
+                <>
+                    <i>Изменена: {formatDateTime(f.modifiedDateTime)}</i>
+                    <br />
+                </>
+            ) : null;
 
         const handleDeleteButtonClick = async () => {
             await folderStore.deleteFolder(f);
-        }
+        };
 
-        const header =
+        const header = (
             <>
-                [{f.id}] {f.title} {incompleteTaskCountAsText}<br />
+                [{f.id}] {f.title} {incompleteTaskCountAsText}
+                <br />
                 {modifiedDateTimeAsText}
-                <i>Создана: {formatDateTime(f.createdDateTime)}</i><br />
-                <Button
-                    onClick={handleDeleteButtonClick}
-                >
-                    Удалить
-                </Button>
-            </>;
-
-        const incompletedTaskComponents = incompletedTasks.map(t =>
-            <TaskListView key={t.id} task={t} />
+                <i>Создана: {formatDateTime(f.createdDateTime)}</i>
+                <br />
+                <Button onClick={handleDeleteButtonClick}>Удалить</Button>
+            </>
         );
 
-        const completedTaskComponents = completedTasks.map(t =>
-            <TaskListView key={t.id} task={t} />
-        );
+        const incompletedTaskComponents = incompletedTasks.map(t => (
+            <TaskListView
+                key={t.id}
+                task={t}
+            />
+        ));
 
-        const taskComponents =
+        const completedTaskComponents = completedTasks.map(t => (
+            <TaskListView
+                key={t.id}
+                task={t}
+            />
+        ));
+
+        const taskComponents = (
             <>
                 {incompletedTaskComponents}
                 {completedTaskComponents}
-            </>;
+            </>
+        );
 
         return {
             key: f.id,
             label: header,
-            children: taskComponents
+            children: taskComponents,
         };
     });
 
     return (
-        <Collapse accordion items={folderCollapseItems} />
+        <Collapse
+            accordion
+            items={folderCollapseItems}
+        />
     );
 });
 

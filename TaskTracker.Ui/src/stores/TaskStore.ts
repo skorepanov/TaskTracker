@@ -19,7 +19,7 @@ class TaskStore {
         runInAction(() => {
             this.incompletedTasks = tasks;
         });
-    }
+    };
 
     fetchCompletedTasks = async () => {
         const url = `${AppUrl}/tasks/complete`;
@@ -28,7 +28,7 @@ class TaskStore {
         runInAction(() => {
             this.completedTasks = tasks;
         });
-    }
+    };
 
     fetchTasksInTrash = async () => {
         const url = `${AppUrl}/tasks/trash`;
@@ -38,7 +38,7 @@ class TaskStore {
         runInAction(() => {
             this.tasksMovedToTrash = tasks;
         });
-    }
+    };
 
     createTask = async (
         title: string,
@@ -53,7 +53,7 @@ class TaskStore {
             description: description,
             dueDateTime: dueDateTime,
             folderId: folderId,
-            createdDateTime: new Date().toISOString()
+            createdDateTime: new Date().toISOString(),
         };
 
         const createdTask = await Api.post<ITask>(url, params);
@@ -61,7 +61,7 @@ class TaskStore {
         runInAction(() => {
             this.incompletedTasks.push(createdTask);
         });
-    }
+    };
 
     deleteTask = async (task: ITask) => {
         const url = `${AppUrl}/tasks/${task.id}`;
@@ -69,72 +69,77 @@ class TaskStore {
         await Api.delete(url);
 
         runInAction(() => {
-            this.tasksMovedToTrash = this.tasksMovedToTrash
-                .filter(t => t.id !== task.id);
+            this.tasksMovedToTrash = this.tasksMovedToTrash.filter(
+                t => t.id !== task.id
+            );
         });
-    }
+    };
 
     completeTask = async (task: ITask) => {
         const url = `${AppUrl}/tasks/${task.id}/completed`;
 
         const params = {
-            completedDateTime: new Date().toISOString()
+            completedDateTime: new Date().toISOString(),
         };
 
         const updatedTask = await Api.put<ITask>(url, params);
 
         runInAction(() => {
-            this.incompletedTasks = this.incompletedTasks
-                .filter(t => t.id !== updatedTask.id);
+            this.incompletedTasks = this.incompletedTasks.filter(
+                t => t.id !== updatedTask.id
+            );
 
             this.completedTasks.push(updatedTask);
         });
-    }
+    };
 
     incompleteTask = async (task: ITask) => {
         const url = `${AppUrl}/tasks/${task.id}/incompleted`;
 
         const params = {
-            modifiedDateTime: new Date().toISOString()
+            modifiedDateTime: new Date().toISOString(),
         };
 
         const updatedTask = await Api.put<ITask>(url, params);
 
         runInAction(() => {
-            this.completedTasks = this.completedTasks
-                .filter(t => t.id !== updatedTask.id);
+            this.completedTasks = this.completedTasks.filter(
+                t => t.id !== updatedTask.id
+            );
 
             this.incompletedTasks.push(updatedTask);
         });
-    }
+    };
 
     moveTaskToTrash = async (task: ITask) => {
         const url = `${AppUrl}/tasks/${task.id}/movedToTrash`;
 
         const params = {
-            movedToTrashDateTime: new Date().toISOString()
+            movedToTrashDateTime: new Date().toISOString(),
         };
 
         const taskMovedToTrash = await Api.put<ITask>(url, params);
 
         runInAction(() => {
             if (taskMovedToTrash.completedDateTime !== null) {
-                this.completedTasks = this.completedTasks
-                    .filter(t => t.id !== taskMovedToTrash.id);
+                this.completedTasks = this.completedTasks.filter(
+                    t => t.id !== taskMovedToTrash.id
+                );
             } else {
-                this.incompletedTasks = this.incompletedTasks
-                    .filter(t => t.id !== taskMovedToTrash.id);
+                this.incompletedTasks = this.incompletedTasks.filter(
+                    t => t.id !== taskMovedToTrash.id
+                );
             }
 
             this.tasksMovedToTrash.push(taskMovedToTrash);
         });
-    }
+    };
 
     moveTaskFromTrash = async (task: ITask) => {
         const url = `${AppUrl}/tasks/${task.id}/movedFromTrash`;
 
         const params = {
-            modifiedDateTime: new Date().toISOString()
+            modifiedDateTime: new Date().toISOString(),
         };
 
         const taskMovedFromTrash = await Api.put<ITask>(url, params);
@@ -146,17 +151,19 @@ class TaskStore {
                 this.incompletedTasks.push(taskMovedFromTrash);
             }
 
-            this.tasksMovedToTrash = this.tasksMovedToTrash
-                .filter(t => t.id !== taskMovedFromTrash.id);
+            this.tasksMovedToTrash = this.tasksMovedToTrash.filter(
+                t => t.id !== taskMovedFromTrash.id
+            );
         });
-    }
+    };
 
     getTodayIncompletedTasks = () => {
         const todayDate = dayjs(new Date()).startOf("day");
 
-        return this.incompletedTasks
-            .filter(t => this.isTodayIncompletedTask(t, todayDate));
-    }
+        return this.incompletedTasks.filter(t =>
+            this.isTodayIncompletedTask(t, todayDate)
+        );
+    };
 
     isTodayIncompletedTask = (task: ITask, todayDate: Dayjs) => {
         if (task.dueDateTime === null) {
@@ -168,14 +175,15 @@ class TaskStore {
         if (dueDateTime.isSame(todayDate) || dueDateTime.isBefore(todayDate)) {
             return true;
         }
-    }
+    };
 
     getTodayCompletedTasks = () => {
         const todayDate = dayjs(new Date()).startOf("day");
 
-        return this.completedTasks
-            .filter(t => this.isTodayCompletedTask(t, todayDate));
-    }
+        return this.completedTasks.filter(t =>
+            this.isTodayCompletedTask(t, todayDate)
+        );
+    };
 
     isTodayCompletedTask = (task: ITask, todayDate: Dayjs) => {
         const completedDateTime = dayjs(task.completedDateTime).startOf("day");
@@ -183,15 +191,15 @@ class TaskStore {
         if (completedDateTime.isSame(todayDate)) {
             return true;
         }
-    }
+    };
 
     getInboxIncompletedTasks = () => {
         return this.incompletedTasks.filter(t => t.folderId === null);
-    }
+    };
 
     getInboxCompletedTasks = () => {
         return this.completedTasks.filter(task => task.folderId === null);
-    }
+    };
 }
 
 export default TaskStore;
