@@ -59,7 +59,7 @@ class TaskStore {
         const createdTask = await Api.post<ITask>(url, params);
 
         runInAction(() => {
-            this.incompletedTasks = [...this.incompletedTasks, createdTask];
+            this.incompletedTasks.push(createdTask);
         });
     }
 
@@ -87,7 +87,7 @@ class TaskStore {
             this.incompletedTasks = this.incompletedTasks
                 .filter(t => t.id !== updatedTask.id);
 
-            this.completedTasks = [...this.completedTasks, updatedTask];
+            this.completedTasks.push(updatedTask);
         });
     }
 
@@ -104,7 +104,7 @@ class TaskStore {
             this.completedTasks = this.completedTasks
                 .filter(t => t.id !== updatedTask.id);
 
-            this.incompletedTasks = [...this.incompletedTasks, updatedTask];
+            this.incompletedTasks.push(updatedTask);
         });
     }
 
@@ -126,7 +126,7 @@ class TaskStore {
                     .filter(t => t.id !== taskMovedToTrash.id);
             }
 
-            this.tasksMovedToTrash = [...this.tasksMovedToTrash, taskMovedToTrash];
+            this.tasksMovedToTrash.push(taskMovedToTrash);
         });
     }
 
@@ -141,9 +141,9 @@ class TaskStore {
 
         runInAction(() => {
             if (taskMovedFromTrash.completedDateTime !== null) {
-                this.completedTasks = [...this.completedTasks, taskMovedFromTrash];
+                this.completedTasks.push(taskMovedFromTrash);
             } else {
-                this.incompletedTasks = [...this.incompletedTasks, taskMovedFromTrash];
+                this.incompletedTasks.push(taskMovedFromTrash);
             }
 
             this.tasksMovedToTrash = this.tasksMovedToTrash

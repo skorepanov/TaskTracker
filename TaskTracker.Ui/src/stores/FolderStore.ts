@@ -30,7 +30,7 @@ class FolderStore {
         const createdFolder = await Api.post<IFolder>(url, params);
 
         runInAction(() => {
-            this.folders = [...this.folders, createdFolder];
+            this.folders.push(createdFolder);
         });
     }
 
