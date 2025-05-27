@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { Space } from "antd";
+import { Collapse, Space } from "antd";
 import { useStore } from "./stores/RootStore";
 import TaskListView from "./components/TaskListView";
 import TaskMovedToTrashListView from "./components/TaskMovedToTrashListView";
@@ -24,45 +24,91 @@ const App: React.FC = observer(() => {
         loadData();
     }, [taskStore, folderStore]);
 
+    const todayIncompletedTaskComponents = taskStore
+        .getTodayIncompletedTasks()
+        .map(t => (
+            <TaskListView
+                key={`today-${t.id}`}
+                task={t}
+            />
+        ));
+
+    const todayCompletedTaskComponents = taskStore
+        .getTodayCompletedTasks()
+        .map(t => (
+            <TaskListView
+                key={`today-${t.id}`}
+                task={t}
+            />
+        ));
+
+    const inboxIncompletedTaskComponents = taskStore
+        .getInboxIncompletedTasks()
+        .map(t => (
+            <TaskListView
+                key={`inbox-${t.id}`}
+                task={t}
+            />
+        ));
+
+    const inboxCompletedTaskComponents = taskStore
+        .getInboxCompletedTasks()
+        .map(t => (
+            <TaskListView
+                key={`inbox-${t.id}`}
+                task={t}
+            />
+        ));
+
+    const taskMovedToTrashComponents = taskStore.tasksMovedToTrash.map(t => (
+        <TaskMovedToTrashListView
+            key={`trash-${t.id}`}
+            task={t}
+        />
+    ));
+
+    const taskGroupComponents = [
+        {
+            key: "today",
+            label: "Задачи на сегодня",
+            children: (
+                <>
+                    {todayIncompletedTaskComponents}
+                    {todayCompletedTaskComponents}
+                </>
+            ),
+        },
+        {
+            key: "inbox",
+            label: "Inbox",
+            children: (
+                <>
+                    {inboxIncompletedTaskComponents}
+                    {inboxCompletedTaskComponents}
+                </>
+            ),
+        },
+        {
+            key: "trash",
+            label: "Корзина",
+            children: <>{taskMovedToTrashComponents}</>,
+        },
+    ];
+
     return (
         <>
-            <Space direction="vertical">
-                <FolderCreationForm />
-                <TaskCreationForm />
+            <Space
+                direction="horizontal"
+                align="start">
+                <Space direction="vertical">
+                    <FolderCreationForm />
+                    <TaskCreationForm />
+                </Space>
                 <FolderList />
-                <strong>Задачи на сегодня</strong>
-                {taskStore.getTodayIncompletedTasks().map(t => (
-                    <TaskListView
-                        key={`today-${t.id}`}
-                        task={t}
-                    />
-                ))}
-                {taskStore.getTodayCompletedTasks().map(t => (
-                    <TaskListView
-                        key={`today-${t.id}`}
-                        task={t}
-                    />
-                ))}
-                <strong>Inbox</strong>
-                {taskStore.getInboxIncompletedTasks().map(t => (
-                    <TaskListView
-                        key={`inbox-${t.id}`}
-                        task={t}
-                    />
-                ))}
-                {taskStore.getInboxCompletedTasks().map(t => (
-                    <TaskListView
-                        key={`inbox-${t.id}`}
-                        task={t}
-                    />
-                ))}
-                <strong>Корзина</strong>
-                {taskStore.tasksMovedToTrash.map(t => (
-                    <TaskMovedToTrashListView
-                        key={`trash-${t.id}`}
-                        task={t}
-                    />
-                ))}
+                <Collapse
+                    accordion
+                    items={taskGroupComponents}
+                />
             </Space>
         </>
     );

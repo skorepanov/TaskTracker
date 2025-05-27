@@ -31,7 +31,7 @@ const FolderList: React.FC = observer(() => {
             await folderStore.deleteFolder(f);
         };
 
-        const header = (
+        const label = (
             <>
                 [{f.id}] {f.title} {incompleteTaskCountAsText}
                 <br />
@@ -65,7 +65,7 @@ const FolderList: React.FC = observer(() => {
 
         return {
             key: f.id,
-            label: header,
+            label: label,
             children: taskComponents,
         };
     });
