@@ -6,11 +6,11 @@ import { formatDateTime } from '../utils';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import ITask from '../interfaces/ITask';
 
-interface ITaskProps {
+interface ITaskListViewProps {
     task: ITask;
 }
 
-const Task: React.FC<ITaskProps> = observer((props) => {
+const TaskListView: React.FC<ITaskListViewProps> = observer((props) => {
     const { taskStore } = useStore();
 
     const { task } = props;
@@ -82,4 +82,4 @@ const Task: React.FC<ITaskProps> = observer((props) => {
     );
 });
 
-export default Task;
+export default TaskListView;

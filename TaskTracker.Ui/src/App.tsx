@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Space } from 'antd';
 import { useStore } from './stores/RootStore';
-import Task from './components/Task';
-import FolderCreationForm from './components/FolderCreationForm';
+import TaskListView from './components/TaskListView';
+import TaskMovedToTrashListView from './components/TaskMovedToTrashListView';
 import TaskCreationForm from './components/TaskCreationForm';
-import TaskMovedToTrash from './components/TaskMovedToTrash';
 import FolderList from './components/FolderList';
+import FolderCreationForm from './components/FolderCreationForm';
 
 const App: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
@@ -33,7 +33,7 @@ const App: React.FC = observer(() => {
                 <strong>Задачи на сегодня</strong>
                 {
                     taskStore.getTodayIncompletedTasks().map(t =>
-                        <Task
+                        <TaskListView
                             key={`today-${t.id}`}
                             task={t}
                         />
@@ -41,7 +41,7 @@ const App: React.FC = observer(() => {
                 }
                 {
                     taskStore.getTodayCompletedTasks().map(t =>
-                        <Task
+                        <TaskListView
                             key={`today-${t.id}`}
                             task={t}
                         />
@@ -50,7 +50,7 @@ const App: React.FC = observer(() => {
                 <strong>Inbox</strong>
                 {
                     taskStore.getInboxIncompletedTasks().map(t =>
-                        <Task
+                        <TaskListView
                             key={`inbox-${t.id}`}
                             task={t}
                         />
@@ -58,7 +58,7 @@ const App: React.FC = observer(() => {
                 }
                 {
                     taskStore.getInboxCompletedTasks().map(t =>
-                        <Task
+                        <TaskListView
                             key={`inbox-${t.id}`}
                             task={t}
                         />
@@ -67,7 +67,7 @@ const App: React.FC = observer(() => {
                 <strong>Корзина</strong>
                 {
                     taskStore.tasksMovedToTrash.map(t =>
-                        <TaskMovedToTrash
+                        <TaskMovedToTrashListView
                             key={`trash-${t.id}`}
                             task={t}
                         />

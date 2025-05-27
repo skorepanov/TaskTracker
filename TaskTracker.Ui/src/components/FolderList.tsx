@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Button, Collapse } from 'antd';
 import { useStore } from '../stores/RootStore';
 import { formatDateTime } from '../utils';
-import Task from './Task';
+import TaskListView from './TaskListView';
 
 const FolderList: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
@@ -39,11 +39,11 @@ const FolderList: React.FC = observer(() => {
             </>;
 
         const incompletedTaskComponents = incompletedTasks.map(t =>
-            <Task key={t.id} task={t} />
+            <TaskListView key={t.id} task={t} />
         );
 
         const completedTaskComponents = completedTasks.map(t =>
-            <Task key={t.id} task={t} />
+            <TaskListView key={t.id} task={t} />
         );
 
         const taskComponents =

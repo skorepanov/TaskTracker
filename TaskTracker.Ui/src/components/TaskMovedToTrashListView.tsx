@@ -5,11 +5,11 @@ import { useStore } from '../stores/RootStore';
 import { formatDateTime } from '../utils';
 import ITask from "../interfaces/ITask";
 
-interface ITaskMovedToTrashProps {
+interface ITaskMovedToTrashListViewProps {
     task: ITask;
 }
 
-const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = observer((props) => {
+const TaskMovedToTrashListView: React.FC<ITaskMovedToTrashListViewProps> = observer((props) => {
     const { taskStore } = useStore();
 
     const { task } = props;
@@ -62,4 +62,4 @@ const TaskMovedToTrash: React.FC<ITaskMovedToTrashProps> = observer((props) => {
     );
 });
 
-export default TaskMovedToTrash;
+export default TaskMovedToTrashListView;
