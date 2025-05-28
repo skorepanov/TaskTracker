@@ -24,14 +24,13 @@ const App: React.FC = observer(() => {
         loadData();
     }, [taskStore, folderStore]);
 
-    const todayIncompletedTaskComponents = taskStore
-        .getTodayIncompletedTasks()
-        .map(t => (
-            <TaskListView
-                key={`today-${t.id}`}
-                task={t}
-            />
-        ));
+    const todayIncompletedTasks = taskStore.getTodayIncompletedTasks();
+    const todayIncompletedTaskComponents = todayIncompletedTasks.map(t => (
+        <TaskListView
+            key={`today-${t.id}`}
+            task={t}
+        />
+    ));
 
     const todayCompletedTaskComponents = taskStore
         .getTodayCompletedTasks()
@@ -42,14 +41,13 @@ const App: React.FC = observer(() => {
             />
         ));
 
-    const inboxIncompletedTaskComponents = taskStore
-        .getInboxIncompletedTasks()
-        .map(t => (
-            <TaskListView
-                key={`inbox-${t.id}`}
-                task={t}
-            />
-        ));
+    const inboxIncompletedTasks = taskStore.getInboxIncompletedTasks();
+    const inboxIncompletedTaskComponents = inboxIncompletedTasks.map(t => (
+        <TaskListView
+            key={`inbox-${t.id}`}
+            task={t}
+        />
+    ));
 
     const inboxCompletedTaskComponents = taskStore
         .getInboxCompletedTasks()
@@ -70,7 +68,7 @@ const App: React.FC = observer(() => {
     const taskGroupComponents = [
         {
             key: "today",
-            label: "Задачи на сегодня",
+            label: `Задачи на сегодня (не выполнено задач: ${todayIncompletedTasks.length})`,
             children: (
                 <>
                     {todayIncompletedTaskComponents}
@@ -80,7 +78,7 @@ const App: React.FC = observer(() => {
         },
         {
             key: "inbox",
-            label: "Inbox",
+            label: `Inbox (не выполнено задач: ${inboxIncompletedTasks.length})`,
             children: (
                 <>
                     {inboxIncompletedTaskComponents}

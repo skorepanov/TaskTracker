@@ -17,7 +17,7 @@ const FolderList: React.FC = observer(() => {
             t => t.folderId === f.id
         );
 
-        const incompleteTaskCountAsText = `(не выполнено: ${incompletedTasks.length} задач)`;
+        const incompleteTaskCountAsText = `(не выполнено задач: ${incompletedTasks.length})`;
 
         const modifiedDateTimeAsText =
             f.modifiedDateTime !== null ? (
