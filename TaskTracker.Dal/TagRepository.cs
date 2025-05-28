@@ -16,6 +16,12 @@ public class TagRepository(ApplicationContext _db) : ITagRepository
         return await _db.Tags.ToListAsync();
     }
 
+    public async Task CreateTag(Tag tag)
+    {
+        _db.Tags.Add(tag);
+        await _db.SaveChangesAsync();
+    }
+
     public async Task DeleteTag(Tag tag)
     {
         _db.Tags.Remove(tag);

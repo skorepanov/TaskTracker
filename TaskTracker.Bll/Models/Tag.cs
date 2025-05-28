@@ -11,4 +11,22 @@ public class Tag
     public DateTime CreatedDateTime { get; private set; }
 
     public DateTime? ModifiedDateTime { get; private set; }
+
+    private Tag(string title, string color, DateTime createdDateTime)
+    {
+        Title = title;
+        Color = color;
+        CreatedDateTime = createdDateTime;
+    }
+
+    public static Tag CreateTag(
+        TagForCreationDto tagDto,
+        DateTime now)
+    {
+        var normalizedTitle = tagDto.Title.Trim();
+        var normalizedColor = tagDto.Color.Trim();
+        var createdDateTime = tagDto.CreatedDateTime ?? now;
+
+        return new Tag(normalizedTitle, normalizedColor, createdDateTime);
+    }
 }

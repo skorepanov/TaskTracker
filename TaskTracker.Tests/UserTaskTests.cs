@@ -282,7 +282,7 @@ public class UserTaskTests
     [Fact]
     public void CreateTaskWithoutCreatedDateTime()
     {
-        // arrange
+        // Arrange
         var userTaskDto = new UserTaskForCreationDto(
             Title: "Folder Title 42",
             Description: "Folder description 42",
@@ -292,17 +292,17 @@ public class UserTaskTests
 
         var now = new DateTime(year: 2025, month: 4, day: 24);
 
-        // act
+        // Act
         var sut = UserTask.CreateTask(userTaskDto, now);
 
-        // assert
+        // Assert
         sut.CreatedDateTime.Should().Be(now);
     }
 
     [Fact]
     public void CreateTaskWithCreatedDateTimeNotEqualsToNow()
     {
-        // arrange
+        // Arrange
         var createdDateTime = new DateTime(year: 2025, month: 1, day: 1);
         var now = new DateTime(year: 2025, month: 1, day: 2);
 
@@ -313,10 +313,10 @@ public class UserTaskTests
             DueDateTime: null,
             createdDateTime);
 
-        // act
+        // Act
         var sut = UserTask.CreateTask(userTaskDto, now);
 
-        // assert
+        // Assert
         sut.CreatedDateTime.Should().Be(createdDateTime);
     }
     #endregion

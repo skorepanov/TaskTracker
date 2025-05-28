@@ -62,24 +62,24 @@ public class FolderTests
     [Fact]
     public void CreateFolderWithoutCreatedDateTime()
     {
-        // arrange
+        // Arrange
         var folderDto = new FolderForCreationDto(
             Title: "Folder Title 42",
             CreatedDateTime: null);
 
         var now = new DateTime(year: 2025, month: 4, day: 24);
 
-        // act
+        // Act
         var sut = Folder.CreateFolder(folderDto, now);
 
-        // assert
+        // Assert
         sut.CreatedDateTime.Should().Be(now);
     }
 
     [Fact]
     public void CreateFolderWithCreatedDateTimeNotEqualsToNow()
     {
-        // arrange
+        // Arrange
         var createdDateTime = new DateTime(year: 2025, month: 1, day: 1);
         var now = new DateTime(year: 2025, month: 1, day: 2);
 
@@ -87,10 +87,10 @@ public class FolderTests
             Title: "Folder Title 42",
             createdDateTime);
 
-        // act
+        // Act
         var sut = Folder.CreateFolder(folderDto, now);
 
-        // assert
+        // Assert
         sut.CreatedDateTime.Should().Be(createdDateTime);
     }
     #endregion

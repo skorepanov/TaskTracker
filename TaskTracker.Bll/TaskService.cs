@@ -273,10 +273,33 @@ public class TaskService(
         await _folderRepository.DeleteFolder(folder);
     }
 
+    public async Task<Tag> GetTagById(int tagId)
+    {
+        var tag = await _tagRepository.GetTag(tagId);
+
+        if (tag is null)
+        {
+            throw new DomainEntityNotFoundException(
+                domainEntityType: typeof(Tag),
+                message: $"Тег не обнаружен (id = {tagId})");
+        }
+
+        return tag;
+    }
+
     public async Task<IReadOnlyList<Tag>> GetTags()
     {
         var tags = await _tagRepository.GetTags();
         return tags;
+    }
+
+    public async Task<Tag> CreateTag(TagForCreationDto tagDto)
+    {
+        var now = DateTime.UtcNow;
+        var newTag = Tag.CreateTag(tagDto, now);
+        await _tagRepository.CreateTag(newTag);
+
+        return newTag;
     }
 
     public async Task DeleteTag(int tagId)
