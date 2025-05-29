@@ -7,6 +7,7 @@ import TaskMovedToTrashListView from "./components/TaskMovedToTrashListView";
 import TaskCreationForm from "./components/TaskCreationForm";
 import FolderList from "./components/FolderList";
 import FolderCreationForm from "./components/FolderCreationForm";
+import TagCreationForm from "./components/TagCreationForm";
 
 const App: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
@@ -101,6 +102,7 @@ const App: React.FC = observer(() => {
                 <Space direction="vertical">
                     <FolderCreationForm />
                     <TaskCreationForm />
+                    <TagCreationForm />
                 </Space>
                 <FolderList />
                 <Collapse
