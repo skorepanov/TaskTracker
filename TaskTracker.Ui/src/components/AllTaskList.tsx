@@ -1,5 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
+import { Divider } from "antd";
 import { useStore } from "../stores/RootStore";
 import TaskListView from "./TaskListView";
 
@@ -28,6 +29,7 @@ const AllTaskList: React.FC = observer(() => {
                 Все задачи (не выполнено задач: {incompletedTasks.length})
             </strong>
             {incompletedTaskComponents}
+            <Divider />
             {completedTaskComponents}
         </>
     );

@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
+import { Divider } from "antd";
 import { useStore } from "../stores/RootStore";
 import TaskListView from "./TaskListView";
 
@@ -39,6 +40,7 @@ const FolderTaskList: React.FC = observer(() => {
                 {incompletedTasks.length})
             </strong>
             {incompletedTaskComponents}
+            <Divider />
             {completedTaskComponents}
         </>
     );
