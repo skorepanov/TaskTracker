@@ -7,14 +7,14 @@ import TaskListView from "./TaskListView";
 const InboxTaskList: React.FC = observer(() => {
     const { taskStore } = useStore();
 
-    const incompletedTasks = taskStore.getInboxIncompletedTasks();
-
-    const incompletedTaskComponents = incompletedTasks.map(t => (
-        <TaskListView
-            key={`inbox-${t.id}`}
-            task={t}
-        />
-    ));
+    const incompletedTaskComponents = taskStore
+        .getInboxIncompletedTasks()
+        .map(t => (
+            <TaskListView
+                key={`inbox-${t.id}`}
+                task={t}
+            />
+        ));
 
     const completedTaskComponents = taskStore
         .getInboxCompletedTasks()
@@ -27,9 +27,8 @@ const InboxTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <strong>
-                Inbox (не выполнено задач: {incompletedTasks.length})
-            </strong>
+            <strong>Inbox</strong>
+            <Divider />
             {incompletedTaskComponents}
             <Divider />
             {completedTaskComponents}

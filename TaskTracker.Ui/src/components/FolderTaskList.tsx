@@ -6,10 +6,12 @@ import { useStore } from "../stores/RootStore";
 import TaskListView from "./TaskListView";
 
 const FolderTaskList: React.FC = observer(() => {
-    const { taskStore } = useStore();
+    const { taskStore, folderStore } = useStore();
 
     const params = useParams();
     const folderId = Number(params.id);
+
+    const folder = folderStore.folders.find(f => f.id === folderId)!;
 
     const incompletedTasks = taskStore.incompletedTasks.filter(
         t => t.folderId === folderId
@@ -35,10 +37,8 @@ const FolderTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <strong>
-                Задачи из папки [{folderId}] (не выполнено задач:{" "}
-                {incompletedTasks.length})
-            </strong>
+            <strong>{folder.title}</strong>
+            <Divider />
             {incompletedTaskComponents}
             <Divider />
             {completedTaskComponents}

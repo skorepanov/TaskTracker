@@ -1,5 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
+import { Divider } from "antd";
 import { useStore } from "../stores/RootStore";
 import TaskMovedToTrashListView from "./TaskMovedToTrashListView";
 
@@ -16,6 +17,7 @@ const TaskInTrashList: React.FC = observer(() => {
     return (
         <>
             <strong>Корзина</strong>
+            <Divider />
             {taskComponents}
         </>
     );

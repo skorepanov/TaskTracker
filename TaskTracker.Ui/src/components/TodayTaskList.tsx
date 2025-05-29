@@ -7,13 +7,14 @@ import TaskListView from "./TaskListView";
 const TodayTaskList: React.FC = observer(() => {
     const { taskStore } = useStore();
 
-    const incompletedTasks = taskStore.getTodayIncompletedTasks();
-    const incompletedTaskComponents = incompletedTasks.map(t => (
-        <TaskListView
-            key={`today-${t.id}`}
-            task={t}
-        />
-    ));
+    const incompletedTaskComponents = taskStore
+        .getTodayIncompletedTasks()
+        .map(t => (
+            <TaskListView
+                key={`today-${t.id}`}
+                task={t}
+            />
+        ));
 
     const completedTaskComponents = taskStore
         .getTodayCompletedTasks()
@@ -26,10 +27,8 @@ const TodayTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <strong>
-                Задачи на сегодня (не выполнено задач: {incompletedTasks.length}
-                )
-            </strong>
+            <strong>Задачи на сегодня</strong>
+            <Divider />
             {incompletedTaskComponents}
             <Divider />
             {completedTaskComponents}
