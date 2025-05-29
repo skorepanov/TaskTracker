@@ -11,7 +11,7 @@ const FolderTaskList: React.FC = observer(() => {
     const params = useParams();
     const folderId = Number(params.id);
 
-    const folder = folderStore.folders.find(f => f.id === folderId)!;
+    const folder = folderStore.folders.find(f => f.id === folderId);
 
     const incompletedTasks = taskStore.incompletedTasks.filter(
         t => t.folderId === folderId
@@ -37,7 +37,7 @@ const FolderTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <strong>{folder.title}</strong>
+            <strong>{folder?.title}</strong>
             <Divider />
             {incompletedTaskComponents}
             <Divider />

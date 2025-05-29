@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Menu } from "antd";
+import { Dropdown, Menu } from "antd";
 import { useStore } from "../stores/RootStore";
 
 const MainMenu: React.FC = observer(() => {
@@ -22,16 +22,33 @@ const MainMenu: React.FC = observer(() => {
             t => t.folderId === f.id
         ).length;
 
+        const handleDeleteFolderButtonClick = async () => {
+            await folderStore.deleteFolder(f);
+        };
+
         return (
             <Menu.Item key={`/folders/${f.id}`}>
-                <Link to={`/folders/${f.id}`}>
-                    <div style={{ float: "left" }}>
-                        [{f.id}] {f.title}
-                    </div>
-                    <div style={{ float: "right", color: "grey" }}>
-                        {folderIncompleteTaskCount}
-                    </div>
-                </Link>
+                <Dropdown
+                    key={f.id}
+                    menu={{
+                        items: [
+                            {
+                                label: "Удалить папку",
+                                key: "deleteFolder",
+                            },
+                        ],
+                        onClick: handleDeleteFolderButtonClick,
+                    }}
+                    trigger={["contextMenu"]}>
+                    <Link to={`/folders/${f.id}`}>
+                        <div style={{ float: "left" }}>
+                            [{f.id}] {f.title}
+                        </div>
+                        <div style={{ float: "right", color: "grey" }}>
+                            {folderIncompleteTaskCount}
+                        </div>
+                    </Link>
+                </Dropdown>
             </Menu.Item>
         );
     });
