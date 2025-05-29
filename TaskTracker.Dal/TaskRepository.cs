@@ -27,13 +27,6 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
             .ToListAsync();
     }
 
-    public async Task<IReadOnlyList<UserTask>> GetTasksInInbox()
-    {
-        return await _db.Tasks
-            .Where(t => t.FolderId == null && t.MovedToTrashDateTime == null)
-            .ToListAsync();
-    }
-
     public async Task<IReadOnlyList<UserTask>> GetTasksInTrash()
     {
         return await _db.Tasks

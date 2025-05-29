@@ -33,12 +33,6 @@ public class TaskService(
         return tasks;
     }
 
-    public async Task<IReadOnlyList<UserTask>> GetTasksInInbox()
-    {
-        var tasks = await _taskRepository.GetTasksInInbox();
-        return tasks;
-    }
-
     public async Task<IReadOnlyList<UserTask>> GetTasksInTrash()
     {
         var tasks = await _taskRepository.GetTasksInTrash();
