@@ -2,20 +2,20 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Divider } from "antd";
 import { useStore } from "../stores/RootStore";
-import TaskListView from "./TaskListView";
+import TaskListItem from "./TaskListItem";
 
 const AllTaskList: React.FC = observer(() => {
     const { taskStore } = useStore();
 
     const incompletedTaskComponents = taskStore.incompletedTasks.map(t => (
-        <TaskListView
+        <TaskListItem
             key={`inbox-${t.id}`}
             task={t}
         />
     ));
 
     const completedTaskComponents = taskStore.completedTasks.map(t => (
-        <TaskListView
+        <TaskListItem
             key={`inbox-${t.id}`}
             task={t}
         />
