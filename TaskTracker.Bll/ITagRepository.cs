@@ -9,5 +9,7 @@ public interface ITagRepository
 
     Task CreateTag(Tag tag);
 
+    Task UpdateTag(Tag tag);
+
     Task DeleteTag(Tag tag);
 }

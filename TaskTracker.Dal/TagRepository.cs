@@ -22,6 +22,12 @@ public class TagRepository(ApplicationContext _db) : ITagRepository
         await _db.SaveChangesAsync();
     }
 
+    public async Task UpdateTag(Tag tag)
+    {
+        _db.Tags.Update(tag);
+        await _db.SaveChangesAsync();
+    }
+
     public async Task DeleteTag(Tag tag)
     {
         _db.Tags.Remove(tag);

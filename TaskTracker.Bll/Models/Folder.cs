@@ -19,9 +19,7 @@ public class Folder
         CreatedDateTime = createdDateTime;
     }
 
-    public static Folder CreateFolder(
-        FolderForCreationDto folderDto,
-        DateTime now)
+    public static Folder CreateFolder(FolderForCreationDto folderDto, DateTime now)
     {
         var normalizedTitle = folderDto.Title.Trim();
         var createdDateTime = folderDto.CreatedDateTime ?? now;
@@ -29,9 +27,7 @@ public class Folder
         return new Folder(normalizedTitle, createdDateTime);
     }
 
-    public void UpdateFolder(
-        FolderForUpdateDto folderDto,
-        DateTime now)
+    public void UpdateFolder(FolderForUpdateDto folderDto, DateTime now)
     {
         Title = folderDto.Title.Trim();
         ModifiedDateTime = folderDto.ModifiedDateTime ?? now;

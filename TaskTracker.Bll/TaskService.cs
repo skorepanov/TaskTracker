@@ -252,7 +252,7 @@ public class TaskService(
                 message: $"Папка не обнаружена (id = {folderId})");
         }
 
-        var now =  DateTime.UtcNow;
+        var now = DateTime.UtcNow;
         folder.UpdateFolder(folderDto, now);
         await _folderRepository.UpdateFolder(folder);
 
@@ -300,6 +300,24 @@ public class TaskService(
         await _tagRepository.CreateTag(newTag);
 
         return newTag;
+    }
+
+    public async Task<Tag> UpdateTag(int tagId, TagForUpdateDto tagDto)
+    {
+        var tag = await _tagRepository.GetTag(tagId);
+
+        if (tag is null)
+        {
+            throw new DomainEntityNotFoundException(
+                domainEntityType: typeof(Tag),
+                message: $"Тег не обнаружен (id = {tagId})");
+        }
+
+        var now = DateTime.UtcNow;
+        tag.UpdateTag(tagDto, now);
+        await _tagRepository.UpdateTag(tag);
+
+        return tag;
     }
 
     public async Task DeleteTag(int tagId)

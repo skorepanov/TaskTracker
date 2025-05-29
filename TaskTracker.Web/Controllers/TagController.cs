@@ -49,6 +49,21 @@ public class TagController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
+    /// Обновить тег
+    /// </summary>
+    /// <param name="tagId">Id тега</param>
+    /// <param name="tagDto">Данные для обновления тега</param>
+    [HttpPut("{tagId:int}")]
+    public async Task<IActionResult> UpdateTag(
+        int tagId, [FromBody] TagForUpdateDto tagDto)
+    {
+        var tag = await _taskService.UpdateTag(tagId, tagDto);
+        var tagVm = new TagVm(tag);
+
+        return Ok(tagVm);
+    }
+
+    /// <summary>
     /// Удалить тег
     /// </summary>
     /// <param name="tagId">Id тега</param>

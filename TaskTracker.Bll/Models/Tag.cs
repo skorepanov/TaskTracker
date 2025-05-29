@@ -19,14 +19,19 @@ public class Tag
         CreatedDateTime = createdDateTime;
     }
 
-    public static Tag CreateTag(
-        TagForCreationDto tagDto,
-        DateTime now)
+    public static Tag CreateTag(TagForCreationDto tagDto, DateTime now)
     {
         var normalizedTitle = tagDto.Title.Trim();
         var normalizedColor = tagDto.Color.Trim();
         var createdDateTime = tagDto.CreatedDateTime ?? now;
 
         return new Tag(normalizedTitle, normalizedColor, createdDateTime);
+    }
+
+    public void UpdateTag(TagForUpdateDto tagDto, DateTime now)
+    {
+        Title = tagDto.Title.Trim();
+        Color = tagDto.Color.Trim();
+        ModifiedDateTime = tagDto.ModifiedDateTime ?? now;
     }
 }

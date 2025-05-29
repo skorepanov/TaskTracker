@@ -35,9 +35,7 @@ public class UserTask
         CreatedDateTime = createdDateTime;
     }
 
-    public static UserTask CreateTask(
-        UserTaskForCreationDto userTaskDto,
-        DateTime now)
+    public static UserTask CreateTask(UserTaskForCreationDto userTaskDto, DateTime now)
     {
         var normalizedTitle = userTaskDto.Title.Trim();
         var normalizedDescription = userTaskDto.Description?.Trim();
@@ -51,9 +49,7 @@ public class UserTask
             createdDateTime);
     }
 
-    public void UpdateTask(
-        UserTaskForUpdateDto userTaskDto,
-        DateTime now)
+    public void UpdateTask(UserTaskForUpdateDto userTaskDto, DateTime now)
     {
         Title = userTaskDto.Title.Trim();
         Description = userTaskDto.Description?.Trim();
