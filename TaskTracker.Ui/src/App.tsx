@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Collapse, Space } from "antd";
+import { Space } from "antd";
 import { useStore } from "./stores/RootStore";
+import MainMenu from "./components/MainMenu";
 import TaskCreationForm from "./components/TaskCreationForm";
 import AllTaskList from "./components/AllTaskList";
 import InboxTaskList from "./components/InboxTaskList";
 import TodayTaskList from "./components/TodayTaskList";
 import TaskInTrashList from "./components/TaskInTrashList";
+import FolderTaskList from "./components/FolderTaskList";
 import FolderList from "./components/FolderList";
 import FolderCreationForm from "./components/FolderCreationForm";
 import TagCreationForm from "./components/TagCreationForm";
@@ -28,68 +30,54 @@ const App: React.FC = observer(() => {
         loadData();
     }, [taskStore, folderStore]);
 
-    const taskGroupComponents = [
-        {
-            key: "all",
-            label: `Все задачи`,
-            children: <AllTaskList />,
-        },
-        {
-            key: "inbox",
-            label: `Inbox`,
-            children: <InboxTaskList />,
-        },
-        {
-            key: "today",
-            label: `Задачи на сегодня`,
-            children: <TodayTaskList />,
-        },
-        {
-            key: "trash",
-            label: "Корзина",
-            children: <TaskInTrashList />,
-        },
-    ];
-
     return (
         <BrowserRouter>
-            <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <Space
-                            direction="horizontal"
-                            align="start">
-                            <Space direction="vertical">
-                                <FolderCreationForm />
-                                <TaskCreationForm />
-                                <TagCreationForm />
+            <Space
+                direction="horizontal"
+                align="start">
+                <MainMenu />
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <Space
+                                direction="horizontal"
+                                align="start">
+                                <Space direction="vertical">
+                                    <FolderCreationForm />
+                                    <TaskCreationForm />
+                                    <TagCreationForm />
+                                </Space>
+                                <FolderList />
                             </Space>
-                            <FolderList />
-                            <Collapse
-                                accordion
-                                items={taskGroupComponents}
-                            />
-                        </Space>
-                    }
-                />
-                <Route
-                    path="/all"
-                    element={<AllTaskList />}
-                />
-                <Route
-                    path="/inbox"
-                    element={<InboxTaskList />}
-                />
-                <Route
-                    path="/today"
-                    element={<TodayTaskList />}
-                />
-                <Route
-                    path="/trash"
-                    element={<TaskInTrashList />}
-                />
-            </Routes>
+                        }
+                    />
+                    <Route
+                        path="/all"
+                        element={<AllTaskList />}
+                    />
+                    <Route
+                        path="/inbox"
+                        element={<InboxTaskList />}
+                    />
+                    <Route
+                        path="/today"
+                        element={<TodayTaskList />}
+                    />
+                    <Route
+                        path="/trash"
+                        element={<TaskInTrashList />}
+                    />
+                    <Route
+                        path="/folders"
+                        element={<FolderTaskList />}>
+                        <Route
+                            path=":id"
+                            element={<FolderTaskList />}
+                        />
+                    </Route>
+                </Routes>
+            </Space>
         </BrowserRouter>
     );
 });
