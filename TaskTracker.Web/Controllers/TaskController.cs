@@ -76,7 +76,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Обновить задачу
     /// </summary>
-    /// <param name="taskId">Id задачи</param>
+    /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для обновления задачи</param>
     [HttpPut("{taskId:int}")]
     public async Task<IActionResult> UpdateTask(
@@ -91,7 +91,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Отметить задачу как выполненную
     /// </summary>
-    /// <param name="taskId">Id задачи</param>
+    /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для отметки задачи как выполненной</param>
     [HttpPut("{taskId:int}/completed")]
     public async Task<IActionResult> CompleteTask(
@@ -106,7 +106,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Отметить задачу как невыполненную
     /// </summary>
-    /// <param name="taskId">Id задачи</param>
+    /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для отметки задачи как невыполненной</param>
     [HttpPut("{taskId:int}/incompleted")]
     public async Task<IActionResult> IncompleteTask(
@@ -121,7 +121,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Переместить задачу в корзину
     /// </summary>
-    /// <param name="taskId">Id задачи</param>
+    /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для перемещения задачи в корзину</param>
     /// <returns></returns>
     [HttpPut("{taskId:int}/movedToTrash")]
@@ -137,7 +137,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Переместить задачу из корзины
     /// </summary>
-    /// <param name="taskId">Id задачи</param>
+    /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для перемещения задачи из корзины</param>
     [HttpPut("{taskId:int}/movedFromTrash")]
     public async Task<IActionResult> MoveTaskFromTrash(

@@ -46,7 +46,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Обновить папку
     /// </summary>
-    /// <param name="folderId">Id папки</param>
+    /// <param name="folderId">Идентификатор папки</param>
     /// <param name="folderDto">Данные для обновления папки</param>
     [HttpPut("{folderId:int}")]
     public async Task<IActionResult> UpdateFolder(
@@ -59,7 +59,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     /// <summary>
     /// Удалить папку
     /// </summary>
-    /// <param name="folderId">Id папки</param>
+    /// <param name="folderId">Идентификатор папки</param>
     [HttpDelete("{folderId:int}")]
     public async Task<IActionResult> DeleteFolder(int folderId)
     {

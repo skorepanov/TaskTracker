@@ -6,7 +6,7 @@
 public record UserTaskVm
 {
     /// <summary>
-    /// Id задачи
+    /// Идентификатор задачи
     /// </summary>
     public int Id { get; }
 
@@ -21,7 +21,7 @@ public record UserTaskVm
     public string? Description { get; }
 
     /// <summary>
-    /// Id папки
+    /// Идентификатор папки
     /// </summary>
     public int? FolderId { get; }
 
