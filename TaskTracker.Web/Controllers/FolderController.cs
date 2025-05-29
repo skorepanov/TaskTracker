@@ -1,6 +1,4 @@
-﻿using TaskTracker.Web.Models;
-
-namespace TaskTracker.Web.Controllers;
+﻿namespace TaskTracker.Web.Controllers;
 
 /// <summary>
 /// Работа с папками
@@ -17,8 +15,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetFolderById(int folderId)
     {
         var folder = await _taskService.GetFolderById(folderId);
-        var folderVm = new FolderVm(folder);
-        return Ok(folderVm);
+        return Ok(folder);
     }
 
     /// <summary>
@@ -28,8 +25,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetFolders()
     {
         var folders = await _taskService.GetFolders();
-        var folderVms = FolderVm.CreateCollectionFrom(folders);
-        return Ok(folderVms);
+        return Ok(folders);
     }
 
     /// <summary>
@@ -40,12 +36,11 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
     {
         var folder = await _taskService.CreateFolder(folderDto);
-        var folderVm = new FolderVm(folder);
 
         return CreatedAtRoute(
             routeName: nameof(GetFolderById),
-            routeValues: new { folderId = folderVm.Id },
-            value: folderVm);
+            routeValues: new { folderId = folder.Id },
+            value: folder);
     }
 
     /// <summary>
@@ -58,9 +53,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
         int folderId, [FromBody] FolderForUpdateDto folderDto)
     {
         var folder = await _taskService.UpdateFolder(folderId, folderDto);
-        var folderVm = new FolderVm(folder);
-
-        return Ok(folderVm);
+        return Ok(folder);
     }
 
     /// <summary>

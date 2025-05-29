@@ -1,6 +1,4 @@
-﻿using TaskTracker.Web.Models;
-
-namespace TaskTracker.Web.Controllers;
+﻿namespace TaskTracker.Web.Controllers;
 
 /// <summary>
 /// Работа с тегами задач
@@ -17,8 +15,7 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetTagById(int tagId)
     {
         var tag = await _taskService.GetTagById(tagId);
-        var tagVm = new TagVm(tag);
-        return Ok(tagVm);
+        return Ok(tag);
     }
 
     /// <summary>
@@ -28,8 +25,7 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<ActionResult> GetTags()
     {
         var tags = await _taskService.GetTags();
-        var tagVms = TagVm.CreateCollectionFrom(tags);
-        return Ok(tagVms);
+        return Ok(tags);
     }
 
     /// <summary>
@@ -40,12 +36,11 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> CreateTag([FromBody] TagForCreationDto tagDto)
     {
         var tag = await _taskService.CreateTag(tagDto);
-        var tagVm = new TagVm(tag);
 
         return CreatedAtRoute(
             routeName: nameof(GetTagById),
-            routeValues: new { tagId = tagVm.Id },
-            value: tagVm);
+            routeValues: new { tagId = tag.Id },
+            value: tag);
     }
 
     /// <summary>
@@ -58,9 +53,7 @@ public class TagController(TaskService _taskService) : ControllerBase
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
         var tag = await _taskService.UpdateTag(tagId, tagDto);
-        var tagVm = new TagVm(tag);
-
-        return Ok(tagVm);
+        return Ok(tag);
     }
 
     /// <summary>
