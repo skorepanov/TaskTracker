@@ -8,14 +8,12 @@ public class FolderRepository(ApplicationContext _db) : IFolderRepository
 {
     public async Task<Folder?> GetFolder(int folderId)
     {
-        return await _db.Folders
-            .Include(f => f.Tasks)
-            .SingleOrDefaultAsync(f => f.Id == folderId);
+        return await _db.Folders.SingleOrDefaultAsync(f => f.Id == folderId);
     }
 
     public async Task<IReadOnlyList<Folder>> GetFolders()
     {
-        return await _db.Folders.Include(f => f.Tasks).ToListAsync();
+        return await _db.Folders.ToListAsync();
     }
 
     public async Task CreateFolder(Folder folder)

@@ -2,42 +2,6 @@
 
 public class FolderTests
 {
-    #region Add task to folder
-    [Fact]
-    public void AddOneTaskToFolder()
-    {
-        // Arrange
-        var task = CreateTask();
-        var expectedTasks = new List<UserTask> { task };
-
-        var sut = CreateSut();
-
-        // Act
-        sut.AddTask(task);
-
-        // Assert
-        sut.Tasks.Should().Equal(expectedTasks);
-    }
-
-    [Fact]
-    public void AddSeveralTasksToFolder()
-    {
-        // Arrange
-        var task = CreateTask();
-
-        var sut = CreateSut();
-
-        // Act & Assert
-        sut.AddTask(task);
-        sut.Tasks.Should().ContainSingle(t => t.Equals(task));
-
-        var otherTask = CreateTask();
-        sut.AddTask(otherTask);
-        sut.Tasks.Should().ContainSingle(t => t.Equals(task));
-        sut.Tasks.Should().ContainSingle(t => t.Equals(otherTask));
-    }
-    #endregion
-
     #region Create folder
     [Fact]
     public void CreateFolderWithFieldNormalization()
@@ -169,25 +133,6 @@ public class FolderTests
         var folderDto = new FolderForCreationDto(title, createdDateTime.Value);
 
         return Folder.CreateFolder(folderDto, now.Value);
-    }
-
-    private UserTask CreateTask(
-        string title = "Task title 42",
-        string? description = null,
-        DateTime? createdDateTime = null,
-        DateTime? now = null)
-    {
-        createdDateTime ??= new DateTime(year: 2025, month: 1, day: 1);
-        now ??= new DateTime(year: 2025, month: 1, day: 2);
-
-        var userTaskDto = new UserTaskForCreationDto(
-            title,
-            description,
-            FolderId: 42,
-            DueDateTime: null,
-            createdDateTime);
-
-        return UserTask.CreateTask(userTaskDto, now.Value);
     }
     #endregion
 }

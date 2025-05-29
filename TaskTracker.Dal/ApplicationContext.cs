@@ -45,7 +45,7 @@ public class ApplicationContext : DbContext
             .HasColumnType("timestamp with time zone");
 
         builder.HasOne(t => t.Folder)
-            .WithMany(f => f.Tasks)
+            .WithMany()
             .HasForeignKey(t => t.FolderId)
             .OnDelete(DeleteBehavior.Cascade);
     }

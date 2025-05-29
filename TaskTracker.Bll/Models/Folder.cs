@@ -3,10 +3,8 @@
 public class Folder
 {
     public int Id { get; }
-    public string Title { get; private set; }
 
-    private readonly List<UserTask> _tasks;
-    public IReadOnlyList<UserTask> Tasks => _tasks;
+    public string Title { get; private set; }
 
     public DateTime CreatedDateTime { get; private set; }
 
@@ -15,7 +13,6 @@ public class Folder
     private Folder(string title, DateTime createdDateTime)
     {
         Title = title;
-        _tasks = [];
         CreatedDateTime = createdDateTime;
     }
 
@@ -31,13 +28,5 @@ public class Folder
     {
         Title = folderDto.Title.Trim();
         ModifiedDateTime = folderDto.ModifiedDateTime ?? now;
-    }
-
-    public void AddTask(UserTask task)
-    {
-        if (!_tasks.Contains(task))
-        {
-            _tasks.Add(task);
-        }
     }
 }
