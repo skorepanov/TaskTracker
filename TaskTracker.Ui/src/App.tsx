@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Collapse, Space } from "antd";
 import { useStore } from "./stores/RootStore";
@@ -51,22 +52,45 @@ const App: React.FC = observer(() => {
     ];
 
     return (
-        <>
-            <Space
-                direction="horizontal"
-                align="start">
-                <Space direction="vertical">
-                    <FolderCreationForm />
-                    <TaskCreationForm />
-                    <TagCreationForm />
-                </Space>
-                <FolderList />
-                <Collapse
-                    accordion
-                    items={taskGroupComponents}
+        <BrowserRouter>
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <Space
+                            direction="horizontal"
+                            align="start">
+                            <Space direction="vertical">
+                                <FolderCreationForm />
+                                <TaskCreationForm />
+                                <TagCreationForm />
+                            </Space>
+                            <FolderList />
+                            <Collapse
+                                accordion
+                                items={taskGroupComponents}
+                            />
+                        </Space>
+                    }
                 />
-            </Space>
-        </>
+                <Route
+                    path="/all"
+                    element={<AllTaskList />}
+                />
+                <Route
+                    path="/inbox"
+                    element={<InboxTaskList />}
+                />
+                <Route
+                    path="/today"
+                    element={<TodayTaskList />}
+                />
+                <Route
+                    path="/trash"
+                    element={<TaskInTrashList />}
+                />
+            </Routes>
+        </BrowserRouter>
     );
 });
 
