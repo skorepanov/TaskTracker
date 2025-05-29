@@ -46,18 +46,6 @@ public class TaskController(TaskService _taskService) : ControllerBase
     }
 
     /// <summary>
-    /// Получить задачи на сегодня
-    /// </summary>
-    [HttpGet]
-    [Route("today")]
-    public async Task<IActionResult> GetTodayTasks()
-    {
-        var tasks = await _taskService.GetTodayTasks();
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
-        return Ok(taskVms);
-    }
-
-    /// <summary>
     /// Получить задачи из инбокса
     /// </summary>
     [HttpGet]

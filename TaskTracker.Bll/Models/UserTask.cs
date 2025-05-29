@@ -80,17 +80,6 @@ public class UserTask
         return (DueDateTime.Value - today).Duration().Days;
     }
 
-    public bool IsTodayTask(DateTime today)
-    {
-        if (IsInTrash)
-        {
-            return false;
-        }
-
-        return CompletedDateTime?.Date == today.Date
-           || !IsCompleted && DueDateTime?.Date <= today.Date;
-    }
-
     public void MoveToTrash(DateTime movedToTrashDateTime)
     {
         if (IsInTrash)

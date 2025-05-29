@@ -33,16 +33,6 @@ public class TaskService(
         return tasks;
     }
 
-    public async Task<IReadOnlyList<UserTask>> GetTodayTasks()
-    {
-        var today = DateTime.UtcNow;
-        var tasks = await _taskRepository.GetNonMovedToTrashTasks();
-
-        var todayTasks = tasks.Where(t => t.IsTodayTask(today)).ToList();
-
-        return todayTasks;
-    }
-
     public async Task<IReadOnlyList<UserTask>> GetTasksInInbox()
     {
         var tasks = await _taskRepository.GetTasksInInbox();
