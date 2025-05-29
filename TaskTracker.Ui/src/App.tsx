@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import { Collapse, Space } from "antd";
 import { useStore } from "./stores/RootStore";
 import TaskCreationForm from "./components/TaskCreationForm";
+import AllTaskList from "./components/AllTaskList";
 import InboxTaskList from "./components/InboxTaskList";
 import TodayTaskList from "./components/TodayTaskList";
 import TaskInTrashList from "./components/TaskInTrashList";
@@ -27,6 +28,11 @@ const App: React.FC = observer(() => {
     }, [taskStore, folderStore]);
 
     const taskGroupComponents = [
+        {
+            key: "all",
+            label: `Все задачи`,
+            children: <AllTaskList />,
+        },
         {
             key: "inbox",
             label: `Inbox`,
