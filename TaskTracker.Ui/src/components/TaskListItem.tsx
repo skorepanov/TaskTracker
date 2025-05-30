@@ -85,7 +85,7 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
                 onChange={handleCompletedChange}
                 style={{ marginRight: 5 }}
             />
-            [{task.id}] {task.title}
+            {task.title}
             <br />
             {descriptionAsText}
             {completedDateTimeAsText}

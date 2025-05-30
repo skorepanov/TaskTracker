@@ -41,9 +41,7 @@ const MainMenu: React.FC = observer(() => {
                     }}
                     trigger={["contextMenu"]}>
                     <Link to={`/folders/${f.id}`}>
-                        <div style={{ float: "left" }}>
-                            [{f.id}] {f.title}
-                        </div>
+                        <div style={{ float: "left" }}>{f.title}</div>
                         <div style={{ float: "right", color: "grey" }}>
                             {folderIncompleteTaskCount}
                         </div>

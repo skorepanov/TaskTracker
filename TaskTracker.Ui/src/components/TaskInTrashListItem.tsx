@@ -53,7 +53,7 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                     disabled={true}
                     style={{ marginRight: 5 }}
                 />
-                [{task.id}] {task.title}
+                {task.title}
                 <br />
                 {description}
                 <br />
