@@ -1,13 +1,16 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import type { MenuProps } from "antd";
-import { Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu, MenuProps } from "antd";
 import { useStore } from "../stores/RootStore";
+import FolderCreationModal from "./FolderCreationModal";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MainMenu: React.FC = observer(() => {
+    const [isFolderCreationModalOpen, setIsFolderCreationModalOpen] =
+        React.useState(false);
+
     const location = useLocation();
 
     const { taskStore, folderStore } = useStore();
@@ -32,6 +35,31 @@ const MainMenu: React.FC = observer(() => {
                     {incompletedTaskCount}
                 </div>
             </Link>
+        );
+    };
+
+    const handleCreateFolderButtonClick = () => {
+        setIsFolderCreationModalOpen(true);
+    };
+
+    const hideFolderCreationModal = () => {
+        setIsFolderCreationModalOpen(false);
+    };
+
+    const getFolderMenuItem = () => {
+        return (
+            <>
+                <div style={{ float: "left" }}>Папки</div>
+                <div
+                    onClick={e => e.stopPropagation()}
+                    style={{ float: "right" }}>
+                    <Button onClick={handleCreateFolderButtonClick}>+</Button>
+                    <FolderCreationModal
+                        isModalOpen={isFolderCreationModalOpen}
+                        hideModal={hideFolderCreationModal}
+                    />
+                </div>
+            </>
         );
     };
 
@@ -95,7 +123,7 @@ const MainMenu: React.FC = observer(() => {
         },
         {
             key: "/folders",
-            label: "Папки",
+            label: getFolderMenuItem(),
             children: getFolderMenuItems(),
         },
         {

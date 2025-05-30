@@ -10,7 +10,6 @@ import InboxTaskList from "./components/InboxTaskList";
 import TodayTaskList from "./components/TodayTaskList";
 import TaskInTrashList from "./components/TaskInTrashList";
 import FolderTaskList from "./components/FolderTaskList";
-import FolderCreationForm from "./components/FolderCreationForm";
 import TagCreationForm from "./components/TagCreationForm";
 
 const App: React.FC = observer(() => {
@@ -40,7 +39,6 @@ const App: React.FC = observer(() => {
                         path="/"
                         element={
                             <Space direction="vertical">
-                                <FolderCreationForm />
                                 <TaskCreationForm />
                                 <TagCreationForm />
                             </Space>
