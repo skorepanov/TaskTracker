@@ -4,22 +4,21 @@ import { Button } from "antd";
 import FolderCreationModal from "./FolderCreationModal";
 
 const FolderCreationModalButton: React.FC = observer(() => {
-    const [isFolderCreationModalOpen, setIsFolderCreationModalOpen] =
-        React.useState(false);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
 
     const handleCreateFolderButtonClick = () => {
-        setIsFolderCreationModalOpen(true);
+        setIsModalOpen(true);
     };
 
     const hideFolderCreationModal = () => {
-        setIsFolderCreationModalOpen(false);
+        setIsModalOpen(false);
     };
 
     return (
         <>
             <Button onClick={handleCreateFolderButtonClick}>+</Button>
             <FolderCreationModal
-                isModalOpen={isFolderCreationModalOpen}
+                isModalOpen={isModalOpen}
                 hideModal={hideFolderCreationModal}
             />
         </>

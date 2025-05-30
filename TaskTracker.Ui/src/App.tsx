@@ -10,7 +10,6 @@ import InboxTaskList from "./components/InboxTaskList";
 import TodayTaskList from "./components/TodayTaskList";
 import TaskInTrashList from "./components/TaskInTrashList";
 import FolderTaskList from "./components/FolderTaskList";
-import TagCreationForm from "./components/TagCreationForm";
 
 const App: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
@@ -37,12 +36,7 @@ const App: React.FC = observer(() => {
                 <Routes>
                     <Route
                         path="/"
-                        element={
-                            <Space direction="vertical">
-                                <TaskCreationForm />
-                                <TagCreationForm />
-                            </Space>
-                        }
+                        element={<TaskCreationForm />}
                     />
                     <Route
                         path="/all"

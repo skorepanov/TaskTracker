@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Dropdown, Menu, MenuProps } from "antd";
 import { useStore } from "../stores/RootStore";
 import FolderCreationModalButton from "./FolderCreationModalButton";
+import TagCreationModalButton from "./TagCreationModalButton";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -86,6 +87,19 @@ const MainMenu: React.FC = observer(() => {
         });
     };
 
+    const getTagMenuItem = () => {
+        return (
+            <>
+                <div style={{ float: "left" }}>Теги</div>
+                <div
+                    onClick={e => e.stopPropagation()}
+                    style={{ float: "right" }}>
+                    <TagCreationModalButton />
+                </div>
+            </>
+        );
+    };
+
     const mainMenuItems: MenuItem[] = [
         {
             key: "/",
@@ -110,6 +124,13 @@ const MainMenu: React.FC = observer(() => {
             key: "/folders",
             label: getFolderMenuItem(),
             children: getFolderMenuItems(),
+        },
+        {
+            type: "divider",
+        },
+        {
+            key: "/tags",
+            label: getTagMenuItem(),
         },
         {
             type: "divider",
