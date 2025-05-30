@@ -1,8 +1,11 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
+import type { MenuProps } from "antd";
 import { Dropdown, Menu } from "antd";
 import { useStore } from "../stores/RootStore";
+
+type MenuItem = Required<MenuProps>["items"][number];
 
 const MainMenu: React.FC = observer(() => {
     const location = useLocation();
@@ -17,78 +20,101 @@ const MainMenu: React.FC = observer(() => {
     const inboxIncompletedTasksCount =
         taskStore.getInboxIncompletedTasks().length;
 
-    const folderMenuItems = folderStore.folders.map(f => {
-        const folderIncompleteTaskCount = taskStore.incompletedTasks.filter(
-            t => t.folderId === f.id
-        ).length;
-
-        const handleDeleteFolderButtonClick = async () => {
-            await folderStore.deleteFolder(f);
-        };
-
-        return (
-            <Menu.Item key={`/folders/${f.id}`}>
-                <Dropdown
-                    key={f.id}
-                    menu={{
-                        items: [
-                            {
-                                label: "Удалить папку",
-                                key: "deleteFolder",
-                            },
-                        ],
-                        onClick: handleDeleteFolderButtonClick,
-                    }}
-                    trigger={["contextMenu"]}>
-                    <Link to={`/folders/${f.id}`}>
-                        <div style={{ float: "left" }}>{f.title}</div>
-                        <div style={{ float: "right", color: "grey" }}>
-                            {folderIncompleteTaskCount}
-                        </div>
-                    </Link>
-                </Dropdown>
-            </Menu.Item>
-        );
-    });
-
     const getMenuItem = (
         link: string,
         title: string,
         incompletedTaskCount?: number
     ) => {
         return (
-            <Menu.Item key={link}>
-                <Link to={link}>
-                    <div style={{ float: "left" }}>{title}</div>
-                    <div style={{ float: "right", color: "grey" }}>
-                        {incompletedTaskCount}
-                    </div>
-                </Link>
-            </Menu.Item>
+            <Link to={link}>
+                <div style={{ float: "left" }}>{title}</div>
+                <div style={{ float: "right", color: "grey" }}>
+                    {incompletedTaskCount}
+                </div>
+            </Link>
         );
     };
 
+    const getFolderMenuItems = () => {
+        return folderStore.folders.map(f => {
+            const folderIncompleteTaskCount = taskStore.incompletedTasks.filter(
+                t => t.folderId === f.id
+            ).length;
+
+            const handleDeleteFolderButtonClick = async () => {
+                await folderStore.deleteFolder(f);
+            };
+
+            const contextMenu = {
+                items: [
+                    {
+                        label: "Удалить папку",
+                        key: "deleteFolder",
+                    },
+                ],
+                onClick: handleDeleteFolderButtonClick,
+            };
+
+            return {
+                key: `/folders/${f.id}`,
+                label: (
+                    <Dropdown
+                        key={f.id}
+                        menu={contextMenu}
+                        trigger={["contextMenu"]}>
+                        {getMenuItem(
+                            `/folders/${f.id}`,
+                            f.title,
+                            folderIncompleteTaskCount
+                        )}
+                    </Dropdown>
+                ),
+            };
+        });
+    };
+
+    const mainMenuItems: MenuItem[] = [
+        {
+            key: "/",
+            label: getMenuItem("/", "Главная"),
+        },
+        {
+            key: "/all",
+            label: getMenuItem("/all", "Все задачи", allIncompletedTaskCount),
+        },
+        {
+            key: "/today",
+            label: getMenuItem("/today", "Сегодня", todayIncompletedTaskCount),
+        },
+        {
+            key: "/inbox",
+            label: getMenuItem("/inbox", "Inbox", inboxIncompletedTasksCount),
+        },
+        {
+            type: "divider",
+        },
+        {
+            key: "/folders",
+            label: "Папки",
+            children: getFolderMenuItems(),
+        },
+        {
+            type: "divider",
+        },
+        {
+            key: "/trash",
+            label: getMenuItem("/trash", "Корзина"),
+        },
+    ];
+
     return (
         <Menu
+            items={mainMenuItems}
             mode="inline"
             selectedKeys={[location.pathname]}
             defaultOpenKeys={["/folders"]}
-            style={{ width: "270px" }}>
-            <Menu.Item key="/">
-                <Link to="/">Главная</Link>
-            </Menu.Item>
-            {getMenuItem("/all", "Все задачи", allIncompletedTaskCount)}
-            {getMenuItem("/today", "Сегодня", todayIncompletedTaskCount)}
-            {getMenuItem("/inbox", "Inbox", inboxIncompletedTasksCount)}
-            <Menu.Divider />
-            <Menu.SubMenu
-                key="/folders"
-                title="Папки">
-                {folderMenuItems}
-            </Menu.SubMenu>
-            <Menu.Divider />
-            {getMenuItem("/trash", "Корзина")}
-        </Menu>
+            style={{ width: "270px" }}
+        />
     );
 });
 
