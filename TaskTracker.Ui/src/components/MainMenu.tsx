@@ -1,16 +1,13 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Button, Dropdown, Menu, MenuProps } from "antd";
+import { Dropdown, Menu, MenuProps } from "antd";
 import { useStore } from "../stores/RootStore";
-import FolderCreationModal from "./FolderCreationModal";
+import FolderCreationModalButton from "./FolderCreationModalButton";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MainMenu: React.FC = observer(() => {
-    const [isFolderCreationModalOpen, setIsFolderCreationModalOpen] =
-        React.useState(false);
-
     const location = useLocation();
 
     const { taskStore, folderStore } = useStore();
@@ -38,14 +35,6 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
-    const handleCreateFolderButtonClick = () => {
-        setIsFolderCreationModalOpen(true);
-    };
-
-    const hideFolderCreationModal = () => {
-        setIsFolderCreationModalOpen(false);
-    };
-
     const getFolderMenuItem = () => {
         return (
             <>
@@ -53,11 +42,7 @@ const MainMenu: React.FC = observer(() => {
                 <div
                     onClick={e => e.stopPropagation()}
                     style={{ float: "right" }}>
-                    <Button onClick={handleCreateFolderButtonClick}>+</Button>
-                    <FolderCreationModal
-                        isModalOpen={isFolderCreationModalOpen}
-                        hideModal={hideFolderCreationModal}
-                    />
+                    <FolderCreationModalButton />
                 </div>
             </>
         );
