@@ -15,8 +15,6 @@ const TaskCreationForm: React.FC = observer(() => {
 
     const { taskStore, folderStore } = useStore();
 
-    const dayjsDueDateTime = dueDateTime !== null ? dayjs(dueDateTime) : null;
-
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
     };
@@ -65,7 +63,7 @@ const TaskCreationForm: React.FC = observer(() => {
             />
             <DatePicker
                 placeholder="Дата"
-                defaultValue={dayjsDueDateTime}
+                value={dueDateTime !== null ? dayjs(dueDateTime) : null}
                 onChange={handleDueDateTimeChange}
             />
             <Select
