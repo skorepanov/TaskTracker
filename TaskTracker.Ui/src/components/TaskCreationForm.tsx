@@ -5,7 +5,6 @@ import { Input, Select, DatePicker, Button, Space } from "antd";
 import { useStore } from "../stores/RootStore";
 
 const { TextArea } = Input;
-const { Option } = Select;
 
 const TaskCreationForm: React.FC = observer(() => {
     const [title, setTitle] = useState<string>("");
@@ -15,21 +14,19 @@ const TaskCreationForm: React.FC = observer(() => {
 
     const { taskStore, folderStore } = useStore();
 
-    const inboxOption = (
-        <Option
-            key={-1}
-            value={-1}>
-            Inbox
-        </Option>
-    );
+    const inboxId = -1;
 
-    const folderOptions = folderStore.folders.map(f => (
-        <Option
-            key={f.id}
-            value={f.id}>
-            {f.title}
-        </Option>
-    ));
+    const inboxOption = {
+        key: inboxId,
+        value: inboxId,
+        label: "<Inbox>",
+    };
+
+    const folderOptions = folderStore.folders.map(f => ({
+        key: f.id,
+        value: f.id,
+        label: f.title,
+    }));
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
@@ -54,7 +51,7 @@ const TaskCreationForm: React.FC = observer(() => {
     };
 
     const handleCreateTaskButtonClick = async () => {
-        const normalizedFolderId = folderId === -1 ? null : folderId;
+        const normalizedFolderId = folderId === inboxId ? null : folderId;
 
         await taskStore.createTask(
             title,
@@ -91,11 +88,13 @@ const TaskCreationForm: React.FC = observer(() => {
             />
             <Select
                 placeholder="Папка"
+                options={[inboxOption, ...folderOptions]}
                 value={folderId}
                 onChange={handleFolderChange}
-                style={{ width: 300 }}>
-                {[inboxOption, ...folderOptions]}
-            </Select>
+                showSearch
+                optionFilterProp="label"
+                style={{ width: 300 }}
+            />
             <Button
                 onClick={handleCreateTaskButtonClick}
                 disabled={isCreateTaskButtonDisabled()}>
