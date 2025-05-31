@@ -20,41 +20,41 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
 
     const textColor = isTaskCompleted ? "green" : "black";
 
-    const descriptionAsText = (
+    const descriptionComponent = (
         <>
             <i>{task.description}</i>
             <br />
         </>
     );
 
-    const completedDateTimeAsText = isTaskCompleted ? (
+    const completedDateTimeComponent = isTaskCompleted ? (
         <>
             Выполнено: {formatDateTime(task.completedDateTime)}
             <br />
         </>
     ) : null;
 
-    const dueDateTimeAsText =
+    const dueDateTimeComponent =
         task.dueDateTime !== null ? (
             <>Срок выполнения: {formatDateTime(task.dueDateTime)}</>
         ) : null;
 
-    const overdueDaysAsText =
+    const overdueDaysComponent =
         task.overdueDaysCount > 0 ? (
             <span style={{ color: isTaskCompleted ? "" : "red" }}>
                 ({task.overdueDaysCount} дней назад)
             </span>
         ) : null;
 
-    const overdueAsText =
+    const overdueComponent =
         task.dueDateTime !== null ? (
             <>
-                {dueDateTimeAsText} {overdueDaysAsText}
+                {dueDateTimeComponent} {overdueDaysComponent}
                 <br />
             </>
         ) : null;
 
-    const modifiedDateTimeAsText =
+    const modifiedDateTimeComponent =
         task.modifiedDateTime !== null ? (
             <>
                 <i>Изменена: {formatDateTime(task.modifiedDateTime)}</i>
@@ -87,10 +87,10 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
             />
             {task.title}
             <br />
-            {descriptionAsText}
-            {completedDateTimeAsText}
-            {overdueAsText}
-            {modifiedDateTimeAsText}
+            {descriptionComponent}
+            {completedDateTimeComponent}
+            {overdueComponent}
+            {modifiedDateTimeComponent}
             <i>Создана: {formatDateTime(task.createdDateTime)}</i>
             <br />
             <Button onClick={handleMoveToTrashButtonClick}>В корзину</Button>

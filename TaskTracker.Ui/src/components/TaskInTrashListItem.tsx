@@ -17,12 +17,12 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
 
         const isCompleted = task.completedDateTime !== null;
 
-        const description =
+        const descriptionComponent =
             task.description !== null && task.description.length > 0 ? (
                 <i>{task.description}</i>
             ) : null;
 
-        const movedToTrashDateTime =
+        const movedToTrashDateTimeComponent =
             task.movedToTrashDateTime !== null ? (
                 <>
                     Дата перемещения в корзину:{" "}
@@ -30,7 +30,7 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                 </>
             ) : null;
 
-        const modifiedDateTimeAsText =
+        const modifiedDateTimeComponent =
             task.modifiedDateTime !== null ? (
                 <>
                     <i>Изменена: {formatDateTime(task.modifiedDateTime)}</i>
@@ -55,11 +55,11 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                 />
                 {task.title}
                 <br />
-                {description}
+                {descriptionComponent}
                 <br />
-                {movedToTrashDateTime}
+                {movedToTrashDateTimeComponent}
                 <br />
-                {modifiedDateTimeAsText}
+                {modifiedDateTimeComponent}
                 <i>Создана: {formatDateTime(task.createdDateTime)}</i>
                 <br />
                 <Button onClick={handleRestoreTaskButtonClick}>
