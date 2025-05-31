@@ -11,9 +11,25 @@ const TaskCreationForm: React.FC = observer(() => {
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [dueDateTime, setDueDateTime] = useState<Date | null>(null);
-    const [folderId, setFolderId] = useState<number | null>(null);
+    const [folderId, setFolderId] = useState<number>(-1);
 
     const { taskStore, folderStore } = useStore();
+
+    const inboxOption = (
+        <Option
+            key={-1}
+            value={-1}>
+            Inbox
+        </Option>
+    );
+
+    const folderOptions = folderStore.folders.map(f => (
+        <Option
+            key={f.id}
+            value={f.id}>
+            {f.title}
+        </Option>
+    ));
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
@@ -38,12 +54,19 @@ const TaskCreationForm: React.FC = observer(() => {
     };
 
     const handleCreateTaskButtonClick = async () => {
-        await taskStore.createTask(title, description, dueDateTime, folderId);
+        const normalizedFolderId = folderId === -1 ? null : folderId;
+
+        await taskStore.createTask(
+            title,
+            description,
+            dueDateTime,
+            normalizedFolderId
+        );
 
         setTitle("");
         setDescription("");
         setDueDateTime(null);
-        setFolderId(null);
+        setFolderId(-1);
     };
 
     return (
@@ -68,15 +91,10 @@ const TaskCreationForm: React.FC = observer(() => {
             />
             <Select
                 placeholder="Папка"
+                value={folderId}
                 onChange={handleFolderChange}
                 style={{ width: 300 }}>
-                {folderStore.folders.map(f => (
-                    <Option
-                        key={f.id}
-                        value={f.id}>
-                        {f.title}
-                    </Option>
-                ))}
+                {[inboxOption, ...folderOptions]}
             </Select>
             <Button
                 onClick={handleCreateTaskButtonClick}
