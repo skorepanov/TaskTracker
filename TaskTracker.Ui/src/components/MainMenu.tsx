@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Dropdown, Menu, MenuProps, Tag } from "antd";
 import { useStore } from "../stores/RootStore";
+import IFolder from "../interfaces/IFolder";
 import FolderCreationModalButton from "./FolderCreationModalButton";
 import TagCreationModalButton from "./TagCreationModalButton";
 
@@ -49,40 +50,44 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
+    const getFolderMenuItem = (folder: IFolder) => {
+        const folderIncompleteTaskCount = taskStore.incompletedTasks.filter(
+            t => t.folderId === folder.id
+        ).length;
+
+        const handleDeleteFolderButtonClick = async () => {
+            await folderStore.deleteFolder(folder);
+        };
+
+        const contextMenu = {
+            items: [
+                {
+                    label: "Удалить папку",
+                    key: "deleteFolder",
+                },
+            ],
+            onClick: handleDeleteFolderButtonClick,
+        };
+
+        return (
+            <Dropdown
+                key={folder.id}
+                menu={contextMenu}
+                trigger={["contextMenu"]}>
+                {getMenuItem(
+                    `/folders/${folder.id}`,
+                    folder.title,
+                    folderIncompleteTaskCount
+                )}
+            </Dropdown>
+        );
+    };
+
     const getFolderMenuItems = () => {
         return folderStore.folders.map(f => {
-            const folderIncompleteTaskCount = taskStore.incompletedTasks.filter(
-                t => t.folderId === f.id
-            ).length;
-
-            const handleDeleteFolderButtonClick = async () => {
-                await folderStore.deleteFolder(f);
-            };
-
-            const contextMenu = {
-                items: [
-                    {
-                        label: "Удалить папку",
-                        key: "deleteFolder",
-                    },
-                ],
-                onClick: handleDeleteFolderButtonClick,
-            };
-
             return {
                 key: `/folders/${f.id}`,
-                label: (
-                    <Dropdown
-                        key={f.id}
-                        menu={contextMenu}
-                        trigger={["contextMenu"]}>
-                        {getMenuItem(
-                            `/folders/${f.id}`,
-                            f.title,
-                            folderIncompleteTaskCount
-                        )}
-                    </Dropdown>
-                ),
+                label: getFolderMenuItem(f),
             };
         });
     };
