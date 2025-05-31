@@ -11,21 +11,15 @@ import TaskInTrashList from "./components/TaskInTrashList";
 import FolderTaskList from "./components/FolderTaskList";
 
 const App: React.FC = observer(() => {
-    const { taskStore, folderStore, tagStore } = useStore();
+    const rootStore = useStore();
 
     useEffect(() => {
-        const loadData = async () => {
-            await Promise.all([
-                taskStore.fetchIncompleteTasks(),
-                taskStore.fetchCompletedTasks(),
-                taskStore.fetchTasksInTrash(),
-                folderStore.fetchFolders(),
-                tagStore.fetchTags(),
-            ]);
+        const fetchInitialData = async () => {
+            await rootStore.fetchInitialData();
         };
 
-        loadData();
-    }, [taskStore, folderStore, tagStore]);
+        fetchInitialData().catch(console.error);
+    }, [rootStore]);
 
     return (
         <BrowserRouter>

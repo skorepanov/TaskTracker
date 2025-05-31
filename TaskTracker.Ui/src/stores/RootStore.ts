@@ -13,6 +13,16 @@ class RootStore {
         this.folderStore = new FolderStore();
         this.tagStore = new TagStore();
     }
+
+    fetchInitialData = async () => {
+        await Promise.all([
+            this.taskStore.fetchIncompleteTasks(),
+            this.taskStore.fetchCompletedTasks(),
+            this.taskStore.fetchTasksInTrash(),
+            this.folderStore.fetchFolders(),
+            this.tagStore.fetchTags(),
+        ]);
+    };
 }
 
 const rootStore = new RootStore();
