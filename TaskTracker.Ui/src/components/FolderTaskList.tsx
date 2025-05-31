@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Divider } from "antd";
 import { useStore } from "../stores/RootStore";
 import TaskListItem from "./TaskListItem";
+import NoTasks from "./NoTasks";
 
 const FolderTaskList: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
@@ -39,8 +40,12 @@ const FolderTaskList: React.FC = observer(() => {
         <>
             <strong>{folder?.title}</strong>
             <Divider />
-            {incompletedTaskComponents}
-            <Divider />
+            {incompletedTaskComponents.length > 0 ? (
+                incompletedTaskComponents
+            ) : (
+                <NoTasks />
+            )}
+            {completedTaskComponents.length > 0 ? <Divider /> : null}
             {completedTaskComponents}
         </>
     );
