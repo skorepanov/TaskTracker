@@ -47,7 +47,7 @@ const FolderTaskList: React.FC = observer(() => {
                 <strong>{folder.title}</strong>
             </div>
             <div style={{ float: "right" }}>
-                <TaskCreationModalButton />
+                <TaskCreationModalButton folderId={folder.id} />
             </div>
             <Divider />
             {incompletedTaskComponents.length > 0 ? (

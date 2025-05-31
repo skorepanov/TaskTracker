@@ -7,6 +7,7 @@ import dayjs, { Dayjs } from "dayjs";
 const { TextArea } = Input;
 
 interface ITaskCreationModalProps {
+    folderId: number | null;
     isModalOpen: boolean;
     hideModal: () => void;
 }
@@ -17,7 +18,7 @@ const TaskCreationModal: React.FC<ITaskCreationModalProps> = observer(props => {
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [dueDateTime, setDueDateTime] = useState<Date | null>(null);
-    const [folderId, setFolderId] = useState<number>(inboxId);
+    const [folderId, setFolderId] = useState<number>(props.folderId ?? inboxId);
 
     const { taskStore, folderStore } = useStore();
 

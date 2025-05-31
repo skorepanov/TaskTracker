@@ -3,26 +3,35 @@ import { observer } from "mobx-react-lite";
 import { Button } from "antd";
 import TaskCreationalModal from "./TaskCreationalModal";
 
-const TaskCreationModalButton: React.FC = observer(() => {
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
+interface ITaskCreationalModalProps {
+    folderId: number | null;
+}
 
-    const handleCreateTaskButtonClick = () => {
-        setIsModalOpen(true);
-    };
+const TaskCreationModalButton: React.FC<ITaskCreationalModalProps> = observer(
+    props => {
+        const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-    const hideTaskCreationModal = () => {
-        setIsModalOpen(false);
-    };
+        const handleCreateTaskButtonClick = () => {
+            setIsModalOpen(true);
+        };
 
-    return (
-        <>
-            <Button onClick={handleCreateTaskButtonClick}>Новая задача</Button>
-            <TaskCreationalModal
-                isModalOpen={isModalOpen}
-                hideModal={hideTaskCreationModal}
-            />
-        </>
-    );
-});
+        const hideTaskCreationModal = () => {
+            setIsModalOpen(false);
+        };
+
+        return (
+            <>
+                <Button onClick={handleCreateTaskButtonClick}>
+                    Новая задача
+                </Button>
+                <TaskCreationalModal
+                    folderId={props.folderId}
+                    isModalOpen={isModalOpen}
+                    hideModal={hideTaskCreationModal}
+                />
+            </>
+        );
+    }
+);
 
 export default TaskCreationModalButton;
