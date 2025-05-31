@@ -102,10 +102,6 @@ const MainMenu: React.FC = observer(() => {
 
     const mainMenuItems: MenuItem[] = [
         {
-            key: "/",
-            label: getMenuItem("/", "Главная"),
-        },
-        {
             key: "/all",
             label: getMenuItem("/all", "Все задачи", allIncompletedTaskCount),
         },

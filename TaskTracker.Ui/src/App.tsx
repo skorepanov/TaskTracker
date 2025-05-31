@@ -34,10 +34,6 @@ const App: React.FC = observer(() => {
                 <MainMenu />
                 <Routes>
                     <Route
-                        path="/"
-                        element={null}
-                    />
-                    <Route
                         path="/all"
                         element={<AllTaskList />}
                     />
