@@ -33,7 +33,7 @@ const InboxTaskList: React.FC = observer(() => {
                 <strong>Inbox</strong>
             </div>
             <div style={{ float: "right" }}>
-                <TaskCreationModalButton folderId={null} />
+                <TaskCreationModalButton />
             </div>
             <Divider />
             {incompletedTaskComponents.length > 0 ? (

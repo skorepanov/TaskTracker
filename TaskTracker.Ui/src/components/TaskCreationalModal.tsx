@@ -7,7 +7,7 @@ import dayjs, { Dayjs } from "dayjs";
 const { TextArea } = Input;
 
 interface ITaskCreationModalProps {
-    folderId: number | null;
+    folderId?: number;
     isModalOpen: boolean;
     hideModal: () => void;
 }

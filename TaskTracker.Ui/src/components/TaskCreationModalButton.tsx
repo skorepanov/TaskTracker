@@ -4,7 +4,7 @@ import { Button } from "antd";
 import TaskCreationalModal from "./TaskCreationalModal";
 
 interface ITaskCreationalModalProps {
-    folderId: number | null;
+    folderId?: number;
 }
 
 const TaskCreationModalButton: React.FC<ITaskCreationalModalProps> = observer(
