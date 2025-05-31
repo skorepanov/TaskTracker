@@ -22,7 +22,7 @@ const MainMenu: React.FC = observer(() => {
     const inboxIncompletedTasksCount =
         taskStore.getInboxIncompletedTasks().length;
 
-    const getMenuItem = (
+    const getLabel = (
         link: string,
         title: string,
         incompletedTaskCount?: number
@@ -37,7 +37,7 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
-    const getFolderRootMenuItem = () => {
+    const getFolderRootLabel = () => {
         return (
             <>
                 <div style={{ float: "left" }}>Папки</div>
@@ -50,7 +50,7 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
-    const getFolderMenuItem = (folder: IFolder) => {
+    const getFolderLabel = (folder: IFolder) => {
         const folderIncompleteTaskCount = taskStore.incompletedTasks.filter(
             t => t.folderId === folder.id
         ).length;
@@ -74,7 +74,7 @@ const MainMenu: React.FC = observer(() => {
                 key={folder.id}
                 menu={contextMenu}
                 trigger={["contextMenu"]}>
-                {getMenuItem(
+                {getLabel(
                     `/folders/${folder.id}`,
                     folder.title,
                     folderIncompleteTaskCount
@@ -83,16 +83,16 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
-    const getFolderMenuItems = () => {
+    const getFolderChildren = () => {
         return folderStore.folders.map(f => {
             return {
                 key: `/folders/${f.id}`,
-                label: getFolderMenuItem(f),
+                label: getFolderLabel(f),
             };
         });
     };
 
-    const getTagRootMenuItem = () => {
+    const getTagRootLabel = () => {
         return (
             <>
                 <div style={{ float: "left" }}>Теги</div>
@@ -105,7 +105,7 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
-    const getTagMenuItems = () => {
+    const getTagChildren = () => {
         return tagStore.tags.map(t => {
             return {
                 key: `/tags/${t.id}`,
@@ -125,38 +125,38 @@ const MainMenu: React.FC = observer(() => {
     const mainMenuItems: MenuItem[] = [
         {
             key: "/all",
-            label: getMenuItem("/all", "Все задачи", allIncompletedTaskCount),
+            label: getLabel("/all", "Все задачи", allIncompletedTaskCount),
         },
         {
             key: "/today",
-            label: getMenuItem("/today", "Сегодня", todayIncompletedTaskCount),
+            label: getLabel("/today", "Сегодня", todayIncompletedTaskCount),
         },
         {
             key: "/inbox",
-            label: getMenuItem("/inbox", "Inbox", inboxIncompletedTasksCount),
+            label: getLabel("/inbox", "Inbox", inboxIncompletedTasksCount),
         },
         {
             type: "divider",
         },
         {
             key: "/folders",
-            label: getFolderRootMenuItem(),
-            children: getFolderMenuItems(),
+            label: getFolderRootLabel(),
+            children: getFolderChildren(),
         },
         {
             type: "divider",
         },
         {
             key: "/tags",
-            label: getTagRootMenuItem(),
-            children: getTagMenuItems(),
+            label: getTagRootLabel(),
+            children: getTagChildren(),
         },
         {
             type: "divider",
         },
         {
             key: "/trash",
-            label: getMenuItem("/trash", "Корзина"),
+            label: getLabel("/trash", "Корзина"),
         },
     ];
 
