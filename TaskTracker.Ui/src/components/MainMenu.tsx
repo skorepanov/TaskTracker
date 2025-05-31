@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Dropdown, Menu, MenuProps, Tag } from "antd";
 import { useStore } from "../stores/RootStore";
 import IFolder from "../interfaces/IFolder";
+import ITag from "../interfaces/ITag";
 import FolderCreationModalButton from "./FolderCreationModalButton";
 import TagCreationModalButton from "./TagCreationModalButton";
 
@@ -62,8 +63,8 @@ const MainMenu: React.FC = observer(() => {
         const contextMenu = {
             items: [
                 {
-                    label: "Удалить папку",
                     key: "deleteFolder",
+                    label: "Удалить папку",
                 },
             ],
             onClick: handleDeleteFolderButtonClick,
@@ -105,19 +106,42 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
+    const getTagLabel = (tag: ITag) => {
+        const handleDeleteTagButtonClick = async () => {
+            await tagStore.deleteTag(tag);
+        };
+
+        const contextMenu = {
+            items: [
+                {
+                    key: "deleteTag",
+                    label: "Удалить тег",
+                },
+            ],
+            onClick: handleDeleteTagButtonClick,
+        };
+
+        return (
+            <Dropdown
+                key={tag.id}
+                menu={contextMenu}
+                trigger={["contextMenu"]}>
+                <Link to={`/tags/${tag.id}`}>
+                    <Tag color={`#${tag.color}`}>
+                        <div style={{ mixBlendMode: "difference" }}>
+                            {tag.title}
+                        </div>
+                    </Tag>
+                </Link>
+            </Dropdown>
+        );
+    };
+
     const getTagChildren = () => {
         return tagStore.tags.map(t => {
             return {
                 key: `/tags/${t.id}`,
-                label: (
-                    <Link to={`/tags/${t.id}`}>
-                        <Tag color={`#${t.color}`}>
-                            <div style={{ mixBlendMode: "difference" }}>
-                                {t.title}
-                            </div>
-                        </Tag>
-                    </Link>
-                ),
+                label: getTagLabel(t),
             };
         });
     };

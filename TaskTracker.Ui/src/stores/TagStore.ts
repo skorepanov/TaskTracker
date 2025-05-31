@@ -34,6 +34,16 @@ class TagStore {
             this.tags.push(createdTag);
         });
     };
+
+    deleteTag = async (tag: ITag) => {
+        const url = `${AppUrl}/tags/${tag.id}`;
+
+        await Api.delete(url);
+
+        runInAction(() => {
+            this.tags = this.tags.filter(t => t.id !== tag.id);
+        });
+    };
 }
 
 export default TagStore;
