@@ -11,7 +11,7 @@ type MenuItem = Required<MenuProps>["items"][number];
 const MainMenu: React.FC = observer(() => {
     const location = useLocation();
 
-    const { taskStore, folderStore } = useStore();
+    const { taskStore, folderStore, tagStore } = useStore();
 
     const allIncompletedTaskCount = taskStore.incompletedTasks.length;
 
@@ -100,6 +100,15 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
+    const getTagMenuItems = () => {
+        return tagStore.tags.map(t => {
+            return {
+                key: `/tags/${t.id}`,
+                label: getMenuItem(`/tags/${t.id}`, t.title),
+            };
+        });
+    };
+
     const mainMenuItems: MenuItem[] = [
         {
             key: "/all",
@@ -127,6 +136,7 @@ const MainMenu: React.FC = observer(() => {
         {
             key: "/tags",
             label: getTagMenuItem(),
+            children: getTagMenuItems(),
         },
         {
             type: "divider",

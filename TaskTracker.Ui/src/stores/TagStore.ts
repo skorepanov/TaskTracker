@@ -9,6 +9,16 @@ class TagStore {
         makeAutoObservable(this);
     }
 
+    fetchTags = async () => {
+        const url = `${AppUrl}/tags`;
+
+        const tags = await Api.get<ITag[]>(url);
+
+        runInAction(() => {
+            this.tags = tags;
+        });
+    };
+
     createTag = async (title: string, color: string) => {
         const url = `${AppUrl}/tags`;
 
