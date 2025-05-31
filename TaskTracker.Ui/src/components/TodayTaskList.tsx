@@ -4,6 +4,7 @@ import { Divider } from "antd";
 import { useStore } from "../stores/RootStore";
 import TaskListItem from "./TaskListItem";
 import NoTasks from "./NoTasks";
+import TaskCreationModalButton from "./TaskCreationModalButton";
 
 const TodayTaskList: React.FC = observer(() => {
     const { taskStore } = useStore();
@@ -28,7 +29,12 @@ const TodayTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <strong>Задачи на сегодня</strong>
+            <div style={{ float: "left" }}>
+                <strong>Задачи на сегодня</strong>
+            </div>
+            <div style={{ float: "right" }}>
+                <TaskCreationModalButton dueDateTime={new Date()} />
+            </div>
             <Divider />
             {incompletedTaskComponents.length > 0 ? (
                 incompletedTaskComponents

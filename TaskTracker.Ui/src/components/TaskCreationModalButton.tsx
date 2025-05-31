@@ -4,6 +4,7 @@ import { Button } from "antd";
 import TaskCreationalModal from "./TaskCreationalModal";
 
 interface ITaskCreationalModalProps {
+    dueDateTime?: Date;
     folderId?: number;
 }
 
@@ -25,6 +26,7 @@ const TaskCreationModalButton: React.FC<ITaskCreationalModalProps> = observer(
                     Новая задача
                 </Button>
                 <TaskCreationalModal
+                    dueDateTime={props.dueDateTime}
                     folderId={props.folderId}
                     isModalOpen={isModalOpen}
                     hideModal={hideTaskCreationModal}
