@@ -5,9 +5,12 @@ import { useStore } from "../stores/RootStore";
 import { formatDateTime } from "../utils";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import ITask from "../interfaces/ITask";
+import IFolder from "../interfaces/IFolder";
 
 interface ITaskListItemProps {
     task: ITask;
+    shouldShowFolder?: boolean;
+    folder?: IFolder;
 }
 
 const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
@@ -20,12 +23,19 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
 
     const textColor = isTaskCompleted ? "green" : "black";
 
-    const descriptionComponent = (
+    const folderComponent = props.shouldShowFolder ? (
         <>
-            <i>{task.description}</i>
+            Папка: {props.folder?.title ?? "<Inbox>"}
             <br />
         </>
-    );
+    ) : null;
+
+    const descriptionComponent = task.description ? (
+        <>
+            Описание: {task.description}
+            <br />
+        </>
+    ) : null;
 
     const completedDateTimeComponent = isTaskCompleted ? (
         <>
@@ -87,6 +97,7 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
             />
             {task.title}
             <br />
+            {folderComponent}
             {descriptionComponent}
             {completedDateTimeComponent}
             {overdueComponent}

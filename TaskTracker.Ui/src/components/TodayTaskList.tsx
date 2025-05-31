@@ -7,7 +7,7 @@ import NoTasks from "./NoTasks";
 import TaskCreationModalButton from "./TaskCreationModalButton";
 
 const TodayTaskList: React.FC = observer(() => {
-    const { taskStore } = useStore();
+    const { taskStore, folderStore } = useStore();
 
     const incompletedTaskComponents = taskStore
         .getTodayIncompletedTasks()
@@ -15,6 +15,8 @@ const TodayTaskList: React.FC = observer(() => {
             <TaskListItem
                 key={`today-${t.id}`}
                 task={t}
+                shouldShowFolder={true}
+                folder={folderStore.folders.find(f => f.id === t.folderId)}
             />
         ));
 
@@ -24,6 +26,8 @@ const TodayTaskList: React.FC = observer(() => {
             <TaskListItem
                 key={`today-${t.id}`}
                 task={t}
+                shouldShowFolder={true}
+                folder={folderStore.folders.find(f => f.id === t.folderId)}
             />
         ));
 

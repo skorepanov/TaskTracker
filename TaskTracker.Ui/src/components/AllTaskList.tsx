@@ -7,12 +7,14 @@ import NoTasks from "./NoTasks";
 import TaskCreationModalButton from "./TaskCreationModalButton";
 
 const AllTaskList: React.FC = observer(() => {
-    const { taskStore } = useStore();
+    const { taskStore, folderStore } = useStore();
 
     const incompletedTaskComponents = taskStore.incompletedTasks.map(t => (
         <TaskListItem
             key={`inbox-${t.id}`}
             task={t}
+            shouldShowFolder={true}
+            folder={folderStore.folders.find(f => f.id === t.folderId)}
         />
     ));
 
@@ -20,6 +22,8 @@ const AllTaskList: React.FC = observer(() => {
         <TaskListItem
             key={`inbox-${t.id}`}
             task={t}
+            shouldShowFolder={true}
+            folder={folderStore.folders.find(f => f.id === t.folderId)}
         />
     ));
 
