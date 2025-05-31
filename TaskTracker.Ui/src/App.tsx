@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite";
 import { Space } from "antd";
 import { useStore } from "./stores/RootStore";
 import MainMenu from "./components/MainMenu";
-import TaskCreationForm from "./components/TaskCreationForm";
 import AllTaskList from "./components/AllTaskList";
 import InboxTaskList from "./components/InboxTaskList";
 import TodayTaskList from "./components/TodayTaskList";
@@ -36,7 +35,7 @@ const App: React.FC = observer(() => {
                 <Routes>
                     <Route
                         path="/"
-                        element={<TaskCreationForm />}
+                        element={null}
                     />
                     <Route
                         path="/all"

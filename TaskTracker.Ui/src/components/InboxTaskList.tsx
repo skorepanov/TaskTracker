@@ -4,6 +4,7 @@ import { Divider } from "antd";
 import { useStore } from "../stores/RootStore";
 import TaskListItem from "./TaskListItem";
 import NoTasks from "./NoTasks";
+import TaskCreationModalButton from "./TaskCreationModalButton";
 
 const InboxTaskList: React.FC = observer(() => {
     const { taskStore } = useStore();
@@ -28,7 +29,12 @@ const InboxTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <strong>Inbox</strong>
+            <div style={{ float: "left" }}>
+                <strong>Inbox</strong>
+            </div>
+            <div style={{ float: "right" }}>
+                <TaskCreationModalButton />
+            </div>
             <Divider />
             {incompletedTaskComponents.length > 0 ? (
                 incompletedTaskComponents
