@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Dropdown, Menu, MenuProps } from "antd";
+import { Dropdown, Menu, MenuProps, Tag } from "antd";
 import { useStore } from "../stores/RootStore";
 import FolderCreationModalButton from "./FolderCreationModalButton";
 import TagCreationModalButton from "./TagCreationModalButton";
@@ -36,7 +36,7 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
-    const getFolderMenuItem = () => {
+    const getFolderRootMenuItem = () => {
         return (
             <>
                 <div style={{ float: "left" }}>Папки</div>
@@ -87,7 +87,7 @@ const MainMenu: React.FC = observer(() => {
         });
     };
 
-    const getTagMenuItem = () => {
+    const getTagRootMenuItem = () => {
         return (
             <>
                 <div style={{ float: "left" }}>Теги</div>
@@ -104,7 +104,15 @@ const MainMenu: React.FC = observer(() => {
         return tagStore.tags.map(t => {
             return {
                 key: `/tags/${t.id}`,
-                label: getMenuItem(`/tags/${t.id}`, t.title),
+                label: (
+                    <Link to={`/tags/${t.id}`}>
+                        <Tag color={`#${t.color}`}>
+                            <div style={{ mixBlendMode: "difference" }}>
+                                {t.title}
+                            </div>
+                        </Tag>
+                    </Link>
+                ),
             };
         });
     };
@@ -127,7 +135,7 @@ const MainMenu: React.FC = observer(() => {
         },
         {
             key: "/folders",
-            label: getFolderMenuItem(),
+            label: getFolderRootMenuItem(),
             children: getFolderMenuItems(),
         },
         {
@@ -135,7 +143,7 @@ const MainMenu: React.FC = observer(() => {
         },
         {
             key: "/tags",
-            label: getTagMenuItem(),
+            label: getTagRootMenuItem(),
             children: getTagMenuItems(),
         },
         {
