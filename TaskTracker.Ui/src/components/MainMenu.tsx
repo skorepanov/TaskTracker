@@ -107,6 +107,10 @@ const MainMenu: React.FC = observer(() => {
     };
 
     const getTagLabel = (tag: ITag) => {
+        const tagIncompleteTaskCount = taskStore.incompletedTasks.filter(t =>
+            t.tagIds?.includes(tag.id)
+        ).length;
+
         const handleDeleteTagButtonClick = async () => {
             await tagStore.deleteTag(tag);
         };
@@ -127,11 +131,16 @@ const MainMenu: React.FC = observer(() => {
                 menu={contextMenu}
                 trigger={["contextMenu"]}>
                 <Link to={`/tags/${tag.id}`}>
-                    <Tag color={`#${tag.color}`}>
-                        <div style={{ mixBlendMode: "difference" }}>
-                            {tag.title}
-                        </div>
-                    </Tag>
+                    <div style={{ float: "left" }}>
+                        <Tag color={`#${tag.color}`}>
+                            <div style={{ mixBlendMode: "difference" }}>
+                                {tag.title}
+                            </div>
+                        </Tag>
+                    </div>
+                    <div style={{ float: "right", color: "grey" }}>
+                        {tagIncompleteTaskCount}
+                    </div>
                 </Link>
             </Dropdown>
         );

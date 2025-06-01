@@ -7,6 +7,7 @@ export default interface ITask {
     dueDateTime: Date | null;
     overdueDaysCount: number;
     movedToTrashDateTime: Date | null;
+    tagIds: number[] | null;
     createdDateTime: Date;
     modifiedDateTime: Date | null;
 }
