@@ -17,6 +17,8 @@ public class UserTask
     public DateTime? MovedToTrashDateTime { get; private set; }
     public bool IsInTrash => MovedToTrashDateTime is not null;
 
+    public List<Tag> Tags { get; private set; }
+
     public DateTime CreatedDateTime { get; private set; }
 
     public DateTime? ModifiedDateTime { get; private set; }
