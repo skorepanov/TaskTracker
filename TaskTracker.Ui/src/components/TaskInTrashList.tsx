@@ -9,7 +9,7 @@ const TaskInTrashList: React.FC = observer(() => {
 
     const taskComponents = taskStore.tasksMovedToTrash.map(t => (
         <TaskInTrashListItem
-            key={`trash-${t.id}`}
+            key={t.id}
             task={t}
         />
     ));

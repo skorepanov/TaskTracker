@@ -13,7 +13,7 @@ const InboxTaskList: React.FC = observer(() => {
         .getInboxIncompletedTasks()
         .map(t => (
             <TaskListItem
-                key={`inbox-${t.id}`}
+                key={t.id}
                 task={t}
             />
         ));
@@ -22,7 +22,7 @@ const InboxTaskList: React.FC = observer(() => {
         .getInboxCompletedTasks()
         .map(t => (
             <TaskListItem
-                key={`inbox-${t.id}`}
+                key={t.id}
                 task={t}
             />
         ));

@@ -11,7 +11,7 @@ const AllTaskList: React.FC = observer(() => {
 
     const incompletedTaskComponents = taskStore.incompletedTasks.map(t => (
         <TaskListItem
-            key={`inbox-${t.id}`}
+            key={t.id}
             task={t}
             shouldShowFolder={true}
             folder={folderStore.folders.find(f => f.id === t.folderId)}
@@ -20,7 +20,7 @@ const AllTaskList: React.FC = observer(() => {
 
     const completedTaskComponents = taskStore.completedTasks.map(t => (
         <TaskListItem
-            key={`inbox-${t.id}`}
+            key={t.id}
             task={t}
             shouldShowFolder={true}
             folder={folderStore.folders.find(f => f.id === t.folderId)}

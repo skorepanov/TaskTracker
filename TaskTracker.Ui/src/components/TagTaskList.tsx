@@ -16,7 +16,7 @@ const TagTaskList: React.FC = observer(() => {
     const tag = tagStore.tags.find(f => f.id === tagId);
 
     if (!tag) {
-        return null;
+        return <NoTasks />;
     }
 
     const incompletedTasks = taskStore.incompletedTasks.filter(t =>
@@ -25,7 +25,7 @@ const TagTaskList: React.FC = observer(() => {
 
     const incompletedTaskComponents = incompletedTasks.map(t => (
         <TaskListItem
-            key={`tag-${t.id}`}
+            key={t.id}
             task={t}
             shouldShowFolder={true}
             folder={folderStore.folders.find(f => f.id === t.folderId)}
@@ -38,7 +38,7 @@ const TagTaskList: React.FC = observer(() => {
 
     const completedTaskComponents = completedTasks.map(t => (
         <TaskListItem
-            key={`today-${t.id}`}
+            key={t.id}
             task={t}
             shouldShowFolder={true}
             folder={folderStore.folders.find(f => f.id === t.folderId)}

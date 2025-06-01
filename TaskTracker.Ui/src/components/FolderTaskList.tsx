@@ -16,7 +16,7 @@ const FolderTaskList: React.FC = observer(() => {
     const folder = folderStore.folders.find(f => f.id === folderId);
 
     if (!folder) {
-        return null;
+        return <NoTasks />;
     }
 
     const incompletedTasks = taskStore.incompletedTasks.filter(
@@ -25,7 +25,7 @@ const FolderTaskList: React.FC = observer(() => {
 
     const incompletedTaskComponents = incompletedTasks.map(t => (
         <TaskListItem
-            key={`today-${t.id}`}
+            key={t.id}
             task={t}
         />
     ));
@@ -36,7 +36,7 @@ const FolderTaskList: React.FC = observer(() => {
 
     const completedTaskComponents = completedTasks.map(t => (
         <TaskListItem
-            key={`today-${t.id}`}
+            key={t.id}
             task={t}
         />
     ));
