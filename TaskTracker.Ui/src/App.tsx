@@ -9,6 +9,7 @@ import InboxTaskList from "./components/InboxTaskList";
 import TodayTaskList from "./components/TodayTaskList";
 import TaskInTrashList from "./components/TaskInTrashList";
 import FolderTaskList from "./components/FolderTaskList";
+import TagTaskList from "./components/TagTaskList";
 
 const App: React.FC = observer(() => {
     const rootStore = useStore();
@@ -55,6 +56,14 @@ const App: React.FC = observer(() => {
                             <Route
                                 path=":id"
                                 element={<FolderTaskList />}
+                            />
+                        </Route>
+                        <Route
+                            path="/tags"
+                            element={<TagTaskList />}>
+                            <Route
+                                path=":id"
+                                element={<TagTaskList />}
                             />
                         </Route>
                     </Routes>

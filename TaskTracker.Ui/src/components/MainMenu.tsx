@@ -7,6 +7,7 @@ import IFolder from "../interfaces/IFolder";
 import ITag from "../interfaces/ITag";
 import FolderCreationModalButton from "./FolderCreationModalButton";
 import TagCreationModalButton from "./TagCreationModalButton";
+import UserTaskTag from "./UserTaskTag";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -132,11 +133,7 @@ const MainMenu: React.FC = observer(() => {
                 trigger={["contextMenu"]}>
                 <Link to={`/tags/${tag.id}`}>
                     <div style={{ float: "left" }}>
-                        <Tag color={`#${tag.color}`}>
-                            <div style={{ mixBlendMode: "difference" }}>
-                                {tag.title}
-                            </div>
-                        </Tag>
+                        <UserTaskTag tag={tag} />
                     </div>
                     <div style={{ float: "right", color: "grey" }}>
                         {tagIncompleteTaskCount}
