@@ -8,12 +8,13 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
 {
     public async Task<UserTask?> GetTask(int taskId)
     {
-        return await _db.Tasks.FindAsync(taskId);
+        return await GetTasksWithTags()
+            .SingleOrDefaultAsync(t => t.Id == taskId);
     }
 
     public async Task<IReadOnlyList<UserTask>> GetIncompletedTasks()
     {
-        return await _db.Tasks
+        return await GetTasksWithTags()
             .Where(t => t.MovedToTrashDateTime == null
                      && t.CompletedDateTime == null)
             .ToListAsync();
@@ -21,7 +22,7 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
 
     public async Task<IReadOnlyList<UserTask>> GetCompletedTasks()
     {
-        return await _db.Tasks
+        return await GetTasksWithTags()
             .Where(t => t.MovedToTrashDateTime == null
                      && t.CompletedDateTime != null)
             .ToListAsync();
@@ -29,9 +30,14 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
 
     public async Task<IReadOnlyList<UserTask>> GetTasksInTrash()
     {
-        return await _db.Tasks
+        return await GetTasksWithTags()
             .Where(t => t.MovedToTrashDateTime != null)
             .ToListAsync();
+    }
+
+    private IQueryable<UserTask> GetTasksWithTags()
+    {
+        return _db.Tasks.Include(t => t.Tags);
     }
 
     public async Task CreateTask(UserTask task)

@@ -56,6 +56,11 @@ public record UserTaskVm
     public bool IsInTrash { get; }
 
     /// <summary>
+    /// Идентификаторы тегов
+    /// </summary>
+    public IReadOnlyList<int>? TagIds { get; }
+
+    /// <summary>
     /// Дата создания задачи
     /// </summary>
     public DateTime CreatedDateTime { get; }
@@ -80,6 +85,7 @@ public record UserTaskVm
         OverdueDaysCount = task.CalculateOverdueDays(today);
         MovedToTrashDateTime = task.MovedToTrashDateTime;
         IsInTrash = task.IsInTrash;
+        TagIds = task.Tags?.Count > 0 ? task.Tags.Select(t => t.Id).ToList() : null;
         CreatedDateTime = task.CreatedDateTime;
         ModifiedDateTime = task.ModifiedDateTime;
     }
