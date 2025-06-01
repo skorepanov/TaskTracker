@@ -190,7 +190,6 @@ const MainMenu: React.FC = observer(() => {
             mode="inline"
             selectedKeys={[location.pathname]}
             defaultOpenKeys={["/folders"]}
-            style={{ width: "270px" }}
         />
     );
 });

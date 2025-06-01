@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Space } from "antd";
+import { Splitter } from "antd";
 import { useStore } from "./stores/RootStore";
 import MainMenu from "./components/MainMenu";
 import AllTaskList from "./components/AllTaskList";
@@ -23,37 +23,43 @@ const App: React.FC = observer(() => {
 
     return (
         <BrowserRouter>
-            <Space
-                direction="horizontal"
-                align="start">
-                <MainMenu />
-                <Routes>
-                    <Route
-                        path="/all"
-                        element={<AllTaskList />}
-                    />
-                    <Route
-                        path="/inbox"
-                        element={<InboxTaskList />}
-                    />
-                    <Route
-                        path="/today"
-                        element={<TodayTaskList />}
-                    />
-                    <Route
-                        path="/trash"
-                        element={<TaskInTrashList />}
-                    />
-                    <Route
-                        path="/folders"
-                        element={<FolderTaskList />}>
+            <Splitter>
+                <Splitter.Panel
+                    defaultSize="270"
+                    min="10%"
+                    max="30%"
+                    style={{ height: "100%" }}>
+                    <MainMenu />
+                </Splitter.Panel>
+                <Splitter.Panel>
+                    <Routes>
                         <Route
-                            path=":id"
-                            element={<FolderTaskList />}
+                            path="/all"
+                            element={<AllTaskList />}
                         />
-                    </Route>
-                </Routes>
-            </Space>
+                        <Route
+                            path="/inbox"
+                            element={<InboxTaskList />}
+                        />
+                        <Route
+                            path="/today"
+                            element={<TodayTaskList />}
+                        />
+                        <Route
+                            path="/trash"
+                            element={<TaskInTrashList />}
+                        />
+                        <Route
+                            path="/folders"
+                            element={<FolderTaskList />}>
+                            <Route
+                                path=":id"
+                                element={<FolderTaskList />}
+                            />
+                        </Route>
+                    </Routes>
+                </Splitter.Panel>
+            </Splitter>
         </BrowserRouter>
     );
 });
