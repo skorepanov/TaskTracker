@@ -144,7 +144,7 @@ const MainMenu: React.FC = observer(() => {
     };
 
     const getTagChildren = () => {
-        return tagStore.tags.map(t => {
+        return tagStore.getSortedTags().map(t => {
             return {
                 key: `/tags/${t.id}`,
                 label: getTagLabel(t),

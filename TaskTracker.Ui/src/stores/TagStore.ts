@@ -44,6 +44,12 @@ class TagStore {
             this.tags = this.tags.filter(t => t.id !== tag.id);
         });
     };
+
+    getSortedTags = () => {
+        const sortedTags = this.tags.slice();
+        sortedTags.sort((t1, t2) => t1.title.localeCompare(t2.title));
+        return sortedTags;
+    };
 }
 
 export default TagStore;
