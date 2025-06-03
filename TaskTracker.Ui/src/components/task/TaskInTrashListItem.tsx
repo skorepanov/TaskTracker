@@ -4,6 +4,7 @@ import { Checkbox, Button } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { formatDateTime } from "../../utils";
 import ITask from "../../interfaces/ITask";
+import TaskTag from "../tag/TaskTag";
 
 interface ITaskInTrashListItemProps {
     task: ITask;
@@ -11,11 +12,22 @@ interface ITaskInTrashListItemProps {
 
 const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
     props => {
-        const { taskStore } = useStore();
+        const { taskStore, tagStore } = useStore();
 
         const { task } = props;
 
         const isCompleted = task.completedDateTime !== null;
+
+        const taskTags = tagStore.getFilteredSortedTags(task.tagIds);
+
+        const taskTagComponents = taskTags
+            ? taskTags.map(t => (
+                  <TaskTag
+                      key={t.id}
+                      tag={t}
+                  />
+              ))
+            : [];
 
         const descriptionComponent =
             task.description !== null && task.description.length > 0 ? (
@@ -55,6 +67,8 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                 />
                 {task.title}
                 <br />
+                {taskTagComponents}
+                {taskTagComponents.length > 0 ? <br /> : null}
                 {descriptionComponent}
                 <br />
                 {movedToTrashDateTimeComponent}

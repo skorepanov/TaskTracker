@@ -50,6 +50,16 @@ class TagStore {
         tags.sort((t1, t2) => t1.title.localeCompare(t2.title));
         return tags;
     };
+
+    getFilteredSortedTags = (tagIds: number[] | null) => {
+        if (tagIds === null || tagIds.length === 0) {
+            return null;
+        }
+
+        const tags = this.tags.filter(t => tagIds.includes(t.id));
+        tags.sort((t1, t2) => t1.title.localeCompare(t2.title));
+        return tags;
+    };
 }
 
 export default TagStore;
