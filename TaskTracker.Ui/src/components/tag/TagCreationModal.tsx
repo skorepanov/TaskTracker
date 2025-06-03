@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { ColorPicker, Input, Modal, Space } from "antd";
-import { useStore } from "../stores/RootStore";
+import { useStore } from "../../stores/RootStore";
 import { Color } from "antd/es/color-picker";
 
 interface ITagCreationModalProps {

@@ -2,9 +2,9 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Divider } from "antd";
-import { useStore } from "../stores/RootStore";
+import { useStore } from "../../stores/RootStore";
 import TaskListItem from "./TaskListItem";
-import UserTaskTag from "./UserTaskTag";
+import UserTaskTag from "../tag/UserTaskTag";
 import NoTasks from "./NoTasks";
 
 const TagTaskList: React.FC = observer(() => {

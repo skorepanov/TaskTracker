@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Dropdown, Menu, MenuProps, Tag } from "antd";
+import { Dropdown, Menu, MenuProps } from "antd";
 import { useStore } from "../stores/RootStore";
 import IFolder from "../interfaces/IFolder";
 import ITag from "../interfaces/ITag";
-import FolderCreationModalButton from "./FolderCreationModalButton";
-import TagCreationModalButton from "./TagCreationModalButton";
-import UserTaskTag from "./UserTaskTag";
+import FolderCreationModalButton from "./folder/FolderCreationModalButton";
+import TagCreationModalButton from "./tag/TagCreationModalButton";
+import UserTaskTag from "./tag/UserTaskTag";
 
 type MenuItem = Required<MenuProps>["items"][number];
 

@@ -4,12 +4,12 @@ import { observer } from "mobx-react-lite";
 import { Splitter } from "antd";
 import { useStore } from "./stores/RootStore";
 import MainMenu from "./components/MainMenu";
-import AllTaskList from "./components/AllTaskList";
-import InboxTaskList from "./components/InboxTaskList";
-import TodayTaskList from "./components/TodayTaskList";
-import TaskInTrashList from "./components/TaskInTrashList";
-import FolderTaskList from "./components/FolderTaskList";
-import TagTaskList from "./components/TagTaskList";
+import AllTaskList from "./components/task/AllTaskList";
+import InboxTaskList from "./components/task/InboxTaskList";
+import TodayTaskList from "./components/task/TodayTaskList";
+import TaskInTrashList from "./components/task/TaskInTrashList";
+import FolderTaskList from "./components/task/FolderTaskList";
+import TagTaskList from "./components/task/TagTaskList";
 
 const App: React.FC = observer(() => {
     const rootStore = useStore();

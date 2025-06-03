@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Button } from "antd";
-import { useStore } from "../stores/RootStore";
-import { formatDateTime } from "../utils";
+import { useStore } from "../../stores/RootStore";
+import { formatDateTime } from "../../utils";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
-import ITask from "../interfaces/ITask";
-import IFolder from "../interfaces/IFolder";
+import ITask from "../../interfaces/ITask";
+import IFolder from "../../interfaces/IFolder";
 
 interface ITaskListItemProps {
     task: ITask;

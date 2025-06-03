@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Input, Modal } from "antd";
-import { useStore } from "../stores/RootStore";
+import { useStore } from "../../stores/RootStore";
 
 interface IFolderCreationModalProps {
     isModalOpen: boolean;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { DatePicker, Input, Modal, Select, Space } from "antd";
-import { useStore } from "../stores/RootStore";
+import { useStore } from "../../stores/RootStore";
 import dayjs, { Dayjs } from "dayjs";
 
 const { TextArea } = Input;

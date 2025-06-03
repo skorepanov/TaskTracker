@@ -1,9 +1,9 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Button } from "antd";
-import { useStore } from "../stores/RootStore";
-import { formatDateTime } from "../utils";
-import ITask from "../interfaces/ITask";
+import { useStore } from "../../stores/RootStore";
+import { formatDateTime } from "../../utils";
+import ITask from "../../interfaces/ITask";
 
 interface ITaskInTrashListItemProps {
     task: ITask;

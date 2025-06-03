@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Divider } from "antd";
-import { useStore } from "../stores/RootStore";
+import { useStore } from "../../stores/RootStore";
 import TaskListItem from "./TaskListItem";
 import NoTasks from "./NoTasks";
 import TaskCreationModalButton from "./TaskCreationModalButton";

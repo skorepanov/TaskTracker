@@ -1,39 +1,43 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Divider } from "antd";
-import { useStore } from "../stores/RootStore";
+import { useStore } from "../../stores/RootStore";
 import TaskListItem from "./TaskListItem";
 import NoTasks from "./NoTasks";
 import TaskCreationModalButton from "./TaskCreationModalButton";
 
-const InboxTaskList: React.FC = observer(() => {
-    const { taskStore } = useStore();
+const TodayTaskList: React.FC = observer(() => {
+    const { taskStore, folderStore } = useStore();
 
     const incompletedTaskComponents = taskStore
-        .getInboxIncompletedTasks()
+        .getTodayIncompletedTasks()
         .map(t => (
             <TaskListItem
                 key={t.id}
                 task={t}
+                shouldShowFolder={true}
+                folder={folderStore.folders.find(f => f.id === t.folderId)}
             />
         ));
 
     const completedTaskComponents = taskStore
-        .getInboxCompletedTasks()
+        .getTodayCompletedTasks()
         .map(t => (
             <TaskListItem
                 key={t.id}
                 task={t}
+                shouldShowFolder={true}
+                folder={folderStore.folders.find(f => f.id === t.folderId)}
             />
         ));
 
     return (
         <>
             <div style={{ float: "left" }}>
-                <strong>Inbox</strong>
+                <strong>Задачи на сегодня</strong>
             </div>
             <div style={{ float: "right" }}>
-                <TaskCreationModalButton />
+                <TaskCreationModalButton dueDateTime={new Date()} />
             </div>
             <Divider />
             {incompletedTaskComponents.length > 0 ? (
@@ -47,4 +51,4 @@ const InboxTaskList: React.FC = observer(() => {
     );
 });
 
-export default InboxTaskList;
+export default TodayTaskList;

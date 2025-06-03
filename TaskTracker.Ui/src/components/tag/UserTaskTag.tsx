@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import ITag from "../interfaces/ITag";
+import ITag from "../../interfaces/ITag";
 import { Tag } from "antd";
 
 interface IUserTaskTagProps {
