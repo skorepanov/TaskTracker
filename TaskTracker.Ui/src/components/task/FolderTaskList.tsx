@@ -19,9 +19,7 @@ const FolderTaskList: React.FC = observer(() => {
         return <NoTasks />;
     }
 
-    const incompletedTasks = taskStore.incompletedTasks.filter(
-        t => t.folderId === folderId
-    );
+    const incompletedTasks = taskStore.getFolderIncompletedTasks(folderId);
 
     const incompletedTaskComponents = incompletedTasks.map(t => (
         <TaskListItem
@@ -30,9 +28,7 @@ const FolderTaskList: React.FC = observer(() => {
         />
     ));
 
-    const completedTasks = taskStore.completedTasks.filter(
-        t => t.folderId === folderId
-    );
+    const completedTasks = taskStore.getFolderCompletedTasks(folderId);
 
     const completedTaskComponents = completedTasks.map(t => (
         <TaskListItem

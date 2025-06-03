@@ -160,9 +160,13 @@ class TaskStore {
     getTodayIncompletedTasks = () => {
         const todayDate = dayjs(new Date()).startOf("day");
 
-        return this.incompletedTasks.filter(t =>
+        const tasks = this.incompletedTasks.filter(t =>
             this.isTodayIncompletedTask(t, todayDate)
         );
+
+        this.sortTasksByTitle(tasks);
+
+        return tasks;
     };
 
     isTodayIncompletedTask = (task: ITask, todayDate: Dayjs) => {
@@ -177,12 +181,20 @@ class TaskStore {
         }
     };
 
+    private sortTasksByTitle = (tasks: ITask[]) => {
+        tasks.sort((t1, t2) => t1.title.localeCompare(t2.title));
+    };
+
     getTodayCompletedTasks = () => {
         const todayDate = dayjs(new Date()).startOf("day");
 
-        return this.completedTasks.filter(t =>
+        const tasks = this.completedTasks.filter(t =>
             this.isTodayCompletedTask(t, todayDate)
         );
+
+        this.sortTasksByTitle(tasks);
+
+        return tasks;
     };
 
     isTodayCompletedTask = (task: ITask, todayDate: Dayjs) => {
@@ -194,11 +206,57 @@ class TaskStore {
     };
 
     getInboxIncompletedTasks = () => {
-        return this.incompletedTasks.filter(t => t.folderId === null);
+        const tasks = this.incompletedTasks.filter(t => t.folderId === null);
+        this.sortTasksByTitle(tasks);
+        return tasks;
     };
 
     getInboxCompletedTasks = () => {
-        return this.completedTasks.filter(task => task.folderId === null);
+        const tasks = this.completedTasks.filter(
+            task => task.folderId === null
+        );
+
+        this.sortTasksByTitle(tasks);
+        return tasks;
+    };
+
+    getFolderIncompletedTasks = (folderId: number) => {
+        const tasks = this.incompletedTasks.filter(
+            t => t.folderId === folderId
+        );
+
+        this.sortTasksByTitle(tasks);
+        return tasks;
+    };
+
+    getFolderCompletedTasks = (folderId: number) => {
+        const tasks = this.completedTasks.filter(t => t.folderId === folderId);
+        this.sortTasksByTitle(tasks);
+        return tasks;
+    };
+
+    getTagIncompletedTasks = (tagId: number) => {
+        const tasks = this.incompletedTasks.filter(t =>
+            t.tagIds?.includes(tagId)
+        );
+
+        this.sortTasksByTitle(tasks);
+        return tasks;
+    };
+
+    getTagCompletedTasks = (tagId: number) => {
+        const tasks = this.completedTasks.filter(t =>
+            t.tagIds?.includes(tagId)
+        );
+
+        this.sortTasksByTitle(tasks);
+        return tasks;
+    };
+
+    getTasksMovedToTrash = () => {
+        const tasks = this.tasksMovedToTrash.slice();
+        this.sortTasksByTitle(tasks);
+        return tasks;
     };
 }
 

@@ -19,9 +19,7 @@ const TagTaskList: React.FC = observer(() => {
         return <NoTasks />;
     }
 
-    const incompletedTasks = taskStore.incompletedTasks.filter(t =>
-        t.tagIds?.includes(tagId)
-    );
+    const incompletedTasks = taskStore.getTagIncompletedTasks(tagId);
 
     const incompletedTaskComponents = incompletedTasks.map(t => (
         <TaskListItem
@@ -32,9 +30,7 @@ const TagTaskList: React.FC = observer(() => {
         />
     ));
 
-    const completedTasks = taskStore.completedTasks.filter(t =>
-        t.tagIds?.includes(tagId)
-    );
+    const completedTasks = taskStore.getTagCompletedTasks(tagId);
 
     const completedTaskComponents = completedTasks.map(t => (
         <TaskListItem

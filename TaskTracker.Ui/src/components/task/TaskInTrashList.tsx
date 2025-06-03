@@ -7,7 +7,9 @@ import TaskInTrashListItem from "./TaskInTrashListItem";
 const TaskInTrashList: React.FC = observer(() => {
     const { taskStore } = useStore();
 
-    const taskComponents = taskStore.tasksMovedToTrash.map(t => (
+    const tasks = taskStore.getTasksMovedToTrash();
+
+    const taskComponents = tasks.map(t => (
         <TaskInTrashListItem
             key={t.id}
             task={t}
