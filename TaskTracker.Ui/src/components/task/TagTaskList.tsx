@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Divider } from "antd";
 import { useStore } from "../../stores/RootStore";
 import TaskListItem from "./TaskListItem";
-import UserTaskTag from "../tag/UserTaskTag";
+import TaskTag from "../tag/TaskTag";
 import NoTasks from "./NoTasks";
 
 const TagTaskList: React.FC = observer(() => {
@@ -47,7 +47,7 @@ const TagTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <UserTaskTag tag={tag} />
+            <TaskTag tag={tag} />
             <Divider />
             {incompletedTaskComponents.length > 0 ? (
                 incompletedTaskComponents

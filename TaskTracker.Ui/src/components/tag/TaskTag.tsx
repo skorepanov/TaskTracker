@@ -3,11 +3,11 @@ import { observer } from "mobx-react-lite";
 import ITag from "../../interfaces/ITag";
 import { Tag } from "antd";
 
-interface IUserTaskTagProps {
+interface ITaskTagProps {
     tag: ITag;
 }
 
-const UserTaskTag: React.FC<IUserTaskTagProps> = observer(props => {
+const TaskTag: React.FC<ITaskTagProps> = observer(props => {
     const { tag } = props;
 
     return (
@@ -17,4 +17,4 @@ const UserTaskTag: React.FC<IUserTaskTagProps> = observer(props => {
     );
 });
 
-export default UserTaskTag;
+export default TaskTag;
