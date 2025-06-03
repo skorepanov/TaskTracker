@@ -86,7 +86,7 @@ const MainMenu: React.FC = observer(() => {
     };
 
     const getFolderChildren = () => {
-        return folderStore.folders.map(f => {
+        return folderStore.getSortedFolders().map(f => {
             return {
                 key: `/folders/${f.id}`,
                 label: getFolderLabel(f),

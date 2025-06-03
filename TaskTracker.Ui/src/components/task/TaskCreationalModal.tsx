@@ -31,7 +31,7 @@ const TaskCreationModal: React.FC<ITaskCreationModalProps> = observer(props => {
         label: "<Inbox>",
     };
 
-    const folderOptions = folderStore.folders.map(f => ({
+    const folderOptions = folderStore.getSortedFolders().map(f => ({
         key: f.id,
         value: f.id,
         label: f.title,

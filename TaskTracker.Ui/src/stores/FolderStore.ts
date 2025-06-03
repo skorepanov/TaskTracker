@@ -43,6 +43,12 @@ class FolderStore {
             this.folders = this.folders.filter(f => f.id !== folder.id);
         });
     };
+
+    getSortedFolders = () => {
+        const sortedFolders = this.folders.slice();
+        sortedFolders.sort((f1, f2) => f1.title.localeCompare(f2.title));
+        return sortedFolders;
+    };
 }
 
 export default FolderStore;
