@@ -46,9 +46,9 @@ class TagStore {
     };
 
     getSortedTags = () => {
-        const sortedTags = this.tags.slice();
-        sortedTags.sort((t1, t2) => t1.title.localeCompare(t2.title));
-        return sortedTags;
+        const tags = this.tags.slice();
+        tags.sort((t1, t2) => t1.title.localeCompare(t2.title));
+        return tags;
     };
 }
 

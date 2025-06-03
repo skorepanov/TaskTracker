@@ -9,7 +9,9 @@ import TaskCreationModalButton from "./TaskCreationModalButton";
 const AllTaskList: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
 
-    const incompletedTaskComponents = taskStore.incompletedTasks.map(t => (
+    const incompletedTasks = taskStore.getAllIncompletedTasks();
+
+    const incompletedTaskComponents = incompletedTasks.map(t => (
         <TaskListItem
             key={t.id}
             task={t}
@@ -18,7 +20,9 @@ const AllTaskList: React.FC = observer(() => {
         />
     ));
 
-    const completedTaskComponents = taskStore.completedTasks.map(t => (
+    const completedTasks = taskStore.getAllCompletedTasks();
+
+    const completedTaskComponents = completedTasks.map(t => (
         <TaskListItem
             key={t.id}
             task={t}

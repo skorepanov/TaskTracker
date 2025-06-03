@@ -157,6 +157,18 @@ class TaskStore {
         });
     };
 
+    getAllIncompletedTasks = () => {
+        const tasks = this.incompletedTasks.slice();
+        tasks.sort((t1, t2) => t1.title.localeCompare(t2.title));
+        return tasks;
+    };
+
+    getAllCompletedTasks = () => {
+        const tasks = this.completedTasks.slice();
+        tasks.sort((t1, t2) => t1.title.localeCompare(t2.title));
+        return tasks;
+    };
+
     getTodayIncompletedTasks = () => {
         const todayDate = dayjs(new Date()).startOf("day");
 

@@ -45,9 +45,9 @@ class FolderStore {
     };
 
     getSortedFolders = () => {
-        const sortedFolders = this.folders.slice();
-        sortedFolders.sort((f1, f2) => f1.title.localeCompare(f2.title));
-        return sortedFolders;
+        const folders = this.folders.slice();
+        folders.sort((f1, f2) => f1.title.localeCompare(f2.title));
+        return folders;
     };
 }
 
