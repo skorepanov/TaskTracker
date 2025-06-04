@@ -25,12 +25,12 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
 
     const handleUpdateFolderButtonClick = async () => {
         await folderStore.updateFolder(props.folder.id, title);
-        setTitle("");
+        setTitle(props.folder.title);
         props.hideModal();
     };
 
     const handleCancelClick = () => {
-        setTitle("");
+        setTitle(props.folder.title);
         props.hideModal();
     };
 
