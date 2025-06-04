@@ -10,6 +10,7 @@ import TodayTaskList from "./components/task/TodayTaskList";
 import TaskInTrashList from "./components/task/TaskInTrashList";
 import FolderTaskList from "./components/task/FolderTaskList";
 import TagTaskList from "./components/task/TagTaskList";
+import TaskUpdatePanel from "./components/task/TaskUpdatePanel";
 
 const App: React.FC = observer(() => {
     const rootStore = useStore();
@@ -32,7 +33,7 @@ const App: React.FC = observer(() => {
                     style={{ height: "100%" }}>
                     <MainMenu />
                 </Splitter.Panel>
-                <Splitter.Panel>
+                <Splitter.Panel min="300">
                     <Routes>
                         <Route
                             path="/all"
@@ -67,6 +68,9 @@ const App: React.FC = observer(() => {
                             />
                         </Route>
                     </Routes>
+                </Splitter.Panel>
+                <Splitter.Panel min="300">
+                    <TaskUpdatePanel />
                 </Splitter.Panel>
             </Splitter>
         </BrowserRouter>

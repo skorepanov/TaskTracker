@@ -8,6 +8,8 @@ class TaskStore {
     completedTasks: ITask[] = [];
     tasksMovedToTrash: ITask[] = [];
 
+    currentTask?: ITask;
+
     constructor() {
         makeAutoObservable(this);
     }
@@ -72,6 +74,10 @@ class TaskStore {
             this.tasksMovedToTrash = this.tasksMovedToTrash.filter(
                 t => t.id !== task.id
             );
+
+            if (this.currentTask?.id === task.id) {
+                this.currentTask = undefined;
+            }
         });
     };
 
@@ -269,6 +275,10 @@ class TaskStore {
         const tasks = this.tasksMovedToTrash.slice();
         this.sortTasksByTitle(tasks);
         return tasks;
+    };
+
+    setCurrentTask = (task?: ITask) => {
+        this.currentTask = task;
     };
 }
 

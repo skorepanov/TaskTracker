@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Checkbox, Button } from "antd";
+import { Button, Checkbox } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { formatDateTime } from "../../utils";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -18,11 +18,15 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
     const { taskStore, tagStore } = useStore();
 
     const { task } = props;
-    const isTaskCompleted = task.completedDateTime !== null;
 
-    const [isCompleted, setIsCompleted] = useState<boolean>(isTaskCompleted);
+    const [isCompleted, setIsCompleted] = useState<boolean>(
+        task.completedDateTime !== null
+    );
 
-    const textColor = isTaskCompleted ? "green" : "black";
+    const textColor = isCompleted ? "green" : "";
+
+    const backgroundColor =
+        taskStore.currentTask?.id === task.id ? "lightgray" : "";
 
     const taskTags = tagStore.getFilteredSortedTags(task.tagIds);
 
@@ -42,20 +46,6 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
         </>
     ) : null;
 
-    const descriptionComponent = task.description ? (
-        <>
-            Описание: {task.description}
-            <br />
-        </>
-    ) : null;
-
-    const completedDateTimeComponent = isTaskCompleted ? (
-        <>
-            Выполнено: {formatDateTime(task.completedDateTime)}
-            <br />
-        </>
-    ) : null;
-
     const dueDateTimeComponent =
         task.dueDateTime !== null ? (
             <>Срок выполнения: {formatDateTime(task.dueDateTime)}</>
@@ -63,7 +53,7 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
 
     const overdueDaysComponent =
         task.overdueDaysCount > 0 ? (
-            <span style={{ color: isTaskCompleted ? "" : "red" }}>
+            <span style={{ color: isCompleted ? "" : "red" }}>
                 ({task.overdueDaysCount} дней назад)
             </span>
         ) : null;
@@ -76,13 +66,9 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
             </>
         ) : null;
 
-    const modifiedDateTimeComponent =
-        task.modifiedDateTime !== null ? (
-            <>
-                <i>Изменена: {formatDateTime(task.modifiedDateTime)}</i>
-                <br />
-            </>
-        ) : null;
+    const handleTaskClick = () => {
+        taskStore.setCurrentTask(task);
+    };
 
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
         const isCompletedNew = event.target.checked;
@@ -101,7 +87,13 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
     };
 
     return (
-        <div style={{ color: textColor, marginBottom: 10 }}>
+        <div
+            onClick={handleTaskClick}
+            style={{
+                color: textColor,
+                backgroundColor: backgroundColor,
+                marginBottom: 10,
+            }}>
             <Checkbox
                 checked={isCompleted}
                 onChange={handleCompletedChange}
@@ -112,12 +104,7 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
             {taskTagComponents}
             {taskTagComponents.length > 0 ? <br /> : null}
             {folderComponent}
-            {descriptionComponent}
-            {completedDateTimeComponent}
             {overdueComponent}
-            {modifiedDateTimeComponent}
-            <i>Создана: {formatDateTime(task.createdDateTime)}</i>
-            <br />
             <Button onClick={handleMoveToTrashButtonClick}>В корзину</Button>
         </div>
     );
