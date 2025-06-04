@@ -35,6 +35,24 @@ class TagStore {
         });
     };
 
+    updateTag = async (tagId: number, title: string, color: string) => {
+        const url = `${AppUrl}/tags/${tagId}`;
+
+        const params = {
+            title: title,
+            color: color,
+            modifiedDateTime: new Date().toISOString(),
+        };
+
+        const updatedTag = await Api.put<ITag>(url, params);
+
+        runInAction(() => {
+            this.tags = this.tags.map(t =>
+                t.id === updatedTag.id ? updatedTag : t
+            );
+        });
+    };
+
     deleteTag = async (tag: ITag) => {
         const url = `${AppUrl}/tags/${tag.id}`;
 

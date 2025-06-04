@@ -8,6 +8,7 @@ import ITag from "../interfaces/ITag";
 import FolderCreationModalButton from "./folder/FolderCreationModalButton";
 import FolderUpdateMenuItem from "./folder/FolderUpdateMenuItem";
 import TagCreationModalButton from "./tag/TagCreationModalButton";
+import TagUpdateModalMenuItem from "./tag/TagUpdateModalMenuItem";
 import TaskTag from "./tag/TaskTag";
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -124,11 +125,15 @@ const MainMenu: React.FC = observer(() => {
         const contextMenu = {
             items: [
                 {
+                    key: "updateTag",
+                    label: <TagUpdateModalMenuItem tag={tag} />,
+                },
+                {
                     key: "deleteTag",
                     label: "Удалить тег",
+                    onClick: handleDeleteTagButtonClick,
                 },
             ],
-            onClick: handleDeleteTagButtonClick,
         };
 
         return (
