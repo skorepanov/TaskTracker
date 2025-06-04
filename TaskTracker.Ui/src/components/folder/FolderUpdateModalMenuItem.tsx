@@ -7,8 +7,8 @@ interface IFolderUpdateMenuItemProps {
     folder: IFolder;
 }
 
-const FolderUpdateMenuItem: React.FC<IFolderUpdateMenuItemProps> = observer(
-    props => {
+const FolderUpdateModalMenuItem: React.FC<IFolderUpdateMenuItemProps> =
+    observer(props => {
         const [isModalOpen, setIsModalOpen] = React.useState(false);
 
         const handleUpdateFolderButtonClick = () => {
@@ -31,7 +31,6 @@ const FolderUpdateMenuItem: React.FC<IFolderUpdateMenuItemProps> = observer(
                 />
             </>
         );
-    }
-);
+    });
 
-export default FolderUpdateMenuItem;
+export default FolderUpdateModalMenuItem;

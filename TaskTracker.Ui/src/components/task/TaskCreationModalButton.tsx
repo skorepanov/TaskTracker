@@ -1,14 +1,14 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Button } from "antd";
-import TaskCreationalModal from "./TaskCreationalModal";
+import TaskCreationModal from "./TaskCreationModal";
 
-interface ITaskCreationalModalProps {
+interface ITaskCreationModalProps {
     dueDateTime?: Date;
     folderId?: number;
 }
 
-const TaskCreationModalButton: React.FC<ITaskCreationalModalProps> = observer(
+const TaskCreationModalButton: React.FC<ITaskCreationModalProps> = observer(
     props => {
         const [isModalOpen, setIsModalOpen] = React.useState(false);
 
@@ -25,7 +25,7 @@ const TaskCreationModalButton: React.FC<ITaskCreationalModalProps> = observer(
                 <Button onClick={handleCreateTaskButtonClick}>
                     Новая задача
                 </Button>
-                <TaskCreationalModal
+                <TaskCreationModal
                     dueDateTime={props.dueDateTime}
                     folderId={props.folderId}
                     isModalOpen={isModalOpen}

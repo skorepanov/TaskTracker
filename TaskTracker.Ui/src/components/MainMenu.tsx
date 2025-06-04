@@ -6,7 +6,7 @@ import { useStore } from "../stores/RootStore";
 import IFolder from "../interfaces/IFolder";
 import ITag from "../interfaces/ITag";
 import FolderCreationModalButton from "./folder/FolderCreationModalButton";
-import FolderUpdateMenuItem from "./folder/FolderUpdateMenuItem";
+import FolderUpdateModalMenuItem from "./folder/FolderUpdateModalMenuItem";
 import TagCreationModalButton from "./tag/TagCreationModalButton";
 import TagUpdateModalMenuItem from "./tag/TagUpdateModalMenuItem";
 import TaskTag from "./tag/TaskTag";
@@ -67,7 +67,7 @@ const MainMenu: React.FC = observer(() => {
             items: [
                 {
                     key: "updateFolder",
-                    label: <FolderUpdateMenuItem folder={folder} />,
+                    label: <FolderUpdateModalMenuItem folder={folder} />,
                 },
                 {
                     key: "deleteFolder",
