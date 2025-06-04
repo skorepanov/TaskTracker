@@ -6,6 +6,7 @@ import { useStore } from "../stores/RootStore";
 import IFolder from "../interfaces/IFolder";
 import ITag from "../interfaces/ITag";
 import FolderCreationModalButton from "./folder/FolderCreationModalButton";
+import FolderUpdateMenuItem from "./folder/FolderUpdateMenuItem";
 import TagCreationModalButton from "./tag/TagCreationModalButton";
 import TaskTag from "./tag/TaskTag";
 
@@ -64,11 +65,15 @@ const MainMenu: React.FC = observer(() => {
         const contextMenu = {
             items: [
                 {
+                    key: "updateFolder",
+                    label: <FolderUpdateMenuItem folder={folder} />,
+                },
+                {
                     key: "deleteFolder",
                     label: "Удалить папку",
+                    onClick: handleDeleteFolderButtonClick,
                 },
             ],
-            onClick: handleDeleteFolderButtonClick,
         };
 
         return (

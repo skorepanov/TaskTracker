@@ -34,6 +34,23 @@ class FolderStore {
         });
     };
 
+    updateFolder = async (folderId: number, title: string) => {
+        const url = `${AppUrl}/folders/${folderId}`;
+
+        const params = {
+            title: title,
+            modifiedDateTime: new Date().toISOString(),
+        };
+
+        const updatedFolder = await Api.put<IFolder>(url, params);
+
+        runInAction(() => {
+            this.folders = this.folders.map(f =>
+                f.id === updatedFolder.id ? updatedFolder : f
+            );
+        });
+    };
+
     deleteFolder = async (folder: IFolder) => {
         const url = `${AppUrl}/folders/${folder.id}`;
 
