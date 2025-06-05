@@ -25,7 +25,7 @@ const App: React.FC = observer(() => {
 
     return (
         <BrowserRouter>
-            <Splitter style={{ height: "98vh" }}>
+            <Splitter style={{ height: "100vh" }}>
                 <Splitter.Panel
                     defaultSize="270"
                     min="10%"

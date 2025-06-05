@@ -13,7 +13,7 @@ const TodayTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <div style={{ float: "left", paddingLeft: 10 }}>
+            <div style={{ float: "left", paddingLeft: 10, paddingTop: 10 }}>
                 <strong>Задачи на сегодня</strong>
             </div>
             <div
