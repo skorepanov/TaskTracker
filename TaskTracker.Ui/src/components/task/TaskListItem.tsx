@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Checkbox } from "antd";
+import { Button, Checkbox, Divider } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { formatDateTime } from "../../utils";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -92,7 +92,6 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
             style={{
                 color: textColor,
                 backgroundColor: backgroundColor,
-                marginBottom: 10,
             }}>
             <Checkbox
                 checked={isCompleted}
@@ -106,6 +105,7 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
             {folderComponent}
             {overdueComponent}
             <Button onClick={handleMoveToTrashButtonClick}>В корзину</Button>
+            <Divider size="small" />
         </div>
     );
 });

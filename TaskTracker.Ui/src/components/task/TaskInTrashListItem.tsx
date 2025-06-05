@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Checkbox, Button } from "antd";
+import { Checkbox, Button, Divider } from "antd";
 import { useStore } from "../../stores/RootStore";
 import ITask from "../../interfaces/ITask";
 import TaskTag from "../tag/TaskTag";
@@ -49,7 +49,6 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                 style={{
                     color: "grey",
                     backgroundColor: backgroundColor,
-                    marginBottom: 10,
                 }}>
                 <Checkbox
                     checked={isCompleted}
@@ -64,6 +63,7 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                     Восстановить
                 </Button>
                 <Button onClick={handleDeleteTaskButtonClick}>Удалить</Button>
+                <Divider size="small" />
             </div>
         );
     }

@@ -1,6 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Divider } from "antd";
+import { Collapse } from "antd";
+import type { CollapseProps } from "antd";
 import { useStore } from "../../stores/RootStore";
 import ITask from "../../interfaces/ITask";
 import TaskListItem from "./TaskListItem";
@@ -41,6 +42,23 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
         />
     ));
 
+    const completedTaskItems: CollapseProps["items"] = [
+        {
+            key: "completedTasks",
+            label: "Выполнено",
+            children: completedTaskComponents,
+        },
+    ];
+
+    const completedTasksPanel =
+        completedTaskComponents.length > 0 ? (
+            <Collapse
+                items={completedTaskItems}
+                ghost
+                defaultActiveKey={["completedTasks"]}
+            />
+        ) : null;
+
     return (
         <>
             {incompletedTaskComponents.length > 0 ? (
@@ -48,8 +66,7 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
             ) : (
                 <NoTasks />
             )}
-            {completedTaskComponents.length > 0 ? <Divider /> : null}
-            {completedTaskComponents}
+            {completedTasksPanel}
         </>
     );
 });
