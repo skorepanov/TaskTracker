@@ -2,6 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Divider, Dropdown } from "antd";
 import { useStore } from "../../stores/RootStore";
+import { formatDate } from "../../utils";
 import ITask from "../../interfaces/ITask";
 import TaskTag from "../tag/TaskTag";
 
@@ -30,6 +31,15 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                   />
               ))
             : [];
+
+        const dateComponent =
+            task.completedDateTime !== null ? (
+                formatDate(task.completedDateTime)
+            ) : task.dueDateTime !== null ? (
+                <span style={{ color: "red" }}>
+                    {formatDate(task.dueDateTime)}
+                </span>
+            ) : null;
 
         const handleTaskClick = () => {
             taskStore.setCurrentTask(task);
@@ -69,15 +79,21 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                         color: "grey",
                         backgroundColor: backgroundColor,
                     }}>
-                    <Checkbox
-                        checked={isCompleted}
-                        disabled={true}
-                        style={{ marginRight: 5 }}
-                    />
-                    {task.title}
-                    <br />
-                    {taskTagComponents}
-                    {taskTagComponents.length > 0 ? <br /> : null}
+                    <div style={{ float: "left" }}>
+                        <Checkbox
+                            checked={isCompleted}
+                            disabled={true}
+                            style={{ marginRight: 5 }}
+                        />
+                        {task.title}
+                    </div>
+                    <div style={{ float: "right" }}>{taskTagComponents}</div>
+                    {dateComponent !== null ? (
+                        <>
+                            <br />
+                            {dateComponent}
+                        </>
+                    ) : null}
                     <Divider size="small" />
                 </div>
             </Dropdown>
