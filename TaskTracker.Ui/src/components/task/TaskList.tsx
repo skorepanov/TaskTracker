@@ -54,8 +54,9 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
         completedTaskComponents.length > 0 ? (
             <Collapse
                 items={completedTaskItems}
-                ghost
                 defaultActiveKey={["completedTasks"]}
+                ghost
+                size={"small"}
             />
         ) : null;
 
