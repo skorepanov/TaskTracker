@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Divider } from "antd";
 import { useStore } from "../../stores/RootStore";
-import TaskListItem from "./TaskListItem";
+import TaskList from "./TaskList";
 import NoTasks from "./NoTasks";
 import TaskCreationModalButton from "./TaskCreationModalButton";
 
@@ -20,22 +20,7 @@ const FolderTaskList: React.FC = observer(() => {
     }
 
     const incompletedTasks = taskStore.getFolderIncompletedTasks(folderId);
-
-    const incompletedTaskComponents = incompletedTasks.map(t => (
-        <TaskListItem
-            key={t.id}
-            task={t}
-        />
-    ));
-
     const completedTasks = taskStore.getFolderCompletedTasks(folderId);
-
-    const completedTaskComponents = completedTasks.map(t => (
-        <TaskListItem
-            key={t.id}
-            task={t}
-        />
-    ));
 
     return (
         <>
@@ -46,13 +31,10 @@ const FolderTaskList: React.FC = observer(() => {
                 <TaskCreationModalButton folderId={folder.id} />
             </div>
             <Divider />
-            {incompletedTaskComponents.length > 0 ? (
-                incompletedTaskComponents
-            ) : (
-                <NoTasks />
-            )}
-            {completedTaskComponents.length > 0 ? <Divider /> : null}
-            {completedTaskComponents}
+            <TaskList
+                incompletedTasks={incompletedTasks}
+                completedTasks={completedTasks}
+            />
         </>
     );
 });
