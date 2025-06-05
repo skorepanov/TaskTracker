@@ -138,6 +138,10 @@ class TaskStore {
             }
 
             this.tasksMovedToTrash.push(taskMovedToTrash);
+
+            if (this.currentTask?.id === task.id) {
+                this.currentTask = undefined;
+            }
         });
     };
 

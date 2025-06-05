@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Checkbox, Divider } from "antd";
+import { Checkbox, Divider, Dropdown } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { formatDateTime } from "../../utils";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -86,27 +86,41 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
         await taskStore.moveTaskToTrash(task);
     };
 
+    const contextMenu = {
+        items: [
+            {
+                key: "moveToTrash",
+                label: "Отправить в корзину",
+                onClick: handleMoveToTrashButtonClick,
+            },
+        ],
+    };
+
     return (
-        <div
-            onClick={handleTaskClick}
-            style={{
-                color: textColor,
-                backgroundColor: backgroundColor,
-            }}>
-            <Checkbox
-                checked={isCompleted}
-                onChange={handleCompletedChange}
-                style={{ marginRight: 5 }}
-            />
-            {task.title}
-            <br />
-            {taskTagComponents}
-            {taskTagComponents.length > 0 ? <br /> : null}
-            {folderComponent}
-            {overdueComponent}
-            <Button onClick={handleMoveToTrashButtonClick}>В корзину</Button>
-            <Divider size="small" />
-        </div>
+        <Dropdown
+            key={task.id}
+            menu={contextMenu}
+            trigger={["contextMenu"]}>
+            <div
+                onClick={handleTaskClick}
+                style={{
+                    color: textColor,
+                    backgroundColor: backgroundColor,
+                }}>
+                <Checkbox
+                    checked={isCompleted}
+                    onChange={handleCompletedChange}
+                    style={{ marginRight: 5 }}
+                />
+                {task.title}
+                <br />
+                {taskTagComponents}
+                {taskTagComponents.length > 0 ? <br /> : null}
+                {folderComponent}
+                {overdueComponent}
+                <Divider size="small" />
+            </div>
+        </Dropdown>
     );
 });
 
