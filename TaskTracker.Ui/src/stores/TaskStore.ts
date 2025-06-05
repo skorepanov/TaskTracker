@@ -164,6 +164,10 @@ class TaskStore {
             this.tasksMovedToTrash = this.tasksMovedToTrash.filter(
                 t => t.id !== taskMovedFromTrash.id
             );
+
+            if (this.currentTask?.id === task.id) {
+                this.currentTask = undefined;
+            }
         });
     };
 

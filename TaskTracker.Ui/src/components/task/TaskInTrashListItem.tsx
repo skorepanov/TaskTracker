@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Checkbox, Button, Divider } from "antd";
+import { Checkbox, Divider, Dropdown } from "antd";
 import { useStore } from "../../stores/RootStore";
 import ITask from "../../interfaces/ITask";
 import TaskTag from "../tag/TaskTag";
@@ -43,28 +43,44 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
             await taskStore.deleteTask(task);
         };
 
+        const contextMenu = {
+            items: [
+                {
+                    key: "restore",
+                    label: "Восстановить",
+                    onClick: handleRestoreTaskButtonClick,
+                },
+                {
+                    key: "delete",
+                    label: "Удалить",
+                    onClick: handleDeleteTaskButtonClick,
+                },
+            ],
+        };
+
         return (
-            <div
-                onClick={handleTaskClick}
-                style={{
-                    color: "grey",
-                    backgroundColor: backgroundColor,
-                }}>
-                <Checkbox
-                    checked={isCompleted}
-                    disabled={true}
-                    style={{ marginRight: 5 }}
-                />
-                {task.title}
-                <br />
-                {taskTagComponents}
-                {taskTagComponents.length > 0 ? <br /> : null}
-                <Button onClick={handleRestoreTaskButtonClick}>
-                    Восстановить
-                </Button>
-                <Button onClick={handleDeleteTaskButtonClick}>Удалить</Button>
-                <Divider size="small" />
-            </div>
+            <Dropdown
+                key={task.id}
+                menu={contextMenu}
+                trigger={["contextMenu"]}>
+                <div
+                    onClick={handleTaskClick}
+                    style={{
+                        color: "grey",
+                        backgroundColor: backgroundColor,
+                    }}>
+                    <Checkbox
+                        checked={isCompleted}
+                        disabled={true}
+                        style={{ marginRight: 5 }}
+                    />
+                    {task.title}
+                    <br />
+                    {taskTagComponents}
+                    {taskTagComponents.length > 0 ? <br /> : null}
+                    <Divider size="small" />
+                </div>
+            </Dropdown>
         );
     }
 );
