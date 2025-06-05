@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Divider, Dropdown } from "antd";
 import { useStore } from "../../stores/RootStore";
-import { formatDateTime } from "../../utils";
+import { formatDate } from "../../utils";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import ITask from "../../interfaces/ITask";
 import IFolder from "../../interfaces/IFolder";
@@ -23,10 +23,29 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
         task.completedDateTime !== null
     );
 
-    const textColor = isCompleted ? "green" : "";
+    const taskTextColor = isCompleted ? "green" : "";
 
     const backgroundColor =
         taskStore.currentTask?.id === task.id ? "lightgray" : "";
+
+    const folderComponent = props.shouldShowFolder ? (
+        <>{props.folder?.title ?? "<Inbox>"}</>
+    ) : null;
+
+    const overdueComponentColor =
+        !isCompleted && task.overdueDaysCount > 0 ? "red" : "";
+
+    const overdueDaysComponent =
+        task.overdueDaysCount > 0 ? (
+            <>({task.overdueDaysCount} дней назад)</>
+        ) : null;
+
+    const overdueComponent =
+        task.dueDateTime !== null ? (
+            <span style={{ color: overdueComponentColor }}>
+                {formatDate(task.dueDateTime)} {overdueDaysComponent}
+            </span>
+        ) : null;
 
     const taskTags = tagStore.getFilteredSortedTags(task.tagIds);
 
@@ -38,33 +57,6 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
               />
           ))
         : [];
-
-    const folderComponent = props.shouldShowFolder ? (
-        <>
-            Папка: {props.folder?.title ?? "<Inbox>"}
-            <br />
-        </>
-    ) : null;
-
-    const dueDateTimeComponent =
-        task.dueDateTime !== null ? (
-            <>Срок выполнения: {formatDateTime(task.dueDateTime)}</>
-        ) : null;
-
-    const overdueDaysComponent =
-        task.overdueDaysCount > 0 ? (
-            <span style={{ color: isCompleted ? "" : "red" }}>
-                ({task.overdueDaysCount} дней назад)
-            </span>
-        ) : null;
-
-    const overdueComponent =
-        task.dueDateTime !== null ? (
-            <>
-                {dueDateTimeComponent} {overdueDaysComponent}
-                <br />
-            </>
-        ) : null;
 
     const handleTaskClick = () => {
         taskStore.setCurrentTask(task);
@@ -104,20 +96,24 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
             <div
                 onClick={handleTaskClick}
                 style={{
-                    color: textColor,
+                    color: taskTextColor,
                     backgroundColor: backgroundColor,
                 }}>
-                <Checkbox
-                    checked={isCompleted}
-                    onChange={handleCompletedChange}
-                    style={{ marginRight: 5 }}
-                />
-                {task.title}
+                <div style={{ float: "left" }}>
+                    <Checkbox
+                        checked={isCompleted}
+                        onChange={handleCompletedChange}
+                        style={{ marginRight: 5 }}
+                    />
+                    {task.title}
+                </div>
+                <div style={{ float: "right" }}>{taskTagComponents}</div>
                 <br />
-                {taskTagComponents}
-                {taskTagComponents.length > 0 ? <br /> : null}
-                {folderComponent}
                 {overdueComponent}
+                {overdueComponent !== null && folderComponent !== null
+                    ? " / "
+                    : null}
+                {folderComponent}
                 <Divider size="small" />
             </div>
         </Dropdown>
