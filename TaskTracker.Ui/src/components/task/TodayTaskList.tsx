@@ -13,10 +13,11 @@ const TodayTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <div style={{ float: "left" }}>
+            <div style={{ float: "left", paddingLeft: 10 }}>
                 <strong>Задачи на сегодня</strong>
             </div>
-            <div style={{ float: "right" }}>
+            <div
+                style={{ float: "right", paddingRight: 10, paddingBottom: 10 }}>
                 <TaskCreationModalButton dueDateTime={new Date()} />
             </div>
             <Divider />

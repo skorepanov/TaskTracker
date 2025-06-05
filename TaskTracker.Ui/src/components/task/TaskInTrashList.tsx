@@ -18,9 +18,11 @@ const TaskInTrashList: React.FC = observer(() => {
 
     return (
         <>
-            <strong>Корзина</strong>
+            <div style={{ paddingLeft: 10 }}>
+                <strong>Корзина</strong>
+            </div>
             <Divider />
-            {taskComponents}
+            <div style={{ paddingLeft: 10 }}>{taskComponents}</div>
         </>
     );
 });

@@ -63,7 +63,9 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
     return (
         <>
             {incompletedTaskComponents.length > 0 ? (
-                incompletedTaskComponents
+                <div style={{ paddingLeft: 10 }}>
+                    {incompletedTaskComponents}
+                </div>
             ) : (
                 <NoTasks />
             )}

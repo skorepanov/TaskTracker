@@ -24,7 +24,9 @@ const TagTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <TaskTag tag={tag} />
+            <div style={{ paddingLeft: 10 }}>
+                <TaskTag tag={tag} />
+            </div>
             <Divider />
             <TaskList
                 incompletedTasks={incompletedTasks}
