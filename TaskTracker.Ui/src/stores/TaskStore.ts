@@ -85,6 +85,30 @@ class TaskStore {
         });
     };
 
+    updateTask = async (
+        taskId: number,
+        title: string,
+        description: string | null,
+        folderId: number | null,
+        dueDateTime: Date | null
+    ) => {
+        const url = `${AppUrl}/tasks/${taskId}`;
+
+        const params = {
+            title: title,
+            description: description,
+            folderId: folderId,
+            dueDateTime: dueDateTime,
+            modifiedDateTime: new Date().toISOString(),
+        };
+
+        const updatedTask = await Api.put<ITask>(url, params);
+
+        runInAction(() => {
+            this.tasks.set(updatedTask.id, updatedTask);
+        });
+    };
+
     deleteTask = async (task: ITask) => {
         const url = `${AppUrl}/tasks/${task.id}`;
 

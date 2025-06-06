@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
 import TaskTag from "../tag/TaskTag";
-import { Checkbox, Divider } from "antd";
+import { Checkbox, Divider, Typography } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { formatDateTime } from "../../utils";
+
+const { Paragraph } = Typography;
 
 const TaskUpdatePanel: React.FC = observer(() => {
     const { taskStore, folderStore, tagStore } = useStore();
@@ -12,9 +14,13 @@ const TaskUpdatePanel: React.FC = observer(() => {
     const { currentTask: task } = taskStore;
 
     const [isCompleted, setIsCompleted] = useState<boolean>();
+    const [title, setTitle] = useState<string>("");
+    const [modifiedDateTime, setModifiedDateTime] = useState<Date | null>(null);
 
     useEffect(() => {
         setIsCompleted(task !== undefined && task.completedDateTime !== null);
+        setTitle(task?.title ?? "");
+        setModifiedDateTime(task?.modifiedDateTime ?? null);
     }, [task]);
 
     if (!task) {
@@ -81,9 +87,9 @@ const TaskUpdatePanel: React.FC = observer(() => {
         ) : null;
 
     const modifiedDateTimeComponent =
-        task.modifiedDateTime !== null ? (
+        modifiedDateTime !== null ? (
             <>
-                <i>Изменена: {formatDateTime(task.modifiedDateTime)}</i>
+                <i>Изменена: {formatDateTime(modifiedDateTime)}</i>
                 <br />
             </>
         ) : null;
@@ -100,6 +106,16 @@ const TaskUpdatePanel: React.FC = observer(() => {
         }
     };
 
+    const handleTitleChange = async (newTitle: string) => {
+        await taskStore.updateTask(
+            task.id,
+            newTitle,
+            task.description,
+            task.folderId,
+            task.dueDateTime
+        );
+    };
+
     return (
         <div style={{ padding: "10px" }}>
             <Checkbox
@@ -107,7 +123,13 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 onChange={handleCompletedChange}
                 style={{ marginRight: 5 }}
             />
-            {task.title}
+            <Divider />
+            <Paragraph
+                editable={{
+                    onChange: handleTitleChange,
+                }}>
+                {title}
+            </Paragraph>
             <br />
             <div style={{ paddingTop: 5 }}>{taskTagComponents}</div>
             {taskTagComponents.length > 0 ? <br /> : null}
