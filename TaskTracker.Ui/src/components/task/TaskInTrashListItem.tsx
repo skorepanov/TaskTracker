@@ -42,7 +42,7 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
             ) : null;
 
         const handleTaskClick = () => {
-            taskStore.setCurrentTask(task);
+            taskStore.currentTaskId = task.id;
         };
 
         const handleRestoreTaskButtonClick = async () => {

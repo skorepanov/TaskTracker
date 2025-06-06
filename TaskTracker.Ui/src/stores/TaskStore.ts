@@ -10,7 +10,15 @@ class TaskStore {
         return Array.from(this.tasks.values());
     }
 
-    currentTask?: ITask;
+    currentTaskId?: number;
+
+    get currentTask() {
+        if (this.currentTaskId === undefined) {
+            return undefined;
+        }
+
+        return this.tasks.get(this.currentTaskId);
+    }
 
     constructor() {
         makeAutoObservable(this);
@@ -81,8 +89,8 @@ class TaskStore {
         runInAction(() => {
             this.tasks.delete(task.id);
 
-            if (this.currentTask?.id === task.id) {
-                this.currentTask = undefined;
+            if (this.currentTaskId === task.id) {
+                this.currentTaskId = undefined;
             }
         });
     };
@@ -127,8 +135,8 @@ class TaskStore {
         runInAction(() => {
             this.tasks.set(taskMovedToTrash.id, taskMovedToTrash);
 
-            if (this.currentTask?.id === task.id) {
-                this.currentTask = undefined;
+            if (this.currentTaskId === task.id) {
+                this.currentTaskId = undefined;
             }
         });
     };
@@ -145,8 +153,8 @@ class TaskStore {
         runInAction(() => {
             this.tasks.set(taskMovedFromTrash.id, taskMovedFromTrash);
 
-            if (this.currentTask?.id === task.id) {
-                this.currentTask = undefined;
+            if (this.currentTaskId === task.id) {
+                this.currentTaskId = undefined;
             }
         });
     };
@@ -281,10 +289,6 @@ class TaskStore {
 
         this.sortTasksByTitle(tasks);
         return tasks;
-    };
-
-    setCurrentTask = (task?: ITask) => {
-        this.currentTask = task;
     };
 }
 

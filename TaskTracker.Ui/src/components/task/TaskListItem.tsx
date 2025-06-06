@@ -59,7 +59,7 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
         : [];
 
     const handleTaskClick = () => {
-        taskStore.setCurrentTask(task);
+        taskStore.currentTaskId = task.id;
     };
 
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
