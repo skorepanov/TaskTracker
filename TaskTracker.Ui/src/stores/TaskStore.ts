@@ -10,14 +10,18 @@ class TaskStore {
         return Array.from(this.tasks.values());
     }
 
-    currentTaskId?: number;
+    private _currentTaskId: number | undefined;
 
     get currentTask() {
-        if (this.currentTaskId === undefined) {
+        if (this._currentTaskId === undefined) {
             return undefined;
         }
 
-        return this.tasks.get(this.currentTaskId);
+        return this.tasks.get(this._currentTaskId);
+    }
+
+    set currentTaskId(taskId: number | undefined) {
+        this._currentTaskId = taskId;
     }
 
     constructor() {
@@ -89,8 +93,8 @@ class TaskStore {
         runInAction(() => {
             this.tasks.delete(task.id);
 
-            if (this.currentTaskId === task.id) {
-                this.currentTaskId = undefined;
+            if (this._currentTaskId === task.id) {
+                this._currentTaskId = undefined;
             }
         });
     };
@@ -135,8 +139,8 @@ class TaskStore {
         runInAction(() => {
             this.tasks.set(taskMovedToTrash.id, taskMovedToTrash);
 
-            if (this.currentTaskId === task.id) {
-                this.currentTaskId = undefined;
+            if (this._currentTaskId === task.id) {
+                this._currentTaskId = undefined;
             }
         });
     };
@@ -153,8 +157,8 @@ class TaskStore {
         runInAction(() => {
             this.tasks.set(taskMovedFromTrash.id, taskMovedFromTrash);
 
-            if (this.currentTaskId === task.id) {
-                this.currentTaskId = undefined;
+            if (this._currentTaskId === task.id) {
+                this._currentTaskId = undefined;
             }
         });
     };
