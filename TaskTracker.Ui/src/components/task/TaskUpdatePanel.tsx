@@ -6,7 +6,7 @@ import { Checkbox, Divider, Typography } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { formatDateTime } from "../../utils";
 
-const { Paragraph } = Typography;
+const { Title } = Typography;
 
 const TaskUpdatePanel: React.FC = observer(() => {
     const { taskStore, folderStore, tagStore } = useStore();
@@ -124,12 +124,13 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 style={{ marginRight: 5 }}
             />
             <Divider />
-            <Paragraph
+            <Title
+                level={4}
                 editable={{
                     onChange: handleTitleChange,
                 }}>
                 {title}
-            </Paragraph>
+            </Title>
             <br />
             <div style={{ paddingTop: 5 }}>{taskTagComponents}</div>
             {taskTagComponents.length > 0 ? <br /> : null}
