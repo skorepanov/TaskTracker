@@ -100,7 +100,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
     };
 
     return (
-        <>
+        <div style={{ padding: "10px" }}>
             <Checkbox
                 checked={isTaskCompleted}
                 onChange={handleCompletedChange}
@@ -108,7 +108,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
             />
             {task.title}
             <br />
-            {taskTagComponents}
+            <div style={{ paddingTop: 5 }}>{taskTagComponents}</div>
             {taskTagComponents.length > 0 ? <br /> : null}
             <Divider />
             {folderComponent}
@@ -120,7 +120,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
             {overdueComponent}
             {modifiedDateTimeComponent}
             <i>Создана: {formatDateTime(task.createdDateTime)}</i>
-        </>
+        </div>
     );
 });
 

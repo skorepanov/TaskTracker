@@ -78,6 +78,8 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                     style={{
                         color: "grey",
                         backgroundColor: backgroundColor,
+                        paddingLeft: 10,
+                        paddingTop: 5,
                     }}>
                     <div style={{ float: "left" }}>
                         <Checkbox

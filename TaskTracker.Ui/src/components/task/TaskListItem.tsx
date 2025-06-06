@@ -98,6 +98,8 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
                 style={{
                     color: taskTextColor,
                     backgroundColor: backgroundColor,
+                    paddingLeft: 10,
+                    paddingTop: 5,
                 }}>
                 <div style={{ float: "left" }}>
                     <Checkbox
