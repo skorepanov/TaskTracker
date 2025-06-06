@@ -1,12 +1,14 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction, observable } from "mobx";
 import dayjs, { Dayjs } from "dayjs";
 import ITask from "../interfaces/ITask";
 import { Api, AppUrl } from "../api";
 
 class TaskStore {
-    incompletedTasks: ITask[] = [];
-    completedTasks: ITask[] = [];
-    tasksMovedToTrash: ITask[] = [];
+    tasks = observable.map<number, ITask>();
+
+    get taskArray(): ITask[] {
+        return Array.from(this.tasks.values());
+    }
 
     currentTask?: ITask;
 
@@ -19,7 +21,9 @@ class TaskStore {
         const tasks = await Api.get<ITask[]>(url);
 
         runInAction(() => {
-            this.incompletedTasks = tasks;
+            tasks.forEach(t => {
+                this.tasks.set(t.id, t);
+            });
         });
     };
 
@@ -28,7 +32,9 @@ class TaskStore {
         const tasks = await Api.get<ITask[]>(url);
 
         runInAction(() => {
-            this.completedTasks = tasks;
+            tasks.forEach(t => {
+                this.tasks.set(t.id, t);
+            });
         });
     };
 
@@ -38,7 +44,9 @@ class TaskStore {
         const tasks = await Api.get<ITask[]>(url);
 
         runInAction(() => {
-            this.tasksMovedToTrash = tasks;
+            tasks.forEach(t => {
+                this.tasks.set(t.id, t);
+            });
         });
     };
 
@@ -61,7 +69,7 @@ class TaskStore {
         const createdTask = await Api.post<ITask>(url, params);
 
         runInAction(() => {
-            this.incompletedTasks.push(createdTask);
+            this.tasks.set(createdTask.id, createdTask);
         });
     };
 
@@ -71,9 +79,7 @@ class TaskStore {
         await Api.delete(url);
 
         runInAction(() => {
-            this.tasksMovedToTrash = this.tasksMovedToTrash.filter(
-                t => t.id !== task.id
-            );
+            this.tasks.delete(task.id);
 
             if (this.currentTask?.id === task.id) {
                 this.currentTask = undefined;
@@ -91,11 +97,7 @@ class TaskStore {
         const updatedTask = await Api.put<ITask>(url, params);
 
         runInAction(() => {
-            this.incompletedTasks = this.incompletedTasks.filter(
-                t => t.id !== updatedTask.id
-            );
-
-            this.completedTasks.push(updatedTask);
+            this.tasks.set(updatedTask.id, updatedTask);
         });
     };
 
@@ -109,11 +111,7 @@ class TaskStore {
         const updatedTask = await Api.put<ITask>(url, params);
 
         runInAction(() => {
-            this.completedTasks = this.completedTasks.filter(
-                t => t.id !== updatedTask.id
-            );
-
-            this.incompletedTasks.push(updatedTask);
+            this.tasks.set(updatedTask.id, updatedTask);
         });
     };
 
@@ -127,17 +125,7 @@ class TaskStore {
         const taskMovedToTrash = await Api.put<ITask>(url, params);
 
         runInAction(() => {
-            if (taskMovedToTrash.completedDateTime !== null) {
-                this.completedTasks = this.completedTasks.filter(
-                    t => t.id !== taskMovedToTrash.id
-                );
-            } else {
-                this.incompletedTasks = this.incompletedTasks.filter(
-                    t => t.id !== taskMovedToTrash.id
-                );
-            }
-
-            this.tasksMovedToTrash.push(taskMovedToTrash);
+            this.tasks.set(taskMovedToTrash.id, taskMovedToTrash);
 
             if (this.currentTask?.id === task.id) {
                 this.currentTask = undefined;
@@ -155,15 +143,7 @@ class TaskStore {
         const taskMovedFromTrash = await Api.put<ITask>(url, params);
 
         runInAction(() => {
-            if (taskMovedFromTrash.completedDateTime !== null) {
-                this.completedTasks.push(taskMovedFromTrash);
-            } else {
-                this.incompletedTasks.push(taskMovedFromTrash);
-            }
-
-            this.tasksMovedToTrash = this.tasksMovedToTrash.filter(
-                t => t.id !== taskMovedFromTrash.id
-            );
+            this.tasks.set(taskMovedFromTrash.id, taskMovedFromTrash);
 
             if (this.currentTask?.id === task.id) {
                 this.currentTask = undefined;
@@ -171,22 +151,34 @@ class TaskStore {
         });
     };
 
-    getAllIncompletedTasks = () => {
-        const tasks = this.incompletedTasks.slice();
-        tasks.sort((t1, t2) => t1.title.localeCompare(t2.title));
+    getIncompletedTasks = (shouldSort: boolean = false) => {
+        const tasks = this.taskArray.filter(
+            t => t.movedToTrashDateTime === null && t.completedDateTime === null
+        );
+
+        if (shouldSort) {
+            this.sortTasksByTitle(tasks);
+        }
+
         return tasks;
     };
 
-    getAllCompletedTasks = () => {
-        const tasks = this.completedTasks.slice();
-        tasks.sort((t1, t2) => t1.title.localeCompare(t2.title));
+    getCompletedTasks = (shouldSort: boolean = false) => {
+        const tasks = this.taskArray.filter(
+            t => t.movedToTrashDateTime === null && t.completedDateTime !== null
+        );
+
+        if (shouldSort) {
+            this.sortTasksByTitle(tasks);
+        }
+
         return tasks;
     };
 
     getTodayIncompletedTasks = () => {
         const todayDate = dayjs(new Date()).startOf("day");
 
-        const tasks = this.incompletedTasks.filter(t =>
+        const tasks = this.getIncompletedTasks().filter(t =>
             this.isTodayIncompletedTask(t, todayDate)
         );
 
@@ -214,7 +206,7 @@ class TaskStore {
     getTodayCompletedTasks = () => {
         const todayDate = dayjs(new Date()).startOf("day");
 
-        const tasks = this.completedTasks.filter(t =>
+        const tasks = this.getCompletedTasks().filter(t =>
             this.isTodayCompletedTask(t, todayDate)
         );
 
@@ -232,22 +224,22 @@ class TaskStore {
     };
 
     getInboxIncompletedTasks = () => {
-        const tasks = this.incompletedTasks.filter(t => t.folderId === null);
-        this.sortTasksByTitle(tasks);
-        return tasks;
-    };
-
-    getInboxCompletedTasks = () => {
-        const tasks = this.completedTasks.filter(
-            task => task.folderId === null
+        const tasks = this.getIncompletedTasks().filter(
+            t => t.folderId === null
         );
 
         this.sortTasksByTitle(tasks);
         return tasks;
     };
 
+    getInboxCompletedTasks = () => {
+        const tasks = this.getCompletedTasks().filter(t => t.folderId === null);
+        this.sortTasksByTitle(tasks);
+        return tasks;
+    };
+
     getFolderIncompletedTasks = (folderId: number) => {
-        const tasks = this.incompletedTasks.filter(
+        const tasks = this.getIncompletedTasks().filter(
             t => t.folderId === folderId
         );
 
@@ -256,13 +248,16 @@ class TaskStore {
     };
 
     getFolderCompletedTasks = (folderId: number) => {
-        const tasks = this.completedTasks.filter(t => t.folderId === folderId);
+        const tasks = this.getCompletedTasks().filter(
+            t => t.folderId === folderId
+        );
+
         this.sortTasksByTitle(tasks);
         return tasks;
     };
 
     getTagIncompletedTasks = (tagId: number) => {
-        const tasks = this.incompletedTasks.filter(t =>
+        const tasks = this.getIncompletedTasks().filter(t =>
             t.tagIds?.includes(tagId)
         );
 
@@ -271,7 +266,7 @@ class TaskStore {
     };
 
     getTagCompletedTasks = (tagId: number) => {
-        const tasks = this.completedTasks.filter(t =>
+        const tasks = this.getCompletedTasks().filter(t =>
             t.tagIds?.includes(tagId)
         );
 
@@ -280,7 +275,10 @@ class TaskStore {
     };
 
     getTasksMovedToTrash = () => {
-        const tasks = this.tasksMovedToTrash.slice();
+        const tasks = this.taskArray.filter(
+            t => t.movedToTrashDateTime !== null
+        );
+
         this.sortTasksByTitle(tasks);
         return tasks;
     };

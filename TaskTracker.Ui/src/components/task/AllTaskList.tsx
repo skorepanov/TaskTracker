@@ -8,8 +8,8 @@ import TaskCreationModalButton from "./TaskCreationModalButton";
 const AllTaskList: React.FC = observer(() => {
     const { taskStore } = useStore();
 
-    const incompletedTasks = taskStore.getAllIncompletedTasks();
-    const completedTasks = taskStore.getAllCompletedTasks();
+    const incompletedTasks = taskStore.getIncompletedTasks(true);
+    const completedTasks = taskStore.getCompletedTasks(true);
 
     return (
         <>

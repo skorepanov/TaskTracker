@@ -18,7 +18,7 @@ const MainMenu: React.FC = observer(() => {
 
     const { taskStore, folderStore, tagStore } = useStore();
 
-    const allIncompletedTaskCount = taskStore.incompletedTasks.length;
+    const allIncompletedTaskCount = taskStore.getIncompletedTasks().length;
 
     const todayIncompletedTaskCount =
         taskStore.getTodayIncompletedTasks().length;
@@ -55,8 +55,8 @@ const MainMenu: React.FC = observer(() => {
     };
 
     const getFolderLabel = (folder: IFolder) => {
-        const folderIncompleteTaskCount = taskStore.incompletedTasks.filter(
-            t => t.folderId === folder.id
+        const folderIncompleteTaskCount = taskStore.getFolderIncompletedTasks(
+            folder.id
         ).length;
 
         const handleDeleteFolderButtonClick = async () => {
@@ -114,8 +114,8 @@ const MainMenu: React.FC = observer(() => {
     };
 
     const getTagLabel = (tag: ITag) => {
-        const tagIncompleteTaskCount = taskStore.incompletedTasks.filter(t =>
-            t.tagIds?.includes(tag.id)
+        const tagIncompleteTaskCount = taskStore.getTagIncompletedTasks(
+            tag.id
         ).length;
 
         const handleDeleteTagButtonClick = async () => {
