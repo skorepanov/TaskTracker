@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
 import TaskTag from "../tag/TaskTag";
@@ -11,10 +11,11 @@ const TaskUpdatePanel: React.FC = observer(() => {
 
     const { currentTask: task } = taskStore;
 
-    const isTaskCompleted =
-        task !== undefined && task.completedDateTime !== null;
+    const [isCompleted, setIsCompleted] = useState<boolean>();
 
-    const [isCompleted, setIsCompleted] = useState<boolean>(isTaskCompleted);
+    useEffect(() => {
+        setIsCompleted(task !== undefined && task.completedDateTime !== null);
+    }, [task]);
 
     if (!task) {
         return null;
@@ -52,7 +53,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
             </>
         ) : null;
 
-    const completedDateTimeComponent = isTaskCompleted ? (
+    const completedDateTimeComponent = isCompleted ? (
         <>
             Выполнена: {formatDateTime(task.completedDateTime)}
             <br />
@@ -66,7 +67,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
 
     const overdueDaysComponent =
         task.overdueDaysCount > 0 ? (
-            <span style={{ color: isTaskCompleted ? "" : "red" }}>
+            <span style={{ color: isCompleted ? "" : "red" }}>
                 ({task.overdueDaysCount} дней назад)
             </span>
         ) : null;
@@ -102,7 +103,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
     return (
         <div style={{ padding: "10px" }}>
             <Checkbox
-                checked={isTaskCompleted}
+                checked={isCompleted}
                 onChange={handleCompletedChange}
                 style={{ marginRight: 5 }}
             />
