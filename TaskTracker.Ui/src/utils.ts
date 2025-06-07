@@ -9,6 +9,6 @@ export function formatDate(date: Date) {
 
 export function formatDateTime(date: Date | null): string {
     const dayjsDate = dayjs(date);
-    const template = "DD.MM.YYYY HH:mm:ss ([GMT:]Z)";
+    const template = "DD.MM.YYYY HH:mm:ss";
     return dayjsDate.format(template);
 }
