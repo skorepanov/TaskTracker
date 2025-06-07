@@ -143,14 +143,14 @@ public class UserTaskTests
     {
         // Arrange
         const string TITLE = "Task title";
-        const string DESCRIPTION = "Task description";
+        const string DESCRIPTION = "    Task description    ";
         const int FOLDER_ID = 42;
         var dueDateTime = new DateTime(year: 2025, month: 4, day: 30);
         var createdDateTime = new DateTime(year: 2025, month: 4, day: 20);
 
         var userTaskDto = new UserTaskForCreationDto(
             Title: $"   {TITLE}    ",
-            Description: $"    {DESCRIPTION}    ",
+            Description: DESCRIPTION,
             FolderId: FOLDER_ID,
             DueDateTime: dueDateTime,
             createdDateTime);
@@ -221,14 +221,14 @@ public class UserTaskTests
         );
 
         const string NEW_TITLE = "New task title";
-        const string NEW_DESCRIPTION = "New task description";
+        const string NEW_DESCRIPTION = "   New task description    ";
         const int NEW_FOLDER_ID = 2;
         var newDueDateTime = new DateTime(year: 2025, month: 1, day: 2);
         var modifiedDateTime =  new DateTime(year: 2025, month: 1, day: 3);
 
         var userTaskDto = new UserTaskForUpdateDto(
             Title: $"   {NEW_TITLE}    ",
-            Description: $"   {NEW_DESCRIPTION}    ",
+            Description: NEW_DESCRIPTION,
             NEW_FOLDER_ID,
             newDueDateTime,
             modifiedDateTime

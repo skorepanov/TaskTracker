@@ -40,12 +40,11 @@ public class UserTask
     public static UserTask CreateTask(UserTaskForCreationDto userTaskDto, DateTime now)
     {
         var normalizedTitle = userTaskDto.Title.Trim();
-        var normalizedDescription = userTaskDto.Description?.Trim();
         var createdDateTime = userTaskDto.CreatedDateTime ?? now;
 
         return new UserTask(
             normalizedTitle,
-            normalizedDescription,
+            userTaskDto.Description,
             userTaskDto.FolderId,
             userTaskDto.DueDateTime,
             createdDateTime);
@@ -54,7 +53,7 @@ public class UserTask
     public void UpdateTask(UserTaskForUpdateDto userTaskDto, DateTime now)
     {
         Title = userTaskDto.Title.Trim();
-        Description = userTaskDto.Description?.Trim();
+        Description = userTaskDto.Description;
         FolderId = userTaskDto.FolderId;
         DueDateTime = userTaskDto.DueDateTime;
         ModifiedDateTime = userTaskDto.ModifiedDateTime ?? now;
