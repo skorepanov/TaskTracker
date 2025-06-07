@@ -1,8 +1,13 @@
 import React from "react";
-import { observer } from "mobx-react-lite";
+import { Empty } from "antd";
 
-const NoTasks: React.FC = observer(() => {
-    return <div style={{ textAlign: "center" }}>Нет задач</div>;
-});
+const NoTasks: React.FC = () => {
+    return (
+        <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description="Нет задач"
+        />
+    );
+};
 
 export default NoTasks;
