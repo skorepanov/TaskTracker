@@ -24,8 +24,8 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
     };
 
     const handleUpdateFolderButtonClick = async () => {
+        setTitle(title.trim());
         await folderStore.updateFolder(props.folder.id, title);
-        setTitle(props.folder.title);
         props.hideModal();
     };
 

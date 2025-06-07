@@ -30,9 +30,8 @@ const TagUpdateModal: React.FC<ITagUpdateModalProps> = observer(props => {
     };
 
     const handleUpdateTagButtonClick = async () => {
+        setTitle(title.trim());
         await tagStore.updateTag(props.tag.id, title, color);
-        setTitle(props.tag.title);
-        setColor(props.tag.color);
         props.hideModal();
     };
 
