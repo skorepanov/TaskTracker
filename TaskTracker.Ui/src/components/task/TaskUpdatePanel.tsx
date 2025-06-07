@@ -2,30 +2,46 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
 import TaskTag from "../tag/TaskTag";
-import { Checkbox, Divider, Typography } from "antd";
+import { Checkbox, Divider, Select, Typography } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { formatDateTime } from "../../utils";
 
 const { Title } = Typography;
 
 const TaskUpdatePanel: React.FC = observer(() => {
+    const inboxId = -1;
+
     const { taskStore, folderStore, tagStore } = useStore();
 
     const { currentTask: task } = taskStore;
 
     const [isCompleted, setIsCompleted] = useState<boolean>();
     const [title, setTitle] = useState<string>("");
+    const [folderId, setFolderId] = useState<number | null>(null);
     const [modifiedDateTime, setModifiedDateTime] = useState<Date | null>(null);
 
     useEffect(() => {
         setIsCompleted(task !== undefined && task.completedDateTime !== null);
         setTitle(task?.title ?? "");
+        setFolderId(task?.folderId ?? inboxId);
         setModifiedDateTime(task?.modifiedDateTime ?? null);
-    }, [task]);
+    }, [task, inboxId]);
 
     if (!task) {
         return null;
     }
+
+    const inboxOption = {
+        key: inboxId,
+        value: inboxId,
+        label: "<Inbox>",
+    };
+
+    const folderOptions = folderStore.getSortedFolders().map(f => ({
+        key: f.id,
+        value: f.id,
+        label: f.title,
+    }));
 
     const taskTags = tagStore.getFilteredSortedTags(task.tagIds);
 
@@ -37,18 +53,6 @@ const TaskUpdatePanel: React.FC = observer(() => {
               />
           ))
         : [];
-
-    const folder =
-        task.folderId !== null
-            ? folderStore.folders.find(f => f.id === task.folderId)?.title
-            : "<Inbox>";
-
-    const folderComponent = (
-        <>
-            Папка: {folder}
-            <br />
-        </>
-    );
 
     const movedToTrashDateTimeComponent =
         task.movedToTrashDateTime !== null ? (
@@ -89,7 +93,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
     const modifiedDateTimeComponent =
         modifiedDateTime !== null ? (
             <>
-                <i>Изменена: {formatDateTime(modifiedDateTime)}</i>
+                Изменена: {formatDateTime(modifiedDateTime)}
                 <br />
             </>
         ) : null;
@@ -120,6 +124,18 @@ const TaskUpdatePanel: React.FC = observer(() => {
         );
     };
 
+    const handleFolderChange = async (newFolderId: number) => {
+        const normalizedFolderId = newFolderId === inboxId ? null : newFolderId;
+
+        await taskStore.updateTask(
+            task.id,
+            task.title,
+            task.description,
+            normalizedFolderId,
+            task.dueDateTime
+        );
+    };
+
     return (
         <div style={{ padding: "10px" }}>
             <Checkbox
@@ -139,16 +155,25 @@ const TaskUpdatePanel: React.FC = observer(() => {
             <br />
             <div style={{ paddingTop: 5 }}>{taskTagComponents}</div>
             {taskTagComponents.length > 0 ? <br /> : null}
-            <Divider />
-            {folderComponent}
-            <Divider />
+            <Divider size="small" />
             {task.description}
-            <Divider />
+            <br />
+            <Select
+                placeholder="Папка"
+                options={[inboxOption, ...folderOptions]}
+                value={folderId}
+                onChange={handleFolderChange}
+                showSearch
+                optionFilterProp="label"
+                style={{ width: 200 }}
+                popupMatchSelectWidth={false}
+            />
+            <Divider size="small" />
             {movedToTrashDateTimeComponent}
             {completedDateTimeComponent}
             {overdueComponent}
             {modifiedDateTimeComponent}
-            <i>Создана: {formatDateTime(task.createdDateTime)}</i>
+            Создана: {formatDateTime(task.createdDateTime)}
         </div>
     );
 });

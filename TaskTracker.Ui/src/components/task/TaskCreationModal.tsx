@@ -121,7 +121,8 @@ const TaskCreationModal: React.FC<ITaskCreationModalProps> = observer(props => {
                     onChange={handleFolderChange}
                     showSearch
                     optionFilterProp="label"
-                    style={{ width: 300 }}
+                    style={{ width: 200 }}
+                    popupMatchSelectWidth={false}
                 />
             </Space>
         </Modal>
