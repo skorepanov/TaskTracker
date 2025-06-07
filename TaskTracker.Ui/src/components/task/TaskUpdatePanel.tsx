@@ -107,6 +107,10 @@ const TaskUpdatePanel: React.FC = observer(() => {
     };
 
     const handleTitleChange = async (newTitle: string) => {
+        if (newTitle.trim() === "") {
+            return;
+        }
+
         await taskStore.updateTask(
             task.id,
             newTitle,
@@ -128,6 +132,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 level={4}
                 editable={{
                     onChange: handleTitleChange,
+                    triggerType: ["text", "icon"],
                 }}>
                 {title}
             </Title>
