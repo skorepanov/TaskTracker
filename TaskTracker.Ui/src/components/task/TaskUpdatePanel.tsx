@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
 import TaskTag from "../tag/TaskTag";
-import { Checkbox, Divider, Select, Typography } from "antd";
+import { Checkbox, Divider, Input, Select, Typography } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { formatDateTime } from "../../utils";
 
 const { Title } = Typography;
+const { TextArea } = Input;
 
 const TaskUpdatePanel: React.FC = observer(() => {
     const inboxId = -1;
@@ -17,12 +18,14 @@ const TaskUpdatePanel: React.FC = observer(() => {
 
     const [isCompleted, setIsCompleted] = useState<boolean>();
     const [title, setTitle] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
     const [folderId, setFolderId] = useState<number | null>(null);
     const [modifiedDateTime, setModifiedDateTime] = useState<Date | null>(null);
 
     useEffect(() => {
         setIsCompleted(task !== undefined && task.completedDateTime !== null);
         setTitle(task?.title ?? "");
+        setDescription(task?.description ?? "");
         setFolderId(task?.folderId ?? inboxId);
         setModifiedDateTime(task?.modifiedDateTime ?? null);
     }, [task, inboxId]);
@@ -124,6 +127,18 @@ const TaskUpdatePanel: React.FC = observer(() => {
         );
     };
 
+    const handleDescriptionChange = async (
+        event: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+        await taskStore.updateTask(
+            task.id,
+            task.title,
+            event.target.value,
+            task.folderId,
+            task.dueDateTime
+        );
+    };
+
     const handleFolderChange = async (newFolderId: number) => {
         const normalizedFolderId = newFolderId === inboxId ? null : newFolderId;
 
@@ -156,7 +171,13 @@ const TaskUpdatePanel: React.FC = observer(() => {
             <div style={{ paddingTop: 5 }}>{taskTagComponents}</div>
             {taskTagComponents.length > 0 ? <br /> : null}
             <Divider size="small" />
-            {task.description}
+            <TextArea
+                placeholder="Описание задачи"
+                value={description}
+                onChange={handleDescriptionChange}
+                style={{ width: "100%", height: 400 }}
+            />
+            <br />
             <br />
             <Select
                 placeholder="Папка"
