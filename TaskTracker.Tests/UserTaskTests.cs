@@ -143,14 +143,12 @@ public class UserTaskTests
     {
         // Arrange
         const string TITLE = "Task title";
-        const string DESCRIPTION = "    Task description    ";
         const int FOLDER_ID = 42;
         var dueDateTime = new DateTime(year: 2025, month: 4, day: 30);
         var createdDateTime = new DateTime(year: 2025, month: 4, day: 20);
 
         var userTaskDto = new UserTaskForCreationDto(
             Title: $"   {TITLE}    ",
-            Description: DESCRIPTION,
             FolderId: FOLDER_ID,
             DueDateTime: dueDateTime,
             createdDateTime);
@@ -160,7 +158,6 @@ public class UserTaskTests
 
         // Assert
         sut.Title.Should().Be(TITLE);
-        sut.Description.Should().Be(DESCRIPTION);
         sut.FolderId.Should().Be(FOLDER_ID);
         sut.DueDateTime.Should().Be(dueDateTime);
         sut.CreatedDateTime.Should().Be(createdDateTime);
@@ -172,7 +169,6 @@ public class UserTaskTests
         // Arrange
         var userTaskDto = new UserTaskForCreationDto(
             Title: "Folder Title 42",
-            Description: "Folder description 42",
             FolderId: 42,
             DueDateTime: null,
             CreatedDateTime: null);
@@ -195,7 +191,6 @@ public class UserTaskTests
 
         var userTaskDto = new UserTaskForCreationDto(
             Title: "Task Title 42",
-            Description: "Task Description 42",
             FolderId: 42,
             DueDateTime: null,
             createdDateTime);
@@ -215,20 +210,19 @@ public class UserTaskTests
         // Arrange
         var sut = CreateSut(
             title: "Old task title",
-            description: "Old task description",
             folderId: 1,
             dueDateTime: new DateTime(year: 2025, month: 1, day: 1)
         );
 
         const string NEW_TITLE = "New task title";
-        const string NEW_DESCRIPTION = "   New task description    ";
+        const string DESCRIPTION = "   Task description    ";
         const int NEW_FOLDER_ID = 2;
         var newDueDateTime = new DateTime(year: 2025, month: 1, day: 2);
         var modifiedDateTime =  new DateTime(year: 2025, month: 1, day: 3);
 
         var userTaskDto = new UserTaskForUpdateDto(
             Title: $"   {NEW_TITLE}    ",
-            Description: NEW_DESCRIPTION,
+            Description: DESCRIPTION,
             NEW_FOLDER_ID,
             newDueDateTime,
             modifiedDateTime
@@ -239,7 +233,7 @@ public class UserTaskTests
 
         // Assert
         sut.Title.Should().Be(NEW_TITLE);
-        sut.Description.Should().Be(NEW_DESCRIPTION);
+        sut.Description.Should().Be(DESCRIPTION);
         sut.FolderId.Should().Be(NEW_FOLDER_ID);
         sut.DueDateTime.Should().Be(newDueDateTime);
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
@@ -393,7 +387,6 @@ public class UserTaskTests
     #region helpers
     private UserTask CreateSut(
         string title = "Task title 42",
-        string? description = null,
         int? folderId = null,
         DateTime? dueDateTime = null,
         DateTime? createdDateTime = null,
@@ -404,7 +397,6 @@ public class UserTaskTests
 
         var userTaskDto = new UserTaskForCreationDto(
             title,
-            description,
             folderId,
             dueDateTime,
             createdDateTime);

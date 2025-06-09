@@ -5,7 +5,6 @@
 /// </summary>
 public record UserTaskForCreationDto(
     string Title,
-    string? Description,
     int? FolderId,
     DateTime? DueDateTime,
     DateTime? CreatedDateTime);

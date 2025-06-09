@@ -20,7 +20,6 @@ public class TaskServiceTests
 
         var userTaskDto = new UserTaskForCreationDto(
             Title: "Task title 42",
-            Description: "Description 42",
             FOLDER_ID,
             DueDateTime: null,
             CreatedDateTime: null);
@@ -48,7 +47,6 @@ public class TaskServiceTests
     {
         // Arrange
         const string TITLE = "title 42";
-        const string DESCRIPTION = "description 42";
         const int FOLDER_ID = 42;
 
         var mockTaskRepository = new Mock<ITaskRepository>();
@@ -62,7 +60,6 @@ public class TaskServiceTests
 
         var userTaskDto = new UserTaskForCreationDto(
             TITLE,
-            DESCRIPTION,
             FOLDER_ID,
             DueDateTime: null,
             CreatedDateTime: null);
@@ -77,7 +74,6 @@ public class TaskServiceTests
 
         // Assert
         task.Title.Should().Be(TITLE);
-        task.Description.Should().Be(DESCRIPTION);
         mockTaskRepository
             .Verify(r => r.CreateTask(It.IsAny<UserTask>()),
                     Times.Once);
@@ -307,7 +303,6 @@ public class TaskServiceTests
 
     private UserTask CreateTask(
         string title = "Task title 42",
-        string? description = null,
         DateTime? createdDateTime = null,
         DateTime? now = null)
     {
@@ -316,7 +311,6 @@ public class TaskServiceTests
 
         var userTaskDto = new UserTaskForCreationDto(
             title,
-            description,
             FolderId: 42,
             DueDateTime: null,
             createdDateTime);

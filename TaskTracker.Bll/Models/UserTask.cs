@@ -25,13 +25,11 @@ public class UserTask
 
     private UserTask(
         string title,
-        string? description,
         int? folderId,
         DateTime? dueDateTime,
         DateTime createdDateTime)
     {
         Title = title;
-        Description = description;
         FolderId = folderId;
         DueDateTime = dueDateTime;
         CreatedDateTime = createdDateTime;
@@ -44,7 +42,6 @@ public class UserTask
 
         return new UserTask(
             normalizedTitle,
-            userTaskDto.Description,
             userTaskDto.FolderId,
             userTaskDto.DueDateTime,
             createdDateTime);
