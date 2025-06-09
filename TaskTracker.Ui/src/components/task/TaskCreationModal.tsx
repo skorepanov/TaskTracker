@@ -17,7 +17,6 @@ const TaskCreationModal: React.FC<ITaskCreationModalProps> = observer(props => {
     const inboxId = -1;
 
     const [title, setTitle] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
     const [dueDateTime, setDueDateTime] = useState<Date | null>(
         props.dueDateTime ?? null
     );
@@ -39,19 +38,12 @@ const TaskCreationModal: React.FC<ITaskCreationModalProps> = observer(props => {
 
     const resetState = () => {
         setTitle("");
-        setDescription("");
         setDueDateTime(null);
         setFolderId(inboxId);
     };
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
-    };
-
-    const handleDescriptionChange = (
-        event: React.ChangeEvent<HTMLTextAreaElement>
-    ) => {
-        setDescription(event.target.value);
     };
 
     const handleDueDateTimeChange = (date: Dayjs | null) => {
@@ -69,12 +61,7 @@ const TaskCreationModal: React.FC<ITaskCreationModalProps> = observer(props => {
     const handleCreateTaskButtonClick = async () => {
         const normalizedFolderId = folderId === inboxId ? null : folderId;
 
-        await taskStore.createTask(
-            title,
-            description,
-            dueDateTime,
-            normalizedFolderId
-        );
+        await taskStore.createTask(title, dueDateTime, normalizedFolderId);
 
         resetState();
         props.hideModal();
@@ -101,12 +88,6 @@ const TaskCreationModal: React.FC<ITaskCreationModalProps> = observer(props => {
                     placeholder="Название задачи"
                     value={title}
                     onChange={handleTitleChange}
-                    style={{ width: 300 }}
-                />
-                <TextArea
-                    placeholder="Описание задачи"
-                    value={description}
-                    onChange={handleDescriptionChange}
                     style={{ width: 300 }}
                 />
                 <DatePicker

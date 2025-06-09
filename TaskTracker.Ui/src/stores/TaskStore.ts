@@ -64,7 +64,6 @@ class TaskStore {
 
     createTask = async (
         title: string,
-        description: string,
         dueDateTime: Date | null,
         folderId: number | null
     ) => {
@@ -72,7 +71,6 @@ class TaskStore {
 
         const params = {
             title: title,
-            description: description,
             dueDateTime: dueDateTime,
             folderId: folderId,
             createdDateTime: new Date().toISOString(),
