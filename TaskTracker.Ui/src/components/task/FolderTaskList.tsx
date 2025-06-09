@@ -27,7 +27,10 @@ const FolderTaskList: React.FC = observer(() => {
             <div style={{ paddingLeft: 10, paddingTop: 10 }}>
                 <strong>{folder.title}</strong>
             </div>
-            <TaskCreationPanel folderId={folder.id} />
+            <TaskCreationPanel
+                key={`createTaskInFolder${folder.id}`}
+                folderId={folder.id}
+            />
             <Divider />
             <TaskList
                 incompletedTasks={incompletedTasks}
