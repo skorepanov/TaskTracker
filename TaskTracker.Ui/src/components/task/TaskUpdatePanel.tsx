@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
 import TaskTag from "../tag/TaskTag";
-import { Checkbox, Divider, Input, Select, Typography } from "antd";
+import { Checkbox, DatePicker, Divider, Input, Select, Typography } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
+import dayjs, { Dayjs } from "dayjs";
 import { formatDateTime } from "../../utils";
 
 const { Title } = Typography;
@@ -20,14 +21,20 @@ const TaskUpdatePanel: React.FC = observer(() => {
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [folderId, setFolderId] = useState<number | null>(null);
+    const [dueDateTime, setDueDateTime] = useState<Date | null>();
     const [modifiedDateTime, setModifiedDateTime] = useState<Date | null>(null);
 
     useEffect(() => {
-        setIsCompleted(task !== undefined && task.completedDateTime !== null);
-        setTitle(task?.title ?? "");
-        setDescription(task?.description ?? "");
-        setFolderId(task?.folderId ?? inboxId);
-        setModifiedDateTime(task?.modifiedDateTime ?? null);
+        if (!task) {
+            return;
+        }
+
+        setIsCompleted(task.completedDateTime !== null);
+        setTitle(task.title);
+        setDescription(task.description ?? "");
+        setFolderId(task.folderId ?? inboxId);
+        setDueDateTime(task.dueDateTime);
+        setModifiedDateTime(task.modifiedDateTime);
     }, [task, inboxId]);
 
     if (!task) {
@@ -45,6 +52,8 @@ const TaskUpdatePanel: React.FC = observer(() => {
         value: f.id,
         label: f.title,
     }));
+
+    const dueDateTimeColor = task.overdueDaysCount > 0 ? "red" : "";
 
     const taskTags = tagStore.getFilteredSortedTags(task.tagIds);
 
@@ -72,26 +81,6 @@ const TaskUpdatePanel: React.FC = observer(() => {
             <br />
         </>
     ) : null;
-
-    const dueDateTimeComponent =
-        task.dueDateTime !== null ? (
-            <>Срок выполнения: {formatDateTime(task.dueDateTime)}</>
-        ) : null;
-
-    const overdueDaysComponent =
-        task.overdueDaysCount > 0 ? (
-            <span style={{ color: isCompleted ? "" : "red" }}>
-                ({task.overdueDaysCount} дней назад)
-            </span>
-        ) : null;
-
-    const overdueComponent =
-        task.dueDateTime !== null ? (
-            <>
-                {dueDateTimeComponent} {overdueDaysComponent}
-                <br />
-            </>
-        ) : null;
 
     const modifiedDateTimeComponent =
         modifiedDateTime !== null ? (
@@ -151,25 +140,44 @@ const TaskUpdatePanel: React.FC = observer(() => {
         );
     };
 
+    const handleDueDateTimeChange = async (newDueDateTime: Dayjs | null) => {
+        const normalizedDueDateTime = newDueDateTime?.toDate() ?? null;
+
+        await taskStore.updateTask(
+            task.id,
+            task.title,
+            task.description,
+            task.folderId,
+            normalizedDueDateTime
+        );
+    };
+
     return (
         <div style={{ padding: "10px" }}>
             <Checkbox
                 checked={isCompleted}
                 onChange={handleCompletedChange}
-                style={{ marginRight: 5 }}
             />
-            <Divider />
+            <DatePicker
+                placeholder="Когда выполнить"
+                value={dueDateTime !== null ? dayjs(dueDateTime) : null}
+                onChange={handleDueDateTimeChange}
+                style={{ color: dueDateTimeColor, width: 180, marginLeft: 10 }}
+            />
+            <Divider size="small" />
             <Title
                 level={4}
                 editable={{
                     onChange: handleTitleChange,
                     triggerType: ["text", "icon"],
+                }}
+                style={{
+                    marginTop: 15,
+                    marginBottom: 15,
                 }}>
                 {title}
             </Title>
-            <br />
             <div style={{ paddingTop: 5 }}>{taskTagComponents}</div>
-            {taskTagComponents.length > 0 ? <br /> : null}
             <Divider size="small" />
             <TextArea
                 placeholder="Описание задачи"
@@ -192,7 +200,6 @@ const TaskUpdatePanel: React.FC = observer(() => {
             <Divider size="small" />
             {movedToTrashDateTimeComponent}
             {completedDateTimeComponent}
-            {overdueComponent}
             {modifiedDateTimeComponent}
             Создана: {formatDateTime(task.createdDateTime)}
         </div>
