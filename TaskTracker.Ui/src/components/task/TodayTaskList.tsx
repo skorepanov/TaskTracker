@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { Divider } from "antd";
 import { useStore } from "../../stores/RootStore";
 import TaskList from "./TaskList";
-import TaskCreationModalButton from "./TaskCreationModalButton";
+import TaskCreationPanel from "./TaskCreationPanel";
 
 const TodayTaskList: React.FC = observer(() => {
     const { taskStore } = useStore();
@@ -13,13 +13,10 @@ const TodayTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <div style={{ float: "left", paddingLeft: 10, paddingTop: 10 }}>
+            <div style={{ paddingLeft: 10, paddingTop: 10 }}>
                 <strong>Задачи на сегодня</strong>
             </div>
-            <div
-                style={{ float: "right", paddingRight: 10, paddingBottom: 10 }}>
-                <TaskCreationModalButton dueDateTime={new Date()} />
-            </div>
+            <TaskCreationPanel dueDateTime={new Date()} />
             <Divider />
             <TaskList
                 incompletedTasks={incompletedTasks}

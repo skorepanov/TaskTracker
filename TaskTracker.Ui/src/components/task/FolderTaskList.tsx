@@ -5,7 +5,7 @@ import { Divider } from "antd";
 import { useStore } from "../../stores/RootStore";
 import TaskList from "./TaskList";
 import NoTasks from "./NoTasks";
-import TaskCreationModalButton from "./TaskCreationModalButton";
+import TaskCreationPanel from "./TaskCreationPanel";
 
 const FolderTaskList: React.FC = observer(() => {
     const { taskStore, folderStore } = useStore();
@@ -24,13 +24,10 @@ const FolderTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <div style={{ float: "left", paddingLeft: 10, paddingTop: 10 }}>
+            <div style={{ paddingLeft: 10, paddingTop: 10 }}>
                 <strong>{folder.title}</strong>
             </div>
-            <div
-                style={{ float: "right", paddingRight: 10, paddingBottom: 10 }}>
-                <TaskCreationModalButton folderId={folder.id} />
-            </div>
+            <TaskCreationPanel folderId={folder.id} />
             <Divider />
             <TaskList
                 incompletedTasks={incompletedTasks}
