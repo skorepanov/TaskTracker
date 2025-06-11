@@ -90,7 +90,7 @@ const TaskCreationPanel: React.FC<ITaskCreationPanelProps> = observer(props => {
                         />
                     </>
                 }
-                style={{ marginTop: 10, marginLeft: 5, marginRight: 5 }}
+                style={{ marginTop: 10, marginBottom: 20, marginRight: 5 }}
             />
         </Space.Compact>
     );

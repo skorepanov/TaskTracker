@@ -1,6 +1,5 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Divider } from "antd";
 import { useStore } from "../../stores/RootStore";
 import TaskInTrashListItem from "./TaskInTrashListItem";
 
@@ -18,10 +17,9 @@ const TaskInTrashList: React.FC = observer(() => {
 
     return (
         <>
-            <div style={{ paddingLeft: 10, paddingTop: 10 }}>
+            <div className="task-list-header">
                 <strong>Корзина</strong>
             </div>
-            <Divider />
             <div style={{ paddingLeft: 10 }}>{taskComponents}</div>
         </>
     );

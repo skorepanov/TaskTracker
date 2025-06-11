@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Divider } from "antd";
 import { useStore } from "../../stores/RootStore";
 import TaskList from "./TaskList";
 import NoTasks from "./NoTasks";
@@ -24,14 +23,13 @@ const FolderTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <div style={{ paddingLeft: 10, paddingTop: 10 }}>
+            <div className="task-list-header">
                 <strong>{folder.title}</strong>
+                <TaskCreationPanel
+                    key={`createTaskInFolder${folder.id}`}
+                    folderId={folder.id}
+                />
             </div>
-            <TaskCreationPanel
-                key={`createTaskInFolder${folder.id}`}
-                folderId={folder.id}
-            />
-            <Divider />
             <TaskList
                 incompletedTasks={incompletedTasks}
                 completedTasks={completedTasks}

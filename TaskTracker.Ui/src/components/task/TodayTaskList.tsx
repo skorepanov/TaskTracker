@@ -1,6 +1,5 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Divider } from "antd";
 import { useStore } from "../../stores/RootStore";
 import TaskList from "./TaskList";
 import TaskCreationPanel from "./TaskCreationPanel";
@@ -13,11 +12,10 @@ const TodayTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <div style={{ paddingLeft: 10, paddingTop: 10 }}>
+            <div className="task-list-header">
                 <strong>Задачи на сегодня</strong>
+                <TaskCreationPanel dueDateTime={new Date()} />
             </div>
-            <TaskCreationPanel dueDateTime={new Date()} />
-            <Divider />
             <TaskList
                 incompletedTasks={incompletedTasks}
                 completedTasks={completedTasks}
