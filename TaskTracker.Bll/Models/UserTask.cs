@@ -47,11 +47,12 @@ public class UserTask
             createdDateTime);
     }
 
-    public void UpdateTask(UserTaskForUpdateDto userTaskDto, DateTime now)
+    public void UpdateTask(UserTaskForUpdateDto userTaskDto, DateTime now, IEnumerable<Tag> tags)
     {
         Title = userTaskDto.Title.Trim();
         Description = userTaskDto.Description;
         FolderId = userTaskDto.FolderId;
+        Tags = tags.ToList();
         DueDateTime = userTaskDto.DueDateTime;
         ModifiedDateTime = userTaskDto.ModifiedDateTime ?? now;
     }

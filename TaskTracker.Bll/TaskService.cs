@@ -87,8 +87,28 @@ public class TaskService(
             }
         }
 
+        var tagIds = userTaskDto.TagIds ?? [];
+        IReadOnlyList<Tag> tags = new List<Tag>();
+
+        if (tagIds.Count > 0)
+        {
+            tags = await _tagRepository.GetTags(tagIds);
+
+            var existentTagIds = tags.Select(t => t.Id).ToList();
+            var nonExistentTagIds = tagIds.Except(existentTagIds).ToList();
+
+            if (nonExistentTagIds.Count > 0)
+            {
+                var nonExistentTagIdsAsString = string.Join(", ", nonExistentTagIds);
+
+                throw new DomainEntityNotFoundException(
+                    domainEntityType: typeof(Tag),
+                    message: $"Теги не обнаружены (id = {nonExistentTagIdsAsString})");
+            }
+        }
+
         var now = DateTime.UtcNow;
-        task.UpdateTask(userTaskDto, now);
+        task.UpdateTask(userTaskDto, now, tags);
         await _taskRepository.UpdateTask(task);
 
         return task;

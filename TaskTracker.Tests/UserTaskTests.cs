@@ -224,12 +224,13 @@ public class UserTaskTests
             Title: $"   {NEW_TITLE}    ",
             Description: DESCRIPTION,
             NEW_FOLDER_ID,
+            TagIds: null,
             newDueDateTime,
             modifiedDateTime
         );
 
         // Act
-        sut.UpdateTask(userTaskDto, modifiedDateTime);
+        sut.UpdateTask(userTaskDto, modifiedDateTime, tags: []);
 
         // Assert
         sut.Title.Should().Be(NEW_TITLE);
@@ -251,11 +252,12 @@ public class UserTaskTests
             Title: "Task title 42",
             Description: "Task description 42",
             FolderId: 42,
+            TagIds: null,
             DueDateTime: new DateTime(),
             ModifiedDateTime: null);
 
         // Act
-        sut.UpdateTask(userTaskDto, now);
+        sut.UpdateTask(userTaskDto, now, tags: []);
 
         // Assert
         sut.ModifiedDateTime.Should().Be(now);
@@ -274,11 +276,12 @@ public class UserTaskTests
             Title: "Task title 42",
             Description: "Task description 42",
             FolderId: 42,
+            TagIds: null,
             DueDateTime: new DateTime(),
             modifiedDateTime);
 
         // Act
-        sut.UpdateTask(userTaskDto, now);
+        sut.UpdateTask(userTaskDto, now, tags: []);
 
         // Assert
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);

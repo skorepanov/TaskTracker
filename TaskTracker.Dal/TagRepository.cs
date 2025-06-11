@@ -16,6 +16,11 @@ public class TagRepository(ApplicationContext _db) : ITagRepository
         return await _db.Tags.ToListAsync();
     }
 
+    public async Task<IReadOnlyList<Tag>> GetTags(IEnumerable<int> tagIds)
+    {
+        return await _db.Tags.Where(t => tagIds.Contains(t.Id)).ToListAsync();
+    }
+
     public async Task CreateTag(Tag tag)
     {
         _db.Tags.Add(tag);
