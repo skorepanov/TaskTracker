@@ -80,6 +80,8 @@ class TaskStore {
 
         runInAction(() => {
             this.tasks.set(createdTask.id, createdTask);
+
+            this.currentTaskId = createdTask.id;
         });
     };
 
