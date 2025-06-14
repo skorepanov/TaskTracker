@@ -4,6 +4,7 @@ import { Checkbox, Divider, Dropdown } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { formatDate } from "../../utils";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
+import { useTranslation } from "../../hooks/useTranslation";
 import ITask from "../../interfaces/ITask";
 import IFolder from "../../interfaces/IFolder";
 import TaskTag from "../tag/TaskTag";
@@ -16,6 +17,7 @@ interface ITaskListItemProps {
 
 const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
     const { taskStore, tagStore } = useStore();
+    const t = useTranslation();
 
     const { task } = props;
 
@@ -37,7 +39,9 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
 
     const overdueDaysComponent =
         task.overdueDaysCount > 0 ? (
-            <>({task.overdueDaysCount} дней назад)</>
+            <>
+                ({task.overdueDaysCount} {t("daysAgo")})
+            </>
         ) : null;
 
     const overdueComponent =
@@ -74,16 +78,16 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
         }
     };
 
-    const handleMoveToTrashButtonClick = async () => {
+    const handleMoveTaskToTrashButtonClick = async () => {
         await taskStore.moveTaskToTrash(task);
     };
 
     const contextMenu = {
         items: [
             {
-                key: "moveToTrash",
-                label: "Отправить в корзину",
-                onClick: handleMoveToTrashButtonClick,
+                key: "moveTaskToTrash",
+                label: t("moveTaskToTrash"),
+                onClick: handleMoveTaskToTrashButtonClick,
             },
         ],
     };

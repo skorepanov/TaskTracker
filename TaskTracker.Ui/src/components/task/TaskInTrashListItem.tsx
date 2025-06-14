@@ -2,6 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Divider, Dropdown } from "antd";
 import { useStore } from "../../stores/RootStore";
+import { useTranslation } from "../../hooks/useTranslation";
 import { formatDate } from "../../utils";
 import ITask from "../../interfaces/ITask";
 import TaskTag from "../tag/TaskTag";
@@ -13,6 +14,7 @@ interface ITaskInTrashListItemProps {
 const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
     props => {
         const { taskStore, tagStore } = useStore();
+        const t = useTranslation();
 
         const { task } = props;
 
@@ -57,12 +59,12 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
             items: [
                 {
                     key: "restore",
-                    label: "Восстановить",
+                    label: t("restoreTask"),
                     onClick: handleRestoreTaskButtonClick,
                 },
                 {
                     key: "delete",
-                    label: "Удалить",
+                    label: t("deleteTask"),
                     onClick: handleDeleteTaskButtonClick,
                 },
             ],

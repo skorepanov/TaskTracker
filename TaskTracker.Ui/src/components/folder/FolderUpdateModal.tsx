@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Input, Modal } from "antd";
 import { useStore } from "../../stores/RootStore";
+import { useTranslation } from "../../hooks/useTranslation";
 import IFolder from "../../interfaces/IFolder";
 
 interface IFolderUpdateModalProps {
@@ -11,9 +12,10 @@ interface IFolderUpdateModalProps {
 }
 
 const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
-    const [title, setTitle] = useState<string>(props.folder.title);
-
     const { folderStore } = useStore();
+    const t = useTranslation();
+
+    const [title, setTitle] = useState<string>(props.folder.title);
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
@@ -36,17 +38,17 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
 
     return (
         <Modal
-            title="Редактировать папку"
+            title={t("updateFolder")}
             open={props.isModalOpen}
-            okText="Сохранить"
+            okText={t("save")}
             onOk={handleUpdateFolderButtonClick}
             okButtonProps={{
                 disabled: isUpdateFolderButtonDisabled(),
             }}
-            cancelText="Отмена"
+            cancelText={t("cancel")}
             onCancel={handleCancelClick}>
             <Input
-                placeholder="Название папки"
+                placeholder={t("folderTitle")}
                 value={title}
                 onChange={handleTitleChange}
                 style={{ width: 300 }}

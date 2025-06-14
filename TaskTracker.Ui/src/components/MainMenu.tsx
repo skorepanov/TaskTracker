@@ -47,7 +47,7 @@ const MainMenu: React.FC = observer(() => {
     const getFolderRootLabel = () => {
         return (
             <>
-                <div style={{ float: "left" }}>Папки</div>
+                <div style={{ float: "left" }}>{t("folders")}</div>
                 <div
                     onClick={e => e.stopPropagation()}
                     style={{ float: "right" }}>
@@ -74,7 +74,7 @@ const MainMenu: React.FC = observer(() => {
                 },
                 {
                     key: "deleteFolder",
-                    label: "Удалить папку",
+                    label: t("deleteFolder"),
                     onClick: handleDeleteFolderButtonClick,
                 },
             ],
@@ -106,7 +106,7 @@ const MainMenu: React.FC = observer(() => {
     const getTagRootLabel = () => {
         return (
             <>
-                <div style={{ float: "left" }}>Теги</div>
+                <div style={{ float: "left" }}>{t("tags")}</div>
                 <div
                     onClick={e => e.stopPropagation()}
                     style={{ float: "right" }}>
@@ -133,7 +133,7 @@ const MainMenu: React.FC = observer(() => {
                 },
                 {
                     key: "deleteTag",
-                    label: "Удалить тег",
+                    label: t("deleteTag"),
                     onClick: handleDeleteTagButtonClick,
                 },
             ],
@@ -168,7 +168,7 @@ const MainMenu: React.FC = observer(() => {
     const mainMenuItems: MenuItem[] = [
         {
             key: "/all",
-            label: getLabel("/all", "Все задачи", allIncompletedTaskCount),
+            label: getLabel("/all", t("allTasks"), allIncompletedTaskCount),
         },
         {
             key: "/today",
@@ -203,7 +203,7 @@ const MainMenu: React.FC = observer(() => {
         },
         {
             key: "/trash",
-            label: getLabel("/trash", "Корзина"),
+            label: getLabel("/trash", t("tasksInTrash")),
         },
     ];
 

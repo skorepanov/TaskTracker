@@ -1,5 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
+import { useTranslation } from "../../hooks/useTranslation";
 import IFolder from "../../interfaces/IFolder";
 import FolderUpdateModal from "./FolderUpdateModal";
 
@@ -9,6 +10,8 @@ interface IFolderUpdateMenuItemProps {
 
 const FolderUpdateModalMenuItem: React.FC<IFolderUpdateMenuItemProps> =
     observer(props => {
+        const t = useTranslation();
+
         const [isModalOpen, setIsModalOpen] = React.useState(false);
 
         const handleUpdateFolderButtonClick = () => {
@@ -22,7 +25,7 @@ const FolderUpdateModalMenuItem: React.FC<IFolderUpdateMenuItemProps> =
         return (
             <>
                 <div onClick={handleUpdateFolderButtonClick}>
-                    Редактировать папку
+                    {t("updateFolder")}
                 </div>
                 <FolderUpdateModal
                     folder={props.folder}

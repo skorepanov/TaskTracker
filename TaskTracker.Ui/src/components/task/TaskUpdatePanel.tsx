@@ -4,6 +4,7 @@ import { useStore } from "../../stores/RootStore";
 import { Checkbox, DatePicker, Divider, Input, Select, Typography } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import dayjs, { Dayjs } from "dayjs";
+import { useTranslation } from "../../hooks/useTranslation";
 import { formatDateTime } from "../../utils";
 
 const { Title } = Typography;
@@ -11,6 +12,7 @@ const { TextArea } = Input;
 
 const TaskUpdatePanel: React.FC = observer(() => {
     const { taskStore, folderStore, tagStore } = useStore();
+    const t = useTranslation();
 
     const { currentTask: task } = taskStore;
 
@@ -50,7 +52,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
     const movedToTrashDateTimeComponent =
         task.movedToTrashDateTime !== null ? (
             <>
-                Дата перемещения в корзину:{" "}
+                {t("taskMovedToTrash")}:{" "}
                 {formatDateTime(task.movedToTrashDateTime)}
                 <br />
             </>
@@ -58,7 +60,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
 
     const completedDateTimeComponent = isCompleted ? (
         <>
-            Выполнена: {formatDateTime(task.completedDateTime)}
+            {t("taskCompleted")}: {formatDateTime(task.completedDateTime)}
             <br />
         </>
     ) : null;
@@ -66,7 +68,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
     const modifiedDateTimeComponent =
         task.modifiedDateTime !== null ? (
             <>
-                Изменена: {formatDateTime(task.modifiedDateTime)}
+                {t("taskUpdated")}: {formatDateTime(task.modifiedDateTime)}
                 <br />
             </>
         ) : null;
@@ -148,7 +150,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
 
     const folderComponent = !isDisabled ? (
         <Select
-            placeholder="Папка"
+            placeholder={t("folder")}
             options={[inboxOption, ...folderOptions]}
             value={task.folderId ?? inboxId}
             onChange={handleFolderChange}
@@ -167,7 +169,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 onChange={handleCompletedChange}
             />
             <DatePicker
-                placeholder="Когда выполнить"
+                placeholder={t("taskDueDateTime")}
                 value={dueDateTime}
                 disabled={isDisabled}
                 onChange={handleDueDateTimeChange}
@@ -189,7 +191,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
             </Title>
             <Select
                 mode="multiple"
-                placeholder="Теги"
+                placeholder={t("tags")}
                 options={allTagOptions}
                 value={task.tagIds}
                 showSearch
@@ -198,7 +200,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 onChange={handleTagChange}
                 style={{ width: "100%" }}></Select>
             <TextArea
-                placeholder="Описание задачи"
+                placeholder={t("taskDescription")}
                 value={task.description ?? ""}
                 disabled={isDisabled}
                 onChange={handleDescriptionChange}
@@ -211,7 +213,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
             {movedToTrashDateTimeComponent}
             {completedDateTimeComponent}
             {modifiedDateTimeComponent}
-            Создана: {formatDateTime(task.createdDateTime)}
+            {t("taskCreated")}: {formatDateTime(task.createdDateTime)}
         </div>
     );
 });

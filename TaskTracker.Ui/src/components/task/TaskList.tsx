@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import { Collapse } from "antd";
 import type { CollapseProps } from "antd";
 import { useStore } from "../../stores/RootStore";
+import { useTranslation } from "../../hooks/useTranslation";
 import ITask from "../../interfaces/ITask";
 import TaskListItem from "./TaskListItem";
 import NoTasks from "./NoTasks";
@@ -15,6 +16,7 @@ interface ITaskListProps {
 
 const TaskList: React.FC<ITaskListProps> = observer(props => {
     const { folderStore } = useStore();
+    const t = useTranslation();
 
     const incompletedTaskComponents = props.incompletedTasks.map(t => (
         <TaskListItem
@@ -45,7 +47,7 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
     const completedTaskItems: CollapseProps["items"] = [
         {
             key: "completedTasks",
-            label: "Выполнено",
+            label: t("completedTasks"),
             children: completedTaskComponents,
         },
     ];

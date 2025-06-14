@@ -1,6 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import ITag from "../../interfaces/ITag";
+import { useTranslation } from "../../hooks/useTranslation";
 import TagUpdateModal from "./TagUpdateModal";
 
 interface ITagUpdateModalMenuItemProps {
@@ -9,6 +10,8 @@ interface ITagUpdateModalMenuItemProps {
 
 const TagUpdateModalMenuItem: React.FC<ITagUpdateModalMenuItemProps> = observer(
     props => {
+        const t = useTranslation();
+
         const [isModalOpen, setIsModalOpen] = React.useState(false);
 
         const handleUpdateTagButtonClick = () => {
@@ -21,9 +24,7 @@ const TagUpdateModalMenuItem: React.FC<ITagUpdateModalMenuItemProps> = observer(
 
         return (
             <>
-                <div onClick={handleUpdateTagButtonClick}>
-                    Редактировать тег
-                </div>
+                <div onClick={handleUpdateTagButtonClick}>{t("updateTag")}</div>
                 <TagUpdateModal
                     tag={props.tag}
                     isModalOpen={isModalOpen}

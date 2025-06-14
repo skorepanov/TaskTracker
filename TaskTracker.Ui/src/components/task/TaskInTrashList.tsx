@@ -1,10 +1,12 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
+import { useTranslation } from "../../hooks/useTranslation";
 import TaskInTrashListItem from "./TaskInTrashListItem";
 
 const TaskInTrashList: React.FC = observer(() => {
     const { taskStore } = useStore();
+    const t = useTranslation();
 
     const tasks = taskStore.getTasksMovedToTrash();
 
@@ -18,7 +20,7 @@ const TaskInTrashList: React.FC = observer(() => {
     return (
         <>
             <div className="task-list-header">
-                <strong>Корзина</strong>
+                <strong>{t("tasksInTrash")}</strong>
             </div>
             <div style={{ paddingLeft: 10 }}>{taskComponents}</div>
         </>

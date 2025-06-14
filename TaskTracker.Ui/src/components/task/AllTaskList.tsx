@@ -1,11 +1,13 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
+import { useTranslation } from "../../hooks/useTranslation";
 import TaskList from "./TaskList";
 import TaskCreationPanel from "./TaskCreationPanel";
 
 const AllTaskList: React.FC = observer(() => {
     const { taskStore } = useStore();
+    const t = useTranslation();
 
     const incompletedTasks = taskStore.getIncompletedTasks(true);
     const completedTasks = taskStore.getCompletedTasks(true);
@@ -13,7 +15,7 @@ const AllTaskList: React.FC = observer(() => {
     return (
         <>
             <div className="task-list-header">
-                <strong>Все задачи</strong>
+                <strong>{t("allTasks")}</strong>
                 <TaskCreationPanel />
             </div>
             <TaskList

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { ColorPicker, Input, Modal, Space } from "antd";
 import { useStore } from "../../stores/RootStore";
+import { useTranslation } from "../../hooks/useTranslation";
 import { Color } from "antd/es/color-picker";
 import ITag from "../../interfaces/ITag";
 
@@ -12,10 +13,11 @@ interface ITagUpdateModalProps {
 }
 
 const TagUpdateModal: React.FC<ITagUpdateModalProps> = observer(props => {
+    const { tagStore } = useStore();
+    const t = useTranslation();
+
     const [title, setTitle] = useState<string>(props.tag.title);
     const [color, setColor] = useState<string>(props.tag.color);
-
-    const { tagStore } = useStore();
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
@@ -43,18 +45,18 @@ const TagUpdateModal: React.FC<ITagUpdateModalProps> = observer(props => {
 
     return (
         <Modal
-            title="Редактировать тег"
+            title={t("updateTag")}
             open={props.isModalOpen}
-            okText="Сохранить"
+            okText={t("save")}
             onOk={handleUpdateTagButtonClick}
             okButtonProps={{
                 disabled: isUpdateTagButtonDisabled(),
             }}
-            cancelText="Отмена"
+            cancelText={t("cancel")}
             onCancel={handleCancelClick}>
             <Space direction="vertical">
                 <Input
-                    placeholder="Название тега"
+                    placeholder={t("tagTitle")}
                     value={title}
                     onChange={handleTitleChange}
                     style={{ width: "300" }}

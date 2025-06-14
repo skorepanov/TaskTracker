@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { DatePicker, Input, Select, Space } from "antd";
-import { useStore } from "../../stores/RootStore";
 import dayjs, { Dayjs } from "dayjs";
+import { useStore } from "../../stores/RootStore";
+import { useTranslation } from "../../hooks/useTranslation";
 
 interface ITaskCreationPanelProps {
     dueDateTime?: Date;
@@ -10,6 +11,9 @@ interface ITaskCreationPanelProps {
 }
 
 const TaskCreationPanel: React.FC<ITaskCreationPanelProps> = observer(props => {
+    const { taskStore, folderStore } = useStore();
+    const t = useTranslation();
+
     const inboxId = -1;
 
     const [title, setTitle] = useState<string>("");
@@ -17,8 +21,6 @@ const TaskCreationPanel: React.FC<ITaskCreationPanelProps> = observer(props => {
         props.dueDateTime ?? null
     );
     const [folderId, setFolderId] = useState<number>(props.folderId ?? inboxId);
-
-    const { taskStore, folderStore } = useStore();
 
     const inboxOption = {
         key: inboxId,
@@ -61,14 +63,14 @@ const TaskCreationPanel: React.FC<ITaskCreationPanelProps> = observer(props => {
     return (
         <Space.Compact style={{ width: "100%" }}>
             <Input
-                placeholder="Создать задачу"
+                placeholder={t("createTask")}
                 value={title}
                 onChange={handleTitleChange}
                 onPressEnter={handleTitlePressEnter}
                 addonAfter={
                     <>
                         <Select
-                            placeholder="Папка"
+                            placeholder={t("folder")}
                             options={[inboxOption, ...folderOptions]}
                             value={folderId}
                             onChange={handleFolderChange}
@@ -78,7 +80,7 @@ const TaskCreationPanel: React.FC<ITaskCreationPanelProps> = observer(props => {
                             style={{ maxWidth: 250 }}
                         />
                         <DatePicker
-                            placeholder="Дата"
+                            placeholder={t("date")}
                             value={
                                 dueDateTime !== null ? dayjs(dueDateTime) : null
                             }
