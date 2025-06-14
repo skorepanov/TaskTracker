@@ -1,8 +1,9 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Dropdown, Menu, MenuProps } from "antd";
+import { Dropdown, Divider, Menu, MenuProps } from "antd";
 import { useStore } from "../stores/RootStore";
+import { useTranslation } from "../hooks/useTranslation";
 import IFolder from "../interfaces/IFolder";
 import ITag from "../interfaces/ITag";
 import FolderCreationModalButton from "./folder/FolderCreationModalButton";
@@ -10,11 +11,13 @@ import FolderUpdateModalMenuItem from "./folder/FolderUpdateModalMenuItem";
 import TagCreationModalButton from "./tag/TagCreationModalButton";
 import TagUpdateModalMenuItem from "./tag/TagUpdateModalMenuItem";
 import TaskTag from "./tag/TaskTag";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MainMenu: React.FC = observer(() => {
     const location = useLocation();
+    const t = useTranslation();
 
     const { taskStore, folderStore, tagStore } = useStore();
 
@@ -169,7 +172,11 @@ const MainMenu: React.FC = observer(() => {
         },
         {
             key: "/today",
-            label: getLabel("/today", "Сегодня", todayIncompletedTaskCount),
+            label: getLabel(
+                "/today",
+                t("todayTasks"),
+                todayIncompletedTaskCount
+            ),
         },
         {
             key: "/inbox",
@@ -201,12 +208,16 @@ const MainMenu: React.FC = observer(() => {
     ];
 
     return (
-        <Menu
-            items={mainMenuItems}
-            mode="inline"
-            selectedKeys={[location.pathname]}
-            defaultOpenKeys={["/folders"]}
-        />
+        <>
+            <Menu
+                items={mainMenuItems}
+                mode="inline"
+                selectedKeys={[location.pathname]}
+                defaultOpenKeys={["/folders"]}
+            />
+            <Divider />
+            <LanguageSwitcher />
+        </>
     );
 });
 
