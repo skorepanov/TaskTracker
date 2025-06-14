@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
 import { Checkbox, DatePicker, Divider, Input, Select, Typography } from "antd";
@@ -10,35 +10,17 @@ const { Title } = Typography;
 const { TextArea } = Input;
 
 const TaskUpdatePanel: React.FC = observer(() => {
-    const inboxId = -1;
-
     const { taskStore, folderStore, tagStore } = useStore();
 
     const { currentTask: task } = taskStore;
 
-    const [isCompleted, setIsCompleted] = useState<boolean>();
-    const [title, setTitle] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [folderId, setFolderId] = useState<number | null>(null);
-    const [dueDateTime, setDueDateTime] = useState<Date | null>();
-    const [modifiedDateTime, setModifiedDateTime] = useState<Date | null>(null);
-
-    useEffect(() => {
-        if (!task) {
-            return;
-        }
-
-        setIsCompleted(task.completedDateTime !== null);
-        setTitle(task.title);
-        setDescription(task.description ?? "");
-        setFolderId(task.folderId ?? inboxId);
-        setDueDateTime(task.dueDateTime);
-        setModifiedDateTime(task.modifiedDateTime);
-    }, [task, inboxId]);
-
     if (!task) {
         return null;
     }
+
+    const isCompleted = task.completedDateTime !== null;
+
+    const inboxId = -1;
 
     const inboxOption = {
         key: inboxId,
@@ -51,6 +33,9 @@ const TaskUpdatePanel: React.FC = observer(() => {
         value: f.id,
         label: f.title,
     }));
+
+    const dueDateTime =
+        task.dueDateTime !== null ? dayjs(task.dueDateTime) : null;
 
     const dueDateTimeColor = task.overdueDaysCount > 0 ? "red" : "";
 
@@ -77,17 +62,15 @@ const TaskUpdatePanel: React.FC = observer(() => {
     ) : null;
 
     const modifiedDateTimeComponent =
-        modifiedDateTime !== null ? (
+        task.modifiedDateTime !== null ? (
             <>
-                Изменена: {formatDateTime(modifiedDateTime)}
+                Изменена: {formatDateTime(task.modifiedDateTime)}
                 <br />
             </>
         ) : null;
 
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
         const isCompletedNew = event.target.checked;
-
-        setIsCompleted(isCompletedNew);
 
         if (isCompletedNew) {
             await taskStore.completeTask(task);
@@ -169,7 +152,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
             />
             <DatePicker
                 placeholder="Когда выполнить"
-                value={dueDateTime !== null ? dayjs(dueDateTime) : null}
+                value={dueDateTime}
                 onChange={handleDueDateTimeChange}
                 style={{ color: dueDateTimeColor, width: 180, marginLeft: 10 }}
             />
@@ -184,7 +167,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
                     marginTop: 15,
                     marginBottom: 15,
                 }}>
-                {title}
+                {task.title}
             </Title>
             <Select
                 mode="multiple"
@@ -197,7 +180,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 style={{ width: "100%" }}></Select>
             <TextArea
                 placeholder="Описание задачи"
-                value={description}
+                value={task.description ?? ""}
                 onChange={handleDescriptionChange}
                 style={{ width: "100%", height: 400, marginTop: 10 }}
             />
@@ -206,7 +189,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
             <Select
                 placeholder="Папка"
                 options={[inboxOption, ...folderOptions]}
-                value={folderId}
+                value={task.folderId ?? inboxId}
                 onChange={handleFolderChange}
                 showSearch
                 optionFilterProp="label"
