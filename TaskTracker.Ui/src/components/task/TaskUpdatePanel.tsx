@@ -18,6 +18,8 @@ const TaskUpdatePanel: React.FC = observer(() => {
         return null;
     }
 
+    const isDisabled = task.movedToTrashDateTime !== null;
+
     const isCompleted = task.completedDateTime !== null;
 
     const inboxId = -1;
@@ -144,24 +146,40 @@ const TaskUpdatePanel: React.FC = observer(() => {
         );
     };
 
+    const folderComponent = !isDisabled ? (
+        <Select
+            placeholder="Папка"
+            options={[inboxOption, ...folderOptions]}
+            value={task.folderId ?? inboxId}
+            onChange={handleFolderChange}
+            showSearch
+            optionFilterProp="label"
+            style={{ width: 200 }}
+            popupMatchSelectWidth={false}
+        />
+    ) : null;
+
     return (
         <div style={{ padding: "10px" }}>
             <Checkbox
                 checked={isCompleted}
+                disabled={isDisabled}
                 onChange={handleCompletedChange}
             />
             <DatePicker
                 placeholder="Когда выполнить"
                 value={dueDateTime}
+                disabled={isDisabled}
                 onChange={handleDueDateTimeChange}
                 style={{ color: dueDateTimeColor, width: 180, marginLeft: 10 }}
             />
             <Divider size="small" />
             <Title
                 level={4}
+                disabled={isDisabled}
                 editable={{
+                    triggerType: !isDisabled ? ["text", "icon"] : [],
                     onChange: handleTitleChange,
-                    triggerType: ["text", "icon"],
                 }}
                 style={{
                     marginTop: 15,
@@ -176,26 +194,19 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 value={task.tagIds}
                 showSearch
                 optionFilterProp="label"
+                disabled={isDisabled}
                 onChange={handleTagChange}
                 style={{ width: "100%" }}></Select>
             <TextArea
                 placeholder="Описание задачи"
                 value={task.description ?? ""}
+                disabled={isDisabled}
                 onChange={handleDescriptionChange}
                 style={{ width: "100%", height: 400, marginTop: 10 }}
             />
             <br />
             <br />
-            <Select
-                placeholder="Папка"
-                options={[inboxOption, ...folderOptions]}
-                value={task.folderId ?? inboxId}
-                onChange={handleFolderChange}
-                showSearch
-                optionFilterProp="label"
-                style={{ width: 200 }}
-                popupMatchSelectWidth={false}
-            />
+            {folderComponent}
             <Divider size="small" />
             {movedToTrashDateTimeComponent}
             {completedDateTimeComponent}
