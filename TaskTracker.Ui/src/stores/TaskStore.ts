@@ -90,7 +90,8 @@ class TaskStore {
         title: string,
         description: string | null,
         folderId: number | null,
-        dueDateTime: Date | null
+        dueDateTime: Date | null,
+        tagIds: number[] | null
     ) => {
         const url = `${AppUrl}/tasks/${taskId}`;
 
@@ -99,6 +100,7 @@ class TaskStore {
             description: description,
             folderId: folderId,
             dueDateTime: dueDateTime,
+            tagIds: tagIds,
             modifiedDateTime: new Date().toISOString(),
         };
 

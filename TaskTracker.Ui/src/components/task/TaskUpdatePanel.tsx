@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
-import TaskTag from "../tag/TaskTag";
 import { Checkbox, DatePicker, Divider, Input, Select, Typography } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import dayjs, { Dayjs } from "dayjs";
@@ -55,16 +54,11 @@ const TaskUpdatePanel: React.FC = observer(() => {
 
     const dueDateTimeColor = task.overdueDaysCount > 0 ? "red" : "";
 
-    const taskTags = tagStore.getFilteredSortedTags(task.tagIds);
-
-    const taskTagComponents = taskTags
-        ? taskTags.map(t => (
-              <TaskTag
-                  key={t.id}
-                  tag={t}
-              />
-          ))
-        : [];
+    const allTagOptions = tagStore.tags.map(t => ({
+        key: t.id,
+        value: t.id,
+        label: t.title,
+    }));
 
     const movedToTrashDateTimeComponent =
         task.movedToTrashDateTime !== null ? (
@@ -112,7 +106,8 @@ const TaskUpdatePanel: React.FC = observer(() => {
             newTitle,
             task.description,
             task.folderId,
-            task.dueDateTime
+            task.dueDateTime,
+            task.tagIds
         );
     };
 
@@ -124,7 +119,8 @@ const TaskUpdatePanel: React.FC = observer(() => {
             task.title,
             event.target.value,
             task.folderId,
-            task.dueDateTime
+            task.dueDateTime,
+            task.tagIds
         );
     };
 
@@ -136,7 +132,8 @@ const TaskUpdatePanel: React.FC = observer(() => {
             task.title,
             task.description,
             normalizedFolderId,
-            task.dueDateTime
+            task.dueDateTime,
+            task.tagIds
         );
     };
 
@@ -148,7 +145,19 @@ const TaskUpdatePanel: React.FC = observer(() => {
             task.title,
             task.description,
             task.folderId,
-            normalizedDueDateTime
+            normalizedDueDateTime,
+            task.tagIds
+        );
+    };
+
+    const handleTagChange = async (newTagIds: number[]) => {
+        await taskStore.updateTask(
+            task.id,
+            task.title,
+            task.description,
+            task.folderId,
+            task.dueDateTime,
+            newTagIds
         );
     };
 
@@ -177,13 +186,20 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 }}>
                 {title}
             </Title>
-            <div style={{ paddingTop: 5 }}>{taskTagComponents}</div>
-            <Divider size="small" />
+            <Select
+                mode="multiple"
+                placeholder="Теги"
+                options={allTagOptions}
+                value={task.tagIds}
+                showSearch
+                optionFilterProp="label"
+                onChange={handleTagChange}
+                style={{ width: "100%" }}></Select>
             <TextArea
                 placeholder="Описание задачи"
                 value={description}
                 onChange={handleDescriptionChange}
-                style={{ width: "100%", height: 400 }}
+                style={{ width: "100%", height: 400, marginTop: 10 }}
             />
             <br />
             <br />
