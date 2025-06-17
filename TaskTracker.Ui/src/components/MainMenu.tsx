@@ -11,6 +11,7 @@ import FolderUpdateModalMenuItem from "./folder/FolderUpdateModalMenuItem";
 import FolderDeleteModalMenuItem from "./folder/FolderDeleteModalMenuItem";
 import TagCreationModalButton from "./tag/TagCreationModalButton";
 import TagUpdateModalMenuItem from "./tag/TagUpdateModalMenuItem";
+import TagDeleteModalMenuItem from "./tag/TagDeleteModalMenuItem";
 import TaskTag from "./tag/TaskTag";
 import LanguageSwitcher from "./LanguageSwitcher";
 
@@ -117,10 +118,6 @@ const MainMenu: React.FC = observer(() => {
             tag.id
         ).length;
 
-        const handleDeleteTagButtonClick = async () => {
-            await tagStore.deleteTag(tag);
-        };
-
         const contextMenu = {
             items: [
                 {
@@ -129,8 +126,7 @@ const MainMenu: React.FC = observer(() => {
                 },
                 {
                     key: "deleteTag",
-                    label: t("deleteTag"),
-                    onClick: handleDeleteTagButtonClick,
+                    label: <TagDeleteModalMenuItem tag={tag} />,
                 },
             ],
         };
