@@ -1,11 +1,22 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
-import { Checkbox, DatePicker, Divider, Input, Select, Typography } from "antd";
+import {
+    Checkbox,
+    DatePicker,
+    Divider,
+    Input,
+    Select,
+    SelectProps,
+    Tag,
+    Typography,
+} from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import dayjs, { Dayjs } from "dayjs";
 import { useTranslation } from "../../hooks/useTranslation";
 import { formatDateTime } from "../../utils";
+
+type TagRender = SelectProps["tagRender"];
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -47,6 +58,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
         key: t.id,
         value: t.id,
         label: t.title,
+        color: t.color,
     }));
 
     const movedToTrashDateTimeComponent =
@@ -148,6 +160,33 @@ const TaskUpdatePanel: React.FC = observer(() => {
         );
     };
 
+    const tagRender: TagRender = props => {
+        const { value: key, label, closable, onClose } = props;
+
+        const handleMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
+        const color = allTagOptions.find(t => t.key === key)?.color;
+
+        return (
+            <Tag
+                color={`#${color}`}
+                closable={closable}
+                onClose={onClose}
+                onMouseDown={handleMouseDown}>
+                <div
+                    style={{
+                        display: "inline-block",
+                        mixBlendMode: "difference",
+                    }}>
+                    {label}
+                </div>
+            </Tag>
+        );
+    };
+
     const folderComponent = !isDisabled ? (
         <Select
             placeholder={t("folder")}
@@ -191,6 +230,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
             </Title>
             <Select
                 mode="multiple"
+                tagRender={tagRender}
                 placeholder={t("tags")}
                 options={allTagOptions}
                 value={task.tagIds}
@@ -198,7 +238,8 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 optionFilterProp="label"
                 disabled={isDisabled}
                 onChange={handleTagChange}
-                style={{ width: "100%" }}></Select>
+                style={{ width: "100%" }}
+            />
             <TextArea
                 placeholder={t("taskDescription")}
                 value={task.description ?? ""}
