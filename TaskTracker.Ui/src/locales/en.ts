@@ -1,6 +1,7 @@
 export default {
     // common
     save: "Save",
+    delete: "Delete",
     cancel: "Cancel",
     daysAgo: "days ago",
     date: "Date",

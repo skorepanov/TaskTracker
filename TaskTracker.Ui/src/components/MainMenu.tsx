@@ -8,6 +8,7 @@ import IFolder from "../interfaces/IFolder";
 import ITag from "../interfaces/ITag";
 import FolderCreationModalButton from "./folder/FolderCreationModalButton";
 import FolderUpdateModalMenuItem from "./folder/FolderUpdateModalMenuItem";
+import FolderDeleteModalMenuItem from "./folder/FolderDeleteModalMenuItem";
 import TagCreationModalButton from "./tag/TagCreationModalButton";
 import TagUpdateModalMenuItem from "./tag/TagUpdateModalMenuItem";
 import TaskTag from "./tag/TaskTag";
@@ -62,10 +63,6 @@ const MainMenu: React.FC = observer(() => {
             folder.id
         ).length;
 
-        const handleDeleteFolderButtonClick = async () => {
-            await folderStore.deleteFolder(folder);
-        };
-
         const contextMenu = {
             items: [
                 {
@@ -74,8 +71,7 @@ const MainMenu: React.FC = observer(() => {
                 },
                 {
                     key: "deleteFolder",
-                    label: t("deleteFolder"),
-                    onClick: handleDeleteFolderButtonClick,
+                    label: <FolderDeleteModalMenuItem folder={folder} />,
                 },
             ],
         };

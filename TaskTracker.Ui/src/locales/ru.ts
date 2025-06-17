@@ -1,6 +1,7 @@
 export default {
     // common
     save: "Сохранить",
+    delete: "Удалить",
     cancel: "Отмена",
     daysAgo: "дней назад",
     date: "Дата",
