@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { ConfigProvider, Splitter } from "antd";
 import dayjs from "dayjs";
@@ -69,6 +69,10 @@ const AppContent = observer(() => {
                                     element={<TagTaskList />}
                                 />
                             </Route>
+                            <Route
+                                path="*"
+                                element={<Navigate to="/today" />}
+                            />
                         </Routes>
                     </Splitter.Panel>
                     <Splitter.Panel min="300">
