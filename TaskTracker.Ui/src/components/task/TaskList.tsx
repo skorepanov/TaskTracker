@@ -63,7 +63,7 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
         ) : null;
 
     return (
-        <>
+        <div className="scrollable-container">
             {incompletedTaskComponents.length > 0 ? (
                 <div style={{ paddingLeft: 10 }}>
                     {incompletedTaskComponents}
@@ -72,7 +72,7 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
                 <NoTasks />
             )}
             {completedTasksPanel}
-        </>
+        </div>
     );
 });
 

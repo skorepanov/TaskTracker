@@ -19,10 +19,16 @@ const TaskInTrashList: React.FC = observer(() => {
 
     return (
         <>
-            <div className="task-list-header">
+            <div
+                className="task-list-header"
+                style={{ height: 40 }}>
                 <strong>{t("tasksInTrash")}</strong>
             </div>
-            <div style={{ paddingLeft: 10 }}>{taskComponents}</div>
+            <div
+                className="scrollable-container"
+                style={{ paddingLeft: 10 }}>
+                {taskComponents}
+            </div>
         </>
     );
 });

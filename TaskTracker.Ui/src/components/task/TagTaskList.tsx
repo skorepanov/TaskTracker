@@ -23,7 +23,9 @@ const TagTaskList: React.FC = observer(() => {
 
     return (
         <>
-            <div className="task-list-header">
+            <div
+                className="task-list-header"
+                style={{ height: 40 }}>
                 <TaskTag tag={tag} />
             </div>
             <TaskList

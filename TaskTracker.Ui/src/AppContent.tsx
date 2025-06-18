@@ -29,7 +29,14 @@ const AppContent: React.FC = observer(() => {
                         <MainMenu />
                     </Splitter.Panel>
                     <Splitter.Panel min="300">
-                        <AppRoutes />
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                height: "100%",
+                            }}>
+                            <AppRoutes />
+                        </div>
                     </Splitter.Panel>
                     <Splitter.Panel min="300">
                         <TaskUpdatePanel />
