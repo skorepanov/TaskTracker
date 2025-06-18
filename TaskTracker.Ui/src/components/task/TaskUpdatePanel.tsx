@@ -63,27 +63,30 @@ const TaskUpdatePanel: React.FC = observer(() => {
 
     const movedToTrashDateTimeComponent =
         task.movedToTrashDateTime !== null ? (
-            <>
+            <div>
                 {t("taskMovedToTrash")}:{" "}
                 {formatDateTime(task.movedToTrashDateTime)}
-                <br />
-            </>
+            </div>
         ) : null;
 
     const completedDateTimeComponent = isCompleted ? (
-        <>
+        <div>
             {t("taskCompleted")}: {formatDateTime(task.completedDateTime)}
-            <br />
-        </>
+        </div>
     ) : null;
 
     const modifiedDateTimeComponent =
         task.modifiedDateTime !== null ? (
-            <>
+            <div>
                 {t("taskUpdated")}: {formatDateTime(task.modifiedDateTime)}
-                <br />
-            </>
+            </div>
         ) : null;
+
+    const createdDateTimeComponent = (
+        <div>
+            {t("taskCreated")}: {formatDateTime(task.createdDateTime)}
+        </div>
+    );
 
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
         const isCompletedNew = event.target.checked;
@@ -195,37 +198,49 @@ const TaskUpdatePanel: React.FC = observer(() => {
             onChange={handleFolderChange}
             showSearch
             optionFilterProp="label"
-            style={{ width: 200 }}
             popupMatchSelectWidth={false}
+            style={{
+                width: 200,
+                marginLeft: 10,
+                marginTop: 10,
+            }}
         />
     ) : null;
 
     return (
-        <div style={{ padding: "10px" }}>
-            <Checkbox
-                checked={isCompleted}
-                disabled={isDisabled}
-                onChange={handleCompletedChange}
-            />
-            <DatePicker
-                placeholder={t("taskDueDateTime")}
-                value={dueDateTime}
-                disabled={isDisabled}
-                onChange={handleDueDateTimeChange}
-                style={{ color: dueDateTimeColor, width: 180, marginLeft: 10 }}
-            />
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+            }}>
+            <div style={{ marginLeft: 10, marginTop: 10 }}>
+                <Checkbox
+                    checked={isCompleted}
+                    disabled={isDisabled}
+                    onChange={handleCompletedChange}
+                />
+                <DatePicker
+                    placeholder={t("taskDueDateTime")}
+                    value={dueDateTime}
+                    disabled={isDisabled}
+                    onChange={handleDueDateTimeChange}
+                    style={{
+                        color: dueDateTimeColor,
+                        width: 180,
+                        marginLeft: 10,
+                    }}
+                />
+            </div>
             <Divider size="small" />
             <Title
                 level={4}
                 disabled={isDisabled}
                 editable={{
-                    triggerType: !isDisabled ? ["text", "icon"] : [],
+                    triggerType: !isDisabled ? ["text"] : [],
                     onChange: handleTitleChange,
                 }}
-                style={{
-                    marginTop: 15,
-                    marginBottom: 15,
-                }}>
+                style={{ marginLeft: 12, marginTop: 0 }}>
                 {task.title}
             </Title>
             <Select
@@ -238,23 +253,24 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 optionFilterProp="label"
                 disabled={isDisabled}
                 onChange={handleTagChange}
-                style={{ width: "100%" }}
+                style={{ marginLeft: 10, marginRight: 10, marginBottom: 10 }}
             />
             <TextArea
                 placeholder={t("taskDescription")}
                 value={task.description ?? ""}
                 disabled={isDisabled}
+                variant="borderless"
                 onChange={handleDescriptionChange}
-                style={{ width: "100%", height: 400, marginTop: 10 }}
+                style={{ flexGrow: 1, height: "100%", resize: "none" }}
             />
-            <br />
-            <br />
             {folderComponent}
             <Divider size="small" />
-            {movedToTrashDateTimeComponent}
-            {completedDateTimeComponent}
-            {modifiedDateTimeComponent}
-            {t("taskCreated")}: {formatDateTime(task.createdDateTime)}
+            <div style={{ marginLeft: 10, marginBottom: 10 }}>
+                {movedToTrashDateTimeComponent}
+                {completedDateTimeComponent}
+                {modifiedDateTimeComponent}
+                {createdDateTimeComponent}
+            </div>
         </div>
     );
 });
