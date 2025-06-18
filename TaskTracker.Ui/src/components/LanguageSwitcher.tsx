@@ -18,7 +18,7 @@ const LanguageSwitcher: React.FC = observer(() => {
             options={languageOptions}
             value={locale}
             onChange={setLocale}
-            style={{ width: 120, marginLeft: 20 }}
+            style={{ width: 120, marginLeft: 20, marginBottom: 20 }}
         />
     );
 });

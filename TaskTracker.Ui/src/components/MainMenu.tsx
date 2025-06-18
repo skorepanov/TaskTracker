@@ -200,16 +200,23 @@ const MainMenu: React.FC = observer(() => {
     ];
 
     return (
-        <>
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+            }}>
             <Menu
                 items={mainMenuItems}
                 mode="inline"
                 selectedKeys={[location.pathname]}
                 defaultOpenKeys={["/folders"]}
+                className="scrollable-container"
+                style={{ flexGrow: 1 }}
             />
-            <Divider />
+            <Divider size="small" />
             <LanguageSwitcher />
-        </>
+        </div>
     );
 });
 
