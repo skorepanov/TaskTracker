@@ -3,13 +3,17 @@ body {
     padding: 0;
 }
 
+.ant-input-group-addon {
+    padding-right: 0 !important;
+}
+
+.ant-tag-close-icon {
+    mix-blend-mode: difference;
+}
+
 .scrollable-container {
     height: 100%;
     overflow-y: auto;
-}
-
-.ant-input-group-addon {
-    padding-right: 0 !important;
 }
 
 .task-list-header {
