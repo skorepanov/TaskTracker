@@ -17,8 +17,8 @@ const App: React.FC = observer(() => {
     const { antdLocale, antdTheme } = useSettings();
 
     dayjs.extend(updateLocale);
-    dayjs.updateLocale("ru-RU", {
-        weekStart: 0,
+    dayjs.updateLocale("en", {
+        weekStart: 1,
     });
 
     useEffect(() => {
