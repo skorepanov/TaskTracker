@@ -6,6 +6,9 @@ export default {
     daysAgo: "days ago",
     date: "Date",
 
+    // settings
+    darkTheme: "Dark theme",
+
     // tasks
     allTasks: "All",
     todayTasks: "Today",

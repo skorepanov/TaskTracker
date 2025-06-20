@@ -13,7 +13,7 @@ import TagCreationModalButton from "./tag/TagCreationModalButton";
 import TagUpdateModalMenuItem from "./tag/TagUpdateModalMenuItem";
 import TagDeleteModalMenuItem from "./tag/TagDeleteModalMenuItem";
 import TaskTag from "./tag/TaskTag";
-import LanguageSwitcher from "./LanguageSwitcher";
+import UserSettingsPanel from "./UserSettingsPanel";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -215,7 +215,7 @@ const MainMenu: React.FC = observer(() => {
                 style={{ flexGrow: 1 }}
             />
             <Divider size="small" />
-            <LanguageSwitcher />
+            <UserSettingsPanel />
         </div>
     );
 });

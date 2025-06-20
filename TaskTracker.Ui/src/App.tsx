@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "./stores/RootStore";
-import { LocaleProvider } from "./contexts/LocaleContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
 import AppContent from "./AppContent";
 
 const App: React.FC = observer(() => {
@@ -16,9 +16,9 @@ const App: React.FC = observer(() => {
     }, [rootStore]);
 
     return (
-        <LocaleProvider>
+        <SettingsProvider>
             <AppContent />
-        </LocaleProvider>
+        </SettingsProvider>
     );
 });
 

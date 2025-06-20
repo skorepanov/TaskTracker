@@ -6,6 +6,9 @@ export default {
     daysAgo: "дней назад",
     date: "Дата",
 
+    // settings
+    darkTheme: "Тёмная тема",
+
     // tasks
     allTasks: "Все",
     todayTasks: "Сегодня",

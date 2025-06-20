@@ -4,6 +4,7 @@ import { Checkbox, Divider, Dropdown } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { formatDate } from "../../utils";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
+import { useSettings } from "../../contexts/SettingsContext";
 import { useTranslation } from "../../hooks/useTranslation";
 import ITask from "../../interfaces/ITask";
 import IFolder from "../../interfaces/IFolder";
@@ -17,6 +18,7 @@ interface ITaskListItemProps {
 
 const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
     const { taskStore, tagStore } = useStore();
+    const { settings } = useSettings();
     const t = useTranslation();
 
     const { task } = props;
@@ -27,8 +29,9 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
 
     const taskTextColor = isCompleted ? "green" : "";
 
+    const selectedTaskColor = settings.theme === "dark" ? "#111a2c" : "#e6f4ff";
     const backgroundColor =
-        taskStore.currentTask?.id === task.id ? "lightgray" : "";
+        taskStore.currentTask?.id === task.id ? selectedTaskColor : "";
 
     const folderComponent = props.shouldShowFolder ? (
         <>{props.folder?.title ?? "<Inbox>"}</>
