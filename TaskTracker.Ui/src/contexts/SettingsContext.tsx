@@ -39,16 +39,13 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const antdLocale = locales[settings.locale];
 
-    const isDarkTheme = settings.theme === "dark";
-
-    const antdTheme: ThemeConfig = {
-        algorithm: isDarkTheme ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        components: {
-            Layout: {
-                colorBgBody: isDarkTheme ? "" : "#ffffff",
-            },
-        },
-    };
+    const antdTheme: ThemeConfig =
+        settings.theme === "dark"
+            ? { algorithm: theme.darkAlgorithm }
+            : {
+                  algorithm: theme.defaultAlgorithm,
+                  components: { Layout: { bodyBg: "#ffffff" } },
+              };
 
     return (
         <SettingsContext.Provider
