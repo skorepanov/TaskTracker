@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import "dayjs/locale/ru";
+
+export const dateFormat = "DD.MM.YYYY";
 
 export function formatDate(date: Date) {
     const dayjsDate = dayjs(date);

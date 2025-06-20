@@ -14,7 +14,7 @@ import {
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import dayjs, { Dayjs } from "dayjs";
 import { useTranslation } from "../../hooks/useTranslation";
-import { formatDateTime } from "../../utils";
+import { dateFormat, formatDateTime } from "../../utils";
 
 type TagRender = SelectProps["tagRender"];
 
@@ -223,6 +223,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 <DatePicker
                     placeholder={t("taskDueDateTime")}
                     value={dueDateTime}
+                    format={dateFormat}
                     disabled={isDisabled}
                     onChange={handleDueDateTimeChange}
                     style={{

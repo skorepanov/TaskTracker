@@ -4,6 +4,7 @@ import { DatePicker, Input, Select, Space } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { useStore } from "../../stores/RootStore";
 import { useTranslation } from "../../hooks/useTranslation";
+import { dateFormat } from "../../utils";
 
 interface ITaskCreationPanelProps {
     dueDateTime?: Date;
@@ -21,6 +22,8 @@ const TaskCreationPanel: React.FC<ITaskCreationPanelProps> = observer(props => {
         props.dueDateTime ?? null
     );
     const [folderId, setFolderId] = useState<number>(props.folderId ?? inboxId);
+
+    const dueDateTimeAsDayjs = dueDateTime !== null ? dayjs(dueDateTime) : null;
 
     const inboxOption = {
         key: inboxId,
@@ -81,9 +84,8 @@ const TaskCreationPanel: React.FC<ITaskCreationPanelProps> = observer(props => {
                         />
                         <DatePicker
                             placeholder={t("date")}
-                            value={
-                                dueDateTime !== null ? dayjs(dueDateTime) : null
-                            }
+                            value={dueDateTimeAsDayjs}
+                            format={dateFormat}
                             onChange={handleDueDateTimeChange}
                             style={{
                                 width: 120,
