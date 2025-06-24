@@ -2,6 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Divider, Dropdown } from "antd";
 import { useStore } from "../../stores/RootStore";
+import { useSettings } from "../../contexts/SettingsContext";
 import { useTranslation } from "../../hooks/useTranslation";
 import { formatDate } from "../../utils";
 import ITask from "../../interfaces/ITask";
@@ -14,14 +15,17 @@ interface ITaskInTrashListItemProps {
 const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
     props => {
         const { taskStore, tagStore } = useStore();
+        const { settings } = useSettings();
         const t = useTranslation();
 
         const { task } = props;
 
         const isCompleted = task.completedDateTime !== null;
 
+        const selectedTaskColor =
+            settings.theme === "dark" ? "#111a2c" : "#e6f4ff";
         const backgroundColor =
-            taskStore.currentTask?.id === task.id ? "lightgray" : "";
+            taskStore.currentTask?.id === task.id ? selectedTaskColor : "";
 
         const taskTags = tagStore.getFilteredSortedTags(task.tagIds);
 
