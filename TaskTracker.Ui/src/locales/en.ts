@@ -1,5 +1,6 @@
 export default {
     // common
+    loading: "Loading...",
     save: "Save",
     delete: "Delete",
     cancel: "Cancel",

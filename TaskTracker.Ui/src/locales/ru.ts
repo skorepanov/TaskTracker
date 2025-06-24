@@ -1,5 +1,6 @@
 export default {
     // common
+    loading: "Загрузка...",
     save: "Сохранить",
     delete: "Удалить",
     cancel: "Отмена",
