@@ -320,6 +320,14 @@ class TaskStore {
         this.sortTasksByTitle(tasks);
         return tasks;
     };
+
+    removeTagFromTasks = (tagId: number) => {
+        for (const task of this.taskArray) {
+            if (task.tagIds !== null) {
+                task.tagIds = task.tagIds.filter(t => t !== tagId);
+            }
+        }
+    };
 }
 
 export default TaskStore;

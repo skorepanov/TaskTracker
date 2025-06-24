@@ -12,11 +12,11 @@ interface ITagDeleteModalProps {
 }
 
 const TagDeleteModal: React.FC<ITagDeleteModalProps> = observer(props => {
-    const { tagStore } = useStore();
+    const rootStore = useStore();
     const t = useTranslation();
 
     const handleDeleteTagButtonClick = async () => {
-        await tagStore.deleteTag(props.tag);
+        await rootStore.deleteTag(props.tag);
         props.hideModal();
     };
 
