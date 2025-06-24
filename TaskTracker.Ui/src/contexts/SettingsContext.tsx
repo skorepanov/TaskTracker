@@ -21,7 +21,18 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
     const [settings, setSettings] = useState<IUserSettings>(() => {
         const savedSettings = localStorage.getItem("userSettings");
-        return savedSettings ? JSON.parse(savedSettings) : DEFAULT_SETTINGS;
+
+        if (savedSettings) {
+            return JSON.parse(savedSettings);
+        }
+
+        const settings = DEFAULT_SETTINGS;
+
+        const query = "(prefers-color-scheme: dark)";
+        const isDarkTheme = window.matchMedia(query).matches;
+        settings.theme = isDarkTheme ? "dark" : "light";
+
+        return settings;
     });
 
     useEffect(() => {
