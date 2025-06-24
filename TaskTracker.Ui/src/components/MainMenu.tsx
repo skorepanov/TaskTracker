@@ -199,6 +199,12 @@ const MainMenu: React.FC = observer(() => {
         },
     ];
 
+    const mainMenuDefaultOpenKeys = ["/folders"];
+
+    if (location.pathname.includes("/tags")) {
+        mainMenuDefaultOpenKeys.push("/tags");
+    }
+
     return (
         <div
             style={{
@@ -210,7 +216,7 @@ const MainMenu: React.FC = observer(() => {
                 items={mainMenuItems}
                 mode="inline"
                 selectedKeys={[location.pathname]}
-                defaultOpenKeys={["/folders"]}
+                defaultOpenKeys={mainMenuDefaultOpenKeys}
                 className="scrollable-container"
                 style={{ flexGrow: 1 }}
             />
