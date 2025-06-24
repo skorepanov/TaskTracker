@@ -59,6 +59,7 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
                 defaultActiveKey={["completedTasks"]}
                 ghost
                 size={"small"}
+                style={{ marginTop: 10 }}
             />
         ) : null;
 

@@ -75,36 +75,41 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
         };
 
         return (
-            <Dropdown
-                key={task.id}
-                menu={contextMenu}
-                trigger={["contextMenu"]}>
-                <div
-                    onClick={handleTaskClick}
-                    style={{
-                        color: "grey",
-                        backgroundColor: backgroundColor,
-                        paddingLeft: 10,
-                        paddingTop: 5,
-                    }}>
-                    <div style={{ float: "left" }}>
-                        <Checkbox
-                            checked={isCompleted}
-                            disabled={true}
-                            style={{ marginRight: 5 }}
-                        />
-                        {task.title}
+            <>
+                <Dropdown
+                    key={task.id}
+                    menu={contextMenu}
+                    trigger={["contextMenu"]}>
+                    <div
+                        onClick={handleTaskClick}
+                        style={{
+                            color: "grey",
+                            backgroundColor: backgroundColor,
+                            paddingLeft: 10,
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                        }}>
+                        <div style={{ float: "left" }}>
+                            <Checkbox
+                                checked={isCompleted}
+                                disabled={true}
+                                style={{ marginRight: 5 }}
+                            />
+                            {task.title}
+                        </div>
+                        <div style={{ float: "right" }}>
+                            {taskTagComponents}
+                        </div>
+                        {dateComponent !== null ? (
+                            <>
+                                <br />
+                                {dateComponent}
+                            </>
+                        ) : null}
                     </div>
-                    <div style={{ float: "right" }}>{taskTagComponents}</div>
-                    {dateComponent !== null ? (
-                        <>
-                            <br />
-                            {dateComponent}
-                        </>
-                    ) : null}
-                    <Divider size="small" />
-                </div>
-            </Dropdown>
+                </Dropdown>
+                <Divider style={{ marginTop: 0, marginBottom: 0 }} />
+            </>
         );
     }
 );
