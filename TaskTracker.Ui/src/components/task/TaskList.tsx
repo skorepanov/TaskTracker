@@ -47,7 +47,14 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
     const completedTaskItems: CollapseProps["items"] = [
         {
             key: "completedTasks",
-            label: t("completedTasks"),
+            label: (
+                <>
+                    {t("completedTasks")}
+                    <span style={{ color: "grey", marginLeft: 10 }}>
+                        {props.completedTasks.length}
+                    </span>
+                </>
+            ),
             children: completedTaskComponents,
         },
     ];
