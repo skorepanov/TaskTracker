@@ -7,6 +7,6 @@ export interface IUserSettings {
 }
 
 export const DEFAULT_SETTINGS: IUserSettings = {
-    locale: "ru_RU",
+    locale: "en_US",
     theme: "light",
 };

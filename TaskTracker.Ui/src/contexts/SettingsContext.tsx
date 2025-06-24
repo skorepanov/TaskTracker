@@ -28,6 +28,14 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 
         const settings = DEFAULT_SETTINGS;
 
+        const isRussianLanguage = navigator.language
+            .toLowerCase()
+            .startsWith("ru");
+
+        if (isRussianLanguage) {
+            settings.locale = "ru_RU";
+        }
+
         const query = "(prefers-color-scheme: dark)";
         const isDarkTheme = window.matchMedia(query).matches;
         settings.theme = isDarkTheme ? "dark" : "light";
