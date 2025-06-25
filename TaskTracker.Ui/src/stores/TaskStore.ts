@@ -321,6 +321,18 @@ class TaskStore {
         return tasks;
     };
 
+    removeTasksFromFolder = (folderId: number) => {
+        if (this.currentTask?.folderId === folderId) {
+            this.currentTaskId = undefined;
+        }
+
+        for (const task of this.taskArray) {
+            if (task.folderId === folderId) {
+                this.tasks.delete(task.id);
+            }
+        }
+    };
+
     removeTagFromTasks = (tagId: number) => {
         for (const task of this.taskArray) {
             if (task.tagIds !== null) {

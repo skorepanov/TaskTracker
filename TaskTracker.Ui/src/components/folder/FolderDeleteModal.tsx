@@ -12,11 +12,11 @@ interface IFolderDeleteModalProps {
 }
 
 const FolderDeleteModal: React.FC<IFolderDeleteModalProps> = observer(props => {
-    const { folderStore } = useStore();
+    const rootStore = useStore();
     const t = useTranslation();
 
     const handleDeleteFolderButtonClick = async () => {
-        await folderStore.deleteFolder(props.folder);
+        await rootStore.deleteFolder(props.folder);
         props.hideModal();
     };
 
