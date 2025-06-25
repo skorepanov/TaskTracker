@@ -171,10 +171,11 @@ class TaskStore {
         });
     };
 
-    moveTaskFromTrash = async (task: ITask) => {
+    moveTaskFromTrash = async (task: ITask, folderId: number | null) => {
         const url = `${AppUrl}/tasks/${task.id}/movedFromTrash`;
 
         const params = {
+            folderId: folderId,
             modifiedDateTime: new Date().toISOString(),
         };
 

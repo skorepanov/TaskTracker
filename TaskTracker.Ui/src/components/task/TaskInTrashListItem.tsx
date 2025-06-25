@@ -14,7 +14,7 @@ interface ITaskInTrashListItemProps {
 
 const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
     props => {
-        const { taskStore, tagStore } = useStore();
+        const { taskStore, folderStore, tagStore } = useStore();
         const { settings } = useSettings();
         const t = useTranslation();
 
@@ -51,20 +51,40 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
             taskStore.currentTaskId = task.id;
         };
 
-        const handleRestoreTaskButtonClick = async () => {
-            await taskStore.moveTaskFromTrash(task);
+        const handleRestoreTaskButtonClick = async (
+            folderId: number | null
+        ) => {
+            await taskStore.moveTaskFromTrash(task, folderId);
         };
 
         const handleDeleteTaskButtonClick = async () => {
             await taskStore.deleteTask(task);
         };
 
+        const inboxMenuItem = {
+            key: "restoreToInbox",
+            label: "<Inbox>",
+            onClick: async () => {
+                await handleRestoreTaskButtonClick(null);
+            },
+        };
+
+        const folderMenuItems = folderStore.getSortedFolders().map(f => {
+            return {
+                key: `restoreTo${f.id}`,
+                label: f.title,
+                onClick: async () => {
+                    await handleRestoreTaskButtonClick(f.id);
+                },
+            };
+        });
+
         const contextMenu = {
             items: [
                 {
                     key: "restore",
                     label: t("restoreTask"),
-                    onClick: handleRestoreTaskButtonClick,
+                    children: [inboxMenuItem, ...folderMenuItems],
                 },
                 {
                     key: "delete",
