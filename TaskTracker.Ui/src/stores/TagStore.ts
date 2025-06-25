@@ -53,13 +53,13 @@ class TagStore {
         });
     };
 
-    deleteTag = async (tag: ITag) => {
-        const url = `${AppUrl}/tags/${tag.id}`;
+    deleteTag = async (tagId: number) => {
+        const url = `${AppUrl}/tags/${tagId}`;
 
         await Api.delete(url);
 
         runInAction(() => {
-            this.tags = this.tags.filter(t => t.id !== tag.id);
+            this.tags = this.tags.filter(t => t.id !== tagId);
         });
     };
 

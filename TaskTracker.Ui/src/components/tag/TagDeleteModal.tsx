@@ -16,7 +16,7 @@ const TagDeleteModal: React.FC<ITagDeleteModalProps> = observer(props => {
     const t = useTranslation();
 
     const handleDeleteTagButtonClick = async () => {
-        await rootStore.deleteTag(props.tag);
+        await rootStore.deleteTag(props.tag.id);
         props.hideModal();
     };
 

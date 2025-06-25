@@ -2,8 +2,6 @@ import { createContext, useContext } from "react";
 import TaskStore from "./TaskStore";
 import FolderStore from "./FolderStore";
 import TagStore from "./TagStore";
-import IFolder from "../interfaces/IFolder";
-import ITag from "../interfaces/ITag";
 
 class RootStore {
     taskStore: TaskStore;
@@ -26,14 +24,14 @@ class RootStore {
         ]);
     };
 
-    deleteFolder = async (folder: IFolder) => {
-        await this.folderStore.deleteFolder(folder);
-        this.taskStore.removeTasksFromFolder(folder.id);
+    deleteFolder = async (folderId: number) => {
+        await this.folderStore.deleteFolder(folderId);
+        this.taskStore.removeTasksFromFolder(folderId);
     };
 
-    deleteTag = async (tag: ITag) => {
-        await this.tagStore.deleteTag(tag);
-        this.taskStore.removeTagFromTasks(tag.id);
+    deleteTag = async (tagId: number) => {
+        await this.tagStore.deleteTag(tagId);
+        this.taskStore.removeTagFromTasks(tagId);
     };
 }
 

@@ -51,13 +51,13 @@ class FolderStore {
         });
     };
 
-    deleteFolder = async (folder: IFolder) => {
-        const url = `${AppUrl}/folders/${folder.id}`;
+    deleteFolder = async (folderId: number) => {
+        const url = `${AppUrl}/folders/${folderId}`;
 
         await Api.delete(url);
 
         runInAction(() => {
-            this.folders = this.folders.filter(f => f.id !== folder.id);
+            this.folders = this.folders.filter(f => f.id !== folderId);
         });
     };
 

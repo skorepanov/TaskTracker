@@ -16,7 +16,7 @@ const FolderDeleteModal: React.FC<IFolderDeleteModalProps> = observer(props => {
     const t = useTranslation();
 
     const handleDeleteFolderButtonClick = async () => {
-        await rootStore.deleteFolder(props.folder);
+        await rootStore.deleteFolder(props.folder.id);
         props.hideModal();
     };
 

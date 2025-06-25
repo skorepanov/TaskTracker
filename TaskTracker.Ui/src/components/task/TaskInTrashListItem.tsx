@@ -54,11 +54,11 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
         const handleRestoreTaskButtonClick = async (
             folderId: number | null
         ) => {
-            await taskStore.moveTaskFromTrash(task, folderId);
+            await taskStore.moveTaskFromTrash(task.id, folderId);
         };
 
         const handleDeleteTaskButtonClick = async () => {
-            await taskStore.deleteTask(task);
+            await taskStore.deleteTask(task.id);
         };
 
         const inboxMenuItem = {

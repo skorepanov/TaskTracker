@@ -111,22 +111,22 @@ class TaskStore {
         });
     };
 
-    deleteTask = async (task: ITask) => {
-        const url = `${AppUrl}/tasks/${task.id}`;
+    deleteTask = async (taskId: number) => {
+        const url = `${AppUrl}/tasks/${taskId}`;
 
         await Api.delete(url);
 
         runInAction(() => {
-            this.tasks.delete(task.id);
+            this.tasks.delete(taskId);
 
-            if (this._currentTaskId === task.id) {
+            if (this._currentTaskId === taskId) {
                 this._currentTaskId = null;
             }
         });
     };
 
-    completeTask = async (task: ITask) => {
-        const url = `${AppUrl}/tasks/${task.id}/completed`;
+    completeTask = async (taskId: number) => {
+        const url = `${AppUrl}/tasks/${taskId}/completed`;
 
         const params = {
             completedDateTime: new Date().toISOString(),
@@ -139,8 +139,8 @@ class TaskStore {
         });
     };
 
-    incompleteTask = async (task: ITask) => {
-        const url = `${AppUrl}/tasks/${task.id}/incompleted`;
+    incompleteTask = async (taskId: number) => {
+        const url = `${AppUrl}/tasks/${taskId}/incompleted`;
 
         const params = {
             modifiedDateTime: new Date().toISOString(),
@@ -153,8 +153,8 @@ class TaskStore {
         });
     };
 
-    moveTaskToTrash = async (task: ITask) => {
-        const url = `${AppUrl}/tasks/${task.id}/movedToTrash`;
+    moveTaskToTrash = async (taskId: number) => {
+        const url = `${AppUrl}/tasks/${taskId}/movedToTrash`;
 
         const params = {
             movedToTrashDateTime: new Date().toISOString(),
@@ -165,14 +165,14 @@ class TaskStore {
         runInAction(() => {
             this.tasks.set(taskMovedToTrash.id, taskMovedToTrash);
 
-            if (this._currentTaskId === task.id) {
+            if (this._currentTaskId === taskId) {
                 this._currentTaskId = null;
             }
         });
     };
 
-    moveTaskFromTrash = async (task: ITask, folderId: number | null) => {
-        const url = `${AppUrl}/tasks/${task.id}/movedFromTrash`;
+    moveTaskFromTrash = async (taskId: number, folderId: number | null) => {
+        const url = `${AppUrl}/tasks/${taskId}/movedFromTrash`;
 
         const params = {
             folderId: folderId,
@@ -184,7 +184,7 @@ class TaskStore {
         runInAction(() => {
             this.tasks.set(taskMovedFromTrash.id, taskMovedFromTrash);
 
-            if (this._currentTaskId === task.id) {
+            if (this._currentTaskId === taskId) {
                 this._currentTaskId = null;
             }
         });

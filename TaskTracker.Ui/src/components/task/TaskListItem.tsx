@@ -75,14 +75,14 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
         setIsCompleted(isCompletedNew);
 
         if (isCompletedNew) {
-            await taskStore.completeTask(task);
+            await taskStore.completeTask(task.id);
         } else {
-            await taskStore.incompleteTask(task);
+            await taskStore.incompleteTask(task.id);
         }
     };
 
     const handleMoveTaskToTrashButtonClick = async () => {
-        await taskStore.moveTaskToTrash(task);
+        await taskStore.moveTaskToTrash(task.id);
     };
 
     const contextMenu = {

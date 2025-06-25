@@ -92,9 +92,9 @@ const TaskUpdatePanel: React.FC = observer(() => {
         const isCompletedNew = event.target.checked;
 
         if (isCompletedNew) {
-            await taskStore.completeTask(task);
+            await taskStore.completeTask(task.id);
         } else {
-            await taskStore.incompleteTask(task);
+            await taskStore.incompleteTask(task.id);
         }
     };
 
