@@ -10,17 +10,17 @@ class TaskStore {
         return Array.from(this.tasks.values());
     }
 
-    private _currentTaskId: number | undefined;
+    private _currentTaskId: number | null = null;
 
     get currentTask() {
-        if (this._currentTaskId === undefined) {
-            return undefined;
+        if (this._currentTaskId === null) {
+            return null;
         }
 
         return this.tasks.get(this._currentTaskId);
     }
 
-    set currentTaskId(taskId: number | undefined) {
+    set currentTaskId(taskId: number | null) {
         this._currentTaskId = taskId;
     }
 
@@ -120,7 +120,7 @@ class TaskStore {
             this.tasks.delete(task.id);
 
             if (this._currentTaskId === task.id) {
-                this._currentTaskId = undefined;
+                this._currentTaskId = null;
             }
         });
     };
@@ -166,7 +166,7 @@ class TaskStore {
             this.tasks.set(taskMovedToTrash.id, taskMovedToTrash);
 
             if (this._currentTaskId === task.id) {
-                this._currentTaskId = undefined;
+                this._currentTaskId = null;
             }
         });
     };
@@ -184,7 +184,7 @@ class TaskStore {
             this.tasks.set(taskMovedFromTrash.id, taskMovedFromTrash);
 
             if (this._currentTaskId === task.id) {
-                this._currentTaskId = undefined;
+                this._currentTaskId = null;
             }
         });
     };
@@ -323,7 +323,7 @@ class TaskStore {
 
     removeTasksFromFolder = (folderId: number) => {
         if (this.currentTask?.folderId === folderId) {
-            this.currentTaskId = undefined;
+            this.currentTaskId = null;
         }
 
         for (const task of this.taskArray) {
