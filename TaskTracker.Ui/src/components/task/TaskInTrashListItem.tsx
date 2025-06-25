@@ -100,12 +100,8 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
                         <div style={{ float: "right" }}>
                             {taskTagComponents}
                         </div>
-                        {dateComponent !== null ? (
-                            <>
-                                <br />
-                                {dateComponent}
-                            </>
-                        ) : null}
+                        <br />
+                        {dateComponent}
                     </div>
                 </Dropdown>
                 <Divider style={{ marginTop: 0, marginBottom: 0 }} />

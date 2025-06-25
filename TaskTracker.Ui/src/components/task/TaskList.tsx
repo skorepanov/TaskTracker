@@ -31,6 +31,13 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
         />
     ));
 
+    const incompletedTasksPanel =
+        incompletedTaskComponents.length > 0 ? (
+            <div style={{ paddingLeft: 10 }}>{incompletedTaskComponents}</div>
+        ) : (
+            <NoTasks />
+        );
+
     const completedTaskComponents = props.completedTasks.map(t => (
         <TaskListItem
             key={t.id}
@@ -72,13 +79,7 @@ const TaskList: React.FC<ITaskListProps> = observer(props => {
 
     return (
         <div className="scrollable-container">
-            {incompletedTaskComponents.length > 0 ? (
-                <div style={{ paddingLeft: 10 }}>
-                    {incompletedTaskComponents}
-                </div>
-            ) : (
-                <NoTasks />
-            )}
+            {incompletedTasksPanel}
             {completedTasksPanel}
         </div>
     );
