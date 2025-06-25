@@ -345,7 +345,7 @@ public class UserTaskTests
 
     #region Move task from trash
     [Fact]
-    public void MoveTaskFromTrash()
+    public void MoveTaskFromTrashToInbox()
     {
         // Arrange
         var sut = CreateSut();
@@ -356,12 +356,36 @@ public class UserTaskTests
         sut.MoveToTrash(movedToTrashDateTime);
 
         // Act
-        sut.MoveFromTrash(movedFromTrashDateTime);
+        sut.MoveFromTrash(movedFromTrashDateTime, folderId: null);
 
         // Assert
         sut.MovedToTrashDateTime.Should().BeNull();
         sut.IsInTrash.Should().BeFalse();
         sut.ModifiedDateTime.Should().Be(movedFromTrashDateTime);
+        sut.FolderId.Should().BeNull();
+    }
+
+    [Fact]
+    public void MoveTaskFromTrashToSpecificFolder()
+    {
+        // Arrange
+        var sut = CreateSut();
+
+        var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 1);
+        var movedFromTrashDateTime = new DateTime(year: 2025, month: 5, day: 2);
+
+        const int NEW_FOLDER_ID = 1;
+
+        sut.MoveToTrash(movedToTrashDateTime);
+
+        // Act
+        sut.MoveFromTrash(movedFromTrashDateTime, NEW_FOLDER_ID);
+
+        // Assert
+        sut.MovedToTrashDateTime.Should().BeNull();
+        sut.IsInTrash.Should().BeFalse();
+        sut.ModifiedDateTime.Should().Be(movedFromTrashDateTime);
+        sut.FolderId.Should().Be(NEW_FOLDER_ID);
     }
 
     [Fact]
@@ -371,19 +395,23 @@ public class UserTaskTests
         var sut = CreateSut();
 
         var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 1);
-        var oldMovedFromTrashDateTime = new DateTime(year: 2025, month: 5, day: 2);
-        var newMovedFromTrashDateTime = new DateTime(year: 2025, month: 5, day: 3);
+        var firstMovedFromTrashDateTime = new DateTime(year: 2025, month: 5, day: 2);
+        var secondMovedFromTrashDateTime = new DateTime(year: 2025, month: 5, day: 3);
+
+        const int FIRST_FOLDER_ID = 1;
+        const int SECOND_FOLDER_ID = 2;
 
         sut.MoveToTrash(movedToTrashDateTime);
 
         // Act
-        sut.MoveFromTrash(oldMovedFromTrashDateTime);
-        sut.MoveFromTrash(newMovedFromTrashDateTime);
+        sut.MoveFromTrash(firstMovedFromTrashDateTime, FIRST_FOLDER_ID);
+        sut.MoveFromTrash(secondMovedFromTrashDateTime, SECOND_FOLDER_ID);
 
         // Assert
         sut.MovedToTrashDateTime.Should().BeNull();
         sut.IsInTrash.Should().BeFalse();
-        sut.ModifiedDateTime.Should().Be(oldMovedFromTrashDateTime);
+        sut.ModifiedDateTime.Should().Be(firstMovedFromTrashDateTime);
+        sut.FolderId.Should().Be(FIRST_FOLDER_ID);
     }
     #endregion
 

@@ -186,9 +186,23 @@ public class TaskService(
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
+        var folderId = userTaskDto.FolderId;
+
+        if (folderId is not null)
+        {
+            var folder = await _folderRepository.GetFolder(folderId.Value);
+
+            if (folder is null)
+            {
+                throw new DomainEntityNotFoundException(
+                    domainEntityType: typeof(Folder),
+                    message: $"Папка не обнаружена (id = {folderId.Value})");
+            }
+        }
+
         var modifiedDateTime = userTaskDto.ModifiedDateTime ?? DateTime.UtcNow;
 
-        task.MoveFromTrash(modifiedDateTime);
+        task.MoveFromTrash(modifiedDateTime, folderId);
         await _taskRepository.UpdateTask(task);
 
         return task;

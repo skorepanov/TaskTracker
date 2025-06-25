@@ -91,7 +91,7 @@ public class UserTask
         FolderId = null;
     }
 
-    public void MoveFromTrash(DateTime modifiedDateTime)
+    public void MoveFromTrash(DateTime modifiedDateTime, int? folderId)
     {
         if (!IsInTrash)
         {
@@ -100,5 +100,6 @@ public class UserTask
 
         MovedToTrashDateTime = null;
         ModifiedDateTime = modifiedDateTime;
+        FolderId = folderId;
     }
 }
