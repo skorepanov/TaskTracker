@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Checkbox, Divider, Dropdown } from "antd";
+import { Checkbox, Divider, Dropdown, MenuProps } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { formatDate } from "../../utils";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -9,6 +9,8 @@ import { useTranslation } from "../../hooks/useTranslation";
 import ITask from "../../interfaces/ITask";
 import IFolder from "../../interfaces/IFolder";
 import TaskTag from "../tag/TaskTag";
+
+type MenuItem = Required<MenuProps>["items"][number];
 
 interface ITaskListItemProps {
     task: ITask;
@@ -85,21 +87,19 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
         await taskStore.moveTaskToTrash(task.id);
     };
 
-    const contextMenu = {
-        items: [
-            {
-                key: "moveTaskToTrash",
-                label: t("moveTaskToTrash"),
-                onClick: handleMoveTaskToTrashButtonClick,
-            },
-        ],
-    };
+    const contextMenuItems: MenuItem[] = [
+        {
+            key: "moveTaskToTrash",
+            label: t("moveTaskToTrash"),
+            onClick: handleMoveTaskToTrashButtonClick,
+        },
+    ];
 
     return (
         <>
             <Dropdown
                 key={task.id}
-                menu={contextMenu}
+                menu={{ items: contextMenuItems }}
                 trigger={["contextMenu"]}>
                 <div
                     onClick={handleTaskClick}

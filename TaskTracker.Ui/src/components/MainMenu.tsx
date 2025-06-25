@@ -64,23 +64,21 @@ const MainMenu: React.FC = observer(() => {
             folder.id
         ).length;
 
-        const contextMenu = {
-            items: [
-                {
-                    key: "updateFolder",
-                    label: <FolderUpdateModalMenuItem folder={folder} />,
-                },
-                {
-                    key: "deleteFolder",
-                    label: <FolderDeleteModalMenuItem folder={folder} />,
-                },
-            ],
-        };
+        const contextMenuItems: MenuItem[] = [
+            {
+                key: "updateFolder",
+                label: <FolderUpdateModalMenuItem folder={folder} />,
+            },
+            {
+                key: "deleteFolder",
+                label: <FolderDeleteModalMenuItem folder={folder} />,
+            },
+        ];
 
         return (
             <Dropdown
                 key={folder.id}
-                menu={contextMenu}
+                menu={{ items: contextMenuItems }}
                 trigger={["contextMenu"]}>
                 {getLabel(
                     `/folders/${folder.id}`,
@@ -118,23 +116,21 @@ const MainMenu: React.FC = observer(() => {
             tag.id
         ).length;
 
-        const contextMenu = {
-            items: [
-                {
-                    key: "updateTag",
-                    label: <TagUpdateModalMenuItem tag={tag} />,
-                },
-                {
-                    key: "deleteTag",
-                    label: <TagDeleteModalMenuItem tag={tag} />,
-                },
-            ],
-        };
+        const contextMenuItems: MenuItem[] = [
+            {
+                key: "updateTag",
+                label: <TagUpdateModalMenuItem tag={tag} />,
+            },
+            {
+                key: "deleteTag",
+                label: <TagDeleteModalMenuItem tag={tag} />,
+            },
+        ];
 
         return (
             <Dropdown
                 key={tag.id}
-                menu={contextMenu}
+                menu={{ items: contextMenuItems }}
                 trigger={["contextMenu"]}>
                 <Link to={`/tags/${tag.id}`}>
                     <div style={{ float: "left" }}>

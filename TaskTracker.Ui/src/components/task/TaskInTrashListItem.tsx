@@ -1,12 +1,14 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Checkbox, Divider, Dropdown } from "antd";
+import { Checkbox, Divider, Dropdown, MenuProps } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { useSettings } from "../../contexts/SettingsContext";
 import { useTranslation } from "../../hooks/useTranslation";
 import { formatDate } from "../../utils";
 import ITask from "../../interfaces/ITask";
 import TaskTag from "../tag/TaskTag";
+
+type MenuItem = Required<MenuProps>["items"][number];
 
 interface ITaskInTrashListItemProps {
     task: ITask;
@@ -61,44 +63,49 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
             await taskStore.deleteTask(task.id);
         };
 
-        const inboxMenuItem = {
-            key: "restoreToInbox",
-            label: "<Inbox>",
-            onClick: async () => {
-                await handleRestoreTaskButtonClick(null);
-            },
-        };
-
-        const folderMenuItems = folderStore.getSortedFolders().map(f => {
-            return {
-                key: `restoreTo${f.id}`,
-                label: f.title,
+        const inboxMenuItems: MenuItem[] = [
+            {
+                key: "restoreToInbox",
+                label: "<Inbox>",
                 onClick: async () => {
-                    await handleRestoreTaskButtonClick(f.id);
+                    await handleRestoreTaskButtonClick(null);
                 },
-            };
-        });
+            },
+            {
+                type: "divider",
+            },
+        ];
 
-        const contextMenu = {
-            items: [
-                {
-                    key: "restore",
-                    label: t("restoreTask"),
-                    children: [inboxMenuItem, ...folderMenuItems],
-                },
-                {
-                    key: "delete",
-                    label: t("deleteTask"),
-                    onClick: handleDeleteTaskButtonClick,
-                },
-            ],
-        };
+        const folderMenuItems: MenuItem[] = folderStore
+            .getSortedFolders()
+            .map(f => {
+                return {
+                    key: `restoreTo${f.id}`,
+                    label: f.title,
+                    onClick: async () => {
+                        await handleRestoreTaskButtonClick(f.id);
+                    },
+                };
+            });
+
+        const contextMenuItems: MenuItem[] = [
+            {
+                key: "restore",
+                label: t("restoreTask"),
+                children: [...inboxMenuItems, ...folderMenuItems],
+            },
+            {
+                key: "delete",
+                label: t("deleteTask"),
+                onClick: handleDeleteTaskButtonClick,
+            },
+        ];
 
         return (
             <>
                 <Dropdown
                     key={task.id}
-                    menu={contextMenu}
+                    menu={{ items: contextMenuItems }}
                     trigger={["contextMenu"]}>
                     <div
                         onClick={handleTaskClick}
