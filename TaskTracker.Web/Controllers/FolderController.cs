@@ -17,7 +17,8 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetFolderById(int folderId)
     {
         var folder = await _taskService.GetFolderById(folderId);
-        var response = ApiResponse<Folder>.Success(folder);
+        var folderVm = new FolderVm(folder);
+        var response = ApiResponse<FolderVm>.Success(folderVm);
         return Ok(response);
     }
 
@@ -41,11 +42,12 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
     {
         var folder = await _taskService.CreateFolder(folderDto);
-        var response = ApiResponse<Folder>.Success(folder);
+        var folderVm = new FolderVm(folder);
+        var response = ApiResponse<FolderVm>.Success(folderVm);
 
         return CreatedAtRoute(
             routeName: nameof(GetFolderById),
-            routeValues: new { folderId = folder.Id },
+            routeValues: new { folderId = folderVm.Id },
             value: response);
     }
 
@@ -59,7 +61,8 @@ public class FolderController(TaskService _taskService) : ControllerBase
         int folderId, [FromBody] FolderForUpdateDto folderDto)
     {
         var folder = await _taskService.UpdateFolder(folderId, folderDto);
-        var response = ApiResponse<Folder>.Success(folder);
+        var folderVm = new FolderVm(folder);
+        var response = ApiResponse<FolderVm>.Success(folderVm);
         return Ok(response);
     }
 
@@ -71,7 +74,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> DeleteFolder(int folderId)
     {
         await _taskService.DeleteFolder(folderId);
-        var response = ApiResponse<Tag>.Success(null);
+        var response = ApiResponse<FolderVm>.Success(null);
         return Ok(response);
     }
 }

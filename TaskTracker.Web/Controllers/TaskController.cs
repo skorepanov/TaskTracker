@@ -30,7 +30,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetIncompletedTasks()
     {
         var tasks = await _taskService.GetIncompletedTasks();
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
+        var today = DateTime.UtcNow;
+        var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
         var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(taskVms);
         return Ok(response);
     }
@@ -43,7 +44,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     public async Task<ActionResult> GetCompletedTasks()
     {
         var tasks = await _taskService.GetCompletedTasks();
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
+        var today = DateTime.UtcNow;
+        var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
         var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(taskVms);
         return Ok(response);
     }
@@ -56,7 +58,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetTasksInTrash()
     {
         var tasks = await _taskService.GetTasksInTrash();
-        var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
+        var today = DateTime.UtcNow;
+        var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
         var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(taskVms);
         return Ok(response);
     }

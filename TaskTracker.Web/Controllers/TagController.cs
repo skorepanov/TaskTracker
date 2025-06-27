@@ -17,7 +17,8 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetTagById(int tagId)
     {
         var tag = await _taskService.GetTagById(tagId);
-        var response = ApiResponse<Tag>.Success(tag);
+        var tagVm = new TagVm(tag);
+        var response = ApiResponse<TagVm>.Success(tagVm);
         return Ok(response);
     }
 
@@ -28,7 +29,8 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<ActionResult> GetTags()
     {
         var tags = await _taskService.GetTags();
-        var response = ApiResponse<IReadOnlyCollection<Tag>>.Success(tags);
+        var tagVms = tags.Select(t => new TagVm(t)).ToList();
+        var response = ApiResponse<IReadOnlyCollection<TagVm>>.Success(tagVms);
         return Ok(response);
     }
 
@@ -40,11 +42,12 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> CreateTag([FromBody] TagForCreationDto tagDto)
     {
         var tag = await _taskService.CreateTag(tagDto);
-        var response = ApiResponse<Tag>.Success(tag);
+        var tagVm = new TagVm(tag);
+        var response = ApiResponse<TagVm>.Success(tagVm);
 
         return CreatedAtRoute(
             routeName: nameof(GetTagById),
-            routeValues: new { tagId = tag.Id },
+            routeValues: new { tagId = tagVm.Id },
             value: response);
     }
 
@@ -58,7 +61,8 @@ public class TagController(TaskService _taskService) : ControllerBase
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
         var tag = await _taskService.UpdateTag(tagId, tagDto);
-        var response = ApiResponse<Tag>.Success(tag);
+        var tagVm = new TagVm(tag);
+        var response = ApiResponse<TagVm>.Success(tagVm);
         return Ok(response);
     }
 
@@ -70,7 +74,7 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> DeleteTag(int tagId)
     {
         await _taskService.DeleteTag(tagId);
-        var response = ApiResponse<Tag>.Success(null);
+        var response = ApiResponse<TagVm>.Success(null);
         return Ok(response);
     }
 }

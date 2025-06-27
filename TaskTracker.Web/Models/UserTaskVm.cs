@@ -1,4 +1,6 @@
-﻿namespace TaskTracker.Web.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace TaskTracker.Web.Models;
 
 /// <summary>
 /// Представление для задачи
@@ -91,11 +93,36 @@ public record UserTaskVm
     }
 
     /// <summary>
-    /// Сформировать коллекцию представлений для задач
+    /// Сконструировать представление для задачи (для парсинга JSON)
     /// </summary>
-    public static IReadOnlyList<UserTaskVm> CreateCollectionFrom(
-        IEnumerable<UserTask> tasks, DateTime today)
+    [JsonConstructor]
+    public UserTaskVm(
+        int id,
+        string title,
+        string? description,
+        int? folderId,
+        DateTime? completedDateTime,
+        bool isCompleted,
+        DateTime? dueDateTime,
+        int overdueDaysCount,
+        DateTime? movedToTrashDateTime,
+        bool isInTrash,
+        IReadOnlyList<int>? tagIds,
+        DateTime createdDateTime,
+        DateTime? modifiedDateTime)
     {
-        return tasks.Select(t => new UserTaskVm(t, today)).ToList();
+        Id = id;
+        Title = title;
+        Description = description;
+        FolderId = folderId;
+        CompletedDateTime = completedDateTime;
+        IsCompleted = isCompleted;
+        DueDateTime = dueDateTime;
+        OverdueDaysCount = overdueDaysCount;
+        MovedToTrashDateTime = movedToTrashDateTime;
+        IsInTrash = isInTrash;
+        TagIds = tagIds;
+        CreatedDateTime = createdDateTime;
+        ModifiedDateTime = modifiedDateTime;
     }
 }

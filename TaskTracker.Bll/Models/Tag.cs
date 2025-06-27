@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace TaskTracker.Bll.Models;
+﻿namespace TaskTracker.Bll.Models;
 
 public class Tag
 {
@@ -10,12 +8,11 @@ public class Tag
 
     public string Color { get; private set; }
 
-    [JsonIgnore]
-    public List<UserTask> UserTasks { get; set; }
-
     public DateTime CreatedDateTime { get; private set; }
 
     public DateTime? ModifiedDateTime { get; private set; }
+
+    public List<UserTask> UserTasks { get; set; }
 
     private Tag(string title, string color, DateTime createdDateTime)
     {
