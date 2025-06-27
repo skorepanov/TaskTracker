@@ -28,7 +28,8 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetFolders()
     {
         var folders = await _taskService.GetFolders();
-        var response = ApiResponse<IReadOnlyList<Folder>>.Success(folders);
+        var folderVms = folders.Select(f => new FolderVm(f)).ToList();
+        var response = ApiResponse<IReadOnlyList<FolderVm>>.Success(folderVms);
         return Ok(response);
     }
 
