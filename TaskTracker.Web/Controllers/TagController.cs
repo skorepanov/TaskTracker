@@ -1,4 +1,6 @@
-﻿namespace TaskTracker.Web.Controllers;
+﻿using TaskTracker.Web.Models;
+
+namespace TaskTracker.Web.Controllers;
 
 /// <summary>
 /// Работа с тегами задач
@@ -15,7 +17,8 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetTagById(int tagId)
     {
         var tag = await _taskService.GetTagById(tagId);
-        return Ok(tag);
+        var response = ApiResponse<Tag>.Success(tag);
+        return Ok(response);
     }
 
     /// <summary>
@@ -25,7 +28,8 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<ActionResult> GetTags()
     {
         var tags = await _taskService.GetTags();
-        return Ok(tags);
+        var response = ApiResponse<IReadOnlyCollection<Tag>>.Success(tags);
+        return Ok(response);
     }
 
     /// <summary>
@@ -36,11 +40,12 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> CreateTag([FromBody] TagForCreationDto tagDto)
     {
         var tag = await _taskService.CreateTag(tagDto);
+        var response = ApiResponse<Tag>.Success(tag);
 
         return CreatedAtRoute(
             routeName: nameof(GetTagById),
             routeValues: new { tagId = tag.Id },
-            value: tag);
+            value: response);
     }
 
     /// <summary>
@@ -53,7 +58,8 @@ public class TagController(TaskService _taskService) : ControllerBase
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
         var tag = await _taskService.UpdateTag(tagId, tagDto);
-        return Ok(tag);
+        var response = ApiResponse<Tag>.Success(tag);
+        return Ok(response);
     }
 
     /// <summary>
@@ -64,6 +70,7 @@ public class TagController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> DeleteTag(int tagId)
     {
         await _taskService.DeleteTag(tagId);
-        return NoContent();
+        var response = ApiResponse<Tag>.Success(null);
+        return Ok(response);
     }
 }

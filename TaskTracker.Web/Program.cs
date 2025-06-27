@@ -1,9 +1,12 @@
 using Scalar.AspNetCore;
 using TaskTracker.Web;
+using TaskTracker.Web.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 #region Add services to the container
+
+builder.Services.AddExceptionHandler<ExceptionHandler>();
 
 builder.Services.AddControllers();
 builder.Services.AddServices();
@@ -34,6 +37,8 @@ builder.Services.AddOpenApi(options =>
 var app = builder.Build();
 
 #region Configure the HTTP request pipeline
+
+app.UseExceptionHandler(_ => { });
 
 if (app.Environment.IsDevelopment())
 {

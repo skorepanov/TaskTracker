@@ -12,7 +12,13 @@ class TagStore {
     fetchTags = async () => {
         const url = `${AppUrl}/tags`;
 
-        const tags = await Api.get<ITag[]>(url);
+        const response = await Api.get<ITag[]>(url);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const tags = response.result;
 
         runInAction(() => {
             this.tags = tags;
@@ -28,7 +34,13 @@ class TagStore {
             createdDateTime: new Date().toISOString(),
         };
 
-        const createdTag = await Api.post<ITag>(url, params);
+        const response = await Api.post<ITag>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const createdTag = response.result;
 
         runInAction(() => {
             this.tags.push(createdTag);
@@ -44,7 +56,13 @@ class TagStore {
             modifiedDateTime: new Date().toISOString(),
         };
 
-        const updatedTag = await Api.put<ITag>(url, params);
+        const response = await Api.put<ITag>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const updatedTag = response.result;
 
         runInAction(() => {
             this.tags = this.tags.map(t =>
@@ -56,7 +74,11 @@ class TagStore {
     deleteTag = async (tagId: number) => {
         const url = `${AppUrl}/tags/${tagId}`;
 
-        await Api.delete(url);
+        const response = await Api.delete(url);
+
+        if (!response.isOk) {
+            return;
+        }
 
         runInAction(() => {
             this.tags = this.tags.filter(t => t.id !== tagId);

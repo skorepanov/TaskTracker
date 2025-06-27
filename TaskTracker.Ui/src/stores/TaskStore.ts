@@ -30,7 +30,13 @@ class TaskStore {
 
     fetchIncompleteTasks = async () => {
         const url = `${AppUrl}/tasks/incomplete`;
-        const tasks = await Api.get<ITask[]>(url);
+        const response = await Api.get<ITask[]>(url);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const tasks = response.result;
 
         runInAction(() => {
             tasks.forEach(t => {
@@ -41,7 +47,13 @@ class TaskStore {
 
     fetchCompletedTasks = async () => {
         const url = `${AppUrl}/tasks/complete`;
-        const tasks = await Api.get<ITask[]>(url);
+        const response = await Api.get<ITask[]>(url);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const tasks = response.result;
 
         runInAction(() => {
             tasks.forEach(t => {
@@ -53,7 +65,13 @@ class TaskStore {
     fetchTasksInTrash = async () => {
         const url = `${AppUrl}/tasks/trash`;
 
-        const tasks = await Api.get<ITask[]>(url);
+        const response = await Api.get<ITask[]>(url);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const tasks = response.result;
 
         runInAction(() => {
             tasks.forEach(t => {
@@ -76,11 +94,16 @@ class TaskStore {
             createdDateTime: new Date().toISOString(),
         };
 
-        const createdTask = await Api.post<ITask>(url, params);
+        const response = await Api.post<ITask>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const createdTask = response.result;
 
         runInAction(() => {
             this.tasks.set(createdTask.id, createdTask);
-
             this.currentTaskId = createdTask.id;
         });
     };
@@ -104,7 +127,13 @@ class TaskStore {
             modifiedDateTime: new Date().toISOString(),
         };
 
-        const updatedTask = await Api.put<ITask>(url, params);
+        const response = await Api.put<ITask>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const updatedTask = response.result;
 
         runInAction(() => {
             this.tasks.set(updatedTask.id, updatedTask);
@@ -114,7 +143,11 @@ class TaskStore {
     deleteTask = async (taskId: number) => {
         const url = `${AppUrl}/tasks/${taskId}`;
 
-        await Api.delete(url);
+        const response = await Api.delete(url);
+
+        if (!response.isOk) {
+            return;
+        }
 
         runInAction(() => {
             this.tasks.delete(taskId);
@@ -132,7 +165,13 @@ class TaskStore {
             completedDateTime: new Date().toISOString(),
         };
 
-        const updatedTask = await Api.put<ITask>(url, params);
+        const response = await Api.put<ITask>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const updatedTask = response.result;
 
         runInAction(() => {
             this.tasks.set(updatedTask.id, updatedTask);
@@ -146,7 +185,13 @@ class TaskStore {
             modifiedDateTime: new Date().toISOString(),
         };
 
-        const updatedTask = await Api.put<ITask>(url, params);
+        const response = await Api.put<ITask>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const updatedTask = response.result;
 
         runInAction(() => {
             this.tasks.set(updatedTask.id, updatedTask);
@@ -160,7 +205,13 @@ class TaskStore {
             movedToTrashDateTime: new Date().toISOString(),
         };
 
-        const taskMovedToTrash = await Api.put<ITask>(url, params);
+        const response = await Api.put<ITask>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const taskMovedToTrash = response.result;
 
         runInAction(() => {
             this.tasks.set(taskMovedToTrash.id, taskMovedToTrash);
@@ -179,7 +230,13 @@ class TaskStore {
             modifiedDateTime: new Date().toISOString(),
         };
 
-        const taskMovedFromTrash = await Api.put<ITask>(url, params);
+        const response = await Api.put<ITask>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const taskMovedFromTrash = response.result;
 
         runInAction(() => {
             this.tasks.set(taskMovedFromTrash.id, taskMovedFromTrash);

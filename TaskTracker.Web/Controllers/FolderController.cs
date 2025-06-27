@@ -1,4 +1,6 @@
-﻿namespace TaskTracker.Web.Controllers;
+﻿using TaskTracker.Web.Models;
+
+namespace TaskTracker.Web.Controllers;
 
 /// <summary>
 /// Работа с папками
@@ -15,7 +17,8 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetFolderById(int folderId)
     {
         var folder = await _taskService.GetFolderById(folderId);
-        return Ok(folder);
+        var response = ApiResponse<Folder>.Success(folder);
+        return Ok(response);
     }
 
     /// <summary>
@@ -25,7 +28,8 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> GetFolders()
     {
         var folders = await _taskService.GetFolders();
-        return Ok(folders);
+        var response = ApiResponse<IReadOnlyList<Folder>>.Success(folders);
+        return Ok(response);
     }
 
     /// <summary>
@@ -36,11 +40,12 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
     {
         var folder = await _taskService.CreateFolder(folderDto);
+        var response = ApiResponse<Folder>.Success(folder);
 
         return CreatedAtRoute(
             routeName: nameof(GetFolderById),
             routeValues: new { folderId = folder.Id },
-            value: folder);
+            value: response);
     }
 
     /// <summary>
@@ -53,7 +58,8 @@ public class FolderController(TaskService _taskService) : ControllerBase
         int folderId, [FromBody] FolderForUpdateDto folderDto)
     {
         var folder = await _taskService.UpdateFolder(folderId, folderDto);
-        return Ok(folder);
+        var response = ApiResponse<Folder>.Success(folder);
+        return Ok(response);
     }
 
     /// <summary>
@@ -64,6 +70,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> DeleteFolder(int folderId)
     {
         await _taskService.DeleteFolder(folderId);
-        return NoContent();
+        var response = ApiResponse<Tag>.Success(null);
+        return Ok(response);
     }
 }

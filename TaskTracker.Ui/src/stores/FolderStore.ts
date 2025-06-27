@@ -12,7 +12,13 @@ class FolderStore {
     fetchFolders = async () => {
         const url = `${AppUrl}/folders`;
 
-        const folders = await Api.get<IFolder[]>(url);
+        const response = await Api.get<IFolder[]>(url);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const folders = response.result;
 
         runInAction(() => {
             this.folders = folders;
@@ -27,7 +33,13 @@ class FolderStore {
             createdDateTime: new Date().toISOString(),
         };
 
-        const createdFolder = await Api.post<IFolder>(url, params);
+        const response = await Api.post<IFolder>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const createdFolder = response.result;
 
         runInAction(() => {
             this.folders.push(createdFolder);
@@ -42,7 +54,13 @@ class FolderStore {
             modifiedDateTime: new Date().toISOString(),
         };
 
-        const updatedFolder = await Api.put<IFolder>(url, params);
+        const response = await Api.put<IFolder>(url, params);
+
+        if (!response.isOk || response.result === null) {
+            return;
+        }
+
+        const updatedFolder = response.result;
 
         runInAction(() => {
             this.folders = this.folders.map(f =>
@@ -54,7 +72,11 @@ class FolderStore {
     deleteFolder = async (folderId: number) => {
         const url = `${AppUrl}/folders/${folderId}`;
 
-        await Api.delete(url);
+        const response = await Api.delete(url);
+
+        if (!response.isOk) {
+            return;
+        }
 
         runInAction(() => {
             this.folders = this.folders.filter(f => f.id !== folderId);

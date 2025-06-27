@@ -18,7 +18,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var task = await _taskService.GetTaskById(taskId);
         var taskVm = new UserTaskVm(task, DateTime.UtcNow);
-        return Ok(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        return Ok(response);
     }
 
     /// <summary>
@@ -30,7 +31,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var tasks = await _taskService.GetIncompletedTasks();
         var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
-        return Ok(taskVms);
+        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(taskVms);
+        return Ok(response);
     }
 
     /// <summary>
@@ -42,7 +44,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var tasks = await _taskService.GetCompletedTasks();
         var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
-        return Ok(taskVms);
+        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(taskVms);
+        return Ok(response);
     }
 
     /// <summary>
@@ -54,7 +57,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var tasks = await _taskService.GetTasksInTrash();
         var taskVms = UserTaskVm.CreateCollectionFrom(tasks, DateTime.UtcNow);
-        return Ok(taskVms);
+        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(taskVms);
+        return Ok(response);
     }
 
     /// <summary>
@@ -66,11 +70,12 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var task = await _taskService.CreateTask(userTaskDto);
         var taskVm = new UserTaskVm(task, DateTime.UtcNow);
+        var response = ApiResponse<UserTaskVm>.Success(taskVm);
 
         return CreatedAtRoute(
             routeName: nameof(GetTaskById),
             routeValues: new { taskId = taskVm.Id },
-            value: taskVm);
+            value: response);
     }
 
     /// <summary>
@@ -84,8 +89,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var task = await _taskService.UpdateTask(taskId, userTaskDto);
         var taskVm = new UserTaskVm(task, DateTime.UtcNow);
-
-        return Ok(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        return Ok(response);
     }
 
     /// <summary>
@@ -99,8 +104,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var task = await _taskService.CompleteTask(taskId, userTaskDto);
         var taskVm = new UserTaskVm(task, DateTime.UtcNow);
-
-        return Ok(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        return Ok(response);
     }
 
     /// <summary>
@@ -114,8 +119,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var task = await _taskService.IncompleteTask(taskId, userTaskDto);
         var taskVm = new UserTaskVm(task, DateTime.UtcNow);
-
-        return Ok(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        return Ok(response);
     }
 
     /// <summary>
@@ -130,8 +135,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var task = await _taskService.MoveTaskToTrash(taskId, userTaskDto);
         var taskVm = new UserTaskVm(task, DateTime.UtcNow);
-
-        return Ok(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        return Ok(response);
     }
 
     /// <summary>
@@ -145,8 +150,8 @@ public class TaskController(TaskService _taskService) : ControllerBase
     {
         var task = await _taskService.MoveTaskFromTrash(taskId, userTaskDto);
         var taskVm = new UserTaskVm(task, DateTime.UtcNow);
-
-        return Ok(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        return Ok(response);
     }
 
     /// <summary>
@@ -157,6 +162,7 @@ public class TaskController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> DeleteTask(int taskId)
     {
         await _taskService.DeleteTask(taskId);
-        return NoContent();
+        var response = ApiResponse<UserTaskVm>.Success(null);
+        return Ok(response);
     }
 }
