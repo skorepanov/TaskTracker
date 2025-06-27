@@ -236,6 +236,7 @@ public class UserTaskTests
         sut.Title.Should().Be(NEW_TITLE);
         sut.Description.Should().Be(DESCRIPTION);
         sut.FolderId.Should().Be(NEW_FOLDER_ID);
+        sut.Tags.Should().BeEmpty();
         sut.DueDateTime.Should().Be(newDueDateTime);
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
@@ -285,6 +286,35 @@ public class UserTaskTests
 
         // Assert
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+    }
+
+    [Fact]
+    public void UpdateTaskAddTags()
+    {
+        // Arrange
+        var sut = CreateSut();
+
+        const string TAG_1_NAME = "Tag 1";
+        var tag1 = CreateTag(TAG_1_NAME);
+
+        const string TAG_2_NAME = "Tag 2";
+        var tag2 = CreateTag(TAG_2_NAME);
+
+        var tags = new List<Tag> { tag1, tag2 };
+
+        var userTaskDto = new UserTaskForUpdateDto(
+            Title: "Task title 42",
+            Description: "Task description 42",
+            FolderId: 42,
+            TagIds: null,
+            DueDateTime: null,
+            ModifiedDateTime: null);
+
+        // Act
+        sut.UpdateTask(userTaskDto, now: It.IsAny<DateTime>(), tags);
+
+        // Assert
+        sut.Tags.Should().BeEquivalentTo(tags);
     }
     #endregion
 
@@ -433,6 +463,20 @@ public class UserTaskTests
             createdDateTime);
 
         return UserTask.CreateTask(userTaskDto, now.Value);
+    }
+
+    private Tag CreateTag(
+        string title = "Tag title 42",
+        string color = "#424242",
+        DateTime? createdDateTime = null,
+        DateTime? now = null)
+    {
+        createdDateTime ??= new DateTime(year: 2025, month: 1, day: 1);
+        now ??= new DateTime(year: 2025, month: 1, day: 2);
+
+        var tagDto = new TagForCreationDto(title, color, createdDateTime);
+
+        return Tag.CreateTag(tagDto, now.Value);
     }
     #endregion
 }
