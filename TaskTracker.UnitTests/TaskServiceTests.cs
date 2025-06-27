@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace TaskTracker.Tests;
+namespace TaskTracker.UnitTests;
 
 public class TaskServiceTests
 {
