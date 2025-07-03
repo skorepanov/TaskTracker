@@ -30,8 +30,9 @@ public static class DiExtensions
     /// <summary>
     /// Сконфигурировать контекст БД
     /// </summary>
-    public static void ConfigureDbContext(this IServiceCollection collection,
-                                          string connectionString)
+    public static void ConfigureDbContext(
+        this IServiceCollection collection,
+        string connectionString)
     {
         collection.AddDbContext<ApplicationContext>(
             options => options

@@ -5,18 +5,18 @@ using Xunit;
 
 namespace TaskTracker.IntegrationTests;
 
+[Collection("IntegrationTests")]
 public class FolderIntegrationTests(ApiWebApplicationFactory factory)
-    : IntegrationTest(factory)
+    : IntegrationTestBase(factory)
 {
     [Fact]
-    public async Task GetFolder()
+    public async Task GetFolders()
     {
         // Arrange
 
         // Act
-        var response = await Client
-            .GetFromJsonAsync<ApiResponse<FolderVm[]>>(
-                "/api/folders");
+        var response = await Client.GetFromJsonAsync<ApiResponse<FolderVm[]>>(
+            requestUri: "/api/folders");
 
         // Assert
         response.Should().NotBeNull();

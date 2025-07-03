@@ -67,4 +67,7 @@ app.MapHealthChecks("api/health");
 
 app.Run();
 
+/// <summary>
+/// Класс Program для возможности его использования в интеграционных тестах
+/// </summary>
 public partial class Program { }
