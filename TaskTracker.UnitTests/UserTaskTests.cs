@@ -153,8 +153,10 @@ public class UserTaskTests
             DueDateTime: dueDateTime,
             createdDateTime);
 
+        var anyDateTime = new DateTime();
+
         // Act
-        var sut = UserTask.CreateTask(userTaskDto, now: It.IsAny<DateTime>());
+        var sut = UserTask.CreateTask(userTaskDto, now: anyDateTime);
 
         // Assert
         sut.Title.Should().Be(TITLE);
@@ -310,8 +312,10 @@ public class UserTaskTests
             DueDateTime: null,
             ModifiedDateTime: null);
 
+        var anyDateTime = new DateTime();
+
         // Act
-        sut.UpdateTask(userTaskDto, now: It.IsAny<DateTime>(), tags);
+        sut.UpdateTask(userTaskDto, now: anyDateTime, tags);
 
         // Assert
         sut.Tags.Should().BeEquivalentTo(tags);

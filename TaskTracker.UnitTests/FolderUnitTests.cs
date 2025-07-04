@@ -14,8 +14,10 @@ public class FolderTests
             Title: $"   {TITLE}    ",
             createdDateTime);
 
+        var anyDateTime = new DateTime();
+
         // Act
-        var sut = Folder.CreateFolder(folderDto, now: It.IsAny<DateTime>());
+        var sut = Folder.CreateFolder(folderDto, now: anyDateTime);
 
         // Assert
         sut.Title.Should().Be(TITLE);

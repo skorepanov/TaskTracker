@@ -16,8 +16,10 @@ public class TagTests
             Color: $"   {COLOR}    ",
             createdDateTime);
 
+        var anyDateTime = new DateTime();
+
         // Act
-        var sut = Tag.CreateTag(tagDto, now: It.IsAny<DateTime>());
+        var sut = Tag.CreateTag(tagDto, now: anyDateTime);
 
         // Assert
         sut.Title.Should().Be(TITLE);
