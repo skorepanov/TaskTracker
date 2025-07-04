@@ -56,8 +56,7 @@ public class TaskService(
             }
         }
 
-        var now = DateTime.UtcNow;
-        var newTask = UserTask.CreateTask(userTaskDto, now);
+        var newTask = UserTask.CreateTask(userTaskDto, _dateTimeProvider.UtcNow);
         await _taskRepository.CreateTask(newTask);
 
         return newTask;
@@ -108,8 +107,7 @@ public class TaskService(
             }
         }
 
-        var now = DateTime.UtcNow;
-        task.UpdateTask(userTaskDto, now, tags);
+        task.UpdateTask(userTaskDto, _dateTimeProvider.UtcNow, tags);
         await _taskRepository.UpdateTask(task);
 
         return task;
@@ -127,7 +125,7 @@ public class TaskService(
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        var completedDateTime = userTaskDto.CompletedDateTime ?? DateTime.UtcNow;
+        var completedDateTime = userTaskDto.CompletedDateTime ?? _dateTimeProvider.UtcNow;
 
         task.Complete(completedDateTime);
         await _taskRepository.UpdateTask(task);
@@ -147,7 +145,7 @@ public class TaskService(
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? DateTime.UtcNow;
+        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? _dateTimeProvider.UtcNow;
 
         task.Incomplete(modifiedDateTime);
         await _taskRepository.UpdateTask(task);
@@ -167,7 +165,7 @@ public class TaskService(
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        var movedToTrashDateTime = userTaskDto.MovedToTrashDateTime ?? DateTime.UtcNow;
+        var movedToTrashDateTime = userTaskDto.MovedToTrashDateTime ?? _dateTimeProvider.UtcNow;
 
         task.MoveToTrash(movedToTrashDateTime);
         await _taskRepository.UpdateTask(task);
@@ -201,7 +199,7 @@ public class TaskService(
             }
         }
 
-        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? DateTime.UtcNow;
+        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? _dateTimeProvider.UtcNow;
 
         task.MoveFromTrash(modifiedDateTime, folderId);
         await _taskRepository.UpdateTask(task);

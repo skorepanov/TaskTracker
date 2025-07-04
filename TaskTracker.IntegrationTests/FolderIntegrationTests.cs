@@ -194,8 +194,8 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             year: 2025, month: 1, day: 1, hour: 1, minute: 1, second: 1,
             DateTimeKind.Utc);
 
-        var folderDto = new FolderForCreationDto(title, createdDateTime.Value);
-        var folder = Folder.CreateFolder(folderDto, createdDateTime.Value);
+        var creationDto = new FolderForCreationDto(title, createdDateTime.Value);
+        var folder = Folder.CreateFolder(creationDto, createdDateTime.Value);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();

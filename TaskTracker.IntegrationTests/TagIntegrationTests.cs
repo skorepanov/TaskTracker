@@ -206,8 +206,8 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             year: 2025, month: 1, day: 1, hour: 1, minute: 1, second: 1,
             DateTimeKind.Utc);
 
-        var tagDto = new TagForCreationDto(title, color, createdDateTime);
-        var tag = Tag.CreateTag(tagDto, createdDateTime.Value);
+        var creationDto = new TagForCreationDto(title, color, createdDateTime);
+        var tag = Tag.CreateTag(creationDto, createdDateTime.Value);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
