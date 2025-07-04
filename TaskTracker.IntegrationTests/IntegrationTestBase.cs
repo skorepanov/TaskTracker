@@ -1,5 +1,12 @@
 ﻿namespace TaskTracker.IntegrationTests;
 
+/// <summary>
+/// Класс нужен только для применения атрибута [CollectionDefinition]
+/// </summary>
+[CollectionDefinition("IntegrationTests")]
+public class IntegrationTestCollection : ICollectionFixture<ApiWebApplicationFactory>;
+
+[Collection("IntegrationTests")]
 public abstract class IntegrationTestBase
     : IClassFixture<ApiWebApplicationFactory>, IAsyncLifetime
 {
