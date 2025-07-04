@@ -1,14 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using TaskTracker.Bll.Models;
-using TaskTracker.Dal;
-using TaskTracker.Web.Models;
-using Xunit;
-
-namespace TaskTracker.IntegrationTests;
+﻿namespace TaskTracker.IntegrationTests;
 
 public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     : IntegrationTestBase(factory)

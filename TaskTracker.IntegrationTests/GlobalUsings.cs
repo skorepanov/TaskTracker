@@ -1,0 +1,13 @@
+﻿global using FluentAssertions;
+global using Moq;
+global using Xunit;
+global using System;
+global using System.Collections.Generic;
+global using System.Net;
+global using System.Net.Http.Json;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.DependencyInjection;
+global using TaskTracker.Bll.Models;
+global using TaskTracker.Bll;
+global using TaskTracker.Dal;
+global using TaskTracker.Web.Models;

@@ -1,8 +1,4 @@
-﻿using Moq;
-using TaskTracker.Bll;
-using Xunit;
-
-namespace TaskTracker.IntegrationTests;
+﻿namespace TaskTracker.IntegrationTests;
 
 public abstract class IntegrationTestBase
     : IClassFixture<ApiWebApplicationFactory>, IAsyncLifetime
