@@ -16,11 +16,12 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     [Fact]
     public async Task GetFolderById()
     {
-        var createdDateTime = new DateTime(year: 2025, month: 7, day: 1,
-            hour: 1, minute: 1, second: 1, DateTimeKind.Utc);
-        var folder = await CreateFolder(title: "Folder title", createdDateTime);
+        var createdDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        var folder = await CreateFolderInDatabase(title: "Folder title", createdDateTime);
 
-        var otherFolder = await CreateFolder();
+        var otherFolder = await CreateFolderInDatabase();
 
         // Act
         var response = await Client.GetAsync(requestUri: $"/api/folders/{folder.Id}");
@@ -45,13 +46,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     [Fact]
     public async Task GetFolders()
     {
-        var createdDateTime1 = new DateTime(year: 2025, month: 7, day: 1,
-            hour: 1, minute: 1, second: 1, DateTimeKind.Utc);
-        var folder1 = await CreateFolder(title: "Folder title 1", createdDateTime1);
+        var createdDateTime1 = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        var folder1 = await CreateFolderInDatabase(title: "Folder title 1", createdDateTime1);
 
-        var createdDateTime2 = new DateTime(year: 2025, month: 7, day: 1,
-            hour: 1, minute: 1, second: 2, DateTimeKind.Utc);
-        var folder2 = await CreateFolder(title: "Folder title 2", createdDateTime2);
+        var createdDateTime2 = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 2,
+            DateTimeKind.Utc);
+        var folder2 = await CreateFolderInDatabase(title: "Folder title 2", createdDateTime2);
 
         // Act
         var response = await Client.GetAsync(requestUri: "/api/folders");
@@ -81,10 +84,94 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
+    public async Task CreateFolder()
+    {
+        // Arrange
+        var creationDto = new FolderForCreationDto(Title: "Folder title", CreatedDateTime: null);
+
+        var utcNow = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
+
+        // Act
+        var response = await Client.PostAsJsonAsync(requestUri: "api/folders", creationDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var content = await response.Content.ReadFromJsonAsync<ApiResponse<FolderVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeTrue();
+        content.Error.Should().BeNull();
+
+        var responseFolder = content.Result;
+        responseFolder.Should().NotBeNull();
+        responseFolder.Title.Should().Be(creationDto.Title);
+        responseFolder.CreatedDateTime.Should().Be(utcNow);
+        responseFolder.ModifiedDateTime.Should().BeNull();
+
+        var dbFolders = await GetFoldersFromDatabase();
+        dbFolders.Should().NotBeNull().And.HaveCount(1);
+
+        var dbFolder = dbFolders.Single();
+        dbFolder.Id.Should().Be(responseFolder.Id);
+        dbFolder.Title.Should().Be(creationDto.Title);
+        dbFolder.CreatedDateTime.Should().Be(utcNow);
+        dbFolder.ModifiedDateTime.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateFolder()
+    {
+        // Arrange
+        var createdDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        var folder = await CreateFolderInDatabase(title: "Old folder title", createdDateTime);
+
+        var updateDto = new FolderForUpdateDto(Title: "New folder title", ModifiedDateTime: null);
+
+        var utcNow = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 2,
+            DateTimeKind.Utc);
+        MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/folders/{folder.Id}", updateDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<ApiResponse<FolderVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeTrue();
+        content.Error.Should().BeNull();
+
+        var responseFolder = content.Result;
+        responseFolder.Should().NotBeNull();
+        responseFolder.Title.Should().Be(updateDto.Title);
+        responseFolder.CreatedDateTime.Should().Be(folder.CreatedDateTime);
+        responseFolder.ModifiedDateTime.Should().Be(utcNow);
+
+        var dbFolders = await GetFoldersFromDatabase();
+        dbFolders.Should().NotBeNull().And.HaveCount(1);
+
+        var dbFolder = dbFolders.Single();
+        dbFolder.Id.Should().Be(folder.Id);
+        dbFolder.Title.Should().Be(updateDto.Title);
+        dbFolder.CreatedDateTime.Should().Be(folder.CreatedDateTime);
+        dbFolder.ModifiedDateTime.Should().Be(utcNow);
+    }
+
+    [Fact]
     public async Task DeleteFolder()
     {
-        var folderToDelete = await CreateFolder();
-        var otherFolder = await CreateFolder();
+        var folderToDelete = await CreateFolderInDatabase();
+        var otherFolder = await CreateFolderInDatabase();
 
         // Act
         var response = await Client
@@ -100,25 +187,22 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         content.Error.Should().BeNull();
         content.Result.Should().BeNull();
 
-        var dbFolders = await GetFoldersFromDb();
+        var dbFolders = await GetFoldersFromDatabase();
         dbFolders.Should().NotBeNull().And.HaveCount(1);
         dbFolders.Single().Id.Should().Be(otherFolder.Id);
     }
 
     #region helpers
-    private async Task<Folder> CreateFolder(
+    private async Task<Folder> CreateFolderInDatabase(
         string title = "Folder title 42",
-        DateTime? createdDateTime = null,
-        DateTime? now = null)
+        DateTime? createdDateTime = null)
     {
         createdDateTime ??= new DateTime(
-            year: 2025, month: 1, day: 1, hour: 1, minute: 1, second: 1, DateTimeKind.Utc);
-
-        now ??= new DateTime(
-            year: 2025, month: 1, day: 1, hour: 1, minute: 1, second: 2, DateTimeKind.Utc);
+            year: 2025, month: 1, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
 
         var folderDto = new FolderForCreationDto(title, createdDateTime.Value);
-        var folder = Folder.CreateFolder(folderDto, now.Value);
+        var folder = Folder.CreateFolder(folderDto, createdDateTime.Value);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
@@ -128,7 +212,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         return folder;
     }
 
-    private async Task<IReadOnlyList<Folder>> GetFoldersFromDb()
+    private async Task<IReadOnlyList<Folder>> GetFoldersFromDatabase()
     {
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();

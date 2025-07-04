@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Moq;
 using Npgsql;
 using Respawn;
+using TaskTracker.Bll;
 using TaskTracker.Dal;
 using Xunit;
 
@@ -14,6 +16,8 @@ namespace TaskTracker.IntegrationTests;
 
 public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    public Mock<IDateTimeProvider> MockDateTimeProvider { get; private set; }
+
     private readonly IConfiguration _configuration;
     private NpgsqlConnection _connection;
     private readonly string _connectionString;
@@ -45,6 +49,7 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
         builder.ConfigureTestServices(services =>
         {
             services.RemoveAll<DbContextOptions<ApplicationContext>>();
+            services.RemoveAll<IDateTimeProvider>();
 
             services.AddDbContext<ApplicationContext>(options =>
             {
@@ -52,12 +57,10 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
                     .UseNpgsql(_connectionString)
                     .UseSnakeCaseNamingConvention();
             });
-        });
-    }
 
-    public NpgsqlConnection CreateConnection()
-    {
-        return new NpgsqlConnection(_connectionString);
+            MockDateTimeProvider = new Mock<IDateTimeProvider>();
+            services.AddSingleton(MockDateTimeProvider.Object);
+        });
     }
 
     public async Task InitializeAsync()

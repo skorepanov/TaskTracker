@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using Moq;
+using TaskTracker.Bll;
 using Xunit;
 
 namespace TaskTracker.IntegrationTests;
@@ -8,13 +9,13 @@ public abstract class IntegrationTestBase
 {
     protected readonly ApiWebApplicationFactory Factory;
     protected readonly HttpClient Client;
-    protected NpgsqlConnection Connection;
+    protected readonly Mock<IDateTimeProvider> MockDateTimeProvider;
 
     protected IntegrationTestBase(ApiWebApplicationFactory factory)
     {
         Factory = factory;
         Client = Factory.CreateClient();
-        Connection = factory.CreateConnection();
+        MockDateTimeProvider = Factory.MockDateTimeProvider;
     }
 
     public async Task InitializeAsync()

@@ -5,7 +5,8 @@ namespace TaskTracker.Bll;
 public class TaskService(
     ITaskRepository _taskRepository,
     IFolderRepository _folderRepository,
-    ITagRepository _tagRepository)
+    ITagRepository _tagRepository,
+    IDateTimeProvider _dateTimeProvider)
 {
     public async Task<UserTask> GetTaskById(int taskId)
     {
@@ -252,8 +253,7 @@ public class TaskService(
 
     public async Task<Folder> CreateFolder(FolderForCreationDto folderDto)
     {
-        var now = DateTime.UtcNow;
-        var newFolder = Folder.CreateFolder(folderDto, now);
+        var newFolder = Folder.CreateFolder(folderDto, _dateTimeProvider.UtcNow);
         await _folderRepository.CreateFolder(newFolder);
 
         return newFolder;
@@ -270,8 +270,7 @@ public class TaskService(
                 message: $"Папка не обнаружена (id = {folderId})");
         }
 
-        var now = DateTime.UtcNow;
-        folder.UpdateFolder(folderDto, now);
+        folder.UpdateFolder(folderDto, _dateTimeProvider.UtcNow);
         await _folderRepository.UpdateFolder(folder);
 
         return folder;
