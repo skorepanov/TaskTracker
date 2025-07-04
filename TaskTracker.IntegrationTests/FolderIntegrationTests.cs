@@ -6,6 +6,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     [Fact]
     public async Task GetFolderById()
     {
+        // Arrange
         var createdDateTime = new DateTime(
             year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
             DateTimeKind.Utc);
@@ -36,6 +37,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     [Fact]
     public async Task GetFolders()
     {
+        // Arrange
         var createdDateTime1 = new DateTime(
             year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
             DateTimeKind.Utc);
@@ -103,7 +105,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         responseFolder.ModifiedDateTime.Should().BeNull();
 
         var dbFolders = await GetFoldersFromDatabase();
-        dbFolders.Should().NotBeNull().And.HaveCount(1);
+        dbFolders.Should().HaveCount(1);
 
         var dbFolder = dbFolders.Single();
         dbFolder.Id.Should().Be(responseFolder.Id);
@@ -148,7 +150,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         responseFolder.ModifiedDateTime.Should().Be(utcNow);
 
         var dbFolders = await GetFoldersFromDatabase();
-        dbFolders.Should().NotBeNull().And.HaveCount(1);
+        dbFolders.Should().HaveCount(1);
 
         var dbFolder = dbFolders.Single();
         dbFolder.Id.Should().Be(folder.Id);
@@ -160,6 +162,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     [Fact]
     public async Task DeleteFolder()
     {
+        // Arrange
         var folderToDelete = await CreateFolderInDatabase();
         var otherFolder = await CreateFolderInDatabase();
 
@@ -178,7 +181,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         content.Result.Should().BeNull();
 
         var dbFolders = await GetFoldersFromDatabase();
-        dbFolders.Should().NotBeNull().And.HaveCount(1);
+        dbFolders.Should().HaveCount(1);
         dbFolders.Single().Id.Should().Be(otherFolder.Id);
     }
 

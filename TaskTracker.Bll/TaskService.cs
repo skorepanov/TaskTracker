@@ -312,8 +312,7 @@ public class TaskService(
 
     public async Task<Tag> CreateTag(TagForCreationDto tagDto)
     {
-        var now = DateTime.UtcNow;
-        var newTag = Tag.CreateTag(tagDto, now);
+        var newTag = Tag.CreateTag(tagDto, _dateTimeProvider.UtcNow);
         await _tagRepository.CreateTag(newTag);
 
         return newTag;
@@ -330,8 +329,7 @@ public class TaskService(
                 message: $"Тег не обнаружен (id = {tagId})");
         }
 
-        var now = DateTime.UtcNow;
-        tag.UpdateTag(tagDto, now);
+        tag.UpdateTag(tagDto, _dateTimeProvider.UtcNow);
         await _tagRepository.UpdateTag(tag);
 
         return tag;

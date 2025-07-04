@@ -30,7 +30,7 @@ public class TagController(TaskService _taskService) : ControllerBase
     {
         var tags = await _taskService.GetTags();
         var tagVms = tags.Select(t => new TagVm(t)).ToList();
-        var response = ApiResponse<IReadOnlyCollection<TagVm>>.Success(tagVms);
+        var response = ApiResponse<IReadOnlyList<TagVm>>.Success(tagVms);
         return Ok(response);
     }
 
