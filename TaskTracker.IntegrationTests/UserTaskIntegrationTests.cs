@@ -59,7 +59,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         var incompletedTask = await CreateIncompletedTaskInDatabase(folder.Id);
         var completedTask = await CreateCompletedTaskInDatabase(folder.Id);
-        var taskInTrash = await CreateTaskInTrashInDatabase(folder.Id);
+        var taskInTrash = await CreateTaskInTrashInDatabase();
 
         // Act
         var response = await Client.GetAsync(requestUri: $"/api/tasks/incomplete");
@@ -97,7 +97,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         var incompletedTask = await CreateIncompletedTaskInDatabase(folder.Id);
         var completedTask = await CreateCompletedTaskInDatabase(folder.Id);
-        var taskInTrash = await CreateTaskInTrashInDatabase(folder.Id);
+        var taskInTrash = await CreateTaskInTrashInDatabase();
 
         // Act
         var response = await Client.GetAsync(requestUri: $"/api/tasks/complete");
@@ -135,7 +135,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         var incompletedTask = await CreateIncompletedTaskInDatabase(folder.Id);
         var completedTask = await CreateCompletedTaskInDatabase(folder.Id);
-        var taskInTrash = await CreateTaskInTrashInDatabase(folder.Id);
+        var taskInTrash = await CreateTaskInTrashInDatabase();
 
         // Act
         var response = await Client.GetAsync(requestUri: $"/api/tasks/trash");
@@ -411,13 +411,133 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
+    public async Task MoveTaskToTrash()
+    {
+        // Arrange
+        var folder = await CreateFolderInDatabase();
+
+        var dueDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        var createdDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 2,
+            DateTimeKind.Utc);
+        var task = await CreateTaskInDatabase(
+            title: "Task title", folder.Id, dueDateTime, createdDateTime);
+
+        var moveToTrashDto = new UserTaskForMoveToTrashDto(MovedToTrashDateTime: null);
+
+        var utcNow = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 3,
+            DateTimeKind.Utc);
+        MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{task.Id}/movedToTrash", moveToTrashDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeTrue();
+        content.Error.Should().BeNull();
+
+        var responseTask = content.Result;
+        responseTask.Should().NotBeNull();
+        responseTask.Id.Should().Be(task.Id);
+        responseTask.Title.Should().Be(task.Title);
+        responseTask.Description.Should().BeNull();
+        responseTask.FolderId.Should().BeNull();
+        responseTask.CompletedDateTime.Should().BeNull();
+        responseTask.DueDateTime.Should().Be(task.DueDateTime);
+        responseTask.MovedToTrashDateTime.Should().Be(utcNow);
+        responseTask.TagIds.Should().BeNull();
+        responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
+        responseTask.ModifiedDateTime.Should().Be(utcNow);
+
+        var dbTasks = await GetTasksFromDatabase();
+        dbTasks.Should().HaveCount(1);
+
+        var dbTask = dbTasks.Single();
+        dbTask.Id.Should().Be(task.Id);
+        dbTask.Title.Should().Be(task.Title);
+        dbTask.Description.Should().BeNull();
+        dbTask.FolderId.Should().BeNull();
+        dbTask.CompletedDateTime.Should().BeNull();
+        dbTask.DueDateTime.Should().Be(task.DueDateTime);
+        dbTask.MovedToTrashDateTime.Should().Be(utcNow);
+        dbTask.Tags.Should().BeNullOrEmpty();
+        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.Should().Be(utcNow);
+    }
+
+    [Fact]
+    public async Task MoveTaskFromTrash()
+    {
+        // Arrange
+        var task = await CreateTaskInTrashInDatabase();
+
+        var folder = await CreateFolderInDatabase();
+        var moveFromTrashDto = new UserTaskForMoveFromTrashDto(folder.Id, ModifiedDateTime: null);
+
+        var utcNow = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 10,
+            DateTimeKind.Utc);
+        MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{task.Id}/movedFromTrash", moveFromTrashDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeTrue();
+        content.Error.Should().BeNull();
+
+        var responseTask = content.Result;
+        responseTask.Should().NotBeNull();
+        responseTask.Id.Should().Be(task.Id);
+        responseTask.Title.Should().Be(task.Title);
+        responseTask.Description.Should().BeNull();
+        responseTask.FolderId.Should().Be(folder.Id);
+        responseTask.CompletedDateTime.Should().BeNull();
+        responseTask.DueDateTime.Should().Be(task.DueDateTime);
+        responseTask.MovedToTrashDateTime.Should().BeNull();
+        responseTask.TagIds.Should().BeNull();
+        responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
+        responseTask.ModifiedDateTime.Should().Be(utcNow);
+
+        var dbTasks = await GetTasksFromDatabase();
+        dbTasks.Should().HaveCount(1);
+
+        var dbTask = dbTasks.Single();
+        dbTask.Id.Should().Be(task.Id);
+        dbTask.Title.Should().Be(task.Title);
+        dbTask.Description.Should().BeNull();
+        dbTask.FolderId.Should().Be(folder.Id);
+        dbTask.CompletedDateTime.Should().BeNull();
+        dbTask.DueDateTime.Should().Be(task.DueDateTime);
+        dbTask.MovedToTrashDateTime.Should().BeNull();
+        dbTask.Tags.Should().BeNullOrEmpty();
+        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.Should().Be(utcNow);
+    }
+
+    [Fact]
     public async Task DeleteTask()
     {
         // Arrange
         var folder = await CreateFolderInDatabase();
 
-        var taskToDelete = await CreateTaskInTrashInDatabase(folder.Id);
-        var otherTask = await CreateTaskInTrashInDatabase(folder.Id);
+        var taskToDelete = await CreateTaskInTrashInDatabase();
+        var otherTask = await CreateTaskInTrashInDatabase();
 
         // Act
         var response = await Client
@@ -505,7 +625,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         return task;
     }
 
-    private async Task<UserTask> CreateTaskInTrashInDatabase(int folderId)
+    private async Task<UserTask> CreateTaskInTrashInDatabase()
     {
         var dueDateTime = new DateTime(
             year: 2025, month: 1, day: 1, hour: 1, minute: 3, second: 1,
@@ -514,7 +634,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             year: 2025, month: 1, day: 1, hour: 1, minute: 3, second: 2,
             DateTimeKind.Utc);
         var creationDto = new UserTaskForCreationDto(
-            Title: "Task in trash title", folderId, dueDateTime, createdDateTime);
+            Title: "Task in trash title", FolderId: null, dueDateTime, createdDateTime);
         var task = UserTask.CreateTask(creationDto, createdDateTime);
 
         var movedToTrashDateTime = new DateTime(
