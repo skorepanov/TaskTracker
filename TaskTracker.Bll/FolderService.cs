@@ -1,12 +1,12 @@
 ﻿namespace TaskTracker.Bll;
 
 public class FolderService(
-    IFolderRepository _folderRepository,
-    IDateTimeProvider _dateTimeProvider)
+    IFolderRepository folderRepository,
+    IDateTimeProvider dateTimeProvider)
 {
     public async Task<Folder> GetFolderById(int folderId)
     {
-        var folder = await _folderRepository.GetFolder(folderId);
+        var folder = await folderRepository.GetFolder(folderId);
 
         if (folder is null)
         {
@@ -20,21 +20,21 @@ public class FolderService(
 
     public async Task<IReadOnlyList<Folder>> GetFolders()
     {
-        var folders = await _folderRepository.GetFolders();
+        var folders = await folderRepository.GetFolders();
         return folders;
     }
 
     public async Task<Folder> CreateFolder(FolderForCreationDto folderDto)
     {
-        var newFolder = Folder.CreateFolder(folderDto, _dateTimeProvider.UtcNow);
-        await _folderRepository.CreateFolder(newFolder);
+        var newFolder = Folder.CreateFolder(folderDto, dateTimeProvider.UtcNow);
+        await folderRepository.CreateFolder(newFolder);
 
         return newFolder;
     }
 
     public async Task<Folder> UpdateFolder(int folderId, FolderForUpdateDto folderDto)
     {
-        var folder = await _folderRepository.GetFolder(folderId);
+        var folder = await folderRepository.GetFolder(folderId);
 
         if (folder is null)
         {
@@ -43,15 +43,15 @@ public class FolderService(
                 message: $"Папка не обнаружена (id = {folderId})");
         }
 
-        folder.UpdateFolder(folderDto, _dateTimeProvider.UtcNow);
-        await _folderRepository.UpdateFolder(folder);
+        folder.UpdateFolder(folderDto, dateTimeProvider.UtcNow);
+        await folderRepository.UpdateFolder(folder);
 
         return folder;
     }
 
     public async Task DeleteFolder(int folderId)
     {
-        var folder = await _folderRepository.GetFolder(folderId);
+        var folder = await folderRepository.GetFolder(folderId);
 
         if (folder is null)
         {
@@ -60,6 +60,6 @@ public class FolderService(
                 message: $"Папка не обнаружена (id = {folderId})");
         }
 
-        await _folderRepository.DeleteFolder(folder);
+        await folderRepository.DeleteFolder(folder);
     }
 }

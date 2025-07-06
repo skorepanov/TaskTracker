@@ -4,33 +4,33 @@ using TaskTracker.Bll.Models;
 
 namespace TaskTracker.Dal;
 
-public class FolderRepository(ApplicationContext _db) : IFolderRepository
+public class FolderRepository(ApplicationContext db) : IFolderRepository
 {
     public async Task<Folder?> GetFolder(int folderId)
     {
-        return await _db.Folders.SingleOrDefaultAsync(f => f.Id == folderId);
+        return await db.Folders.SingleOrDefaultAsync(f => f.Id == folderId);
     }
 
     public async Task<IReadOnlyList<Folder>> GetFolders()
     {
-        return await _db.Folders.ToListAsync();
+        return await db.Folders.ToListAsync();
     }
 
     public async Task CreateFolder(Folder folder)
     {
-        _db.Folders.Add(folder);
-        await _db.SaveChangesAsync();
+        db.Folders.Add(folder);
+        await db.SaveChangesAsync();
     }
 
     public async Task UpdateFolder(Folder folder)
     {
-        _db.Folders.Update(folder);
-        await _db.SaveChangesAsync();
+        db.Folders.Update(folder);
+        await db.SaveChangesAsync();
     }
 
     public async Task DeleteFolder(Folder folder)
     {
-        _db.Folders.Remove(folder);
-        await _db.SaveChangesAsync();
+        db.Folders.Remove(folder);
+        await db.SaveChangesAsync();
     }
 }

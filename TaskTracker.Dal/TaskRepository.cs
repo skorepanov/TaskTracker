@@ -4,7 +4,7 @@ using TaskTracker.Bll.Models;
 
 namespace TaskTracker.Dal;
 
-public class TaskRepository(ApplicationContext _db) : ITaskRepository
+public class TaskRepository(ApplicationContext db) : ITaskRepository
 {
     public async Task<UserTask?> GetTask(int taskId)
     {
@@ -37,24 +37,24 @@ public class TaskRepository(ApplicationContext _db) : ITaskRepository
 
     private IQueryable<UserTask> GetTasksWithTags()
     {
-        return _db.Tasks.Include(t => t.Tags);
+        return db.Tasks.Include(t => t.Tags);
     }
 
     public async Task CreateTask(UserTask task)
     {
-        _db.Tasks.Add(task);
-        await _db.SaveChangesAsync();
+        db.Tasks.Add(task);
+        await db.SaveChangesAsync();
     }
 
     public async Task UpdateTask(UserTask task)
     {
-        _db.Tasks.Update(task);
-        await _db.SaveChangesAsync();
+        db.Tasks.Update(task);
+        await db.SaveChangesAsync();
     }
 
     public async Task DeleteTask(UserTask task)
     {
-        _db.Tasks.Remove(task);
-        await _db.SaveChangesAsync();
+        db.Tasks.Remove(task);
+        await db.SaveChangesAsync();
     }
 }

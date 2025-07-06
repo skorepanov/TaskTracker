@@ -7,7 +7,7 @@ namespace TaskTracker.Web.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/tags")]
-public class TagController(TagService _tagService) : ControllerBase
+public class TagController(TagService tagService) : ControllerBase
 {
     /// <summary>
     /// Получить тег по идентификатору
@@ -16,7 +16,7 @@ public class TagController(TagService _tagService) : ControllerBase
     [HttpGet("{tagId:int}", Name = nameof(GetTagById))]
     public async Task<IActionResult> GetTagById(int tagId)
     {
-        var tag = await _tagService.GetTagById(tagId);
+        var tag = await tagService.GetTagById(tagId);
         var tagVm = new TagVm(tag);
         var response = ApiResponse<TagVm>.Success(tagVm);
         return Ok(response);
@@ -28,7 +28,7 @@ public class TagController(TagService _tagService) : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetTags()
     {
-        var tags = await _tagService.GetTags();
+        var tags = await tagService.GetTags();
         var tagVms = tags.Select(t => new TagVm(t)).ToList();
         var response = ApiResponse<IReadOnlyList<TagVm>>.Success(tagVms);
         return Ok(response);
@@ -41,7 +41,7 @@ public class TagController(TagService _tagService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTag([FromBody] TagForCreationDto tagDto)
     {
-        var tag = await _tagService.CreateTag(tagDto);
+        var tag = await tagService.CreateTag(tagDto);
         var tagVm = new TagVm(tag);
         var response = ApiResponse<TagVm>.Success(tagVm);
 
@@ -60,7 +60,7 @@ public class TagController(TagService _tagService) : ControllerBase
     public async Task<IActionResult> UpdateTag(
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
-        var tag = await _tagService.UpdateTag(tagId, tagDto);
+        var tag = await tagService.UpdateTag(tagId, tagDto);
         var tagVm = new TagVm(tag);
         var response = ApiResponse<TagVm>.Success(tagVm);
         return Ok(response);
@@ -73,7 +73,7 @@ public class TagController(TagService _tagService) : ControllerBase
     [HttpDelete("{tagId:int}")]
     public async Task<IActionResult> DeleteTag(int tagId)
     {
-        await _tagService.DeleteTag(tagId);
+        await tagService.DeleteTag(tagId);
         var response = ApiResponse<TagVm>.Success(null);
         return Ok(response);
     }

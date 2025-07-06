@@ -1,14 +1,14 @@
 ﻿namespace TaskTracker.Bll;
 
 public class TaskService(
-    ITaskRepository _taskRepository,
-    IFolderRepository _folderRepository,
-    ITagRepository _tagRepository,
-    IDateTimeProvider _dateTimeProvider)
+    ITaskRepository taskRepository,
+    IFolderRepository folderRepository,
+    ITagRepository tagRepository,
+    IDateTimeProvider dateTimeProvider)
 {
     public async Task<UserTask> GetTaskById(int taskId)
     {
-        var task = await _taskRepository.GetTask(taskId);
+        var task = await taskRepository.GetTask(taskId);
 
         if (task is null)
         {
@@ -22,19 +22,19 @@ public class TaskService(
 
     public async Task<IReadOnlyList<UserTask>> GetIncompletedTasks()
     {
-        var tasks = await _taskRepository.GetIncompletedTasks();
+        var tasks = await taskRepository.GetIncompletedTasks();
         return tasks;
     }
 
     public async Task<IReadOnlyList<UserTask>> GetCompletedTasks()
     {
-        var tasks = await _taskRepository.GetCompletedTasks();
+        var tasks = await taskRepository.GetCompletedTasks();
         return tasks;
     }
 
     public async Task<IReadOnlyList<UserTask>> GetTasksInTrash()
     {
-        var tasks = await _taskRepository.GetTasksInTrash();
+        var tasks = await taskRepository.GetTasksInTrash();
         return tasks;
     }
 
@@ -44,7 +44,7 @@ public class TaskService(
 
         if (folderId is not null)
         {
-            var folder = await _folderRepository.GetFolder(folderId.Value);
+            var folder = await folderRepository.GetFolder(folderId.Value);
 
             if (folder is null)
             {
@@ -54,15 +54,15 @@ public class TaskService(
             }
         }
 
-        var newTask = UserTask.CreateTask(userTaskDto, _dateTimeProvider.UtcNow);
-        await _taskRepository.CreateTask(newTask);
+        var newTask = UserTask.CreateTask(userTaskDto, dateTimeProvider.UtcNow);
+        await taskRepository.CreateTask(newTask);
 
         return newTask;
     }
 
     public async Task<UserTask> UpdateTask(int taskId, UserTaskForUpdateDto userTaskDto)
     {
-        var task = await _taskRepository.GetTask(taskId);
+        var task = await taskRepository.GetTask(taskId);
 
         if (task is null)
         {
@@ -75,7 +75,7 @@ public class TaskService(
 
         if (folderId is not null)
         {
-            var folder = await _folderRepository.GetFolder(folderId.Value);
+            var folder = await folderRepository.GetFolder(folderId.Value);
 
             if (folder is null)
             {
@@ -90,7 +90,7 @@ public class TaskService(
 
         if (tagIds.Count > 0)
         {
-            tags = await _tagRepository.GetTags(tagIds);
+            tags = await tagRepository.GetTags(tagIds);
 
             var existentTagIds = tags.Select(t => t.Id).ToList();
             var nonExistentTagIds = tagIds.Except(existentTagIds).ToList();
@@ -105,8 +105,8 @@ public class TaskService(
             }
         }
 
-        task.UpdateTask(userTaskDto, _dateTimeProvider.UtcNow, tags);
-        await _taskRepository.UpdateTask(task);
+        task.UpdateTask(userTaskDto, dateTimeProvider.UtcNow, tags);
+        await taskRepository.UpdateTask(task);
 
         return task;
     }
@@ -114,7 +114,7 @@ public class TaskService(
     public async Task<UserTask> CompleteTask(
         int taskId, UserTaskForCompleteDto userTaskDto)
     {
-        var task = await _taskRepository.GetTask(taskId);
+        var task = await taskRepository.GetTask(taskId);
 
         if (task is null)
         {
@@ -123,10 +123,10 @@ public class TaskService(
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        var completedDateTime = userTaskDto.CompletedDateTime ?? _dateTimeProvider.UtcNow;
+        var completedDateTime = userTaskDto.CompletedDateTime ?? dateTimeProvider.UtcNow;
 
         task.Complete(completedDateTime);
-        await _taskRepository.UpdateTask(task);
+        await taskRepository.UpdateTask(task);
 
         return task;
     }
@@ -134,7 +134,7 @@ public class TaskService(
     public async Task<UserTask> IncompleteTask(
         int taskId, UserTaskForIncompleteDto userTaskDto)
     {
-        var task = await _taskRepository.GetTask(taskId);
+        var task = await taskRepository.GetTask(taskId);
 
         if (task is null)
         {
@@ -143,10 +143,10 @@ public class TaskService(
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? _dateTimeProvider.UtcNow;
+        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? dateTimeProvider.UtcNow;
 
         task.Incomplete(modifiedDateTime);
-        await _taskRepository.UpdateTask(task);
+        await taskRepository.UpdateTask(task);
 
         return task;
     }
@@ -154,7 +154,7 @@ public class TaskService(
     public async Task<UserTask> MoveTaskToTrash(
         int taskId, UserTaskForMoveToTrashDto userTaskDto)
     {
-        var task = await _taskRepository.GetTask(taskId);
+        var task = await taskRepository.GetTask(taskId);
 
         if (task is null)
         {
@@ -163,10 +163,10 @@ public class TaskService(
                 message: $"Задача не обнаружена (id = {taskId})");
         }
 
-        var movedToTrashDateTime = userTaskDto.MovedToTrashDateTime ?? _dateTimeProvider.UtcNow;
+        var movedToTrashDateTime = userTaskDto.MovedToTrashDateTime ?? dateTimeProvider.UtcNow;
 
         task.MoveToTrash(movedToTrashDateTime);
-        await _taskRepository.UpdateTask(task);
+        await taskRepository.UpdateTask(task);
 
         return task;
     }
@@ -174,7 +174,7 @@ public class TaskService(
     public async Task<UserTask> MoveTaskFromTrash(
         int taskId, UserTaskForMoveFromTrashDto userTaskDto)
     {
-        var task = await _taskRepository.GetTask(taskId);
+        var task = await taskRepository.GetTask(taskId);
 
         if (task is null)
         {
@@ -187,7 +187,7 @@ public class TaskService(
 
         if (folderId is not null)
         {
-            var folder = await _folderRepository.GetFolder(folderId.Value);
+            var folder = await folderRepository.GetFolder(folderId.Value);
 
             if (folder is null)
             {
@@ -197,17 +197,17 @@ public class TaskService(
             }
         }
 
-        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? _dateTimeProvider.UtcNow;
+        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? dateTimeProvider.UtcNow;
 
         task.MoveFromTrash(modifiedDateTime, folderId);
-        await _taskRepository.UpdateTask(task);
+        await taskRepository.UpdateTask(task);
 
         return task;
     }
 
     public async Task DeleteTask(int taskId)
     {
-        var task = await _taskRepository.GetTask(taskId);
+        var task = await taskRepository.GetTask(taskId);
 
         if (task is null)
         {
@@ -224,6 +224,6 @@ public class TaskService(
                 message: $"Невозможно удалить задачу не из корзины (id = {taskId})");
         }
 
-        await _taskRepository.DeleteTask(task);
+        await taskRepository.DeleteTask(task);
     }
 }
