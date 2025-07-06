@@ -534,8 +534,6 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     public async Task DeleteTask()
     {
         // Arrange
-        var folder = await CreateFolderInDatabase();
-
         var taskToDelete = await CreateTaskInTrashInDatabase();
         var otherTask = await CreateTaskInTrashInDatabase();
 
