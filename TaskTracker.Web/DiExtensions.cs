@@ -17,6 +17,7 @@ public static class DiExtensions
         collection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         collection.AddTransient<TaskService>();
         collection.AddTransient<FolderService>();
+        collection.AddTransient<TagService>();
     }
 
     /// <summary>
