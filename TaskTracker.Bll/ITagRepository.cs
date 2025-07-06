@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
-
-namespace TaskTracker.Bll;
+﻿namespace TaskTracker.Bll;
 
 public interface ITagRepository
 {
     Task<Tag?> GetTag(int tagId);
+
     Task<IReadOnlyList<Tag>> GetTags();
+
     Task<IReadOnlyList<Tag>> GetTags(IEnumerable<int> tagIds);
 
     Task CreateTag(Tag tag);

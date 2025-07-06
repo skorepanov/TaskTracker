@@ -7,7 +7,7 @@ namespace TaskTracker.Web.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/folders")]
-public class FolderController(TaskService _taskService) : ControllerBase
+public class FolderController(FolderService _folderService) : ControllerBase
 {
     /// <summary>
     /// Получить папку по идентификатору
@@ -16,7 +16,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     [HttpGet("{folderId:int}", Name = nameof(GetFolderById))]
     public async Task<IActionResult> GetFolderById(int folderId)
     {
-        var folder = await _taskService.GetFolderById(folderId);
+        var folder = await _folderService.GetFolderById(folderId);
         var folderVm = new FolderVm(folder);
         var response = ApiResponse<FolderVm>.Success(folderVm);
         return Ok(response);
@@ -28,7 +28,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetFolders()
     {
-        var folders = await _taskService.GetFolders();
+        var folders = await _folderService.GetFolders();
         var folderVms = folders.Select(f => new FolderVm(f)).ToList();
         var response = ApiResponse<IReadOnlyList<FolderVm>>.Success(folderVms);
         return Ok(response);
@@ -41,7 +41,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
     {
-        var folder = await _taskService.CreateFolder(folderDto);
+        var folder = await _folderService.CreateFolder(folderDto);
         var folderVm = new FolderVm(folder);
         var response = ApiResponse<FolderVm>.Success(folderVm);
 
@@ -60,7 +60,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     public async Task<IActionResult> UpdateFolder(
         int folderId, [FromBody] FolderForUpdateDto folderDto)
     {
-        var folder = await _taskService.UpdateFolder(folderId, folderDto);
+        var folder = await _folderService.UpdateFolder(folderId, folderDto);
         var folderVm = new FolderVm(folder);
         var response = ApiResponse<FolderVm>.Success(folderVm);
         return Ok(response);
@@ -73,7 +73,7 @@ public class FolderController(TaskService _taskService) : ControllerBase
     [HttpDelete("{folderId:int}")]
     public async Task<IActionResult> DeleteFolder(int folderId)
     {
-        await _taskService.DeleteFolder(folderId);
+        await _folderService.DeleteFolder(folderId);
         var response = ApiResponse<FolderVm>.Success(null);
         return Ok(response);
     }
