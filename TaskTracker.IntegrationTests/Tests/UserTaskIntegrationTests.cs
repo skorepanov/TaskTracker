@@ -1,4 +1,4 @@
-﻿namespace TaskTracker.IntegrationTests;
+﻿namespace TaskTracker.IntegrationTests.Tests;
 
 public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     : IntegrationTestBase(factory)

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskTracker.Bll;
+using TaskTracker.Bll.Interfaces;
 using TaskTracker.Bll.Models;
 
-namespace TaskTracker.Dal;
+namespace TaskTracker.Dal.Repositories;
 
 public class TagRepository(ApplicationContext db) : ITagRepository
 {

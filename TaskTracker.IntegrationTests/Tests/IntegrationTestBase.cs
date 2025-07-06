@@ -1,4 +1,4 @@
-﻿namespace TaskTracker.IntegrationTests;
+﻿namespace TaskTracker.IntegrationTests.Tests;
 
 /// <summary>
 /// Класс нужен только для применения атрибута [CollectionDefinition]

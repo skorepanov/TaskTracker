@@ -1,4 +1,4 @@
-﻿namespace TaskTracker.Bll;
+﻿namespace TaskTracker.Bll.Services;
 
 public class DateTimeProvider : IDateTimeProvider
 {

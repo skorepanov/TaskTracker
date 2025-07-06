@@ -1,4 +1,4 @@
-﻿namespace TaskTracker.UnitTests;
+﻿namespace TaskTracker.UnitTests.Tests;
 
 public class FolderUnitTests
 {

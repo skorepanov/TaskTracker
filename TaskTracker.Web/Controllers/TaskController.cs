@@ -7,7 +7,7 @@ namespace TaskTracker.Web.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/tasks")]
-public class TaskController(TaskService taskService, IDateTimeProvider dateTimeProvider)
+public class TaskController(TaskService taskService)
     : ControllerBase
 {
     /// <summary>
