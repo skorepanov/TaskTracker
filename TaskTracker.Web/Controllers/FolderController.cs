@@ -17,8 +17,7 @@ public class FolderController(FolderService folderService) : ControllerBase
     public async Task<IActionResult> GetFolderById(int folderId)
     {
         var folder = await folderService.GetFolderById(folderId);
-        var folderVm = new FolderVm(folder);
-        var response = ApiResponse<FolderVm>.Success(folderVm);
+        var response = ApiResponse<FolderVm>.Success(folder);
         return Ok(response);
     }
 
@@ -29,8 +28,7 @@ public class FolderController(FolderService folderService) : ControllerBase
     public async Task<IActionResult> GetFolders()
     {
         var folders = await folderService.GetFolders();
-        var folderVms = folders.Select(f => new FolderVm(f)).ToList();
-        var response = ApiResponse<IReadOnlyList<FolderVm>>.Success(folderVms);
+        var response = ApiResponse<IReadOnlyList<FolderVm>>.Success(folders);
         return Ok(response);
     }
 
@@ -42,12 +40,11 @@ public class FolderController(FolderService folderService) : ControllerBase
     public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
     {
         var folder = await folderService.CreateFolder(folderDto);
-        var folderVm = new FolderVm(folder);
-        var response = ApiResponse<FolderVm>.Success(folderVm);
+        var response = ApiResponse<FolderVm>.Success(folder);
 
         return CreatedAtRoute(
             routeName: nameof(GetFolderById),
-            routeValues: new { folderId = folderVm.Id },
+            routeValues: new { folderId = folder.Id },
             value: response);
     }
 
@@ -61,8 +58,7 @@ public class FolderController(FolderService folderService) : ControllerBase
         int folderId, [FromBody] FolderForUpdateDto folderDto)
     {
         var folder = await folderService.UpdateFolder(folderId, folderDto);
-        var folderVm = new FolderVm(folder);
-        var response = ApiResponse<FolderVm>.Success(folderVm);
+        var response = ApiResponse<FolderVm>.Success(folder);
         return Ok(response);
     }
 

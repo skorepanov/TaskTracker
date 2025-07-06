@@ -4,7 +4,7 @@ public class TagService(
     ITagRepository tagRepository,
     IDateTimeProvider dateTimeProvider)
 {
-    public async Task<Tag> GetTagById(int tagId)
+    public async Task<TagVm> GetTagById(int tagId)
     {
         var tag = await tagRepository.GetTag(tagId);
 
@@ -15,24 +15,27 @@ public class TagService(
                 message: $"Тег не обнаружен (id = {tagId})");
         }
 
-        return tag;
+        var tagVm = new TagVm(tag);
+        return tagVm;
     }
 
-    public async Task<IReadOnlyList<Tag>> GetTags()
+    public async Task<IReadOnlyList<TagVm>> GetTags()
     {
         var tags = await tagRepository.GetTags();
-        return tags;
+        var tagVms = tags.Select(t => new TagVm(t)).ToList();
+        return tagVms;
     }
 
-    public async Task<Tag> CreateTag(TagForCreationDto tagDto)
+    public async Task<TagVm> CreateTag(TagForCreationDto tagDto)
     {
         var newTag = Tag.CreateTag(tagDto, dateTimeProvider.UtcNow);
         await tagRepository.CreateTag(newTag);
 
-        return newTag;
+        var newTagVm = new TagVm(newTag);
+        return newTagVm;
     }
 
-    public async Task<Tag> UpdateTag(int tagId, TagForUpdateDto tagDto)
+    public async Task<TagVm> UpdateTag(int tagId, TagForUpdateDto tagDto)
     {
         var tag = await tagRepository.GetTag(tagId);
 
@@ -46,7 +49,8 @@ public class TagService(
         tag.UpdateTag(tagDto, dateTimeProvider.UtcNow);
         await tagRepository.UpdateTag(tag);
 
-        return tag;
+        var tagVm = new TagVm(tag);
+        return tagVm;
     }
 
     public async Task DeleteTag(int tagId)

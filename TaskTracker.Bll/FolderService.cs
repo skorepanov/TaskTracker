@@ -4,7 +4,7 @@ public class FolderService(
     IFolderRepository folderRepository,
     IDateTimeProvider dateTimeProvider)
 {
-    public async Task<Folder> GetFolderById(int folderId)
+    public async Task<FolderVm> GetFolderById(int folderId)
     {
         var folder = await folderRepository.GetFolder(folderId);
 
@@ -15,24 +15,27 @@ public class FolderService(
                 message: $"Папка не обнаружена (id = {folderId})");
         }
 
-        return folder;
+        var folderVm = new FolderVm(folder);
+        return folderVm;
     }
 
-    public async Task<IReadOnlyList<Folder>> GetFolders()
+    public async Task<IReadOnlyList<FolderVm>> GetFolders()
     {
         var folders = await folderRepository.GetFolders();
-        return folders;
+        var folderVms = folders.Select(f => new FolderVm(f)).ToList();
+        return folderVms;
     }
 
-    public async Task<Folder> CreateFolder(FolderForCreationDto folderDto)
+    public async Task<FolderVm> CreateFolder(FolderForCreationDto folderDto)
     {
         var newFolder = Folder.CreateFolder(folderDto, dateTimeProvider.UtcNow);
         await folderRepository.CreateFolder(newFolder);
 
-        return newFolder;
+        var newFolderVm = new FolderVm(newFolder);
+        return newFolderVm;
     }
 
-    public async Task<Folder> UpdateFolder(int folderId, FolderForUpdateDto folderDto)
+    public async Task<FolderVm> UpdateFolder(int folderId, FolderForUpdateDto folderDto)
     {
         var folder = await folderRepository.GetFolder(folderId);
 
@@ -46,7 +49,8 @@ public class FolderService(
         folder.UpdateFolder(folderDto, dateTimeProvider.UtcNow);
         await folderRepository.UpdateFolder(folder);
 
-        return folder;
+        var folderVm = new FolderVm(folder);
+        return folderVm;
     }
 
     public async Task DeleteFolder(int folderId)

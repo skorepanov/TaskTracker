@@ -17,8 +17,7 @@ public class TagController(TagService tagService) : ControllerBase
     public async Task<IActionResult> GetTagById(int tagId)
     {
         var tag = await tagService.GetTagById(tagId);
-        var tagVm = new TagVm(tag);
-        var response = ApiResponse<TagVm>.Success(tagVm);
+        var response = ApiResponse<TagVm>.Success(tag);
         return Ok(response);
     }
 
@@ -29,8 +28,7 @@ public class TagController(TagService tagService) : ControllerBase
     public async Task<ActionResult> GetTags()
     {
         var tags = await tagService.GetTags();
-        var tagVms = tags.Select(t => new TagVm(t)).ToList();
-        var response = ApiResponse<IReadOnlyList<TagVm>>.Success(tagVms);
+        var response = ApiResponse<IReadOnlyList<TagVm>>.Success(tags);
         return Ok(response);
     }
 
@@ -42,12 +40,11 @@ public class TagController(TagService tagService) : ControllerBase
     public async Task<IActionResult> CreateTag([FromBody] TagForCreationDto tagDto)
     {
         var tag = await tagService.CreateTag(tagDto);
-        var tagVm = new TagVm(tag);
-        var response = ApiResponse<TagVm>.Success(tagVm);
+        var response = ApiResponse<TagVm>.Success(tag);
 
         return CreatedAtRoute(
             routeName: nameof(GetTagById),
-            routeValues: new { tagId = tagVm.Id },
+            routeValues: new { tagId = tag.Id },
             value: response);
     }
 
@@ -61,8 +58,7 @@ public class TagController(TagService tagService) : ControllerBase
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
         var tag = await tagService.UpdateTag(tagId, tagDto);
-        var tagVm = new TagVm(tag);
-        var response = ApiResponse<TagVm>.Success(tagVm);
+        var response = ApiResponse<TagVm>.Success(tag);
         return Ok(response);
     }
 

@@ -18,8 +18,7 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
     public async Task<IActionResult> GetTaskById(int taskId)
     {
         var task = await taskService.GetTaskById(taskId);
-        var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(task);
         return Ok(response);
     }
 
@@ -31,9 +30,7 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
     public async Task<IActionResult> GetIncompletedTasks()
     {
         var tasks = await taskService.GetIncompletedTasks();
-        var today = dateTimeProvider.UtcNow;
-        var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
-        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(taskVms);
+        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(tasks);
         return Ok(response);
     }
 
@@ -45,9 +42,7 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
     public async Task<ActionResult> GetCompletedTasks()
     {
         var tasks = await taskService.GetCompletedTasks();
-        var today = dateTimeProvider.UtcNow;
-        var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
-        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(taskVms);
+        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(tasks);
         return Ok(response);
     }
 
@@ -59,9 +54,7 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
     public async Task<IActionResult> GetTasksInTrash()
     {
         var tasks = await taskService.GetTasksInTrash();
-        var today = dateTimeProvider.UtcNow;
-        var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
-        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(taskVms);
+        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(tasks);
         return Ok(response);
     }
 
@@ -73,12 +66,11 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
     public async Task<IActionResult> CreateTask([FromBody] UserTaskForCreationDto userTaskDto)
     {
         var task = await taskService.CreateTask(userTaskDto);
-        var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(task);
 
         return CreatedAtRoute(
             routeName: nameof(GetTaskById),
-            routeValues: new { taskId = taskVm.Id },
+            routeValues: new { taskId = task.Id },
             value: response);
     }
 
@@ -92,8 +84,7 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
         int taskId, [FromBody] UserTaskForUpdateDto userTaskDto)
     {
         var task = await taskService.UpdateTask(taskId, userTaskDto);
-        var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(task);
         return Ok(response);
     }
 
@@ -107,8 +98,7 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
         int taskId, [FromBody] UserTaskForCompleteDto userTaskDto)
     {
         var task = await taskService.CompleteTask(taskId, userTaskDto);
-        var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(task);
         return Ok(response);
     }
 
@@ -122,8 +112,7 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
         int taskId, [FromBody] UserTaskForIncompleteDto userTaskDto)
     {
         var task = await taskService.IncompleteTask(taskId, userTaskDto);
-        var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(task);
         return Ok(response);
     }
 
@@ -138,8 +127,7 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
         int taskId, [FromBody] UserTaskForMoveToTrashDto userTaskDto)
     {
         var task = await taskService.MoveTaskToTrash(taskId, userTaskDto);
-        var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(task);
         return Ok(response);
     }
 
@@ -153,8 +141,7 @@ public class TaskController(TaskService taskService, IDateTimeProvider dateTimeP
         int taskId, [FromBody] UserTaskForMoveFromTrashDto userTaskDto)
     {
         var task = await taskService.MoveTaskFromTrash(taskId, userTaskDto);
-        var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var response = ApiResponse<UserTaskVm>.Success(taskVm);
+        var response = ApiResponse<UserTaskVm>.Success(task);
         return Ok(response);
     }
 

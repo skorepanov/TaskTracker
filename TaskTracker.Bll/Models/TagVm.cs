@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace TaskTracker.Web.Models;
+namespace TaskTracker.Bll.Models;
 
 /// <summary>
 /// Представление для тега
