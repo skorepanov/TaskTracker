@@ -7,7 +7,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     public async Task GetTaskById()
     {
         // Arrange
-        var folder = CreateFolderInDatabase();
+        var folder = await CreateFolderInDatabase();
 
         var dueDateTime = new DateTime(
             year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
@@ -48,7 +48,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.MovedToTrashDateTime.Should().BeNull();
         responseTask.TagIds.Should().BeNull();
         responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().Be(null);
+        responseTask.ModifiedDateTime.Should().BeNull();
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.MovedToTrashDateTime.Should().BeNull();
         responseTask.TagIds.Should().BeNull();
         responseTask.CreatedDateTime.Should().Be(incompletedTask.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().Be(null);
+        responseTask.ModifiedDateTime.Should().BeNull();
     }
 
     [Fact]
@@ -163,6 +163,139 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.TagIds.Should().BeNull();
         responseTask.CreatedDateTime.Should().Be(taskInTrash.CreatedDateTime);
         responseTask.ModifiedDateTime.Should().Be(taskInTrash.ModifiedDateTime);
+    }
+
+    [Fact]
+    public async Task CreateTask()
+    {
+        // Arrange
+        var folder = await CreateFolderInDatabase();
+
+        var dueDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        var creationDto = new UserTaskForCreationDto(
+            Title: "Task title", folder.Id, dueDateTime, CreatedDateTime: null);
+
+        var utcNow = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 2,
+            DateTimeKind.Utc);
+        MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
+
+        // Act
+        var response = await Client.PostAsJsonAsync(requestUri: "/api/tasks", creationDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeTrue();
+        content.Error.Should().BeNull();
+
+        var responseTask = content.Result;
+        responseTask.Should().NotBeNull();
+        responseTask.Title.Should().Be(creationDto.Title);
+        responseTask.Description.Should().BeNull();
+        responseTask.FolderId.Should().Be(creationDto.FolderId);
+        responseTask.CompletedDateTime.Should().BeNull();
+        responseTask.DueDateTime.Should().Be(creationDto.DueDateTime);
+        responseTask.MovedToTrashDateTime.Should().BeNull();
+        responseTask.TagIds.Should().BeNull();
+        responseTask.CreatedDateTime.Should().Be(utcNow);
+        responseTask.ModifiedDateTime.Should().BeNull();
+
+        var dbTasks = await GetTasksFromDatabase();
+        dbTasks.Should().HaveCount(1);
+
+        var dbTask = dbTasks.Single();
+        dbTask.Id.Should().Be(responseTask.Id);
+        dbTask.Title.Should().Be(creationDto.Title);
+        dbTask.Description.Should().BeNull();
+        dbTask.FolderId.Should().Be(creationDto.FolderId);
+        dbTask.CompletedDateTime.Should().BeNull();
+        dbTask.DueDateTime.Should().Be(creationDto.DueDateTime);
+        dbTask.MovedToTrashDateTime.Should().BeNull();
+        dbTask.Tags.Should().BeNullOrEmpty();
+        dbTask.CreatedDateTime.Should().Be(utcNow);
+        dbTask.ModifiedDateTime.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateTask()
+    {
+        // Arrange
+        var oldDueDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        var createdDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 2,
+            DateTimeKind.Utc);
+        var task = await CreateTaskInDatabase(
+            title: "Old task title", folderId: null, oldDueDateTime, createdDateTime);
+
+        var folder = await CreateFolderInDatabase();
+        var tagId1 = await CreateTagInDatabase();
+        var tagId2 = await CreateTagInDatabase();
+        var newDueDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 3,
+            DateTimeKind.Utc);
+
+        var updateDto = new UserTaskForUpdateDto(
+            Title: "New task title",
+            Description: "Task description",
+            folder.Id,
+            TagIds: [tagId1.Id, tagId2.Id],
+            newDueDateTime,
+            ModifiedDateTime: null);
+
+        var utcNow = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 4,
+            DateTimeKind.Utc);
+        MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{task.Id}", updateDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeTrue();
+        content.Error.Should().BeNull();
+
+        var responseTask = content.Result;
+        responseTask.Should().NotBeNull();
+        responseTask.Id.Should().Be(task.Id);
+        responseTask.Title.Should().Be(updateDto.Title);
+        responseTask.Description.Should().Be(updateDto.Description);
+        responseTask.FolderId.Should().Be(updateDto.FolderId);
+        responseTask.CompletedDateTime.Should().BeNull();
+        responseTask.DueDateTime.Should().Be(updateDto.DueDateTime);
+        responseTask.MovedToTrashDateTime.Should().BeNull();
+        responseTask.TagIds.Should().BeEquivalentTo([tagId1.Id, tagId2.Id]);
+        responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
+        responseTask.ModifiedDateTime.Should().Be(utcNow);
+
+        var dbTasks = await GetTasksFromDatabase();
+        dbTasks.Should().HaveCount(1);
+
+        var dbTask = dbTasks.Single();
+        dbTask.Id.Should().Be(responseTask.Id);
+        dbTask.Title.Should().Be(updateDto.Title);
+        dbTask.Description.Should().Be(updateDto.Description);
+        dbTask.FolderId.Should().Be(updateDto.FolderId);
+        dbTask.CompletedDateTime.Should().BeNull();
+        dbTask.DueDateTime.Should().Be(updateDto.DueDateTime);
+        dbTask.MovedToTrashDateTime.Should().BeNull();
+        dbTask.Tags.Should().HaveCount(2);
+        dbTask.Tags.Select(t => t.Id).ToList().Should().BeEquivalentTo([tagId1.Id, tagId2.Id]);
+        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.Should().Be(utcNow);
     }
 
     [Fact]
@@ -299,11 +432,26 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         return folder;
     }
 
+    private async Task<Tag> CreateTagInDatabase()
+    {
+        var anyDateTime = new DateTime();
+        var creationDto = new TagForCreationDto(
+            Title: "Tag title 42", Color: "424242", anyDateTime);
+        var tag = Tag.CreateTag(creationDto, anyDateTime);
+
+        using var scope = Factory.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+        dbContext.Tags.Add(tag);
+        await dbContext.SaveChangesAsync();
+
+        return tag;
+    }
+
     private async Task<IReadOnlyList<UserTask>> GetTasksFromDatabase()
     {
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        return await dbContext.Tasks.ToListAsync();
+        return await dbContext.Tasks.Include(t => t.Tags).ToListAsync();
     }
     #endregion
 }

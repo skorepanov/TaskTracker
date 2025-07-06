@@ -154,6 +154,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
 
         var responseTag = content.Result;
         responseTag.Should().NotBeNull();
+        responseTag.Id.Should().Be(tag.Id);
         responseTag.Title.Should().Be(updateDto.Title);
         responseTag.Color.Should().Be(updateDto.Color);
         responseTag.CreatedDateTime.Should().Be(tag.CreatedDateTime);

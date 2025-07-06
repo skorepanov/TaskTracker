@@ -145,6 +145,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
 
         var responseFolder = content.Result;
         responseFolder.Should().NotBeNull();
+        responseFolder.Id.Should().Be(folder.Id);
         responseFolder.Title.Should().Be(updateDto.Title);
         responseFolder.CreatedDateTime.Should().Be(folder.CreatedDateTime);
         responseFolder.ModifiedDateTime.Should().Be(utcNow);
