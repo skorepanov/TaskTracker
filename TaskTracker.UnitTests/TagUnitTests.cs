@@ -1,6 +1,6 @@
 ﻿namespace TaskTracker.UnitTests;
 
-public class TagTests
+public class TagUnitTests
 {
     #region Create tag
     [Fact]

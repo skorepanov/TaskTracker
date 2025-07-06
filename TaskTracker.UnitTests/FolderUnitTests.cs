@@ -1,6 +1,6 @@
 ﻿namespace TaskTracker.UnitTests;
 
-public class FolderTests
+public class FolderUnitTests
 {
     #region Create folder
     [Fact]

@@ -1,6 +1,6 @@
 namespace TaskTracker.UnitTests;
 
-public class UserTaskTests
+public class UserTaskUnitTests
 {
     #region Complete task
     [Fact]
