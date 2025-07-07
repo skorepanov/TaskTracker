@@ -10,14 +10,13 @@ public class UserTask
     public Folder? Folder { get; private set; }
 
     public DateTime? CompletedDateTime { get; private set; }
-    public bool IsCompleted => CompletedDateTime is not null;
 
     public DateTime? DueDateTime { get; set; }
 
     public DateTime? MovedToTrashDateTime { get; private set; }
     public bool IsInTrash => MovedToTrashDateTime is not null;
 
-    public List<Tag> Tags { get; private set; }
+    public List<Tag>? Tags { get; private set; }
 
     public DateTime CreatedDateTime { get; private set; }
 

@@ -33,11 +33,6 @@ public record UserTaskVm
     public DateTime? CompletedDateTime { get; }
 
     /// <summary>
-    /// Выполнена ли задача
-    /// </summary>
-    public bool IsCompleted { get; }
-
-    /// <summary>
     /// Планируемая дата и время выполнения задачи
     /// </summary>
     public DateTime? DueDateTime { get; }
@@ -51,11 +46,6 @@ public record UserTaskVm
     /// Дата перемещения задачи в корзину
     /// </summary>
     public DateTime? MovedToTrashDateTime { get; }
-
-    /// <summary>
-    /// Находится ли задача в корзине
-    /// </summary>
-    public bool IsInTrash { get; }
 
     /// <summary>
     /// Идентификаторы тегов
@@ -82,11 +72,9 @@ public record UserTaskVm
         Description = task.Description;
         FolderId = task.FolderId;
         CompletedDateTime = task.CompletedDateTime;
-        IsCompleted = task.IsCompleted;
         DueDateTime = task.DueDateTime;
         OverdueDaysCount = task.CalculateOverdueDays(today);
         MovedToTrashDateTime = task.MovedToTrashDateTime;
-        IsInTrash = task.IsInTrash;
         TagIds = task.Tags?.Count > 0 ? task.Tags.Select(t => t.Id).ToList() : null;
         CreatedDateTime = task.CreatedDateTime;
         ModifiedDateTime = task.ModifiedDateTime;
@@ -102,11 +90,9 @@ public record UserTaskVm
         string? description,
         int? folderId,
         DateTime? completedDateTime,
-        bool isCompleted,
         DateTime? dueDateTime,
         int overdueDaysCount,
         DateTime? movedToTrashDateTime,
-        bool isInTrash,
         IReadOnlyList<int>? tagIds,
         DateTime createdDateTime,
         DateTime? modifiedDateTime)
@@ -116,11 +102,9 @@ public record UserTaskVm
         Description = description;
         FolderId = folderId;
         CompletedDateTime = completedDateTime;
-        IsCompleted = isCompleted;
         DueDateTime = dueDateTime;
         OverdueDaysCount = overdueDaysCount;
         MovedToTrashDateTime = movedToTrashDateTime;
-        IsInTrash = isInTrash;
         TagIds = tagIds;
         CreatedDateTime = createdDateTime;
         ModifiedDateTime = modifiedDateTime;

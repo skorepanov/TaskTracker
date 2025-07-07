@@ -15,7 +15,6 @@ public class UserTaskUnitTests
 
         // Assert
         sut.CompletedDateTime.Should().Be(completedDateTime);
-        sut.IsCompleted.Should().BeTrue();
         sut.ModifiedDateTime.Should().Be(completedDateTime);
     }
     #endregion
@@ -36,7 +35,6 @@ public class UserTaskUnitTests
 
         // Assert
         sut.CompletedDateTime.Should().BeNull();
-        sut.IsCompleted.Should().BeFalse();
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
     #endregion
