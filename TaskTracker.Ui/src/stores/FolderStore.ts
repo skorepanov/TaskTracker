@@ -14,11 +14,11 @@ class FolderStore {
 
         const response = await Api.get<IFolder[]>(url);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const folders = response.result;
+        const folders = response.value;
 
         runInAction(() => {
             this.folders = folders;
@@ -35,11 +35,11 @@ class FolderStore {
 
         const response = await Api.post<IFolder>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const createdFolder = response.result;
+        const createdFolder = response.value;
 
         runInAction(() => {
             this.folders.push(createdFolder);
@@ -56,11 +56,11 @@ class FolderStore {
 
         const response = await Api.put<IFolder>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const updatedFolder = response.result;
+        const updatedFolder = response.value;
 
         runInAction(() => {
             this.folders = this.folders.map(f =>

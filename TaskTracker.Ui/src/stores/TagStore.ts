@@ -14,11 +14,11 @@ class TagStore {
 
         const response = await Api.get<ITag[]>(url);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const tags = response.result;
+        const tags = response.value;
 
         runInAction(() => {
             this.tags = tags;
@@ -36,11 +36,11 @@ class TagStore {
 
         const response = await Api.post<ITag>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const createdTag = response.result;
+        const createdTag = response.value;
 
         runInAction(() => {
             this.tags.push(createdTag);
@@ -58,11 +58,11 @@ class TagStore {
 
         const response = await Api.put<ITag>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const updatedTag = response.result;
+        const updatedTag = response.value;
 
         runInAction(() => {
             this.tags = this.tags.map(t =>

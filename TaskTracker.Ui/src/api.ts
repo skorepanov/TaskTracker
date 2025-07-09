@@ -2,7 +2,7 @@ export const AppUrl = "https://localhost:7265/api";
 
 interface IApiResponse<T> {
     isOk: boolean;
-    result: T | null;
+    value: T | null;
     error: string | null;
 }
 
@@ -23,7 +23,7 @@ export const Api: IApi = {
             const errorResponse: IApiResponse<T> = {
                 isOk: false,
                 error: "Network request failed",
-                result: null,
+                value: null,
             };
 
             return errorResponse;
@@ -51,7 +51,7 @@ export const Api: IApi = {
             const errorResponse: IApiResponse<T> = {
                 isOk: false,
                 error: "Network request failed",
-                result: null,
+                value: null,
             };
 
             return errorResponse;
@@ -79,7 +79,7 @@ export const Api: IApi = {
             const errorResponse: IApiResponse<T> = {
                 isOk: false,
                 error: "Network request failed",
-                result: null,
+                value: null,
             };
 
             return errorResponse;
@@ -106,7 +106,7 @@ export const Api: IApi = {
             const errorResponse: IApiResponse<T> = {
                 isOk: false,
                 error: "Network request failed",
-                result: null,
+                value: null,
             };
 
             return errorResponse;

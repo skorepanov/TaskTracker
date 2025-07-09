@@ -32,11 +32,11 @@ class TaskStore {
         const url = `${AppUrl}/tasks/incomplete`;
         const response = await Api.get<ITask[]>(url);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const tasks = response.result;
+        const tasks = response.value;
 
         runInAction(() => {
             tasks.forEach(t => {
@@ -49,11 +49,11 @@ class TaskStore {
         const url = `${AppUrl}/tasks/complete`;
         const response = await Api.get<ITask[]>(url);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const tasks = response.result;
+        const tasks = response.value;
 
         runInAction(() => {
             tasks.forEach(t => {
@@ -67,11 +67,11 @@ class TaskStore {
 
         const response = await Api.get<ITask[]>(url);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const tasks = response.result;
+        const tasks = response.value;
 
         runInAction(() => {
             tasks.forEach(t => {
@@ -96,11 +96,11 @@ class TaskStore {
 
         const response = await Api.post<ITask>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const createdTask = response.result;
+        const createdTask = response.value;
 
         runInAction(() => {
             this.tasks.set(createdTask.id, createdTask);
@@ -129,11 +129,11 @@ class TaskStore {
 
         const response = await Api.put<ITask>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const updatedTask = response.result;
+        const updatedTask = response.value;
 
         runInAction(() => {
             this.tasks.set(updatedTask.id, updatedTask);
@@ -167,11 +167,11 @@ class TaskStore {
 
         const response = await Api.put<ITask>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const updatedTask = response.result;
+        const updatedTask = response.value;
 
         runInAction(() => {
             this.tasks.set(updatedTask.id, updatedTask);
@@ -187,11 +187,11 @@ class TaskStore {
 
         const response = await Api.put<ITask>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const updatedTask = response.result;
+        const updatedTask = response.value;
 
         runInAction(() => {
             this.tasks.set(updatedTask.id, updatedTask);
@@ -207,11 +207,11 @@ class TaskStore {
 
         const response = await Api.put<ITask>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const taskMovedToTrash = response.result;
+        const taskMovedToTrash = response.value;
 
         runInAction(() => {
             this.tasks.set(taskMovedToTrash.id, taskMovedToTrash);
@@ -232,11 +232,11 @@ class TaskStore {
 
         const response = await Api.put<ITask>(url, params);
 
-        if (!response.isOk || response.result === null) {
+        if (!response.isOk || response.value === null) {
             return;
         }
 
-        const taskMovedFromTrash = response.result;
+        const taskMovedFromTrash = response.value;
 
         runInAction(() => {
             this.tasks.set(taskMovedFromTrash.id, taskMovedFromTrash);

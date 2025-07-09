@@ -13,7 +13,7 @@ public class ApiResponse<T>
     /// <summary>
     /// Результат запроса
     /// </summary>
-    public T? Result { get; init; }
+    public T? Value { get; init; }
 
     /// <summary>
     /// Сообщение об ошибке запроса
@@ -23,12 +23,12 @@ public class ApiResponse<T>
     /// <summary>
     /// Создать успешный результат
     /// </summary>
-    public static ApiResponse<T> Success(T? result)
+    public static ApiResponse<T> Success(T? value)
     {
         return new ApiResponse<T>
         {
             IsOk = true,
-            Result = result,
+            Value = value,
         };
     }
 

@@ -37,7 +37,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTask = content.Result;
+        var responseTask = content.Value;
         responseTask.Should().NotBeNull();
         responseTask.Id.Should().Be(task.Id);
         responseTask.Title.Should().Be(task.Title);
@@ -73,9 +73,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Result.Should().NotBeNull().And.HaveCount(1);
+        content.Value.Should().NotBeNull().And.HaveCount(1);
 
-        var responseTask = content.Result.Single();
+        var responseTask = content.Value.Single();
         responseTask.Should().NotBeNull();
         responseTask.Id.Should().Be(incompletedTask.Id);
         responseTask.Title.Should().Be(incompletedTask.Title);
@@ -111,9 +111,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Result.Should().NotBeNull().And.HaveCount(1);
+        content.Value.Should().NotBeNull().And.HaveCount(1);
 
-        var responseTask = content.Result.Single();
+        var responseTask = content.Value.Single();
         responseTask.Should().NotBeNull();
         responseTask.Id.Should().Be(completedTask.Id);
         responseTask.Title.Should().Be(completedTask.Title);
@@ -149,9 +149,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Result.Should().NotBeNull().And.HaveCount(1);
+        content.Value.Should().NotBeNull().And.HaveCount(1);
 
-        var responseTask = content.Result.Single();
+        var responseTask = content.Value.Single();
         responseTask.Should().NotBeNull();
         responseTask.Id.Should().Be(taskInTrash.Id);
         responseTask.Title.Should().Be(taskInTrash.Title);
@@ -194,7 +194,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTask = content.Result;
+        var responseTask = content.Value;
         responseTask.Should().NotBeNull();
         responseTask.Title.Should().Be(creationDto.Title);
         responseTask.Description.Should().BeNull();
@@ -268,7 +268,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTask = content.Result;
+        var responseTask = content.Value;
         responseTask.Should().NotBeNull();
         responseTask.Id.Should().Be(task.Id);
         responseTask.Title.Should().Be(updateDto.Title);
@@ -325,7 +325,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTask = content.Result;
+        var responseTask = content.Value;
         responseTask.Should().NotBeNull();
         responseTask.Id.Should().Be(task.Id);
         responseTask.Title.Should().Be(task.Title);
@@ -381,7 +381,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTask = content.Result;
+        var responseTask = content.Value;
         responseTask.Should().NotBeNull();
         responseTask.Id.Should().Be(task.Id);
         responseTask.Title.Should().Be(task.Title);
@@ -445,7 +445,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTask = content.Result;
+        var responseTask = content.Value;
         responseTask.Should().NotBeNull();
         responseTask.Id.Should().Be(task.Id);
         responseTask.Title.Should().Be(task.Title);
@@ -501,7 +501,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTask = content.Result;
+        var responseTask = content.Value;
         responseTask.Should().NotBeNull();
         responseTask.Id.Should().Be(task.Id);
         responseTask.Title.Should().Be(task.Title);
@@ -549,7 +549,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Result.Should().BeNull();
+        content.Value.Should().BeNull();
 
         var dbTasks = await GetTasksFromDatabase();
         dbTasks.Should().HaveCount(1);

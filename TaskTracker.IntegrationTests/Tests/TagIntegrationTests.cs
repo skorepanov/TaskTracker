@@ -26,7 +26,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTag = content.Result;
+        var responseTag = content.Value;
         responseTag.Should().NotBeNull();
         responseTag.Id.Should().Be(tag.Id);
         responseTag.Title.Should().Be(tag.Title);
@@ -63,16 +63,16 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Result.Should().NotBeNull().And.HaveCount(2);
+        content.Value.Should().NotBeNull().And.HaveCount(2);
 
-        var responseTag1 = content.Result.SingleOrDefault(t => t.Id == tag1.Id);
+        var responseTag1 = content.Value.SingleOrDefault(t => t.Id == tag1.Id);
         responseTag1.Should().NotBeNull();
         responseTag1.Title.Should().Be(tag1.Title);
         responseTag1.Color.Should().Be(tag1.Color);
         responseTag1.CreatedDateTime.Should().Be(tag1.CreatedDateTime);
         responseTag1.ModifiedDateTime.Should().BeNull();
 
-        var responseTag2 = content.Result.SingleOrDefault(t => t.Id == tag2.Id);
+        var responseTag2 = content.Value.SingleOrDefault(t => t.Id == tag2.Id);
         responseTag2.Should().NotBeNull();
         responseTag2.Title.Should().Be(tag2.Title);
         responseTag2.Color.Should().Be(tag2.Color);
@@ -104,7 +104,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTag = content.Result;
+        var responseTag = content.Value;
         responseTag.Should().NotBeNull();
         responseTag.Title.Should().Be(creationDto.Title);
         responseTag.Color.Should().Be(creationDto.Color);
@@ -152,7 +152,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseTag = content.Result;
+        var responseTag = content.Value;
         responseTag.Should().NotBeNull();
         responseTag.Id.Should().Be(tag.Id);
         responseTag.Title.Should().Be(updateDto.Title);
@@ -190,7 +190,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Result.Should().BeNull();
+        content.Value.Should().BeNull();
 
         var dbTags = await GetTagsFromDatabase();
         dbTags.Should().HaveCount(1);

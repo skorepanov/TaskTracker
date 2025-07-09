@@ -26,7 +26,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseFolder = content.Result;
+        var responseFolder = content.Value;
         responseFolder.Should().NotBeNull();
         responseFolder.Id.Should().Be(folder.Id);
         responseFolder.Title.Should().Be(folder.Title);
@@ -60,15 +60,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Result.Should().NotBeNull().And.HaveCount(2);
+        content.Value.Should().NotBeNull().And.HaveCount(2);
 
-        var responseFolder1 = content.Result.SingleOrDefault(f => f.Id == folder1.Id);
+        var responseFolder1 = content.Value.SingleOrDefault(f => f.Id == folder1.Id);
         responseFolder1.Should().NotBeNull();
         responseFolder1.Title.Should().Be(folder1.Title);
         responseFolder1.CreatedDateTime.Should().Be(folder1.CreatedDateTime);
         responseFolder1.ModifiedDateTime.Should().BeNull();
 
-        var responseFolder2 = content.Result.SingleOrDefault(f => f.Id == folder2.Id);
+        var responseFolder2 = content.Value.SingleOrDefault(f => f.Id == folder2.Id);
         responseFolder2.Should().NotBeNull();
         responseFolder2.Title.Should().Be(folder2.Title);
         responseFolder2.CreatedDateTime.Should().Be(folder2.CreatedDateTime);
@@ -98,7 +98,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseFolder = content.Result;
+        var responseFolder = content.Value;
         responseFolder.Should().NotBeNull();
         responseFolder.Title.Should().Be(creationDto.Title);
         responseFolder.CreatedDateTime.Should().Be(utcNow);
@@ -143,7 +143,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
 
-        var responseFolder = content.Result;
+        var responseFolder = content.Value;
         responseFolder.Should().NotBeNull();
         responseFolder.Id.Should().Be(folder.Id);
         responseFolder.Title.Should().Be(updateDto.Title);
@@ -179,7 +179,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Result.Should().BeNull();
+        content.Value.Should().BeNull();
 
         var dbFolders = await GetFoldersFromDatabase();
         dbFolders.Should().HaveCount(1);
