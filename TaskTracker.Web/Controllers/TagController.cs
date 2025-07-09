@@ -1,6 +1,4 @@
-﻿using TaskTracker.Web.Models;
-
-namespace TaskTracker.Web.Controllers;
+﻿namespace TaskTracker.Web.Controllers;
 
 /// <summary>
 /// Работа с тегами задач

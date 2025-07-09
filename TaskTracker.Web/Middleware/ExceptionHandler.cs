@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using TaskTracker.Web.Models;
 
 namespace TaskTracker.Web.Middleware;
 

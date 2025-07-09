@@ -1,4 +1,4 @@
-﻿namespace TaskTracker.Web.Models;
+﻿namespace TaskTracker.Bll.Models;
 
 /// <summary>
 /// Результат выполнения запроса

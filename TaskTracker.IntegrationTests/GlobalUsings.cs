@@ -10,4 +10,3 @@ global using Microsoft.Extensions.DependencyInjection;
 global using TaskTracker.Bll.Interfaces;
 global using TaskTracker.Bll.Models;
 global using TaskTracker.Dal;
-global using TaskTracker.Web.Models;
