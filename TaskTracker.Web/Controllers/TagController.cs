@@ -14,8 +14,7 @@ public class TagController(TagService tagService) : ControllerBase
     [HttpGet("{tagId:int}", Name = nameof(GetTagById))]
     public async Task<IActionResult> GetTagById(int tagId)
     {
-        var tag = await tagService.GetTagById(tagId);
-        var result = Result<TagVm>.Success(tag);
+        var result = await tagService.GetTagById(tagId);
         return Ok(result);
     }
 
@@ -25,8 +24,7 @@ public class TagController(TagService tagService) : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetTags()
     {
-        var tags = await tagService.GetTags();
-        var result = Result<IReadOnlyList<TagVm>>.Success(tags);
+        var result = await tagService.GetTags();
         return Ok(result);
     }
 
@@ -37,13 +35,8 @@ public class TagController(TagService tagService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTag([FromBody] TagForCreationDto tagDto)
     {
-        var tag = await tagService.CreateTag(tagDto);
-        var result = Result<TagVm>.Success(tag);
-
-        return CreatedAtRoute(
-            routeName: nameof(GetTagById),
-            routeValues: new { tagId = tag.Id },
-            value: result);
+        var result = await tagService.CreateTag(tagDto);
+        return Ok(result);
     }
 
     /// <summary>
@@ -55,8 +48,7 @@ public class TagController(TagService tagService) : ControllerBase
     public async Task<IActionResult> UpdateTag(
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
-        var tag = await tagService.UpdateTag(tagId, tagDto);
-        var result = Result<TagVm>.Success(tag);
+        var result = await tagService.UpdateTag(tagId, tagDto);
         return Ok(result);
     }
 
@@ -67,8 +59,7 @@ public class TagController(TagService tagService) : ControllerBase
     [HttpDelete("{tagId:int}")]
     public async Task<IActionResult> DeleteTag(int tagId)
     {
-        await tagService.DeleteTag(tagId);
-        var result = Result<TagVm>.Success(null);
+        var result = await tagService.DeleteTag(tagId);
         return Ok(result);
     }
 }

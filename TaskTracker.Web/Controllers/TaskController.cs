@@ -15,8 +15,7 @@ public class TaskController(TaskService taskService)
     [HttpGet("{taskId:int}", Name = nameof(GetTaskById))]
     public async Task<IActionResult> GetTaskById(int taskId)
     {
-        var task = await taskService.GetTaskById(taskId);
-        var result = Result<UserTaskVm>.Success(task);
+        var result = await taskService.GetTaskById(taskId);
         return Ok(result);
     }
 
@@ -27,8 +26,7 @@ public class TaskController(TaskService taskService)
     [Route("incomplete")]
     public async Task<IActionResult> GetIncompletedTasks()
     {
-        var tasks = await taskService.GetIncompletedTasks();
-        var result = Result<IReadOnlyList<UserTaskVm>>.Success(tasks);
+        var result = await taskService.GetIncompletedTasks();
         return Ok(result);
     }
 
@@ -39,8 +37,7 @@ public class TaskController(TaskService taskService)
     [Route("complete")]
     public async Task<ActionResult> GetCompletedTasks()
     {
-        var tasks = await taskService.GetCompletedTasks();
-        var result = Result<IReadOnlyList<UserTaskVm>>.Success(tasks);
+        var result = await taskService.GetCompletedTasks();
         return Ok(result);
     }
 
@@ -51,8 +48,7 @@ public class TaskController(TaskService taskService)
     [Route("trash")]
     public async Task<IActionResult> GetTasksInTrash()
     {
-        var tasks = await taskService.GetTasksInTrash();
-        var result = Result<IReadOnlyList<UserTaskVm>>.Success(tasks);
+        var result = await taskService.GetTasksInTrash();
         return Ok(result);
     }
 
@@ -63,13 +59,8 @@ public class TaskController(TaskService taskService)
     [HttpPost]
     public async Task<IActionResult> CreateTask([FromBody] UserTaskForCreationDto userTaskDto)
     {
-        var task = await taskService.CreateTask(userTaskDto);
-        var result = Result<UserTaskVm>.Success(task);
-
-        return CreatedAtRoute(
-            routeName: nameof(GetTaskById),
-            routeValues: new { taskId = task.Id },
-            value: result);
+        var result = await taskService.CreateTask(userTaskDto);
+        return Ok(result);
     }
 
     /// <summary>
@@ -81,8 +72,7 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> UpdateTask(
         int taskId, [FromBody] UserTaskForUpdateDto userTaskDto)
     {
-        var task = await taskService.UpdateTask(taskId, userTaskDto);
-        var result = Result<UserTaskVm>.Success(task);
+        var result = await taskService.UpdateTask(taskId, userTaskDto);
         return Ok(result);
     }
 
@@ -95,8 +85,7 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> CompleteTask(
         int taskId, [FromBody] UserTaskForCompleteDto userTaskDto)
     {
-        var task = await taskService.CompleteTask(taskId, userTaskDto);
-        var result = Result<UserTaskVm>.Success(task);
+        var result = await taskService.CompleteTask(taskId, userTaskDto);
         return Ok(result);
     }
 
@@ -109,8 +98,7 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> IncompleteTask(
         int taskId, [FromBody] UserTaskForIncompleteDto userTaskDto)
     {
-        var task = await taskService.IncompleteTask(taskId, userTaskDto);
-        var result = Result<UserTaskVm>.Success(task);
+        var result = await taskService.IncompleteTask(taskId, userTaskDto);
         return Ok(result);
     }
 
@@ -124,8 +112,7 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> MoveTaskToTrash(
         int taskId, [FromBody] UserTaskForMoveToTrashDto userTaskDto)
     {
-        var task = await taskService.MoveTaskToTrash(taskId, userTaskDto);
-        var result = Result<UserTaskVm>.Success(task);
+        var result = await taskService.MoveTaskToTrash(taskId, userTaskDto);
         return Ok(result);
     }
 
@@ -138,8 +125,7 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> MoveTaskFromTrash(
         int taskId, [FromBody] UserTaskForMoveFromTrashDto userTaskDto)
     {
-        var task = await taskService.MoveTaskFromTrash(taskId, userTaskDto);
-        var result = Result<UserTaskVm>.Success(task);
+        var result = await taskService.MoveTaskFromTrash(taskId, userTaskDto);
         return Ok(result);
     }
 
@@ -150,8 +136,7 @@ public class TaskController(TaskService taskService)
     [HttpDelete("{taskId:int}")]
     public async Task<IActionResult> DeleteTask(int taskId)
     {
-        await taskService.DeleteTask(taskId);
-        var result = Result<UserTaskVm>.Success(null);
+        var result = await taskService.DeleteTask(taskId);
         return Ok(result);
     }
 }

@@ -4,7 +4,7 @@ public class TagService(
     ITagRepository tagRepository,
     IDateTimeProvider dateTimeProvider)
 {
-    public async Task<TagVm> GetTagById(int tagId)
+    public async Task<Result<TagVm>> GetTagById(int tagId)
     {
         var tag = await tagRepository.GetTag(tagId);
 
@@ -16,26 +16,29 @@ public class TagService(
         }
 
         var tagVm = new TagVm(tag);
-        return tagVm;
+        var result = Result<TagVm>.Success(tagVm);
+        return result;
     }
 
-    public async Task<IReadOnlyList<TagVm>> GetTags()
+    public async Task<Result<IReadOnlyList<TagVm>>> GetTags()
     {
         var tags = await tagRepository.GetTags();
         var tagVms = tags.Select(t => new TagVm(t)).ToList();
-        return tagVms;
+        var result = Result<IReadOnlyList<TagVm>>.Success(tagVms);
+        return result;
     }
 
-    public async Task<TagVm> CreateTag(TagForCreationDto tagDto)
+    public async Task<Result<TagVm>> CreateTag(TagForCreationDto tagDto)
     {
         var newTag = Tag.CreateTag(tagDto, dateTimeProvider.UtcNow);
         await tagRepository.CreateTag(newTag);
 
         var newTagVm = new TagVm(newTag);
-        return newTagVm;
+        var result = Result<TagVm>.Success(newTagVm);
+        return result;
     }
 
-    public async Task<TagVm> UpdateTag(int tagId, TagForUpdateDto tagDto)
+    public async Task<Result<TagVm>> UpdateTag(int tagId, TagForUpdateDto tagDto)
     {
         var tag = await tagRepository.GetTag(tagId);
 
@@ -50,10 +53,11 @@ public class TagService(
         await tagRepository.UpdateTag(tag);
 
         var tagVm = new TagVm(tag);
-        return tagVm;
+        var result = Result<TagVm>.Success(tagVm);
+        return result;
     }
 
-    public async Task DeleteTag(int tagId)
+    public async Task<Result<TagVm>> DeleteTag(int tagId)
     {
         var tag = await tagRepository.GetTag(tagId);
 
@@ -65,5 +69,8 @@ public class TagService(
         }
 
         await tagRepository.DeleteTag(tag);
+
+        var result = Result<TagVm>.Success(null);
+        return result;
     }
 }

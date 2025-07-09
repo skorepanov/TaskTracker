@@ -186,7 +186,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         var response = await Client.PostAsJsonAsync(requestUri: "/api/tasks", creationDto);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
 

@@ -14,8 +14,7 @@ public class FolderController(FolderService folderService) : ControllerBase
     [HttpGet("{folderId:int}", Name = nameof(GetFolderById))]
     public async Task<IActionResult> GetFolderById(int folderId)
     {
-        var folder = await folderService.GetFolderById(folderId);
-        var result = Result<FolderVm>.Success(folder);
+        var result = await folderService.GetFolderById(folderId);
         return Ok(result);
     }
 
@@ -25,8 +24,7 @@ public class FolderController(FolderService folderService) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetFolders()
     {
-        var folders = await folderService.GetFolders();
-        var result = Result<IReadOnlyList<FolderVm>>.Success(folders);
+        var result = await folderService.GetFolders();
         return Ok(result);
     }
 
@@ -37,13 +35,8 @@ public class FolderController(FolderService folderService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
     {
-        var folder = await folderService.CreateFolder(folderDto);
-        var result = Result<FolderVm>.Success(folder);
-
-        return CreatedAtRoute(
-            routeName: nameof(GetFolderById),
-            routeValues: new { folderId = folder.Id },
-            value: result);
+        var result = await folderService.CreateFolder(folderDto);
+        return Ok(result);
     }
 
     /// <summary>
@@ -55,8 +48,7 @@ public class FolderController(FolderService folderService) : ControllerBase
     public async Task<IActionResult> UpdateFolder(
         int folderId, [FromBody] FolderForUpdateDto folderDto)
     {
-        var folder = await folderService.UpdateFolder(folderId, folderDto);
-        var result = Result<FolderVm>.Success(folder);
+        var result = await folderService.UpdateFolder(folderId, folderDto);
         return Ok(result);
     }
 
@@ -67,8 +59,7 @@ public class FolderController(FolderService folderService) : ControllerBase
     [HttpDelete("{folderId:int}")]
     public async Task<IActionResult> DeleteFolder(int folderId)
     {
-        await folderService.DeleteFolder(folderId);
-        var result = Result<FolderVm>.Success(null);
+        var result = await folderService.DeleteFolder(folderId);
         return Ok(result);
     }
 }

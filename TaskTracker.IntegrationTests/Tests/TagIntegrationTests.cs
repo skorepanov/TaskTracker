@@ -96,7 +96,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         var response = await Client.PostAsJsonAsync(requestUri: "/api/tags", creationDto);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
 
