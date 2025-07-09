@@ -18,8 +18,8 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> GetTaskById(int taskId)
     {
         var task = await taskService.GetTaskById(taskId);
-        var response = ApiResponse<UserTaskVm>.Success(task);
-        return Ok(response);
+        var result = Result<UserTaskVm>.Success(task);
+        return Ok(result);
     }
 
     /// <summary>
@@ -30,8 +30,8 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> GetIncompletedTasks()
     {
         var tasks = await taskService.GetIncompletedTasks();
-        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(tasks);
-        return Ok(response);
+        var result = Result<IReadOnlyList<UserTaskVm>>.Success(tasks);
+        return Ok(result);
     }
 
     /// <summary>
@@ -42,8 +42,8 @@ public class TaskController(TaskService taskService)
     public async Task<ActionResult> GetCompletedTasks()
     {
         var tasks = await taskService.GetCompletedTasks();
-        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(tasks);
-        return Ok(response);
+        var result = Result<IReadOnlyList<UserTaskVm>>.Success(tasks);
+        return Ok(result);
     }
 
     /// <summary>
@@ -54,8 +54,8 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> GetTasksInTrash()
     {
         var tasks = await taskService.GetTasksInTrash();
-        var response = ApiResponse<IReadOnlyList<UserTaskVm>>.Success(tasks);
-        return Ok(response);
+        var result = Result<IReadOnlyList<UserTaskVm>>.Success(tasks);
+        return Ok(result);
     }
 
     /// <summary>
@@ -66,12 +66,12 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> CreateTask([FromBody] UserTaskForCreationDto userTaskDto)
     {
         var task = await taskService.CreateTask(userTaskDto);
-        var response = ApiResponse<UserTaskVm>.Success(task);
+        var result = Result<UserTaskVm>.Success(task);
 
         return CreatedAtRoute(
             routeName: nameof(GetTaskById),
             routeValues: new { taskId = task.Id },
-            value: response);
+            value: result);
     }
 
     /// <summary>
@@ -84,8 +84,8 @@ public class TaskController(TaskService taskService)
         int taskId, [FromBody] UserTaskForUpdateDto userTaskDto)
     {
         var task = await taskService.UpdateTask(taskId, userTaskDto);
-        var response = ApiResponse<UserTaskVm>.Success(task);
-        return Ok(response);
+        var result = Result<UserTaskVm>.Success(task);
+        return Ok(result);
     }
 
     /// <summary>
@@ -98,8 +98,8 @@ public class TaskController(TaskService taskService)
         int taskId, [FromBody] UserTaskForCompleteDto userTaskDto)
     {
         var task = await taskService.CompleteTask(taskId, userTaskDto);
-        var response = ApiResponse<UserTaskVm>.Success(task);
-        return Ok(response);
+        var result = Result<UserTaskVm>.Success(task);
+        return Ok(result);
     }
 
     /// <summary>
@@ -112,8 +112,8 @@ public class TaskController(TaskService taskService)
         int taskId, [FromBody] UserTaskForIncompleteDto userTaskDto)
     {
         var task = await taskService.IncompleteTask(taskId, userTaskDto);
-        var response = ApiResponse<UserTaskVm>.Success(task);
-        return Ok(response);
+        var result = Result<UserTaskVm>.Success(task);
+        return Ok(result);
     }
 
     /// <summary>
@@ -127,8 +127,8 @@ public class TaskController(TaskService taskService)
         int taskId, [FromBody] UserTaskForMoveToTrashDto userTaskDto)
     {
         var task = await taskService.MoveTaskToTrash(taskId, userTaskDto);
-        var response = ApiResponse<UserTaskVm>.Success(task);
-        return Ok(response);
+        var result = Result<UserTaskVm>.Success(task);
+        return Ok(result);
     }
 
     /// <summary>
@@ -141,8 +141,8 @@ public class TaskController(TaskService taskService)
         int taskId, [FromBody] UserTaskForMoveFromTrashDto userTaskDto)
     {
         var task = await taskService.MoveTaskFromTrash(taskId, userTaskDto);
-        var response = ApiResponse<UserTaskVm>.Success(task);
-        return Ok(response);
+        var result = Result<UserTaskVm>.Success(task);
+        return Ok(result);
     }
 
     /// <summary>
@@ -153,7 +153,7 @@ public class TaskController(TaskService taskService)
     public async Task<IActionResult> DeleteTask(int taskId)
     {
         await taskService.DeleteTask(taskId);
-        var response = ApiResponse<UserTaskVm>.Success(null);
-        return Ok(response);
+        var result = Result<UserTaskVm>.Success(null);
+        return Ok(result);
     }
 }

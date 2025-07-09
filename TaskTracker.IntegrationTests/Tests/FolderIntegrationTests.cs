@@ -20,7 +20,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -55,7 +55,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<ApiResponse<IReadOnlyList<FolderVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<FolderVm>>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -92,7 +92,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -137,7 +137,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -174,7 +174,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();

@@ -3,7 +3,7 @@
 /// <summary>
 /// Результат выполнения запроса
 /// </summary>
-public class ApiResponse<T>
+public class Result<T>
 {
     /// <summary>
     /// Запрос выполнена успешно?
@@ -23,9 +23,9 @@ public class ApiResponse<T>
     /// <summary>
     /// Создать успешный результат
     /// </summary>
-    public static ApiResponse<T> Success(T? value)
+    public static Result<T> Success(T? value)
     {
-        return new ApiResponse<T>
+        return new Result<T>
         {
             IsOk = true,
             Value = value,
@@ -35,9 +35,9 @@ public class ApiResponse<T>
     /// <summary>
     /// Создать результат с ошибкой
     /// </summary>
-    public static ApiResponse<T> Failure(string error)
+    public static Result<T> Failure(string error)
     {
-        return new ApiResponse<T>
+        return new Result<T>
         {
             IsOk = false,
             Error = error,

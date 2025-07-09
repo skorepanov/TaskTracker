@@ -17,8 +17,8 @@ public class TagController(TagService tagService) : ControllerBase
     public async Task<IActionResult> GetTagById(int tagId)
     {
         var tag = await tagService.GetTagById(tagId);
-        var response = ApiResponse<TagVm>.Success(tag);
-        return Ok(response);
+        var result = Result<TagVm>.Success(tag);
+        return Ok(result);
     }
 
     /// <summary>
@@ -28,8 +28,8 @@ public class TagController(TagService tagService) : ControllerBase
     public async Task<ActionResult> GetTags()
     {
         var tags = await tagService.GetTags();
-        var response = ApiResponse<IReadOnlyList<TagVm>>.Success(tags);
-        return Ok(response);
+        var result = Result<IReadOnlyList<TagVm>>.Success(tags);
+        return Ok(result);
     }
 
     /// <summary>
@@ -40,12 +40,12 @@ public class TagController(TagService tagService) : ControllerBase
     public async Task<IActionResult> CreateTag([FromBody] TagForCreationDto tagDto)
     {
         var tag = await tagService.CreateTag(tagDto);
-        var response = ApiResponse<TagVm>.Success(tag);
+        var result = Result<TagVm>.Success(tag);
 
         return CreatedAtRoute(
             routeName: nameof(GetTagById),
             routeValues: new { tagId = tag.Id },
-            value: response);
+            value: result);
     }
 
     /// <summary>
@@ -58,8 +58,8 @@ public class TagController(TagService tagService) : ControllerBase
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
         var tag = await tagService.UpdateTag(tagId, tagDto);
-        var response = ApiResponse<TagVm>.Success(tag);
-        return Ok(response);
+        var result = Result<TagVm>.Success(tag);
+        return Ok(result);
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class TagController(TagService tagService) : ControllerBase
     public async Task<IActionResult> DeleteTag(int tagId)
     {
         await tagService.DeleteTag(tagId);
-        var response = ApiResponse<TagVm>.Success(null);
-        return Ok(response);
+        var result = Result<TagVm>.Success(null);
+        return Ok(result);
     }
 }

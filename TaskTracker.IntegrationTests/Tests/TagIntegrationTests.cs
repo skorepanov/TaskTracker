@@ -20,7 +20,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -58,7 +58,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<ApiResponse<IReadOnlyList<TagVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<TagVm>>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -98,7 +98,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -146,7 +146,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -185,7 +185,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();

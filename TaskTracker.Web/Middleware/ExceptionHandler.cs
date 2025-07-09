@@ -16,7 +16,7 @@ public class ExceptionHandler : IExceptionHandler
         Exception exception,
         CancellationToken cancellationToken)
     {
-        var error = ApiResponse<object>.Failure(exception.Message);
+        var error = Result<object>.Failure(exception.Message);
 
         httpContext.Response.StatusCode = StatusCodes.Status200OK;
         await httpContext.Response.WriteAsJsonAsync(error, cancellationToken);

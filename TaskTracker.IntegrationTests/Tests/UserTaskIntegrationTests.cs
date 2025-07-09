@@ -31,7 +31,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -68,7 +68,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<ApiResponse<IReadOnlyList<UserTaskVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -106,7 +106,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<ApiResponse<IReadOnlyList<UserTaskVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -144,7 +144,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<ApiResponse<IReadOnlyList<UserTaskVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -188,7 +188,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -262,7 +262,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -319,7 +319,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -375,7 +375,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -439,7 +439,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -495,7 +495,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -544,7 +544,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<ApiResponse<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
