@@ -15,16 +15,14 @@ public class FolderService(
         }
 
         var folderVm = new FolderVm(folder);
-        var result = Result<FolderVm>.Success(folderVm);
-        return result;
+        return Result<FolderVm>.Success(folderVm);
     }
 
     public async Task<Result<IReadOnlyList<FolderVm>>> GetFolders()
     {
         var folders = await folderRepository.GetFolders();
         var folderVms = folders.Select(f => new FolderVm(f)).ToList();
-        var result = Result<IReadOnlyList<FolderVm>>.Success(folderVms);
-        return result;
+        return Result<IReadOnlyList<FolderVm>>.Success(folderVms);
     }
 
     public async Task<Result<FolderVm>> CreateFolder(FolderForCreationDto folderDto)
@@ -33,8 +31,7 @@ public class FolderService(
         await folderRepository.CreateFolder(newFolder);
 
         var newFolderVm = new FolderVm(newFolder);
-        var result = Result<FolderVm>.Success(newFolderVm);
-        return result;
+        return Result<FolderVm>.Success(newFolderVm);
     }
 
     public async Task<Result<FolderVm>> UpdateFolder(
@@ -52,8 +49,7 @@ public class FolderService(
         await folderRepository.UpdateFolder(folder);
 
         var folderVm = new FolderVm(folder);
-        var result = Result<FolderVm>.Success(folderVm);
-        return result;
+        return Result<FolderVm>.Success(folderVm);
     }
 
     public async Task<Result> DeleteFolder(int folderId)
@@ -68,7 +64,6 @@ public class FolderService(
 
         await folderRepository.DeleteFolder(folder);
 
-        var result = Result.Success();
-        return result;
+        return Result.Success();
     }
 }

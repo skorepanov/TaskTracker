@@ -15,16 +15,14 @@ public class TagService(
         }
 
         var tagVm = new TagVm(tag);
-        var result = Result<TagVm>.Success(tagVm);
-        return result;
+        return Result<TagVm>.Success(tagVm);
     }
 
     public async Task<Result<IReadOnlyList<TagVm>>> GetTags()
     {
         var tags = await tagRepository.GetTags();
         var tagVms = tags.Select(t => new TagVm(t)).ToList();
-        var result = Result<IReadOnlyList<TagVm>>.Success(tagVms);
-        return result;
+        return Result<IReadOnlyList<TagVm>>.Success(tagVms);
     }
 
     public async Task<Result<TagVm>> CreateTag(TagForCreationDto tagDto)
@@ -33,8 +31,7 @@ public class TagService(
         await tagRepository.CreateTag(newTag);
 
         var newTagVm = new TagVm(newTag);
-        var result = Result<TagVm>.Success(newTagVm);
-        return result;
+        return Result<TagVm>.Success(newTagVm);
     }
 
     public async Task<Result<TagVm>> UpdateTag(int tagId, TagForUpdateDto tagDto)
@@ -51,8 +48,7 @@ public class TagService(
         await tagRepository.UpdateTag(tag);
 
         var tagVm = new TagVm(tag);
-        var result = Result<TagVm>.Success(tagVm);
-        return result;
+        return Result<TagVm>.Success(tagVm);
     }
 
     public async Task<Result> DeleteTag(int tagId)
@@ -67,7 +63,6 @@ public class TagService(
 
         await tagRepository.DeleteTag(tag);
 
-        var result = Result.Success();
-        return result;
+        return Result.Success();
     }
 }

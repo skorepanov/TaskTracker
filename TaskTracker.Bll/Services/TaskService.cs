@@ -17,8 +17,7 @@ public class TaskService(
         }
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var result = Result<UserTaskVm>.Success(taskVm);
-        return result;
+        return Result<UserTaskVm>.Success(taskVm);
     }
 
     public async Task<Result<IReadOnlyList<UserTaskVm>>> GetIncompletedTasks()
@@ -28,8 +27,7 @@ public class TaskService(
         var today = dateTimeProvider.UtcNow;
         var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
 
-        var result = Result<IReadOnlyList<UserTaskVm>>.Success(taskVms);
-        return result;
+        return Result<IReadOnlyList<UserTaskVm>>.Success(taskVms);
     }
 
     public async Task<Result<IReadOnlyList<UserTaskVm>>> GetCompletedTasks()
@@ -39,8 +37,7 @@ public class TaskService(
         var today = dateTimeProvider.UtcNow;
         var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
 
-        var result = Result<IReadOnlyList<UserTaskVm>>.Success(taskVms);
-        return result;
+        return Result<IReadOnlyList<UserTaskVm>>.Success(taskVms);
     }
 
     public async Task<Result<IReadOnlyList<UserTaskVm>>> GetTasksInTrash()
@@ -50,8 +47,7 @@ public class TaskService(
         var today = dateTimeProvider.UtcNow;
         var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
 
-        var result = Result<IReadOnlyList<UserTaskVm>>.Success(taskVms);
-        return result;
+        return Result<IReadOnlyList<UserTaskVm>>.Success(taskVms);
     }
 
     public async Task<Result<UserTaskVm>> CreateTask(UserTaskForCreationDto userTaskDto)
@@ -73,8 +69,7 @@ public class TaskService(
         await taskRepository.CreateTask(newTask);
 
         var newTaskVm = new UserTaskVm(newTask, dateTimeProvider.UtcNow);
-        var result = Result<UserTaskVm>.Success(newTaskVm);
-        return result;
+        return Result<UserTaskVm>.Success(newTaskVm);
     }
 
     public async Task<Result<UserTaskVm>> UpdateTask(
@@ -124,8 +119,7 @@ public class TaskService(
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var result = Result<UserTaskVm>.Success(taskVm);
-        return result;
+        return Result<UserTaskVm>.Success(taskVm);
     }
 
     public async Task<Result<UserTaskVm>> CompleteTask(
@@ -145,8 +139,7 @@ public class TaskService(
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var result = Result<UserTaskVm>.Success(taskVm);
-        return result;
+        return Result<UserTaskVm>.Success(taskVm);
     }
 
     public async Task<Result<UserTaskVm>> IncompleteTask(
@@ -166,8 +159,7 @@ public class TaskService(
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var result = Result<UserTaskVm>.Success(taskVm);
-        return result;
+        return Result<UserTaskVm>.Success(taskVm);
     }
 
     public async Task<Result<UserTaskVm>> MoveTaskToTrash(
@@ -187,8 +179,7 @@ public class TaskService(
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var result = Result<UserTaskVm>.Success(taskVm);
-        return result;
+        return Result<UserTaskVm>.Success(taskVm);
     }
 
     public async Task<Result<UserTaskVm>> MoveTaskFromTrash(
@@ -221,8 +212,7 @@ public class TaskService(
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        var result = Result<UserTaskVm>.Success(taskVm);
-        return result;
+        return Result<UserTaskVm>.Success(taskVm);
     }
 
     public async Task<Result> DeleteTask(int taskId)
@@ -243,7 +233,6 @@ public class TaskService(
 
         await taskRepository.DeleteTask(task);
 
-        var result = Result.Success();
-        return result;
+        return Result.Success();
     }
 }
