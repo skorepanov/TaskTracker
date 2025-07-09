@@ -235,7 +235,7 @@ public class TaskService(
         return result;
     }
 
-    public async Task<Result<UserTaskVm>> DeleteTask(int taskId)
+    public async Task<Result> DeleteTask(int taskId)
     {
         var task = await taskRepository.GetTask(taskId);
 
@@ -256,7 +256,7 @@ public class TaskService(
 
         await taskRepository.DeleteTask(task);
 
-        var result = Result<UserTaskVm>.Success(null);
+        var result = Result.Success();
         return result;
     }
 }

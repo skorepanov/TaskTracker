@@ -57,7 +57,7 @@ public class TagService(
         return result;
     }
 
-    public async Task<Result<TagVm>> DeleteTag(int tagId)
+    public async Task<Result> DeleteTag(int tagId)
     {
         var tag = await tagRepository.GetTag(tagId);
 
@@ -70,7 +70,7 @@ public class TagService(
 
         await tagRepository.DeleteTag(tag);
 
-        var result = Result<TagVm>.Success(null);
+        var result = Result.Success();
         return result;
     }
 }

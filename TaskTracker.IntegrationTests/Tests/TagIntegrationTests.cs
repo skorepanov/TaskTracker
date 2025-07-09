@@ -185,12 +185,11 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Value.Should().BeNull();
 
         var dbTags = await GetTagsFromDatabase();
         dbTags.Should().HaveCount(1);

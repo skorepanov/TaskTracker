@@ -174,12 +174,11 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Value.Should().BeNull();
 
         var dbFolders = await GetFoldersFromDatabase();
         dbFolders.Should().HaveCount(1);

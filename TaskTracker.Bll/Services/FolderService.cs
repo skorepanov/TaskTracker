@@ -58,7 +58,7 @@ public class FolderService(
         return result;
     }
 
-    public async Task<Result<FolderVm>> DeleteFolder(int folderId)
+    public async Task<Result> DeleteFolder(int folderId)
     {
         var folder = await folderRepository.GetFolder(folderId);
 
@@ -71,7 +71,7 @@ public class FolderService(
 
         await folderRepository.DeleteFolder(folder);
 
-        var result = Result<FolderVm>.Success(null);
+        var result = Result.Success();
         return result;
     }
 }

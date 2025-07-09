@@ -544,12 +544,11 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
         content.Error.Should().BeNull();
-        content.Value.Should().BeNull();
 
         var dbTasks = await GetTasksFromDatabase();
         dbTasks.Should().HaveCount(1);
