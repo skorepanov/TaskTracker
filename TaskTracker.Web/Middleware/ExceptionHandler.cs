@@ -15,10 +15,10 @@ public class ExceptionHandler : IExceptionHandler
         Exception exception,
         CancellationToken cancellationToken)
     {
-        var error = Result<object>.Failure(exception.Message);
+        var result = Result.Failure(exception.Message);
 
         httpContext.Response.StatusCode = StatusCodes.Status200OK;
-        await httpContext.Response.WriteAsJsonAsync(error, cancellationToken);
+        await httpContext.Response.WriteAsJsonAsync(result, cancellationToken);
 
         return true;
     }

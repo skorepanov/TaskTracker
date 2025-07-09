@@ -10,9 +10,8 @@ public class TagService(
 
         if (tag is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Tag),
-                message: $"Тег не обнаружен (id = {tagId})");
+            return Result.Failure<TagVm>(
+                error: $"Тег не обнаружен (id = {tagId})");
         }
 
         var tagVm = new TagVm(tag);
@@ -44,9 +43,8 @@ public class TagService(
 
         if (tag is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Tag),
-                message: $"Тег не обнаружен (id = {tagId})");
+            return Result.Failure<TagVm>(
+                error: $"Тег не обнаружен (id = {tagId})");
         }
 
         tag.UpdateTag(tagDto, dateTimeProvider.UtcNow);
@@ -63,9 +61,8 @@ public class TagService(
 
         if (tag is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Tag),
-                message: $"Тег не обнаружен (id = {tagId})");
+            return Result.Failure<TagVm>(
+                error: $"Тег не обнаружен (id = {tagId})");
         }
 
         await tagRepository.DeleteTag(tag);

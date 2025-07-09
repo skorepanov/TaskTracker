@@ -12,9 +12,8 @@ public class TaskService(
 
         if (task is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(UserTask),
-                message: $"Задача не обнаружена (id = {taskId})");
+            return Result.Failure<UserTaskVm>(
+                error: $"Задача не обнаружена (id = {taskId})");
         }
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
@@ -65,9 +64,8 @@ public class TaskService(
 
             if (folder is null)
             {
-                throw new DomainEntityNotFoundException(
-                    domainEntityType: typeof(Folder),
-                    message: $"Папка не обнаружена (id = {folderId.Value})");
+                return Result.Failure<UserTaskVm>(
+                    error: $"Папка не обнаружена (id = {folderId.Value})");
             }
         }
 
@@ -86,9 +84,8 @@ public class TaskService(
 
         if (task is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(UserTask),
-                message: $"Задача не обнаружена (id = {taskId})");
+            return Result.Failure<UserTaskVm>(
+                error: $"Задача не обнаружена (id = {taskId})");
         }
 
         var folderId = userTaskDto.FolderId;
@@ -99,9 +96,8 @@ public class TaskService(
 
             if (folder is null)
             {
-                throw new DomainEntityNotFoundException(
-                    domainEntityType: typeof(Folder),
-                    message: $"Папка не обнаружена (id = {folderId.Value})");
+                return Result.Failure<UserTaskVm>(
+                    error: $"Папка не обнаружена (id = {folderId.Value})");
             }
         }
 
@@ -119,9 +115,8 @@ public class TaskService(
             {
                 var nonExistentTagIdsAsString = string.Join(", ", nonExistentTagIds);
 
-                throw new DomainEntityNotFoundException(
-                    domainEntityType: typeof(Tag),
-                    message: $"Теги не обнаружены (id = {nonExistentTagIdsAsString})");
+                return Result.Failure<UserTaskVm>(
+                    error: $"Теги не обнаружены (id = {nonExistentTagIdsAsString})");
             }
         }
 
@@ -140,9 +135,8 @@ public class TaskService(
 
         if (task is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(UserTask),
-                message: $"Задача не обнаружена (id = {taskId})");
+            return Result.Failure<UserTaskVm>(
+                error: $"Задача не обнаружена (id = {taskId})");
         }
 
         var completedDateTime = userTaskDto.CompletedDateTime ?? dateTimeProvider.UtcNow;
@@ -162,9 +156,8 @@ public class TaskService(
 
         if (task is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(UserTask),
-                message: $"Задача не обнаружена (id = {taskId})");
+            return Result.Failure<UserTaskVm>(
+                error: $"Задача не обнаружена (id = {taskId})");
         }
 
         var modifiedDateTime = userTaskDto.ModifiedDateTime ?? dateTimeProvider.UtcNow;
@@ -184,9 +177,8 @@ public class TaskService(
 
         if (task is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(UserTask),
-                message: $"Задача не обнаружена (id = {taskId})");
+            return Result.Failure<UserTaskVm>(
+                error: $"Задача не обнаружена (id = {taskId})");
         }
 
         var movedToTrashDateTime = userTaskDto.MovedToTrashDateTime ?? dateTimeProvider.UtcNow;
@@ -206,9 +198,8 @@ public class TaskService(
 
         if (task is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(UserTask),
-                message: $"Задача не обнаружена (id = {taskId})");
+            return Result.Failure<UserTaskVm>(
+                error: $"Задача не обнаружена (id = {taskId})");
         }
 
         var folderId = userTaskDto.FolderId;
@@ -219,9 +210,8 @@ public class TaskService(
 
             if (folder is null)
             {
-                throw new DomainEntityNotFoundException(
-                    domainEntityType: typeof(Folder),
-                    message: $"Папка не обнаружена (id = {folderId.Value})");
+                return Result.Failure<UserTaskVm>(
+                    error: $"Папка не обнаружена (id = {folderId.Value})");
             }
         }
 
@@ -241,17 +231,14 @@ public class TaskService(
 
         if (task is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(UserTask),
-                message: $"Задача не обнаружена (id = {taskId})");
+            return Result.Failure<UserTaskVm>(
+                error: $"Задача не обнаружена (id = {taskId})");
         }
 
         if (task.MovedToTrashDateTime is null)
         {
-            throw new CannotDeleteDomainEntityException(
-                domainEntityType: typeof(UserTask),
-                domainEntityId: task.Id,
-                message: $"Невозможно удалить задачу не из корзины (id = {taskId})");
+            return Result.Failure<UserTaskVm>(
+                error: $"Невозможно удалить задачу не из корзины (id = {taskId})");
         }
 
         await taskRepository.DeleteTask(task);

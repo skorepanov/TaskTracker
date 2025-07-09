@@ -10,9 +10,8 @@ public class FolderService(
 
         if (folder is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Folder),
-                message: $"Папка не обнаружена (id = {folderId})");
+            return Result.Failure<FolderVm>(
+                error: $"Папка не обнаружена (id = {folderId})");
         }
 
         var folderVm = new FolderVm(folder);
@@ -45,9 +44,8 @@ public class FolderService(
 
         if (folder is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Folder),
-                message: $"Папка не обнаружена (id = {folderId})");
+            return Result.Failure<FolderVm>(
+                error: $"Папка не обнаружена (id = {folderId})");
         }
 
         folder.UpdateFolder(folderDto, dateTimeProvider.UtcNow);
@@ -64,9 +62,8 @@ public class FolderService(
 
         if (folder is null)
         {
-            throw new DomainEntityNotFoundException(
-                domainEntityType: typeof(Folder),
-                message: $"Папка не обнаружена (id = {folderId})");
+            return Result.Failure<FolderVm>(
+                error: $"Папка не обнаружена (id = {folderId})");
         }
 
         await folderRepository.DeleteFolder(folder);

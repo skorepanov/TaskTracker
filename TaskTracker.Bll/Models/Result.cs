@@ -37,6 +37,18 @@ public class Result
             Error = error,
         };
     }
+
+    /// <summary>
+    /// Создать обобщённый результат с ошибкой
+    /// </summary>
+    public static Result<T> Failure<T>(string error)
+    {
+        return new Result<T>
+        {
+            IsOk = false,
+            Error = error,
+        };
+    }
 }
 
 /// <summary>
@@ -50,7 +62,7 @@ public class Result<T> : Result
     public T? Value { get; init; }
 
     /// <summary>
-    /// Создать успешный результат
+    /// Создать обобщённый успешный результат
     /// </summary>
     public static Result<T> Success(T? value)
     {
