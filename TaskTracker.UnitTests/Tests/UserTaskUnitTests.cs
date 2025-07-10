@@ -157,10 +157,36 @@ public class UserTaskUnitTests
         var sut = UserTask.CreateTask(userTaskDto, now: anyDateTime);
 
         // Assert
-        sut.Title.Should().Be(TITLE);
-        sut.FolderId.Should().Be(FOLDER_ID);
-        sut.DueDateTime.Should().Be(dueDateTime);
-        sut.CreatedDateTime.Should().Be(createdDateTime);
+        sut.IsOk.Should().BeTrue();
+        sut.Error.Should().BeNull();
+
+        sut.Value.Should().NotBeNull();
+        sut.Value.Title.Should().Be(TITLE);
+        sut.Value.FolderId.Should().Be(FOLDER_ID);
+        sut.Value.DueDateTime.Should().Be(dueDateTime);
+        sut.Value.CreatedDateTime.Should().Be(createdDateTime);
+        sut.Value.ModifiedDateTime.Should().BeNull();
+    }
+
+    [Fact]
+    public void CreateTaskWithoutTitle()
+    {
+        // Arrange
+        var userTaskDto = new UserTaskForCreationDto(
+            Title: "   \t   \n   ",
+            FolderId: null,
+            DueDateTime: null,
+            CreatedDateTime: null);
+
+        var anyDateTime = new DateTime();
+
+        // Act
+        var sut = UserTask.CreateTask(userTaskDto, now: anyDateTime);
+
+        // Assert
+        sut.IsOk.Should().BeFalse();
+        sut.Value.Should().BeNull();
+        sut.Error.Should().NotBeNull();
     }
 
     [Fact]
@@ -179,7 +205,11 @@ public class UserTaskUnitTests
         var sut = UserTask.CreateTask(userTaskDto, now);
 
         // Assert
-        sut.CreatedDateTime.Should().Be(now);
+        sut.IsOk.Should().BeTrue();
+        sut.Error.Should().BeNull();
+
+        sut.Value.Should().NotBeNull();
+        sut.Value.CreatedDateTime.Should().Be(now);
     }
 
     [Fact]
@@ -199,7 +229,11 @@ public class UserTaskUnitTests
         var sut = UserTask.CreateTask(userTaskDto, now);
 
         // Assert
-        sut.CreatedDateTime.Should().Be(createdDateTime);
+        sut.IsOk.Should().BeTrue();
+        sut.Error.Should().BeNull();
+
+        sut.Value.Should().NotBeNull();
+        sut.Value.CreatedDateTime.Should().Be(createdDateTime);
     }
     #endregion
 
@@ -211,8 +245,7 @@ public class UserTaskUnitTests
         var sut = CreateSut(
             title: "Old task title",
             folderId: 1,
-            dueDateTime: new DateTime(year: 2025, month: 1, day: 1)
-        );
+            dueDateTime: new DateTime(year: 2025, month: 1, day: 1));
 
         const string NEW_TITLE = "New task title";
         const string DESCRIPTION = "   Task description    ";
@@ -226,19 +259,56 @@ public class UserTaskUnitTests
             NEW_FOLDER_ID,
             TagIds: null,
             newDueDateTime,
-            modifiedDateTime
-        );
+            modifiedDateTime);
 
         // Act
-        sut.UpdateTask(userTaskDto, modifiedDateTime, tags: []);
+        var result = sut.UpdateTask(userTaskDto, modifiedDateTime, tags: []);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.Title.Should().Be(NEW_TITLE);
         sut.Description.Should().Be(DESCRIPTION);
         sut.FolderId.Should().Be(NEW_FOLDER_ID);
         sut.Tags.Should().BeEmpty();
         sut.DueDateTime.Should().Be(newDueDateTime);
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+    }
+
+    [Fact]
+    public void UpdateTaskWithoutTitle()
+    {
+        // Arrange
+        const string OLD_TITLE = "Old task title";
+        const int OLD_FOLDER_ID = 1;
+        var oldDueDateTime = new DateTime(year: 2025, month: 1, day: 1);
+
+        var sut = CreateSut(OLD_TITLE, OLD_FOLDER_ID, oldDueDateTime);
+
+        var userTaskDto = new UserTaskForUpdateDto(
+            Title: "   \t   \n   ",
+            Description: "Task description",
+            FolderId: 2,
+            TagIds: [],
+            DueDateTime: new DateTime(year: 2025, month: 1, day: 2),
+            ModifiedDateTime: null);
+
+        var anyDateTime = new DateTime();
+
+        // Act
+        var result = sut.UpdateTask(userTaskDto, now: anyDateTime, tags: []);
+
+        // Assert
+        result.IsOk.Should().BeFalse();
+        result.Error.Should().NotBeNull();
+
+        sut.Title.Should().Be(OLD_TITLE);
+        sut.Description.Should().BeNull();
+        sut.FolderId.Should().Be(OLD_FOLDER_ID);
+        sut.Tags.Should().BeNull();
+        sut.DueDateTime.Should().Be(oldDueDateTime);
+        sut.ModifiedDateTime.Should().BeNull();
     }
 
     [Fact]
@@ -251,16 +321,19 @@ public class UserTaskUnitTests
 
         var userTaskDto = new UserTaskForUpdateDto(
             Title: "Task title 42",
-            Description: "Task description 42",
-            FolderId: 42,
+            Description: null,
+            FolderId: null,
             TagIds: null,
             DueDateTime: new DateTime(),
             ModifiedDateTime: null);
 
         // Act
-        sut.UpdateTask(userTaskDto, now, tags: []);
+        var result = sut.UpdateTask(userTaskDto, now, tags: []);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.ModifiedDateTime.Should().Be(now);
     }
 
@@ -275,16 +348,19 @@ public class UserTaskUnitTests
 
         var userTaskDto = new UserTaskForUpdateDto(
             Title: "Task title 42",
-            Description: "Task description 42",
-            FolderId: 42,
+            Description: null,
+            FolderId: null,
             TagIds: null,
             DueDateTime: new DateTime(),
             modifiedDateTime);
 
         // Act
-        sut.UpdateTask(userTaskDto, now, tags: []);
+        var result = sut.UpdateTask(userTaskDto, now, tags: []);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
 
@@ -304,8 +380,8 @@ public class UserTaskUnitTests
 
         var userTaskDto = new UserTaskForUpdateDto(
             Title: "Task title 42",
-            Description: "Task description 42",
-            FolderId: 42,
+            Description: null,
+            FolderId: null,
             TagIds: null,
             DueDateTime: null,
             ModifiedDateTime: null);
@@ -313,9 +389,12 @@ public class UserTaskUnitTests
         var anyDateTime = new DateTime();
 
         // Act
-        sut.UpdateTask(userTaskDto, now: anyDateTime, tags);
+        var result = sut.UpdateTask(userTaskDto, now: anyDateTime, tags);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.Tags.Should().BeEquivalentTo(tags);
     }
     #endregion
@@ -464,7 +543,8 @@ public class UserTaskUnitTests
             dueDateTime,
             createdDateTime);
 
-        return UserTask.CreateTask(userTaskDto, now.Value);
+        var taskResult = UserTask.CreateTask(userTaskDto, now.Value);
+        return taskResult.Value;
     }
 
     private Tag CreateTag(

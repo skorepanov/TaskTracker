@@ -195,14 +195,14 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
 
         var creationDto = new FolderForCreationDto(title, createdDateTime.Value);
-        var folder = Folder.CreateFolder(creationDto, createdDateTime.Value);
+        var folderResult = Folder.CreateFolder(creationDto, createdDateTime.Value);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Folders.Add(folder.Value);
+        dbContext.Folders.Add(folderResult.Value);
         await dbContext.SaveChangesAsync();
 
-        return folder.Value;
+        return folderResult.Value;
     }
 
     private async Task<IReadOnlyList<Folder>> GetFoldersFromDatabase()

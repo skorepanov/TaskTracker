@@ -34,26 +34,60 @@ public class UserTask
         CreatedDateTime = createdDateTime;
     }
 
-    public static UserTask CreateTask(UserTaskForCreationDto userTaskDto, DateTime now)
+    public static Result<UserTask> CreateTask(
+        UserTaskForCreationDto userTaskDto, DateTime now)
     {
+        var validationErrors = new List<string>();
+
+        ValidateTitle(userTaskDto.Title, validationErrors);
+
+        if (validationErrors.Count > 0)
+        {
+            var error = string.Join(separator: ", ",  validationErrors);
+            return Result.Failure<UserTask>(error);
+        }
+
         var normalizedTitle = userTaskDto.Title.Trim();
         var createdDateTime = userTaskDto.CreatedDateTime ?? now;
 
-        return new UserTask(
+        var task = new UserTask(
             normalizedTitle,
             userTaskDto.FolderId,
             userTaskDto.DueDateTime,
             createdDateTime);
+
+        return Result<UserTask>.Success(task);
     }
 
-    public void UpdateTask(UserTaskForUpdateDto userTaskDto, DateTime now, IEnumerable<Tag> tags)
+    public Result UpdateTask(
+        UserTaskForUpdateDto userTaskDto, DateTime now, IEnumerable<Tag> tags)
     {
+        var validationErrors = new List<string>();
+
+        ValidateTitle(userTaskDto.Title, validationErrors);
+
+        if (validationErrors.Count > 0)
+        {
+            var error = string.Join(separator: ", ",  validationErrors);
+            return Result.Failure<UserTask>(error);
+        }
+
         Title = userTaskDto.Title.Trim();
         Description = userTaskDto.Description;
         FolderId = userTaskDto.FolderId;
         Tags = tags.ToList();
         DueDateTime = userTaskDto.DueDateTime;
         ModifiedDateTime = userTaskDto.ModifiedDateTime ?? now;
+
+        return Result.Success();
+    }
+
+    private static void ValidateTitle(string? title, List<string> errors)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            errors.Add("Не заполнено название задачи");
+        }
     }
 
     public void Complete(DateTime completedDateTime)

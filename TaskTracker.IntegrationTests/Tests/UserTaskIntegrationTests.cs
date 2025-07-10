@@ -567,14 +567,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
 
         var creationDto = new UserTaskForCreationDto(title, folderId, dueDateTime, createdDateTime);
-        var task = UserTask.CreateTask(creationDto, createdDateTime.Value);
+        var taskResult = UserTask.CreateTask(creationDto, createdDateTime.Value);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Tasks.Add(task);
+        dbContext.Tasks.Add(taskResult.Value);
         await dbContext.SaveChangesAsync();
 
-        return task;
+        return taskResult.Value;
     }
 
     private async Task<UserTask> CreateIncompletedTaskInDatabase(int folderId)
@@ -587,14 +587,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
         var creationDto = new UserTaskForCreationDto(
             Title: "Incompleted task title", folderId, dueDateTime, createdDateTime);
-        var task = UserTask.CreateTask(creationDto, createdDateTime);
+        var taskResult = UserTask.CreateTask(creationDto, createdDateTime);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Tasks.Add(task);
+        dbContext.Tasks.Add(taskResult.Value);
         await dbContext.SaveChangesAsync();
 
-        return task;
+        return taskResult.Value;
     }
 
     private async Task<UserTask> CreateCompletedTaskInDatabase(int folderId)
@@ -607,7 +607,8 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
         var creationDto = new UserTaskForCreationDto(
             Title: "Completed task title", folderId, dueDateTime, createdDateTime);
-        var task = UserTask.CreateTask(creationDto, createdDateTime);
+        var taskResult = UserTask.CreateTask(creationDto, createdDateTime);
+        var task = taskResult.Value;
 
         var completedDateTime = new DateTime(
             year: 2025, month: 1, day: 1, hour: 1, minute: 2, second: 3,
@@ -632,7 +633,8 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
         var creationDto = new UserTaskForCreationDto(
             Title: "Task in trash title", FolderId: null, dueDateTime, createdDateTime);
-        var task = UserTask.CreateTask(creationDto, createdDateTime);
+        var taskResult = UserTask.CreateTask(creationDto, createdDateTime);
+        var task = taskResult.Value;
 
         var movedToTrashDateTime = new DateTime(
             year: 2025, month: 1, day: 1, hour: 1, minute: 3, second: 3,

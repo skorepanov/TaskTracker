@@ -65,10 +65,16 @@ public class TaskService(
             }
         }
 
-        var newTask = UserTask.CreateTask(userTaskDto, dateTimeProvider.UtcNow);
-        await taskRepository.CreateTask(newTask);
+        var newTaskResult = UserTask.CreateTask(userTaskDto, dateTimeProvider.UtcNow);
 
-        var newTaskVm = new UserTaskVm(newTask, dateTimeProvider.UtcNow);
+        if (!newTaskResult.IsOk)
+        {
+            return Result.Failure<UserTaskVm>(newTaskResult.Error ?? string.Empty);
+        }
+
+        await taskRepository.CreateTask(newTaskResult.Value);
+
+        var newTaskVm = new UserTaskVm(newTaskResult.Value, dateTimeProvider.UtcNow);
         return Result<UserTaskVm>.Success(newTaskVm);
     }
 
@@ -115,7 +121,14 @@ public class TaskService(
             }
         }
 
-        task.UpdateTask(userTaskDto, dateTimeProvider.UtcNow, tags);
+        var updateResult = task.UpdateTask(
+            userTaskDto, dateTimeProvider.UtcNow, tags);
+
+        if (!updateResult.IsOk)
+        {
+            return Result.Failure<UserTaskVm>(updateResult.Error ?? string.Empty);
+        }
+
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);

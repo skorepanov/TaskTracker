@@ -33,7 +33,7 @@ public class TagUnitTests
     }
 
     [Fact]
-    public void CreateTagWithEmptyTitle()
+    public void CreateTagWithoutTitle()
     {
         // Arrange
         var tagDto = new TagForCreationDto(
@@ -147,7 +147,7 @@ public class TagUnitTests
     }
 
     [Fact]
-    public void UpdateTagWithEmptyTitle()
+    public void UpdateTagWithoutTitle()
     {
         // Arrange
         const string OLD_TITLE = "Old tag title";

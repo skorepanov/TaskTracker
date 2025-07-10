@@ -30,7 +30,7 @@ public class FolderUnitTests
     }
 
     [Fact]
-    public void CreateFolderWithEmptyTitle()
+    public void CreateFolderWithoutTitle()
     {
         // Arrange
         var folderDto = new FolderForCreationDto(
@@ -118,7 +118,7 @@ public class FolderUnitTests
     }
 
     [Fact]
-    public void UpdateFolderWithEmptyTitle()
+    public void UpdateFolderWithoutTitle()
     {
         // Arrange
         const string OLD_TITLE = "Old folder title";

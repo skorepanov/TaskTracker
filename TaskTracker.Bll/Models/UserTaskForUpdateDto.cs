@@ -4,7 +4,7 @@
 /// Данные для редактирования задачи
 /// </summary>
 public record UserTaskForUpdateDto(
-    string Title,
+    string? Title,
     string? Description,
     int? FolderId,
     List<int>? TagIds,

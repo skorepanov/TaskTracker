@@ -5,8 +5,7 @@
 /// </summary>
 [ApiController]
 [Route("api/tasks")]
-public class TaskController(TaskService taskService)
-    : ControllerBase
+public class TaskController(TaskService taskService) : ControllerBase
 {
     /// <summary>
     /// Получить задачу по идентификатору
@@ -107,7 +106,6 @@ public class TaskController(TaskService taskService)
     /// </summary>
     /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для перемещения задачи в корзину</param>
-    /// <returns></returns>
     [HttpPut("{taskId:int}/movedToTrash")]
     public async Task<IActionResult> MoveTaskToTrash(
         int taskId, [FromBody] UserTaskForMoveToTrashDto userTaskDto)
