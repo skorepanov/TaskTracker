@@ -186,9 +186,17 @@ public class TaskService(
                 error: $"Задача не обнаружена (id = {taskId})");
         }
 
-        var movedToTrashDateTime = userTaskDto.MovedToTrashDateTime ?? dateTimeProvider.UtcNow;
+        var movedToTrashDateTime
+            = userTaskDto.MovedToTrashDateTime ?? dateTimeProvider.UtcNow;
 
-        task.MoveToTrash(movedToTrashDateTime);
+        var moveToTrashResult = task.MoveToTrash(movedToTrashDateTime);
+
+        if (!moveToTrashResult.IsOk)
+        {
+            return Result.Failure<UserTaskVm>(
+                moveToTrashResult.Error ?? string.Empty);
+        }
+
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
@@ -219,9 +227,17 @@ public class TaskService(
             }
         }
 
-        var modifiedDateTime = userTaskDto.ModifiedDateTime ?? dateTimeProvider.UtcNow;
+        var modifiedDateTime
+            = userTaskDto.ModifiedDateTime ?? dateTimeProvider.UtcNow;
 
-        task.MoveFromTrash(modifiedDateTime, folderId);
+        var moveFromTrashResult = task.MoveFromTrash(modifiedDateTime, folderId);
+
+        if (!moveFromTrashResult.IsOk)
+        {
+            return Result.Failure<UserTaskVm>(
+                moveFromTrashResult.Error ?? string.Empty);
+        }
+
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);

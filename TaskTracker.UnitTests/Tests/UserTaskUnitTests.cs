@@ -408,9 +408,12 @@ public class UserTaskUnitTests
          var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 5);
 
          // Act
-         sut.MoveToTrash(movedToTrashDateTime);
+         var result = sut.MoveToTrash(movedToTrashDateTime);
 
          // Assert
+         result.IsOk.Should().BeTrue();
+         result.Error.Should().BeNull();
+
          sut.MovedToTrashDateTime.Should().Be(movedToTrashDateTime);
          sut.IsInTrash.Should().BeTrue();
          sut.ModifiedDateTime.Should().Be(movedToTrashDateTime);
@@ -425,9 +428,12 @@ public class UserTaskUnitTests
         var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 5);
 
         // Act
-        sut.MoveToTrash(movedToTrashDateTime);
+        var result = sut.MoveToTrash(movedToTrashDateTime);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.MovedToTrashDateTime.Should().Be(movedToTrashDateTime);
         sut.IsInTrash.Should().BeTrue();
         sut.ModifiedDateTime.Should().Be(movedToTrashDateTime);
@@ -443,10 +449,16 @@ public class UserTaskUnitTests
         var newMovedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 2);
 
         // Act
-        sut.MoveToTrash(oldMovedToTrashDateTime);
-        sut.MoveToTrash(newMovedToTrashDateTime);
+        var result1 = sut.MoveToTrash(oldMovedToTrashDateTime);
+        var result2 = sut.MoveToTrash(newMovedToTrashDateTime);
 
         // Assert
+        result1.IsOk.Should().BeTrue();
+        result1.Error.Should().BeNull();
+
+        result2.IsOk.Should().BeFalse();
+        result2.Error.Should().NotBeNull();
+
         sut.MovedToTrashDateTime.Should().Be(oldMovedToTrashDateTime);
         sut.IsInTrash.Should().BeTrue();
         sut.ModifiedDateTime.Should().Be(oldMovedToTrashDateTime);
@@ -464,12 +476,15 @@ public class UserTaskUnitTests
         var movedToTrashDateTime = new DateTime(year: 2025, month: 5, day: 1);
         var movedFromTrashDateTime = new DateTime(year: 2025, month: 5, day: 2);
 
-        sut.MoveToTrash(movedToTrashDateTime);
+        var result = sut.MoveToTrash(movedToTrashDateTime);
 
         // Act
         sut.MoveFromTrash(movedFromTrashDateTime, folderId: null);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.MovedToTrashDateTime.Should().BeNull();
         sut.IsInTrash.Should().BeFalse();
         sut.ModifiedDateTime.Should().Be(movedFromTrashDateTime);
@@ -490,9 +505,12 @@ public class UserTaskUnitTests
         sut.MoveToTrash(movedToTrashDateTime);
 
         // Act
-        sut.MoveFromTrash(movedFromTrashDateTime, NEW_FOLDER_ID);
+        var result = sut.MoveFromTrash(movedFromTrashDateTime, NEW_FOLDER_ID);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.MovedToTrashDateTime.Should().BeNull();
         sut.IsInTrash.Should().BeFalse();
         sut.ModifiedDateTime.Should().Be(movedFromTrashDateTime);
@@ -515,10 +533,16 @@ public class UserTaskUnitTests
         sut.MoveToTrash(movedToTrashDateTime);
 
         // Act
-        sut.MoveFromTrash(firstMovedFromTrashDateTime, FIRST_FOLDER_ID);
-        sut.MoveFromTrash(secondMovedFromTrashDateTime, SECOND_FOLDER_ID);
+        var result1 = sut.MoveFromTrash(firstMovedFromTrashDateTime, FIRST_FOLDER_ID);
+        var result2 = sut.MoveFromTrash(secondMovedFromTrashDateTime, SECOND_FOLDER_ID);
 
         // Assert
+        result1.IsOk.Should().BeTrue();
+        result1.Error.Should().BeNull();
+
+        result2.IsOk.Should().BeFalse();
+        result2.Error.Should().NotBeNull();
+
         sut.MovedToTrashDateTime.Should().BeNull();
         sut.IsInTrash.Should().BeFalse();
         sut.ModifiedDateTime.Should().Be(firstMovedFromTrashDateTime);

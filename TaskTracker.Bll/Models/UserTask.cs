@@ -112,27 +112,33 @@ public class UserTask
         return (DueDateTime.Value - today).Duration().Days;
     }
 
-    public void MoveToTrash(DateTime movedToTrashDateTime)
+    public Result MoveToTrash(DateTime movedToTrashDateTime)
     {
         if (IsInTrash)
         {
-            return;
+            return Result.Failure(
+                error: $"Задача уже находится в корзине (id = {Id})");
         }
 
         MovedToTrashDateTime = movedToTrashDateTime;
         ModifiedDateTime = movedToTrashDateTime;
         FolderId = null;
+
+        return Result.Success();
     }
 
-    public void MoveFromTrash(DateTime modifiedDateTime, int? folderId)
+    public Result MoveFromTrash(DateTime modifiedDateTime, int? folderId)
     {
         if (!IsInTrash)
         {
-            return;
+            return Result.Failure(
+                error: $"Задача не находится в корзине (id = {Id})");
         }
 
         MovedToTrashDateTime = null;
         ModifiedDateTime = modifiedDateTime;
         FolderId = folderId;
+
+        return Result.Success();
     }
 }
