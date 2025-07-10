@@ -16,17 +16,31 @@ public class Folder
         CreatedDateTime = createdDateTime;
     }
 
-    public static Folder CreateFolder(FolderForCreationDto folderDto, DateTime now)
+    public static Result<Folder> CreateFolder(FolderForCreationDto folderDto, DateTime now)
     {
+        if (string.IsNullOrWhiteSpace(folderDto.Title))
+        {
+            return Result.Failure<Folder>(
+                error: "Не заполнено название папки");
+        }
+
         var normalizedTitle = folderDto.Title.Trim();
         var createdDateTime = folderDto.CreatedDateTime ?? now;
 
-        return new Folder(normalizedTitle, createdDateTime);
+        var folder = new Folder(normalizedTitle, createdDateTime);
+        return Result<Folder>.Success(folder);
     }
 
-    public void UpdateFolder(FolderForUpdateDto folderDto, DateTime now)
+    public Result UpdateFolder(FolderForUpdateDto folderDto, DateTime now)
     {
+        if (string.IsNullOrWhiteSpace(folderDto.Title))
+        {
+            return Result.Failure(error: "Не заполнено название папки");
+        }
+
         Title = folderDto.Title.Trim();
         ModifiedDateTime = folderDto.ModifiedDateTime ?? now;
+
+        return Result.Success();
     }
 }

@@ -4,5 +4,5 @@
 /// Данные для создания папки
 /// </summary>
 public record FolderForCreationDto(
-    string Title,
+    string? Title,
     DateTime? CreatedDateTime);

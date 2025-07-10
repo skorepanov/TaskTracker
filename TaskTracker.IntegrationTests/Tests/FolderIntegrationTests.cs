@@ -199,10 +199,10 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Folders.Add(folder);
+        dbContext.Folders.Add(folder.Value);
         await dbContext.SaveChangesAsync();
 
-        return folder;
+        return folder.Value;
     }
 
     private async Task<IReadOnlyList<Folder>> GetFoldersFromDatabase()

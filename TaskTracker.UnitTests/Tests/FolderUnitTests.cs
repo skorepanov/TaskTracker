@@ -20,9 +20,32 @@ public class FolderUnitTests
         var sut = Folder.CreateFolder(folderDto, now: anyDateTime);
 
         // Assert
-        sut.Title.Should().Be(TITLE);
-        sut.CreatedDateTime.Should().Be(createdDateTime);
-        sut.ModifiedDateTime.Should().BeNull();
+        sut.IsOk.Should().BeTrue();
+        sut.Error.Should().BeNull();
+
+        sut.Value.Should().NotBeNull();
+        sut.Value.Title.Should().Be(TITLE);
+        sut.Value.CreatedDateTime.Should().Be(createdDateTime);
+        sut.Value.ModifiedDateTime.Should().BeNull();
+    }
+
+    [Fact]
+    public void CreateFolderWithEmptyTitle()
+    {
+        // Arrange
+        var folderDto = new FolderForCreationDto(
+            Title: "   \t   \n   ",
+            CreatedDateTime: null);
+
+        var anyDateTime = new DateTime();
+
+        // Act
+        var sut = Folder.CreateFolder(folderDto, now: anyDateTime);
+
+        // Assert
+        sut.IsOk.Should().BeFalse();
+        sut.Value.Should().BeNull();
+        sut.Error.Should().NotBeNull();
     }
 
     [Fact]
@@ -39,7 +62,11 @@ public class FolderUnitTests
         var sut = Folder.CreateFolder(folderDto, now);
 
         // Assert
-        sut.CreatedDateTime.Should().Be(now);
+        sut.IsOk.Should().BeTrue();
+        sut.Error.Should().BeNull();
+
+        sut.Value.Should().NotBeNull();
+        sut.Value.CreatedDateTime.Should().Be(now);
     }
 
     [Fact]
@@ -57,7 +84,11 @@ public class FolderUnitTests
         var sut = Folder.CreateFolder(folderDto, now);
 
         // Assert
-        sut.CreatedDateTime.Should().Be(createdDateTime);
+        sut.IsOk.Should().BeTrue();
+        sut.Error.Should().BeNull();
+
+        sut.Value.Should().NotBeNull();
+        sut.Value.CreatedDateTime.Should().Be(createdDateTime);
     }
     #endregion
 
@@ -76,11 +107,37 @@ public class FolderUnitTests
             modifiedDateTime);
 
         // Act
-        sut.UpdateFolder(folderDto, modifiedDateTime);
+        var result = sut.UpdateFolder(folderDto, modifiedDateTime);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.Title.Should().Be(NEW_TITLE);
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+    }
+
+    [Fact]
+    public void UpdateFolderWithEmptyTitle()
+    {
+        // Arrange
+        const string OLD_TITLE = "Old folder title";
+        var sut = CreateSut(OLD_TITLE);
+
+        var folderDto = new FolderForUpdateDto(
+            Title: "   \t   \n   ",
+            ModifiedDateTime: null);
+
+        var anyDateTime = new DateTime();
+
+        // Act
+        var result = sut.UpdateFolder(folderDto, now: anyDateTime);
+
+        // Assert
+        result.IsOk.Should().BeFalse();
+        result.Error.Should().NotBeNull();
+
+        sut.Title.Should().Be(OLD_TITLE);
     }
 
     [Fact]
@@ -96,9 +153,12 @@ public class FolderUnitTests
             ModifiedDateTime: null);
 
         // Act
-        sut.UpdateFolder(folderDto, now);
+        var result = sut.UpdateFolder(folderDto, now);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.ModifiedDateTime.Should().Be(now);
     }
 
@@ -116,9 +176,12 @@ public class FolderUnitTests
             modifiedDateTime);
 
         // Act
-        sut.UpdateFolder(folderDto, now);
+        var result = sut.UpdateFolder(folderDto, now);
 
         // Assert
+        result.IsOk.Should().BeTrue();
+        result.Error.Should().BeNull();
+
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
     #endregion
@@ -134,7 +197,8 @@ public class FolderUnitTests
 
         var folderDto = new FolderForCreationDto(title, createdDateTime.Value);
 
-        return Folder.CreateFolder(folderDto, now.Value);
+        var folderResult = Folder.CreateFolder(folderDto, now.Value);
+        return folderResult.Value;
     }
     #endregion
 }

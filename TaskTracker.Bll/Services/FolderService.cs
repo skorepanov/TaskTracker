@@ -27,10 +27,16 @@ public class FolderService(
 
     public async Task<Result<FolderVm>> CreateFolder(FolderForCreationDto folderDto)
     {
-        var newFolder = Folder.CreateFolder(folderDto, dateTimeProvider.UtcNow);
-        await folderRepository.CreateFolder(newFolder);
+        var newFolderResult = Folder.CreateFolder(folderDto, dateTimeProvider.UtcNow);
 
-        var newFolderVm = new FolderVm(newFolder);
+        if (!newFolderResult.IsOk)
+        {
+            return Result.Failure<FolderVm>(newFolderResult.Error ?? string.Empty);
+        }
+
+        await folderRepository.CreateFolder(newFolderResult.Value);
+
+        var newFolderVm = new FolderVm(newFolderResult.Value);
         return Result<FolderVm>.Success(newFolderVm);
     }
 
@@ -45,7 +51,13 @@ public class FolderService(
                 error: $"Папка не обнаружена (id = {folderId})");
         }
 
-        folder.UpdateFolder(folderDto, dateTimeProvider.UtcNow);
+        var updateResult = folder.UpdateFolder(folderDto, dateTimeProvider.UtcNow);
+
+        if (!updateResult.IsOk)
+        {
+            return Result.Failure<FolderVm>(updateResult.Error ?? string.Empty);
+        }
+
         await folderRepository.UpdateFolder(folder);
 
         var folderVm = new FolderVm(folder);
