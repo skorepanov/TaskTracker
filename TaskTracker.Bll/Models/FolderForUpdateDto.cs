@@ -4,5 +4,5 @@
 /// Данные для обновления папки
 /// </summary>
 public record FolderForUpdateDto(
-    string Title,
+    string? Title,
     DateTime? ModifiedDateTime);

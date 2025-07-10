@@ -651,14 +651,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     {
         var anyDateTime = new DateTime();
         var creationDto = new FolderForCreationDto(Title: "Folder title 42", anyDateTime);
-        var folder = Folder.CreateFolder(creationDto, anyDateTime);
+        var folderResult = Folder.CreateFolder(creationDto, anyDateTime);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Folders.Add(folder.Value);
+        dbContext.Folders.Add(folderResult.Value);
         await dbContext.SaveChangesAsync();
 
-        return folder.Value;
+        return folderResult.Value;
     }
 
     private async Task<Tag> CreateTagInDatabase()

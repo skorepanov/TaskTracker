@@ -18,10 +18,14 @@ public class Folder
 
     public static Result<Folder> CreateFolder(FolderForCreationDto folderDto, DateTime now)
     {
-        if (string.IsNullOrWhiteSpace(folderDto.Title))
+        var validationErrors = new List<string>();
+
+        ValidateTitle(folderDto.Title, validationErrors);
+
+        if (validationErrors.Count > 0)
         {
-            return Result.Failure<Folder>(
-                error: "Не заполнено название папки");
+            var error = string.Join(separator: ", ",  validationErrors);
+            return Result.Failure<Folder>(error);
         }
 
         var normalizedTitle = folderDto.Title.Trim();
@@ -33,14 +37,27 @@ public class Folder
 
     public Result UpdateFolder(FolderForUpdateDto folderDto, DateTime now)
     {
-        if (string.IsNullOrWhiteSpace(folderDto.Title))
+        var validationErrors = new List<string>();
+
+        ValidateTitle(folderDto.Title, validationErrors);
+
+        if (validationErrors.Count > 0)
         {
-            return Result.Failure(error: "Не заполнено название папки");
+            var error = string.Join(separator: ", ",  validationErrors);
+            return Result.Failure<Folder>(error);
         }
 
         Title = folderDto.Title.Trim();
         ModifiedDateTime = folderDto.ModifiedDateTime ?? now;
 
         return Result.Success();
+    }
+
+    private static void ValidateTitle(string? title, List<string> errors)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            errors.Add("Не заполнено название папки");
+        }
     }
 }
