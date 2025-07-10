@@ -478,7 +478,8 @@ public class UserTaskUnitTests
 
         var tagDto = new TagForCreationDto(title, color, createdDateTime);
 
-        return Tag.CreateTag(tagDto, now.Value);
+        var tagResult = Tag.CreateTag(tagDto, now.Value);
+        return tagResult.Value;
     }
     #endregion
 }

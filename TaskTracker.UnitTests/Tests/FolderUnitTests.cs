@@ -138,6 +138,7 @@ public class FolderUnitTests
         result.Error.Should().NotBeNull();
 
         sut.Title.Should().Be(OLD_TITLE);
+        sut.ModifiedDateTime.Should().BeNull();
     }
 
     [Fact]

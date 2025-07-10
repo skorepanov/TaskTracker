@@ -666,14 +666,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         var anyDateTime = new DateTime();
         var creationDto = new TagForCreationDto(
             Title: "Tag title 42", Color: "424242", anyDateTime);
-        var tag = Tag.CreateTag(creationDto, anyDateTime);
+        var tagResult = Tag.CreateTag(creationDto, anyDateTime);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Tags.Add(tag);
+        dbContext.Tags.Add(tagResult.Value);
         await dbContext.SaveChangesAsync();
 
-        return tag;
+        return tagResult.Value;
     }
 
     private async Task<IReadOnlyList<UserTask>> GetTasksFromDatabase()

@@ -207,14 +207,14 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
 
         var creationDto = new TagForCreationDto(title, color, createdDateTime);
-        var tag = Tag.CreateTag(creationDto, createdDateTime.Value);
+        var tagResult = Tag.CreateTag(creationDto, createdDateTime.Value);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Tags.Add(tag);
+        dbContext.Tags.Add(tagResult.Value);
         await dbContext.SaveChangesAsync();
 
-        return tag;
+        return tagResult.Value;
     }
 
     private async Task<IReadOnlyList<Tag>> GetTagsFromDatabase()

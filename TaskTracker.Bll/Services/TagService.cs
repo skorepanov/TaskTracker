@@ -27,10 +27,16 @@ public class TagService(
 
     public async Task<Result<TagVm>> CreateTag(TagForCreationDto tagDto)
     {
-        var newTag = Tag.CreateTag(tagDto, dateTimeProvider.UtcNow);
-        await tagRepository.CreateTag(newTag);
+        var newTagResult = Tag.CreateTag(tagDto, dateTimeProvider.UtcNow);
 
-        var newTagVm = new TagVm(newTag);
+        if (!newTagResult.IsOk)
+        {
+            return Result.Failure<TagVm>(newTagResult.Error ?? string.Empty);
+        }
+
+        await tagRepository.CreateTag(newTagResult.Value);
+
+        var newTagVm = new TagVm(newTagResult.Value);
         return Result<TagVm>.Success(newTagVm);
     }
 
@@ -44,7 +50,13 @@ public class TagService(
                 error: $"Тег не обнаружен (id = {tagId})");
         }
 
-        tag.UpdateTag(tagDto, dateTimeProvider.UtcNow);
+        var updateResult = tag.UpdateTag(tagDto, dateTimeProvider.UtcNow);
+
+        if (!updateResult.IsOk)
+        {
+            return Result.Failure<TagVm>(updateResult.Error ?? string.Empty);
+        }
+
         await tagRepository.UpdateTag(tag);
 
         var tagVm = new TagVm(tag);
