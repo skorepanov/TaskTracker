@@ -66,7 +66,7 @@ public class Tag
     {
         if (string.IsNullOrWhiteSpace(title))
         {
-            errors.Add("Не заполнено название тега");
+            errors.Add(ErrorMessages.TagTitleIsEmpty);
         }
     }
 
@@ -74,7 +74,7 @@ public class Tag
     {
         if (string.IsNullOrWhiteSpace(color))
         {
-            errors.Add("Не заполнен цвет тега");
+            errors.Add(ErrorMessages.TagColorIsEmpty);
         }
     }
 }

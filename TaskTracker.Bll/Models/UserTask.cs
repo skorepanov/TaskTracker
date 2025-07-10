@@ -86,7 +86,7 @@ public class UserTask
     {
         if (string.IsNullOrWhiteSpace(title))
         {
-            errors.Add("Не заполнено название задачи");
+            errors.Add(ErrorMessages.UserTaskTitleIsEmpty);
         }
     }
 
@@ -116,8 +116,8 @@ public class UserTask
     {
         if (IsInTrash)
         {
-            return Result.Failure(
-                error: $"Задача уже находится в корзине (id = {Id})");
+            var error = ErrorMessages.UserTaskIsInTrashAlready(Id);
+            return Result.Failure(error);
         }
 
         MovedToTrashDateTime = movedToTrashDateTime;
@@ -131,8 +131,8 @@ public class UserTask
     {
         if (!IsInTrash)
         {
-            return Result.Failure(
-                error: $"Задача не находится в корзине (id = {Id})");
+            var error = ErrorMessages.UserTaskIsNotInTrash(Id);
+            return Result.Failure(error);
         }
 
         MovedToTrashDateTime = null;

@@ -10,8 +10,8 @@ public class TagService(
 
         if (tag is null)
         {
-            return Result.Failure<TagVm>(
-                error: $"Тег не обнаружен (id = {tagId})");
+            var error = ErrorMessages.TagNotFound(tagId);
+            return Result.Failure<TagVm>(error);
         }
 
         var tagVm = new TagVm(tag);
@@ -46,8 +46,8 @@ public class TagService(
 
         if (tag is null)
         {
-            return Result.Failure<TagVm>(
-                error: $"Тег не обнаружен (id = {tagId})");
+            var error = ErrorMessages.TagNotFound(tagId);
+            return Result.Failure<TagVm>(error);
         }
 
         var updateResult = tag.UpdateTag(tagDto, dateTimeProvider.UtcNow);
@@ -69,8 +69,8 @@ public class TagService(
 
         if (tag is null)
         {
-            return Result.Failure<TagVm>(
-                error: $"Тег не обнаружен (id = {tagId})");
+            var error = ErrorMessages.TagNotFound(tagId);
+            return Result.Failure(error);
         }
 
         await tagRepository.DeleteTag(tag);

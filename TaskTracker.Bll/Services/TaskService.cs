@@ -12,8 +12,8 @@ public class TaskService(
 
         if (task is null)
         {
-            return Result.Failure<UserTaskVm>(
-                error: $"Задача не обнаружена (id = {taskId})");
+            var error = ErrorMessages.UserTaskNotFound(taskId);
+            return Result.Failure<UserTaskVm>(error);
         }
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
@@ -60,8 +60,8 @@ public class TaskService(
 
             if (folder is null)
             {
-                return Result.Failure<UserTaskVm>(
-                    error: $"Папка не обнаружена (id = {folderId.Value})");
+                var error = ErrorMessages.FolderNotFound(folderId.Value);
+                return Result.Failure<UserTaskVm>(error);
             }
         }
 
@@ -85,8 +85,8 @@ public class TaskService(
 
         if (task is null)
         {
-            return Result.Failure<UserTaskVm>(
-                error: $"Задача не обнаружена (id = {taskId})");
+            var error = ErrorMessages.UserTaskNotFound(taskId);
+            return Result.Failure<UserTaskVm>(error);
         }
 
         var folderId = userTaskDto.FolderId;
@@ -97,8 +97,8 @@ public class TaskService(
 
             if (folder is null)
             {
-                return Result.Failure<UserTaskVm>(
-                    error: $"Папка не обнаружена (id = {folderId.Value})");
+                var error = ErrorMessages.FolderNotFound(folderId.Value);
+                return Result.Failure<UserTaskVm>(error);
             }
         }
 
@@ -114,10 +114,8 @@ public class TaskService(
 
             if (nonExistentTagIds.Count > 0)
             {
-                var nonExistentTagIdsAsString = string.Join(", ", nonExistentTagIds);
-
-                return Result.Failure<UserTaskVm>(
-                    error: $"Теги не обнаружены (id = {nonExistentTagIdsAsString})");
+                var error = ErrorMessages.TagsNotFound(nonExistentTagIds);
+                return Result.Failure<UserTaskVm>(error);
             }
         }
 
@@ -142,8 +140,8 @@ public class TaskService(
 
         if (task is null)
         {
-            return Result.Failure<UserTaskVm>(
-                error: $"Задача не обнаружена (id = {taskId})");
+            var error = ErrorMessages.UserTaskNotFound(taskId);
+            return Result.Failure<UserTaskVm>(error);
         }
 
         var completedDateTime = userTaskDto.CompletedDateTime ?? dateTimeProvider.UtcNow;
@@ -162,8 +160,8 @@ public class TaskService(
 
         if (task is null)
         {
-            return Result.Failure<UserTaskVm>(
-                error: $"Задача не обнаружена (id = {taskId})");
+            var error = ErrorMessages.UserTaskNotFound(taskId);
+            return Result.Failure<UserTaskVm>(error);
         }
 
         var modifiedDateTime = userTaskDto.ModifiedDateTime ?? dateTimeProvider.UtcNow;
@@ -182,8 +180,8 @@ public class TaskService(
 
         if (task is null)
         {
-            return Result.Failure<UserTaskVm>(
-                error: $"Задача не обнаружена (id = {taskId})");
+            var error = ErrorMessages.UserTaskNotFound(taskId);
+            return Result.Failure<UserTaskVm>(error);
         }
 
         var movedToTrashDateTime
@@ -210,8 +208,8 @@ public class TaskService(
 
         if (task is null)
         {
-            return Result.Failure<UserTaskVm>(
-                error: $"Задача не обнаружена (id = {taskId})");
+            var error = ErrorMessages.UserTaskNotFound(taskId);
+            return Result.Failure<UserTaskVm>(error);
         }
 
         var folderId = userTaskDto.FolderId;
@@ -222,8 +220,8 @@ public class TaskService(
 
             if (folder is null)
             {
-                return Result.Failure<UserTaskVm>(
-                    error: $"Папка не обнаружена (id = {folderId.Value})");
+                var error = ErrorMessages.FolderNotFound(folderId.Value);
+                return Result.Failure<UserTaskVm>(error);
             }
         }
 
@@ -250,14 +248,14 @@ public class TaskService(
 
         if (task is null)
         {
-            return Result.Failure<UserTaskVm>(
-                error: $"Задача не обнаружена (id = {taskId})");
+            var error = ErrorMessages.UserTaskNotFound(taskId);
+            return Result.Failure<UserTaskVm>(error);
         }
 
         if (task.MovedToTrashDateTime is null)
         {
-            return Result.Failure<UserTaskVm>(
-                error: $"Невозможно удалить задачу не из корзины (id = {taskId})");
+            var error = ErrorMessages.CantDeleteUserTaskThatIsNotInTrash(taskId);
+            return Result.Failure<UserTaskVm>(error);
         }
 
         await taskRepository.DeleteTask(task);

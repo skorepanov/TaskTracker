@@ -10,8 +10,8 @@ public class FolderService(
 
         if (folder is null)
         {
-            return Result.Failure<FolderVm>(
-                error: $"Папка не обнаружена (id = {folderId})");
+            var error = ErrorMessages.FolderNotFound(folderId);
+            return Result.Failure<FolderVm>(error);
         }
 
         var folderVm = new FolderVm(folder);
@@ -47,8 +47,8 @@ public class FolderService(
 
         if (folder is null)
         {
-            return Result.Failure<FolderVm>(
-                error: $"Папка не обнаружена (id = {folderId})");
+            var error = ErrorMessages.FolderNotFound(folderId);
+            return Result.Failure<FolderVm>(error);
         }
 
         var updateResult = folder.UpdateFolder(folderDto, dateTimeProvider.UtcNow);
@@ -70,8 +70,8 @@ public class FolderService(
 
         if (folder is null)
         {
-            return Result.Failure<FolderVm>(
-                error: $"Папка не обнаружена (id = {folderId})");
+            var error = ErrorMessages.FolderNotFound(folderId);
+            return Result.Failure(error);
         }
 
         await folderRepository.DeleteFolder(folder);

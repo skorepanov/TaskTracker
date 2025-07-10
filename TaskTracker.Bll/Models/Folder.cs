@@ -57,7 +57,7 @@ public class Folder
     {
         if (string.IsNullOrWhiteSpace(title))
         {
-            errors.Add("Не заполнено название папки");
+            errors.Add(ErrorMessages.FolderTitleIsEmpty);
         }
     }
 }
