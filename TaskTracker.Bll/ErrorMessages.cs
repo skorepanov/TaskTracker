@@ -6,23 +6,23 @@ public static class ErrorMessages
     public const string UserTaskTitleIsEmpty = "Не заполнено название задачи";
 
     public static string UserTaskNotFound(int taskId)
-        => $"Задача не обнаружена (id = {taskId})";
+        => $"Задача не обнаружена: id = {taskId}";
 
     public static string UserTaskIsInTrashAlready(int taskId)
-        => $"Задача уже находится в корзине (id = {taskId})";
+        => $"Задача уже находится в корзине: id = {taskId}";
 
     public static string UserTaskIsNotInTrash(int taskId)
-        => $"Задача не находится в корзине (id = {taskId})";
+        => $"Задача не находится в корзине: id = {taskId}";
 
     public static string CantDeleteUserTaskThatIsNotInTrash(int taskId)
-        => $"Невозможно удалить задачу не из корзины (id = {taskId})";
+        => $"Невозможно удалить задачу не из корзины: id = {taskId}";
     #endregion
 
     #region Folder
     public const string FolderTitleIsEmpty = "Не заполнено название папки";
 
     public static string FolderNotFound(int folderId)
-        => $"Папка не обнаружена (id = {folderId})";
+        => $"Папка не обнаружена: id = {folderId}";
     #endregion
 
     #region Tag
@@ -30,12 +30,12 @@ public static class ErrorMessages
     public const string TagColorIsEmpty = "Не указан цвет тега";
 
     public static string TagNotFound(int tagId)
-        => $"Тег не обнаружен (id = {tagId})";
+        => $"Тег не обнаружен: id = {tagId}";
 
     public static string TagsNotFound(IList<int> tagIds)
     {
         var tagIdsAsString = string.Join(", ", tagIds);
-        return $"Теги не обнаружены (ids = {tagIdsAsString})";
+        return $"Теги не обнаружены: ids = {tagIdsAsString}";
     }
     #endregion
 }
