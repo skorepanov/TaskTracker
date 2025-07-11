@@ -4,36 +4,36 @@ public class FolderService(
     IFolderRepository folderRepository,
     IDateTimeProvider dateTimeProvider)
 {
-    public async Task<Result<FolderVm>> GetFolderById(int folderId)
+    public async Task<FolderVm> GetFolderById(int folderId)
     {
         var folder = await folderRepository.GetFolder(folderId);
         var folderVm = new FolderVm(folder);
-        return Result<FolderVm>.Success(folderVm);
+        return folderVm;
     }
 
-    public async Task<Result<IReadOnlyList<FolderVm>>> GetFolders()
+    public async Task<IReadOnlyList<FolderVm>> GetFolders()
     {
         var folders = await folderRepository.GetFolders();
         var folderVms = folders.Select(f => new FolderVm(f)).ToList();
-        return Result<IReadOnlyList<FolderVm>>.Success(folderVms);
+        return folderVms;
     }
 
-    public async Task<Result<FolderVm>> CreateFolder(FolderForCreationDto folderDto)
+    public async Task<FolderVm> CreateFolder(FolderForCreationDto folderDto)
     {
         var newFolderResult = Folder.CreateFolder(folderDto, dateTimeProvider.UtcNow);
 
         if (!newFolderResult.IsOk)
         {
-            return Result.Failure<FolderVm>(newFolderResult.Error ?? string.Empty);
+            throw new DomainException(newFolderResult.Error ?? string.Empty);
         }
 
         await folderRepository.CreateFolder(newFolderResult.Value);
 
         var newFolderVm = new FolderVm(newFolderResult.Value);
-        return Result<FolderVm>.Success(newFolderVm);
+        return newFolderVm;
     }
 
-    public async Task<Result<FolderVm>> UpdateFolder(
+    public async Task<FolderVm> UpdateFolder(
         int folderId, FolderForUpdateDto folderDto)
     {
         var folder = await folderRepository.GetFolder(folderId);
@@ -41,19 +41,19 @@ public class FolderService(
 
         if (!updateResult.IsOk)
         {
-            return Result.Failure<FolderVm>(updateResult.Error ?? string.Empty);
+            throw new DomainException(updateResult.Error ?? string.Empty);
         }
 
         await folderRepository.UpdateFolder(folder);
 
         var folderVm = new FolderVm(folder);
-        return Result<FolderVm>.Success(folderVm);
+        return folderVm;
     }
 
-    public async Task<Result> DeleteFolder(int folderId)
+    public async Task<bool> DeleteFolder(int folderId)
     {
         var folder = await folderRepository.GetFolder(folderId);
         await folderRepository.DeleteFolder(folder);
-        return Result.Success();
+        return true;
     }
 }

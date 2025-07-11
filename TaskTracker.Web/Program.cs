@@ -1,12 +1,9 @@
 using Scalar.AspNetCore;
 using TaskTracker.Web;
-using TaskTracker.Web.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 #region Add services to the container
-
-builder.Services.AddExceptionHandler<ExceptionHandler>();
 
 builder.Services.AddControllers();
 builder.Services.AddServices();

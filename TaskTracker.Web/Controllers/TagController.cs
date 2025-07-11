@@ -5,7 +5,8 @@
 /// </summary>
 [ApiController]
 [Route("api/tags")]
-public class TagController(TagService tagService) : ControllerBase
+public class TagController(ExecutionService executionService, TagService tagService)
+    : ControllerBase
 {
     /// <summary>
     /// Получить тег по идентификатору
@@ -14,7 +15,8 @@ public class TagController(TagService tagService) : ControllerBase
     [HttpGet("{tagId:int}", Name = nameof(GetTagById))]
     public async Task<IActionResult> GetTagById(int tagId)
     {
-        var result = await tagService.GetTagById(tagId);
+        var result = await executionService.TryExecute(
+            () => tagService.GetTagById(tagId));
         return Ok(result);
     }
 
@@ -24,7 +26,8 @@ public class TagController(TagService tagService) : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetTags()
     {
-        var result = await tagService.GetTags();
+        var result = await executionService.TryExecute(
+            () => tagService.GetTags());
         return Ok(result);
     }
 
@@ -35,7 +38,8 @@ public class TagController(TagService tagService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTag([FromBody] TagForCreationDto tagDto)
     {
-        var result = await tagService.CreateTag(tagDto);
+        var result = await executionService.TryExecute(
+            () => tagService.CreateTag(tagDto));
         return Ok(result);
     }
 
@@ -48,7 +52,8 @@ public class TagController(TagService tagService) : ControllerBase
     public async Task<IActionResult> UpdateTag(
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
-        var result = await tagService.UpdateTag(tagId, tagDto);
+        var result = await executionService.TryExecute(
+            () => tagService.UpdateTag(tagId, tagDto));
         return Ok(result);
     }
 
@@ -59,7 +64,8 @@ public class TagController(TagService tagService) : ControllerBase
     [HttpDelete("{tagId:int}")]
     public async Task<IActionResult> DeleteTag(int tagId)
     {
-        var result = await tagService.DeleteTag(tagId);
+        var result = await executionService.TryExecute(
+            () => tagService.DeleteTag(tagId));
         return Ok(result);
     }
 }

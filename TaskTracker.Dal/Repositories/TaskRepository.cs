@@ -9,7 +9,7 @@ public class TaskRepository(ApplicationContext db) : ITaskRepository
         if (task is null)
         {
             var error = ErrorMessages.UserTaskNotFound(taskId);
-            throw new DomainEntityNotFoundException(error);
+            throw new DomainException(error);
         }
 
         return task;

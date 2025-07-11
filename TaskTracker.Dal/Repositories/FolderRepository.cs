@@ -14,7 +14,7 @@ public class FolderRepository(ApplicationContext db) : IFolderRepository
         if (folder is null)
         {
             var error = ErrorMessages.FolderNotFound(folderId);
-            throw new DomainEntityNotFoundException(error);
+            throw new DomainException(error);
         }
 
         return folder;

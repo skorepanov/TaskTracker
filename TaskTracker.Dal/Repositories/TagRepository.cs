@@ -9,7 +9,7 @@ public class TagRepository(ApplicationContext db) : ITagRepository
         if (tag is null)
         {
             var error = ErrorMessages.TagNotFound(tagId);
-            throw new DomainEntityNotFoundException(error);
+            throw new DomainException(error);
         }
 
         return tag;

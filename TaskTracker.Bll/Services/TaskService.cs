@@ -6,44 +6,44 @@ public class TaskService(
     ITagRepository tagRepository,
     IDateTimeProvider dateTimeProvider)
 {
-    public async Task<Result<UserTaskVm>> GetTaskById(int taskId)
+    public async Task<UserTaskVm> GetTaskById(int taskId)
     {
         var task = await taskRepository.GetTask(taskId);
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        return Result<UserTaskVm>.Success(taskVm);
+        return taskVm;
     }
 
-    public async Task<Result<IReadOnlyList<UserTaskVm>>> GetIncompletedTasks()
+    public async Task<IReadOnlyList<UserTaskVm>> GetIncompletedTasks()
     {
         var tasks = await taskRepository.GetIncompletedTasks();
 
         var today = dateTimeProvider.UtcNow;
         var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
 
-        return Result<IReadOnlyList<UserTaskVm>>.Success(taskVms);
+        return taskVms;
     }
 
-    public async Task<Result<IReadOnlyList<UserTaskVm>>> GetCompletedTasks()
+    public async Task<IReadOnlyList<UserTaskVm>> GetCompletedTasks()
     {
         var tasks = await taskRepository.GetCompletedTasks();
 
         var today = dateTimeProvider.UtcNow;
         var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
 
-        return Result<IReadOnlyList<UserTaskVm>>.Success(taskVms);
+        return taskVms;
     }
 
-    public async Task<Result<IReadOnlyList<UserTaskVm>>> GetTasksInTrash()
+    public async Task<IReadOnlyList<UserTaskVm>> GetTasksInTrash()
     {
         var tasks = await taskRepository.GetTasksInTrash();
 
         var today = dateTimeProvider.UtcNow;
         var taskVms = tasks.Select(t => new UserTaskVm(t, today)).ToList();
 
-        return Result<IReadOnlyList<UserTaskVm>>.Success(taskVms);
+        return taskVms;
     }
 
-    public async Task<Result<UserTaskVm>> CreateTask(UserTaskForCreationDto userTaskDto)
+    public async Task<UserTaskVm> CreateTask(UserTaskForCreationDto userTaskDto)
     {
         var folderId = userTaskDto.FolderId;
 
@@ -54,7 +54,7 @@ public class TaskService(
             if (!isFolderExists)
             {
                 var error = ErrorMessages.FolderNotFound(folderId.Value);
-                return Result.Failure<UserTaskVm>(error);
+                throw new DomainException(error);
             }
         }
 
@@ -62,16 +62,16 @@ public class TaskService(
 
         if (!newTaskResult.IsOk)
         {
-            return Result.Failure<UserTaskVm>(newTaskResult.Error ?? string.Empty);
+            throw new DomainException(newTaskResult.Error ?? string.Empty);
         }
 
         await taskRepository.CreateTask(newTaskResult.Value);
 
         var newTaskVm = new UserTaskVm(newTaskResult.Value, dateTimeProvider.UtcNow);
-        return Result<UserTaskVm>.Success(newTaskVm);
+        return newTaskVm;
     }
 
-    public async Task<Result<UserTaskVm>> UpdateTask(
+    public async Task<UserTaskVm> UpdateTask(
         int taskId, UserTaskForUpdateDto userTaskDto)
     {
         var task = await taskRepository.GetTask(taskId);
@@ -84,7 +84,7 @@ public class TaskService(
             if (!isFolderExists)
             {
                 var error = ErrorMessages.FolderNotFound(folderId.Value);
-                return Result.Failure<UserTaskVm>(error);
+                throw new DomainException(error);
             }
         }
 
@@ -101,7 +101,7 @@ public class TaskService(
             if (nonExistentTagIds.Count > 0)
             {
                 var error = ErrorMessages.TagsNotFound(nonExistentTagIds);
-                return Result.Failure<UserTaskVm>(error);
+                throw new DomainException(error);
             }
         }
 
@@ -110,16 +110,16 @@ public class TaskService(
 
         if (!updateResult.IsOk)
         {
-            return Result.Failure<UserTaskVm>(updateResult.Error ?? string.Empty);
+            throw new DomainException(updateResult.Error ?? string.Empty);
         }
 
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        return Result<UserTaskVm>.Success(taskVm);
+        return taskVm;
     }
 
-    public async Task<Result<UserTaskVm>> CompleteTask(
+    public async Task<UserTaskVm> CompleteTask(
         int taskId, UserTaskForCompleteDto userTaskDto)
     {
         var task = await taskRepository.GetTask(taskId);
@@ -130,10 +130,10 @@ public class TaskService(
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        return Result<UserTaskVm>.Success(taskVm);
+        return taskVm;
     }
 
-    public async Task<Result<UserTaskVm>> IncompleteTask(
+    public async Task<UserTaskVm> IncompleteTask(
         int taskId, UserTaskForIncompleteDto userTaskDto)
     {
         var task = await taskRepository.GetTask(taskId);
@@ -144,10 +144,10 @@ public class TaskService(
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        return Result<UserTaskVm>.Success(taskVm);
+        return taskVm;
     }
 
-    public async Task<Result<UserTaskVm>> MoveTaskToTrash(
+    public async Task<UserTaskVm> MoveTaskToTrash(
         int taskId, UserTaskForMoveToTrashDto userTaskDto)
     {
         var task = await taskRepository.GetTask(taskId);
@@ -158,17 +158,16 @@ public class TaskService(
 
         if (!moveToTrashResult.IsOk)
         {
-            return Result.Failure<UserTaskVm>(
-                moveToTrashResult.Error ?? string.Empty);
+            throw new DomainException(moveToTrashResult.Error ?? string.Empty);
         }
 
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        return Result<UserTaskVm>.Success(taskVm);
+        return taskVm;
     }
 
-    public async Task<Result<UserTaskVm>> MoveTaskFromTrash(
+    public async Task<UserTaskVm> MoveTaskFromTrash(
         int taskId, UserTaskForMoveFromTrashDto userTaskDto)
     {
         var task = await taskRepository.GetTask(taskId);
@@ -181,7 +180,7 @@ public class TaskService(
             if (!isFolderExists)
             {
                 var error = ErrorMessages.FolderNotFound(folderId.Value);
-                return Result.Failure<UserTaskVm>(error);
+                throw new DomainException(error);
             }
         }
 
@@ -192,28 +191,27 @@ public class TaskService(
 
         if (!moveFromTrashResult.IsOk)
         {
-            return Result.Failure<UserTaskVm>(
-                moveFromTrashResult.Error ?? string.Empty);
+            throw new DomainException(moveFromTrashResult.Error ?? string.Empty);
         }
 
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
-        return Result<UserTaskVm>.Success(taskVm);
+        return taskVm;
     }
 
-    public async Task<Result> DeleteTask(int taskId)
+    public async Task<bool> DeleteTask(int taskId)
     {
         var task = await taskRepository.GetTask(taskId);
 
         if (task.MovedToTrashDateTime is null)
         {
             var error = ErrorMessages.CantDeleteUserTaskThatIsNotInTrash(taskId);
-            return Result.Failure<UserTaskVm>(error);
+            throw new DomainException(error);
         }
 
         await taskRepository.DeleteTask(task);
 
-        return Result.Success();
+        return true;
     }
 }

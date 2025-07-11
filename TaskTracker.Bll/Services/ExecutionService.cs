@@ -1,0 +1,17 @@
+﻿namespace TaskTracker.Bll.Services;
+
+public class ExecutionService
+{
+    public async Task<Result<T>> TryExecute<T>(Func<Task<T>> callback)
+    {
+        try
+        {
+            var result = await callback();
+            return Result<T>.Success(result);
+        }
+        catch (Exception e)
+        {
+            return Result.Failure<T>(e.Message);
+        }
+    }
+}

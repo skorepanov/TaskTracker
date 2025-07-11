@@ -17,6 +17,7 @@ public static class DiExtensions
     public static void AddServices(this IServiceCollection collection)
     {
         collection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        collection.AddTransient<ExecutionService>();
         collection.AddTransient<TaskService>();
         collection.AddTransient<FolderService>();
         collection.AddTransient<TagService>();

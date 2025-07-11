@@ -4,55 +4,55 @@ public class TagService(
     ITagRepository tagRepository,
     IDateTimeProvider dateTimeProvider)
 {
-    public async Task<Result<TagVm>> GetTagById(int tagId)
+    public async Task<TagVm> GetTagById(int tagId)
     {
         var tag = await tagRepository.GetTag(tagId);
         var tagVm = new TagVm(tag);
-        return Result<TagVm>.Success(tagVm);
+        return tagVm;
     }
 
-    public async Task<Result<IReadOnlyList<TagVm>>> GetTags()
+    public async Task<IReadOnlyList<TagVm>> GetTags()
     {
         var tags = await tagRepository.GetTags();
         var tagVms = tags.Select(t => new TagVm(t)).ToList();
-        return Result<IReadOnlyList<TagVm>>.Success(tagVms);
+        return tagVms;
     }
 
-    public async Task<Result<TagVm>> CreateTag(TagForCreationDto tagDto)
+    public async Task<TagVm> CreateTag(TagForCreationDto tagDto)
     {
         var newTagResult = Tag.CreateTag(tagDto, dateTimeProvider.UtcNow);
 
         if (!newTagResult.IsOk)
         {
-            return Result.Failure<TagVm>(newTagResult.Error ?? string.Empty);
+            throw new DomainException(newTagResult.Error ?? string.Empty);
         }
 
         await tagRepository.CreateTag(newTagResult.Value);
 
         var newTagVm = new TagVm(newTagResult.Value);
-        return Result<TagVm>.Success(newTagVm);
+        return newTagVm;
     }
 
-    public async Task<Result<TagVm>> UpdateTag(int tagId, TagForUpdateDto tagDto)
+    public async Task<TagVm> UpdateTag(int tagId, TagForUpdateDto tagDto)
     {
         var tag = await tagRepository.GetTag(tagId);
         var updateResult = tag.UpdateTag(tagDto, dateTimeProvider.UtcNow);
 
         if (!updateResult.IsOk)
         {
-            return Result.Failure<TagVm>(updateResult.Error ?? string.Empty);
+            throw new DomainException(updateResult.Error ?? string.Empty);
         }
 
         await tagRepository.UpdateTag(tag);
 
         var tagVm = new TagVm(tag);
-        return Result<TagVm>.Success(tagVm);
+        return tagVm;
     }
 
-    public async Task<Result> DeleteTag(int tagId)
+    public async Task<bool> DeleteTag(int tagId)
     {
         var tag = await tagRepository.GetTag(tagId);
         await tagRepository.DeleteTag(tag);
-        return Result.Success();
+        return true;
     }
 }

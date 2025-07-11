@@ -5,7 +5,8 @@
 /// </summary>
 [ApiController]
 [Route("api/folders")]
-public class FolderController(FolderService folderService) : ControllerBase
+public class FolderController(ExecutionService executionService, FolderService folderService)
+    : ControllerBase
 {
     /// <summary>
     /// Получить папку по идентификатору
@@ -14,7 +15,8 @@ public class FolderController(FolderService folderService) : ControllerBase
     [HttpGet("{folderId:int}", Name = nameof(GetFolderById))]
     public async Task<IActionResult> GetFolderById(int folderId)
     {
-        var result = await folderService.GetFolderById(folderId);
+        var result = await executionService.TryExecute(
+            () => folderService.GetFolderById(folderId));
         return Ok(result);
     }
 
@@ -24,7 +26,8 @@ public class FolderController(FolderService folderService) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetFolders()
     {
-        var result = await folderService.GetFolders();
+        var result = await executionService.TryExecute(
+            () => folderService.GetFolders());
         return Ok(result);
     }
 
@@ -35,7 +38,8 @@ public class FolderController(FolderService folderService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
     {
-        var result = await folderService.CreateFolder(folderDto);
+        var result = await executionService.TryExecute(
+            () => folderService.CreateFolder(folderDto));
         return Ok(result);
     }
 
@@ -48,7 +52,8 @@ public class FolderController(FolderService folderService) : ControllerBase
     public async Task<IActionResult> UpdateFolder(
         int folderId, [FromBody] FolderForUpdateDto folderDto)
     {
-        var result = await folderService.UpdateFolder(folderId, folderDto);
+        var result = await executionService.TryExecute(
+            () => folderService.UpdateFolder(folderId, folderDto));
         return Ok(result);
     }
 
@@ -59,7 +64,8 @@ public class FolderController(FolderService folderService) : ControllerBase
     [HttpDelete("{folderId:int}")]
     public async Task<IActionResult> DeleteFolder(int folderId)
     {
-        var result = await folderService.DeleteFolder(folderId);
+        var result = await executionService.TryExecute(
+            () => folderService.DeleteFolder(folderId));
         return Ok(result);
     }
 }
