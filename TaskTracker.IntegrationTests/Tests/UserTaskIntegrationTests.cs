@@ -851,14 +851,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
 
         var creationDto = new UserTaskForCreationDto(title, folderId, dueDateTime, createdDateTime);
-        var taskResult = UserTask.CreateTask(creationDto, createdDateTime.Value);
+        var task = UserTask.CreateTask(creationDto, createdDateTime.Value);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Tasks.Add(taskResult.Value);
+        dbContext.Tasks.Add(task);
         await dbContext.SaveChangesAsync();
 
-        return taskResult.Value;
+        return task;
     }
 
     private async Task<UserTask> CreateIncompletedTaskInDatabase(int folderId)
@@ -871,14 +871,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
         var creationDto = new UserTaskForCreationDto(
             Title: "Incompleted task title", folderId, dueDateTime, createdDateTime);
-        var taskResult = UserTask.CreateTask(creationDto, createdDateTime);
+        var task = UserTask.CreateTask(creationDto, createdDateTime);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Tasks.Add(taskResult.Value);
+        dbContext.Tasks.Add(task);
         await dbContext.SaveChangesAsync();
 
-        return taskResult.Value;
+        return task;
     }
 
     private async Task<UserTask> CreateCompletedTaskInDatabase(int folderId)
@@ -891,8 +891,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
         var creationDto = new UserTaskForCreationDto(
             Title: "Completed task title", folderId, dueDateTime, createdDateTime);
-        var taskResult = UserTask.CreateTask(creationDto, createdDateTime);
-        var task = taskResult.Value;
+        var task = UserTask.CreateTask(creationDto, createdDateTime);
 
         var completedDateTime = new DateTime(
             year: 2025, month: 1, day: 1, hour: 1, minute: 2, second: 3,
@@ -917,8 +916,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
         var creationDto = new UserTaskForCreationDto(
             Title: "Task in trash title", FolderId: null, dueDateTime, createdDateTime);
-        var taskResult = UserTask.CreateTask(creationDto, createdDateTime);
-        var task = taskResult.Value;
+        var task = UserTask.CreateTask(creationDto, createdDateTime);
 
         var movedToTrashDateTime = new DateTime(
             year: 2025, month: 1, day: 1, hour: 1, minute: 3, second: 3,
@@ -937,14 +935,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     {
         var anyDateTime = new DateTime();
         var creationDto = new FolderForCreationDto(Title: "Folder title 42", anyDateTime);
-        var folderResult = Folder.CreateFolder(creationDto, anyDateTime);
+        var folder = Folder.CreateFolder(creationDto, anyDateTime);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Folders.Add(folderResult.Value);
+        dbContext.Folders.Add(folder);
         await dbContext.SaveChangesAsync();
 
-        return folderResult.Value;
+        return folder;
     }
 
     private async Task<Tag> CreateTagInDatabase()
@@ -952,14 +950,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         var anyDateTime = new DateTime();
         var creationDto = new TagForCreationDto(
             Title: "Tag title 42", Color: "424242", anyDateTime);
-        var tagResult = Tag.CreateTag(creationDto, anyDateTime);
+        var tag = Tag.CreateTag(creationDto, anyDateTime);
 
         using var scope = Factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        dbContext.Tags.Add(tagResult.Value);
+        dbContext.Tags.Add(tag);
         await dbContext.SaveChangesAsync();
 
-        return tagResult.Value;
+        return tag;
     }
 
     private async Task<IReadOnlyList<UserTask>> GetTasksFromDatabase()

@@ -58,16 +58,11 @@ public class TaskService(
             }
         }
 
-        var newTaskResult = UserTask.CreateTask(userTaskDto, dateTimeProvider.UtcNow);
+        var newTask = UserTask.CreateTask(userTaskDto, dateTimeProvider.UtcNow);
 
-        if (!newTaskResult.IsOk)
-        {
-            throw new DomainException(newTaskResult.Error ?? string.Empty);
-        }
+        await taskRepository.CreateTask(newTask);
 
-        await taskRepository.CreateTask(newTaskResult.Value);
-
-        var newTaskVm = new UserTaskVm(newTaskResult.Value, dateTimeProvider.UtcNow);
+        var newTaskVm = new UserTaskVm(newTask, dateTimeProvider.UtcNow);
         return newTaskVm;
     }
 
@@ -105,13 +100,7 @@ public class TaskService(
             }
         }
 
-        var updateResult = task.UpdateTask(
-            userTaskDto, dateTimeProvider.UtcNow, tags);
-
-        if (!updateResult.IsOk)
-        {
-            throw new DomainException(updateResult.Error ?? string.Empty);
-        }
+        task.UpdateTask(userTaskDto, dateTimeProvider.UtcNow, tags);
 
         await taskRepository.UpdateTask(task);
 

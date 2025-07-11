@@ -22,14 +22,10 @@ public class TagUnitTests
         var sut = Tag.CreateTag(tagDto, now: anyDateTime);
 
         // Assert
-        sut.IsOk.Should().BeTrue();
-        sut.Error.Should().BeNull();
-
-        sut.Value.Should().NotBeNull();
-        sut.Value.Title.Should().Be(TITLE);
-        sut.Value.Color.Should().Be(COLOR);
-        sut.Value.CreatedDateTime.Should().Be(createdDateTime);
-        sut.Value.ModifiedDateTime.Should().BeNull();
+        sut.Title.Should().Be(TITLE);
+        sut.Color.Should().Be(COLOR);
+        sut.CreatedDateTime.Should().Be(createdDateTime);
+        sut.ModifiedDateTime.Should().BeNull();
     }
 
     [Fact]
@@ -44,12 +40,11 @@ public class TagUnitTests
         var anyDateTime = new DateTime();
 
         // Act
-        var sut = Tag.CreateTag(tagDto, now: anyDateTime);
+        var action = () => Tag.CreateTag(tagDto, now: anyDateTime);
 
         // Assert
-        sut.IsOk.Should().BeFalse();
-        sut.Value.Should().BeNull();
-        sut.Error.Should().NotBeNullOrWhiteSpace();
+        action.Should().Throw<DomainException>()
+            .Which.Message.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -64,12 +59,11 @@ public class TagUnitTests
         var anyDateTime = new DateTime();
 
         // Act
-        var sut = Tag.CreateTag(tagDto, now: anyDateTime);
+        var action = () => Tag.CreateTag(tagDto, now: anyDateTime);
 
         // Assert
-        sut.IsOk.Should().BeFalse();
-        sut.Value.Should().BeNull();
-        sut.Error.Should().NotBeNullOrWhiteSpace();
+        action.Should().Throw<DomainException>()
+            .Which.Message.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -87,11 +81,7 @@ public class TagUnitTests
         var sut = Tag.CreateTag(tagDto, now);
 
         // Assert
-        sut.IsOk.Should().BeTrue();
-        sut.Error.Should().BeNull();
-
-        sut.Value.Should().NotBeNull();
-        sut.Value.CreatedDateTime.Should().Be(now);
+        sut.CreatedDateTime.Should().Be(now);
     }
 
     [Fact]
@@ -110,11 +100,7 @@ public class TagUnitTests
         var sut = Tag.CreateTag(tagDto, now);
 
         // Assert
-        sut.IsOk.Should().BeTrue();
-        sut.Error.Should().BeNull();
-
-        sut.Value.Should().NotBeNull();
-        sut.Value.CreatedDateTime.Should().Be(createdDateTime);
+        sut.CreatedDateTime.Should().Be(createdDateTime);
     }
     #endregion
 
@@ -135,12 +121,9 @@ public class TagUnitTests
             modifiedDateTime);
 
         // Act
-        var result = sut.UpdateTag(tagDto, modifiedDateTime);
+        sut.UpdateTag(tagDto, modifiedDateTime);
 
         // Assert
-        result.IsOk.Should().BeTrue();
-        result.Error.Should().BeNull();
-
         sut.Title.Should().Be(NEW_TITLE);
         sut.Color.Should().Be(NEW_COLOR);
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
@@ -162,11 +145,11 @@ public class TagUnitTests
         var anyDateTime = new DateTime();
 
         // Act
-        var result = sut.UpdateTag(tagDto, now: anyDateTime);
+        var action = () => sut.UpdateTag(tagDto, now: anyDateTime);
 
         // Assert
-        result.IsOk.Should().BeFalse();
-        result.Error.Should().NotBeNullOrWhiteSpace();
+        action.Should().Throw<DomainException>()
+            .Which.Message.Should().NotBeNullOrWhiteSpace();
 
         sut.Title.Should().Be(OLD_TITLE);
         sut.Color.Should().Be(OLD_COLOR);
@@ -189,11 +172,11 @@ public class TagUnitTests
         var anyDateTime = new DateTime();
 
         // Act
-        var result = sut.UpdateTag(tagDto, now: anyDateTime);
+        var action = () => sut.UpdateTag(tagDto, now: anyDateTime);
 
         // Assert
-        result.IsOk.Should().BeFalse();
-        result.Error.Should().NotBeNullOrWhiteSpace();
+        action.Should().Throw<DomainException>()
+            .Which.Message.Should().NotBeNullOrWhiteSpace();
 
         sut.Title.Should().Be(OLD_TITLE);
         sut.Color.Should().Be(OLD_COLOR);
@@ -214,12 +197,9 @@ public class TagUnitTests
             ModifiedDateTime: null);
 
         // Act
-        var result = sut.UpdateTag(tagDto, now);
+        sut.UpdateTag(tagDto, now);
 
         // Assert
-        result.IsOk.Should().BeTrue();
-        result.Error.Should().BeNull();
-
         sut.ModifiedDateTime.Should().Be(now);
     }
 
@@ -238,12 +218,9 @@ public class TagUnitTests
             modifiedDateTime);
 
         // Act
-        var result = sut.UpdateTag(tagDto, now);
+        sut.UpdateTag(tagDto, now);
 
         // Assert
-        result.IsOk.Should().BeTrue();
-        result.Error.Should().BeNull();
-
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
     #endregion
@@ -260,8 +237,8 @@ public class TagUnitTests
 
         var tagDto = new TagForCreationDto(title, color, createdDateTime);
 
-        var tagResult = Tag.CreateTag(tagDto, now.Value);
-        return tagResult.Value;
+        var tag = Tag.CreateTag(tagDto, now.Value);
+        return tag;
     }
     #endregion
 }

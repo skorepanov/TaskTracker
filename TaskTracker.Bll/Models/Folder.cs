@@ -16,7 +16,7 @@ public class Folder
         CreatedDateTime = createdDateTime;
     }
 
-    public static Result<Folder> CreateFolder(FolderForCreationDto folderDto, DateTime now)
+    public static Folder CreateFolder(FolderForCreationDto folderDto, DateTime now)
     {
         var validationErrors = new List<string>();
 
@@ -25,17 +25,17 @@ public class Folder
         if (validationErrors.Count > 0)
         {
             var error = string.Join(separator: ", ",  validationErrors);
-            return Result.Failure<Folder>(error);
+            throw new DomainException(error);
         }
 
         var normalizedTitle = folderDto.Title.Trim();
         var createdDateTime = folderDto.CreatedDateTime ?? now;
 
         var folder = new Folder(normalizedTitle, createdDateTime);
-        return Result<Folder>.Success(folder);
+        return folder;
     }
 
-    public Result UpdateFolder(FolderForUpdateDto folderDto, DateTime now)
+    public void UpdateFolder(FolderForUpdateDto folderDto, DateTime now)
     {
         var validationErrors = new List<string>();
 
@@ -44,13 +44,11 @@ public class Folder
         if (validationErrors.Count > 0)
         {
             var error = string.Join(separator: ", ",  validationErrors);
-            return Result.Failure<Folder>(error);
+            throw new DomainException(error);
         }
 
         Title = folderDto.Title.Trim();
         ModifiedDateTime = folderDto.ModifiedDateTime ?? now;
-
-        return Result.Success();
     }
 
     private static void ValidateTitle(string? title, List<string> errors)

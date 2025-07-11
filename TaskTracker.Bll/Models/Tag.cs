@@ -21,7 +21,7 @@ public class Tag
         CreatedDateTime = createdDateTime;
     }
 
-    public static Result<Tag> CreateTag(TagForCreationDto tagDto, DateTime now)
+    public static Tag CreateTag(TagForCreationDto tagDto, DateTime now)
     {
         var validationErrors = new List<string>();
 
@@ -31,7 +31,7 @@ public class Tag
         if (validationErrors.Count > 0)
         {
             var error = string.Join(separator: ", ",  validationErrors);
-            return Result.Failure<Tag>(error);
+            throw new DomainException(error);
         }
 
         var normalizedTitle = tagDto.Title.Trim();
@@ -39,10 +39,10 @@ public class Tag
         var createdDateTime = tagDto.CreatedDateTime ?? now;
 
         var tag = new Tag(normalizedTitle, normalizedColor, createdDateTime);
-        return Result<Tag>.Success(tag);
+        return tag;
     }
 
-    public Result UpdateTag(TagForUpdateDto tagDto, DateTime now)
+    public void UpdateTag(TagForUpdateDto tagDto, DateTime now)
     {
         var validationErrors = new List<string>();
 
@@ -52,14 +52,12 @@ public class Tag
         if (validationErrors.Count > 0)
         {
             var error = string.Join(separator: ", ",  validationErrors);
-            return Result.Failure<Tag>(error);
+            throw new DomainException(error);
         }
 
         Title = tagDto.Title.Trim();
         Color = tagDto.Color.Trim();
         ModifiedDateTime = tagDto.ModifiedDateTime ?? now;
-
-        return Result.Success();
     }
 
     private static void ValidateTitle(string? title, List<string> errors)

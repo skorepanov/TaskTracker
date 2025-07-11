@@ -20,16 +20,11 @@ public class FolderService(
 
     public async Task<FolderVm> CreateFolder(FolderForCreationDto folderDto)
     {
-        var newFolderResult = Folder.CreateFolder(folderDto, dateTimeProvider.UtcNow);
+        var newFolder = Folder.CreateFolder(folderDto, dateTimeProvider.UtcNow);
 
-        if (!newFolderResult.IsOk)
-        {
-            throw new DomainException(newFolderResult.Error ?? string.Empty);
-        }
+        await folderRepository.CreateFolder(newFolder);
 
-        await folderRepository.CreateFolder(newFolderResult.Value);
-
-        var newFolderVm = new FolderVm(newFolderResult.Value);
+        var newFolderVm = new FolderVm(newFolder);
         return newFolderVm;
     }
 
@@ -37,12 +32,7 @@ public class FolderService(
         int folderId, FolderForUpdateDto folderDto)
     {
         var folder = await folderRepository.GetFolder(folderId);
-        var updateResult = folder.UpdateFolder(folderDto, dateTimeProvider.UtcNow);
-
-        if (!updateResult.IsOk)
-        {
-            throw new DomainException(updateResult.Error ?? string.Empty);
-        }
+        folder.UpdateFolder(folderDto, dateTimeProvider.UtcNow);
 
         await folderRepository.UpdateFolder(folder);
 

@@ -20,13 +20,9 @@ public class FolderUnitTests
         var sut = Folder.CreateFolder(folderDto, now: anyDateTime);
 
         // Assert
-        sut.IsOk.Should().BeTrue();
-        sut.Error.Should().BeNull();
-
-        sut.Value.Should().NotBeNull();
-        sut.Value.Title.Should().Be(TITLE);
-        sut.Value.CreatedDateTime.Should().Be(createdDateTime);
-        sut.Value.ModifiedDateTime.Should().BeNull();
+        sut.Title.Should().Be(TITLE);
+        sut.CreatedDateTime.Should().Be(createdDateTime);
+        sut.ModifiedDateTime.Should().BeNull();
     }
 
     [Fact]
@@ -40,12 +36,11 @@ public class FolderUnitTests
         var anyDateTime = new DateTime();
 
         // Act
-        var sut = Folder.CreateFolder(folderDto, now: anyDateTime);
+        var action = () => Folder.CreateFolder(folderDto, now: anyDateTime);
 
         // Assert
-        sut.IsOk.Should().BeFalse();
-        sut.Value.Should().BeNull();
-        sut.Error.Should().NotBeNullOrWhiteSpace();
+        action.Should().Throw<DomainException>()
+            .Which.Message.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -62,11 +57,7 @@ public class FolderUnitTests
         var sut = Folder.CreateFolder(folderDto, now);
 
         // Assert
-        sut.IsOk.Should().BeTrue();
-        sut.Error.Should().BeNull();
-
-        sut.Value.Should().NotBeNull();
-        sut.Value.CreatedDateTime.Should().Be(now);
+        sut.CreatedDateTime.Should().Be(now);
     }
 
     [Fact]
@@ -84,11 +75,7 @@ public class FolderUnitTests
         var sut = Folder.CreateFolder(folderDto, now);
 
         // Assert
-        sut.IsOk.Should().BeTrue();
-        sut.Error.Should().BeNull();
-
-        sut.Value.Should().NotBeNull();
-        sut.Value.CreatedDateTime.Should().Be(createdDateTime);
+        sut.CreatedDateTime.Should().Be(createdDateTime);
     }
     #endregion
 
@@ -107,12 +94,9 @@ public class FolderUnitTests
             modifiedDateTime);
 
         // Act
-        var result = sut.UpdateFolder(folderDto, modifiedDateTime);
+        sut.UpdateFolder(folderDto, modifiedDateTime);
 
         // Assert
-        result.IsOk.Should().BeTrue();
-        result.Error.Should().BeNull();
-
         sut.Title.Should().Be(NEW_TITLE);
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
@@ -131,11 +115,11 @@ public class FolderUnitTests
         var anyDateTime = new DateTime();
 
         // Act
-        var result = sut.UpdateFolder(folderDto, now: anyDateTime);
+        var action = () => sut.UpdateFolder(folderDto, now: anyDateTime);
 
         // Assert
-        result.IsOk.Should().BeFalse();
-        result.Error.Should().NotBeNullOrWhiteSpace();
+        action.Should().Throw<DomainException>()
+            .Which.Message.Should().NotBeNullOrWhiteSpace();
 
         sut.Title.Should().Be(OLD_TITLE);
         sut.ModifiedDateTime.Should().BeNull();
@@ -154,12 +138,9 @@ public class FolderUnitTests
             ModifiedDateTime: null);
 
         // Act
-        var result = sut.UpdateFolder(folderDto, now);
+        sut.UpdateFolder(folderDto, now);
 
         // Assert
-        result.IsOk.Should().BeTrue();
-        result.Error.Should().BeNull();
-
         sut.ModifiedDateTime.Should().Be(now);
     }
 
@@ -177,12 +158,9 @@ public class FolderUnitTests
             modifiedDateTime);
 
         // Act
-        var result = sut.UpdateFolder(folderDto, now);
+        sut.UpdateFolder(folderDto, now);
 
         // Assert
-        result.IsOk.Should().BeTrue();
-        result.Error.Should().BeNull();
-
         sut.ModifiedDateTime.Should().Be(modifiedDateTime);
     }
     #endregion
@@ -198,8 +176,8 @@ public class FolderUnitTests
 
         var folderDto = new FolderForCreationDto(title, createdDateTime.Value);
 
-        var folderResult = Folder.CreateFolder(folderDto, now.Value);
-        return folderResult.Value;
+        var folder = Folder.CreateFolder(folderDto, now.Value);
+        return folder;
     }
     #endregion
 }

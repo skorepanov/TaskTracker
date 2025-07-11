@@ -34,8 +34,7 @@ public class UserTask
         CreatedDateTime = createdDateTime;
     }
 
-    public static Result<UserTask> CreateTask(
-        UserTaskForCreationDto userTaskDto, DateTime now)
+    public static UserTask CreateTask(UserTaskForCreationDto userTaskDto, DateTime now)
     {
         var validationErrors = new List<string>();
 
@@ -44,7 +43,7 @@ public class UserTask
         if (validationErrors.Count > 0)
         {
             var error = string.Join(separator: ", ",  validationErrors);
-            return Result.Failure<UserTask>(error);
+            throw new DomainException(error);
         }
 
         var normalizedTitle = userTaskDto.Title.Trim();
@@ -56,10 +55,10 @@ public class UserTask
             userTaskDto.DueDateTime,
             createdDateTime);
 
-        return Result<UserTask>.Success(task);
+        return task;
     }
 
-    public Result UpdateTask(
+    public void UpdateTask(
         UserTaskForUpdateDto userTaskDto, DateTime now, IEnumerable<Tag> tags)
     {
         var validationErrors = new List<string>();
@@ -69,7 +68,7 @@ public class UserTask
         if (validationErrors.Count > 0)
         {
             var error = string.Join(separator: ", ",  validationErrors);
-            return Result.Failure<UserTask>(error);
+            throw new DomainException(error);
         }
 
         Title = userTaskDto.Title.Trim();
@@ -78,8 +77,6 @@ public class UserTask
         Tags = tags.ToList();
         DueDateTime = userTaskDto.DueDateTime;
         ModifiedDateTime = userTaskDto.ModifiedDateTime ?? now;
-
-        return Result.Success();
     }
 
     private static void ValidateTitle(string? title, List<string> errors)
