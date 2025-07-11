@@ -109,33 +109,29 @@ public class UserTask
         return (DueDateTime.Value - today).Duration().Days;
     }
 
-    public Result MoveToTrash(DateTime movedToTrashDateTime)
+    public void MoveToTrash(DateTime movedToTrashDateTime)
     {
         if (IsInTrash)
         {
             var error = ErrorMessages.UserTaskIsInTrashAlready(Id);
-            return Result.Failure(error);
+            throw new DomainException(error);
         }
 
         MovedToTrashDateTime = movedToTrashDateTime;
         ModifiedDateTime = movedToTrashDateTime;
         FolderId = null;
-
-        return Result.Success();
     }
 
-    public Result MoveFromTrash(DateTime modifiedDateTime, int? folderId)
+    public void MoveFromTrash(DateTime modifiedDateTime, int? folderId)
     {
         if (!IsInTrash)
         {
             var error = ErrorMessages.UserTaskIsNotInTrash(Id);
-            return Result.Failure(error);
+            throw new DomainException(error);
         }
 
         MovedToTrashDateTime = null;
         ModifiedDateTime = modifiedDateTime;
         FolderId = folderId;
-
-        return Result.Success();
     }
 }

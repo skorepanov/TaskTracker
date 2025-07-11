@@ -143,12 +143,7 @@ public class TaskService(
 
         var movedToTrashDateTime
             = userTaskDto.MovedToTrashDateTime ?? dateTimeProvider.UtcNow;
-        var moveToTrashResult = task.MoveToTrash(movedToTrashDateTime);
-
-        if (!moveToTrashResult.IsOk)
-        {
-            throw new DomainException(moveToTrashResult.Error ?? string.Empty);
-        }
+        task.MoveToTrash(movedToTrashDateTime);
 
         await taskRepository.UpdateTask(task);
 
@@ -175,13 +170,7 @@ public class TaskService(
 
         var modifiedDateTime
             = userTaskDto.ModifiedDateTime ?? dateTimeProvider.UtcNow;
-
-        var moveFromTrashResult = task.MoveFromTrash(modifiedDateTime, folderId);
-
-        if (!moveFromTrashResult.IsOk)
-        {
-            throw new DomainException(moveFromTrashResult.Error ?? string.Empty);
-        }
+        task.MoveFromTrash(modifiedDateTime, folderId);
 
         await taskRepository.UpdateTask(task);
 
