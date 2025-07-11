@@ -2,7 +2,7 @@
 
 public interface ITaskRepository
 {
-    Task<UserTask?> GetTask(int taskId);
+    Task<UserTask> GetTask(int taskId);
 
     Task<IReadOnlyList<UserTask>> GetIncompletedTasks();
 

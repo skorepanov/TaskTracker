@@ -7,13 +7,6 @@ public class FolderService(
     public async Task<Result<FolderVm>> GetFolderById(int folderId)
     {
         var folder = await folderRepository.GetFolder(folderId);
-
-        if (folder is null)
-        {
-            var error = ErrorMessages.FolderNotFound(folderId);
-            return Result.Failure<FolderVm>(error);
-        }
-
         var folderVm = new FolderVm(folder);
         return Result<FolderVm>.Success(folderVm);
     }
@@ -44,13 +37,6 @@ public class FolderService(
         int folderId, FolderForUpdateDto folderDto)
     {
         var folder = await folderRepository.GetFolder(folderId);
-
-        if (folder is null)
-        {
-            var error = ErrorMessages.FolderNotFound(folderId);
-            return Result.Failure<FolderVm>(error);
-        }
-
         var updateResult = folder.UpdateFolder(folderDto, dateTimeProvider.UtcNow);
 
         if (!updateResult.IsOk)
@@ -67,15 +53,7 @@ public class FolderService(
     public async Task<Result> DeleteFolder(int folderId)
     {
         var folder = await folderRepository.GetFolder(folderId);
-
-        if (folder is null)
-        {
-            var error = ErrorMessages.FolderNotFound(folderId);
-            return Result.Failure(error);
-        }
-
         await folderRepository.DeleteFolder(folder);
-
         return Result.Success();
     }
 }

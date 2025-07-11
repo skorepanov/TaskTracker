@@ -2,9 +2,22 @@
 
 public class FolderRepository(ApplicationContext db) : IFolderRepository
 {
-    public async Task<Folder?> GetFolder(int folderId)
+    public async Task<bool> IsFolderExists(int folderId)
     {
-        return await db.Folders.SingleOrDefaultAsync(f => f.Id == folderId);
+        return await db.Folders.AnyAsync(f => f.Id == folderId);
+    }
+
+    public async Task<Folder> GetFolder(int folderId)
+    {
+        var folder = await db.Folders.SingleOrDefaultAsync(f => f.Id == folderId);
+
+        if (folder is null)
+        {
+            var error = ErrorMessages.FolderNotFound(folderId);
+            throw new DomainEntityNotFoundException(error);
+        }
+
+        return folder;
     }
 
     public async Task<IReadOnlyList<Folder>> GetFolders()

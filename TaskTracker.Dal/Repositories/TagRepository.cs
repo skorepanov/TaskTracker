@@ -2,9 +2,17 @@
 
 public class TagRepository(ApplicationContext db) : ITagRepository
 {
-    public async Task<Tag?> GetTag(int tagId)
+    public async Task<Tag> GetTag(int tagId)
     {
-        return await db.Tags.SingleOrDefaultAsync(t => t.Id == tagId);
+        var tag = await db.Tags.SingleOrDefaultAsync(t => t.Id == tagId);
+
+        if (tag is null)
+        {
+            var error = ErrorMessages.TagNotFound(tagId);
+            throw new DomainEntityNotFoundException(error);
+        }
+
+        return tag;
     }
 
     public async Task<IReadOnlyList<Tag>> GetTags()

@@ -2,7 +2,9 @@
 
 public interface IFolderRepository
 {
-    Task<Folder?> GetFolder(int folderId);
+    Task<bool> IsFolderExists(int folderId);
+
+    Task<Folder> GetFolder(int folderId);
 
     Task<IReadOnlyList<Folder>> GetFolders();
 

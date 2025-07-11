@@ -7,13 +7,6 @@ public class TagService(
     public async Task<Result<TagVm>> GetTagById(int tagId)
     {
         var tag = await tagRepository.GetTag(tagId);
-
-        if (tag is null)
-        {
-            var error = ErrorMessages.TagNotFound(tagId);
-            return Result.Failure<TagVm>(error);
-        }
-
         var tagVm = new TagVm(tag);
         return Result<TagVm>.Success(tagVm);
     }
@@ -43,13 +36,6 @@ public class TagService(
     public async Task<Result<TagVm>> UpdateTag(int tagId, TagForUpdateDto tagDto)
     {
         var tag = await tagRepository.GetTag(tagId);
-
-        if (tag is null)
-        {
-            var error = ErrorMessages.TagNotFound(tagId);
-            return Result.Failure<TagVm>(error);
-        }
-
         var updateResult = tag.UpdateTag(tagDto, dateTimeProvider.UtcNow);
 
         if (!updateResult.IsOk)
@@ -66,15 +52,7 @@ public class TagService(
     public async Task<Result> DeleteTag(int tagId)
     {
         var tag = await tagRepository.GetTag(tagId);
-
-        if (tag is null)
-        {
-            var error = ErrorMessages.TagNotFound(tagId);
-            return Result.Failure(error);
-        }
-
         await tagRepository.DeleteTag(tag);
-
         return Result.Success();
     }
 }

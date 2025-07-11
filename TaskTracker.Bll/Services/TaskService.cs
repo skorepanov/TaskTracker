@@ -9,13 +9,6 @@ public class TaskService(
     public async Task<Result<UserTaskVm>> GetTaskById(int taskId)
     {
         var task = await taskRepository.GetTask(taskId);
-
-        if (task is null)
-        {
-            var error = ErrorMessages.UserTaskNotFound(taskId);
-            return Result.Failure<UserTaskVm>(error);
-        }
-
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
         return Result<UserTaskVm>.Success(taskVm);
     }
@@ -56,9 +49,9 @@ public class TaskService(
 
         if (folderId is not null)
         {
-            var folder = await folderRepository.GetFolder(folderId.Value);
+            var isFolderExists = await folderRepository.IsFolderExists(folderId.Value);
 
-            if (folder is null)
+            if (!isFolderExists)
             {
                 var error = ErrorMessages.FolderNotFound(folderId.Value);
                 return Result.Failure<UserTaskVm>(error);
@@ -82,20 +75,13 @@ public class TaskService(
         int taskId, UserTaskForUpdateDto userTaskDto)
     {
         var task = await taskRepository.GetTask(taskId);
-
-        if (task is null)
-        {
-            var error = ErrorMessages.UserTaskNotFound(taskId);
-            return Result.Failure<UserTaskVm>(error);
-        }
-
         var folderId = userTaskDto.FolderId;
 
         if (folderId is not null)
         {
-            var folder = await folderRepository.GetFolder(folderId.Value);
+            var isFolderExists = await folderRepository.IsFolderExists(folderId.Value);
 
-            if (folder is null)
+            if (!isFolderExists)
             {
                 var error = ErrorMessages.FolderNotFound(folderId.Value);
                 return Result.Failure<UserTaskVm>(error);
@@ -138,15 +124,9 @@ public class TaskService(
     {
         var task = await taskRepository.GetTask(taskId);
 
-        if (task is null)
-        {
-            var error = ErrorMessages.UserTaskNotFound(taskId);
-            return Result.Failure<UserTaskVm>(error);
-        }
-
         var completedDateTime = userTaskDto.CompletedDateTime ?? dateTimeProvider.UtcNow;
-
         task.Complete(completedDateTime);
+
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
@@ -158,15 +138,9 @@ public class TaskService(
     {
         var task = await taskRepository.GetTask(taskId);
 
-        if (task is null)
-        {
-            var error = ErrorMessages.UserTaskNotFound(taskId);
-            return Result.Failure<UserTaskVm>(error);
-        }
-
         var modifiedDateTime = userTaskDto.ModifiedDateTime ?? dateTimeProvider.UtcNow;
-
         task.Incomplete(modifiedDateTime);
+
         await taskRepository.UpdateTask(task);
 
         var taskVm = new UserTaskVm(task, dateTimeProvider.UtcNow);
@@ -178,15 +152,8 @@ public class TaskService(
     {
         var task = await taskRepository.GetTask(taskId);
 
-        if (task is null)
-        {
-            var error = ErrorMessages.UserTaskNotFound(taskId);
-            return Result.Failure<UserTaskVm>(error);
-        }
-
         var movedToTrashDateTime
             = userTaskDto.MovedToTrashDateTime ?? dateTimeProvider.UtcNow;
-
         var moveToTrashResult = task.MoveToTrash(movedToTrashDateTime);
 
         if (!moveToTrashResult.IsOk)
@@ -205,20 +172,13 @@ public class TaskService(
         int taskId, UserTaskForMoveFromTrashDto userTaskDto)
     {
         var task = await taskRepository.GetTask(taskId);
-
-        if (task is null)
-        {
-            var error = ErrorMessages.UserTaskNotFound(taskId);
-            return Result.Failure<UserTaskVm>(error);
-        }
-
         var folderId = userTaskDto.FolderId;
 
         if (folderId is not null)
         {
-            var folder = await folderRepository.GetFolder(folderId.Value);
+            var isFolderExists = await folderRepository.IsFolderExists(folderId.Value);
 
-            if (folder is null)
+            if (!isFolderExists)
             {
                 var error = ErrorMessages.FolderNotFound(folderId.Value);
                 return Result.Failure<UserTaskVm>(error);
@@ -245,12 +205,6 @@ public class TaskService(
     public async Task<Result> DeleteTask(int taskId)
     {
         var task = await taskRepository.GetTask(taskId);
-
-        if (task is null)
-        {
-            var error = ErrorMessages.UserTaskNotFound(taskId);
-            return Result.Failure<UserTaskVm>(error);
-        }
 
         if (task.MovedToTrashDateTime is null)
         {

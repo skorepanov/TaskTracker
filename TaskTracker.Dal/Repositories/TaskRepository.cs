@@ -2,10 +2,17 @@
 
 public class TaskRepository(ApplicationContext db) : ITaskRepository
 {
-    public async Task<UserTask?> GetTask(int taskId)
+    public async Task<UserTask> GetTask(int taskId)
     {
-        return await GetTasksWithTags()
-            .SingleOrDefaultAsync(t => t.Id == taskId);
+        var task = await GetTasksWithTags().SingleOrDefaultAsync(t => t.Id == taskId);
+
+        if (task is null)
+        {
+            var error = ErrorMessages.UserTaskNotFound(taskId);
+            throw new DomainEntityNotFoundException(error);
+        }
+
+        return task;
     }
 
     public async Task<IReadOnlyList<UserTask>> GetIncompletedTasks()
