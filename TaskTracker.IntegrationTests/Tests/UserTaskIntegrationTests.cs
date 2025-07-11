@@ -4,7 +4,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     : IntegrationTestBase(factory)
 {
     [Fact]
-    public async Task GetTaskById()
+    public async Task GetTaskByIdWhenTaskExists()
     {
         // Arrange
         var folder = await CreateFolderInDatabase();
@@ -49,6 +49,27 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.TagIds.Should().BeNull();
         responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
         responseTask.ModifiedDateTime.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetTaskByIdWhenTaskNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_TASK_ID = 1;
+
+        // Act
+        var response = await Client.GetAsync(
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
     }
 
     [Fact]
@@ -166,7 +187,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task CreateTask()
+    public async Task CreateTaskWithValidData()
     {
         // Arrange
         var folder = await CreateFolderInDatabase();
@@ -223,7 +244,33 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task UpdateTask()
+    public async Task CreateTaskWithInvalidData()
+    {
+        // Arrange
+        const string INVALID_TITLE = "   \t   \n   ";
+        var anyDateTime = new DateTime();
+        var creationDto = new UserTaskForCreationDto(
+            INVALID_TITLE, FolderId: null, DueDateTime: null, CreatedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PostAsJsonAsync(requestUri: "/api/tasks", creationDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+
+        var dbTasks = await GetTasksFromDatabase();
+        dbTasks.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task UpdateTaskWithValidDataWhenTaskExists()
     {
         // Arrange
         var oldDueDateTime = new DateTime(
@@ -296,6 +343,90 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         dbTask.Tags.Select(t => t.Id).ToList().Should().BeEquivalentTo([tagId1.Id, tagId2.Id]);
         dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
         dbTask.ModifiedDateTime.Should().Be(utcNow);
+    }
+
+    [Fact]
+    public async Task UpdateTaskWhenTaskNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_TASK_ID = 1;
+
+        var anyDateTime = new DateTime();
+        var updateDto = new UserTaskForUpdateDto(
+            Title: "New task title",
+            Description: "New task description",
+            FolderId: null,
+            TagIds: null,
+            DueDateTime: null,
+            ModifiedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}", updateDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateTaskWithInvalidData()
+    {
+        // Arrange
+        const string OLD_TASK_TITLE = "Old task title";
+        var oldDueDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        var createdDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 2,
+            DateTimeKind.Utc);
+        var task = await CreateTaskInDatabase(
+            OLD_TASK_TITLE, folderId: null, oldDueDateTime, createdDateTime);
+
+        const string INVALID_TITLE = "   \t   \n   ";
+        var anyDateTime = new DateTime();
+        var updateDto = new UserTaskForUpdateDto(
+            INVALID_TITLE,
+            Description: null,
+            FolderId: null,
+            TagIds: null,
+            DueDateTime: null,
+            ModifiedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{task.Id}", updateDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+
+        var dbTasks = await GetTasksFromDatabase();
+        dbTasks.Should().HaveCount(1);
+
+        var dbTask = dbTasks.Single();
+        dbTask.Id.Should().Be(task.Id);
+        dbTask.Title.Should().Be(OLD_TASK_TITLE);
+        dbTask.Description.Should().BeNull();
+        dbTask.FolderId.Should().BeNull();
+        dbTask.CompletedDateTime.Should().BeNull();
+        dbTask.DueDateTime.Should().Be(oldDueDateTime);
+        dbTask.MovedToTrashDateTime.Should().BeNull();
+        dbTask.Tags.Should().BeEmpty();
+        dbTask.CreatedDateTime.Should().Be(createdDateTime);
+        dbTask.ModifiedDateTime.Should().BeNull();
     }
 
     [Fact]
@@ -531,7 +662,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task DeleteTask()
+    public async Task DeleteTaskWhenTaskExists()
     {
         // Arrange
         var taskToDelete = await CreateTaskInTrashInDatabase();
@@ -553,6 +684,26 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         var dbTasks = await GetTasksFromDatabase();
         dbTasks.Should().HaveCount(1);
         dbTasks.Single().Id.Should().Be(otherTask.Id);
+    }
+
+    [Fact]
+    public async Task DeleteTaskWhenTaskNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_TASK_ID = 1;
+
+        // Act
+        var response = await Client
+            .DeleteAsync(requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
     }
 
     #region helpers

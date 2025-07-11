@@ -186,7 +186,7 @@ public class UserTaskUnitTests
         // Assert
         sut.IsOk.Should().BeFalse();
         sut.Value.Should().BeNull();
-        sut.Error.Should().NotBeNull();
+        sut.Error.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -301,7 +301,7 @@ public class UserTaskUnitTests
 
         // Assert
         result.IsOk.Should().BeFalse();
-        result.Error.Should().NotBeNull();
+        result.Error.Should().NotBeNullOrWhiteSpace();
 
         sut.Title.Should().Be(OLD_TITLE);
         sut.Description.Should().BeNull();
@@ -457,7 +457,7 @@ public class UserTaskUnitTests
         result1.Error.Should().BeNull();
 
         result2.IsOk.Should().BeFalse();
-        result2.Error.Should().NotBeNull();
+        result2.Error.Should().NotBeNullOrWhiteSpace();
 
         sut.MovedToTrashDateTime.Should().Be(oldMovedToTrashDateTime);
         sut.IsInTrash.Should().BeTrue();
@@ -541,7 +541,7 @@ public class UserTaskUnitTests
         result1.Error.Should().BeNull();
 
         result2.IsOk.Should().BeFalse();
-        result2.Error.Should().NotBeNull();
+        result2.Error.Should().NotBeNullOrWhiteSpace();
 
         sut.MovedToTrashDateTime.Should().BeNull();
         sut.IsInTrash.Should().BeFalse();

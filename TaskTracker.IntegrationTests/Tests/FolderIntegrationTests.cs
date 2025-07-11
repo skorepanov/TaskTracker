@@ -4,7 +4,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     : IntegrationTestBase(factory)
 {
     [Fact]
-    public async Task GetFolderById()
+    public async Task GetFolderByIdWhenFolderExists()
     {
         // Arrange
         var createdDateTime = new DateTime(
@@ -32,6 +32,27 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         responseFolder.Title.Should().Be(folder.Title);
         responseFolder.CreatedDateTime.Should().Be(folder.CreatedDateTime);
         responseFolder.ModifiedDateTime.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetFolderByIdWhenFolderNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_FOLDER_ID = 1;
+
+        // Act
+        var response = await Client.GetAsync(
+            requestUri: $"/api/folders/{NON_EXISTENT_FOLDER_ID}");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
     }
 
     [Fact]
@@ -76,7 +97,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task CreateFolder()
+    public async Task CreateFolderWithValidData()
     {
         // Arrange
         var creationDto = new FolderForCreationDto(Title: "Folder title", CreatedDateTime: null);
@@ -115,7 +136,33 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task UpdateFolder()
+    public async Task CreateFolderWithInvalidData()
+    {
+        // Arrange
+        const string INVALID_TITLE = "   \t   \n   ";
+        var anyDateTime = new DateTime();
+        var creationDto = new FolderForCreationDto(
+            INVALID_TITLE, CreatedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PostAsJsonAsync(requestUri: "api/folders", creationDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+
+        var dbFolders = await GetFoldersFromDatabase();
+        dbFolders.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task UpdateFolderWithValidDataWhenFolderExists()
     {
         // Arrange
         var createdDateTime = new DateTime(
@@ -161,7 +208,71 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task DeleteFolder()
+    public async Task UpdateFolderWhenFolderNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_FOLDER_ID = 1;
+
+        var anyDateTime = new DateTime();
+        var updateDto = new FolderForUpdateDto(
+            Title: "New folder title", ModifiedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/folders/{NON_EXISTENT_FOLDER_ID}", updateDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateFolderWithInvalidData()
+    {
+        // Arrange
+        const string OLD_TITLE = "Old folder title";
+        var createdDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        var folder = await CreateFolderInDatabase(OLD_TITLE, createdDateTime);
+
+        const string INVALID_TITLE = "   \t   \n   ";
+        var anyDateTime = new DateTime();
+        var updateDto = new FolderForUpdateDto(
+            INVALID_TITLE, ModifiedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/folders/{folder.Id}", updateDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+
+        var dbFolders = await GetFoldersFromDatabase();
+        dbFolders.Should().HaveCount(1);
+
+        var dbFolder = dbFolders.Single();
+        dbFolder.Id.Should().Be(folder.Id);
+        dbFolder.Title.Should().Be(OLD_TITLE);
+        dbFolder.CreatedDateTime.Should().Be(createdDateTime);
+        dbFolder.ModifiedDateTime.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task DeleteFolderWhenFolderExists()
     {
         // Arrange
         var folderToDelete = await CreateFolderInDatabase();
@@ -183,6 +294,26 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         var dbFolders = await GetFoldersFromDatabase();
         dbFolders.Should().HaveCount(1);
         dbFolders.Single().Id.Should().Be(otherFolder.Id);
+    }
+
+    [Fact]
+    public async Task DeleteFolderWhenFolderNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_FOLDER_ID = 1;
+
+        // Act
+        var response = await Client
+            .DeleteAsync(requestUri: $"/api/folders/{NON_EXISTENT_FOLDER_ID}");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
     }
 
     #region helpers

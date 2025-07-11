@@ -49,7 +49,7 @@ public class TagUnitTests
         // Assert
         sut.IsOk.Should().BeFalse();
         sut.Value.Should().BeNull();
-        sut.Error.Should().NotBeNull();
+        sut.Error.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public class TagUnitTests
         // Assert
         sut.IsOk.Should().BeFalse();
         sut.Value.Should().BeNull();
-        sut.Error.Should().NotBeNull();
+        sut.Error.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -166,7 +166,7 @@ public class TagUnitTests
 
         // Assert
         result.IsOk.Should().BeFalse();
-        result.Error.Should().NotBeNull();
+        result.Error.Should().NotBeNullOrWhiteSpace();
 
         sut.Title.Should().Be(OLD_TITLE);
         sut.Color.Should().Be(OLD_COLOR);
@@ -193,7 +193,7 @@ public class TagUnitTests
 
         // Assert
         result.IsOk.Should().BeFalse();
-        result.Error.Should().NotBeNull();
+        result.Error.Should().NotBeNullOrWhiteSpace();
 
         sut.Title.Should().Be(OLD_TITLE);
         sut.Color.Should().Be(OLD_COLOR);

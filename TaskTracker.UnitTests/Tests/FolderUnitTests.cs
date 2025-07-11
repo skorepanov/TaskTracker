@@ -45,7 +45,7 @@ public class FolderUnitTests
         // Assert
         sut.IsOk.Should().BeFalse();
         sut.Value.Should().BeNull();
-        sut.Error.Should().NotBeNull();
+        sut.Error.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -135,7 +135,7 @@ public class FolderUnitTests
 
         // Assert
         result.IsOk.Should().BeFalse();
-        result.Error.Should().NotBeNull();
+        result.Error.Should().NotBeNullOrWhiteSpace();
 
         sut.Title.Should().Be(OLD_TITLE);
         sut.ModifiedDateTime.Should().BeNull();

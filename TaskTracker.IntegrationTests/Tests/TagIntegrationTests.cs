@@ -4,13 +4,14 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
     : IntegrationTestBase(factory)
 {
     [Fact]
-    public async Task GetTagById()
+    public async Task GetTagByIdWhenTagExists()
     {
         // Arrange
         var createdDateTime = new DateTime(
             year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
             DateTimeKind.Utc);
-        var tag = await CreateTagInDatabase(title: "Tag title", color: "123456", createdDateTime);
+        var tag = await CreateTagInDatabase(
+            title: "Tag title", color: "123456", createdDateTime);
 
         var otherTag = await CreateTagInDatabase();
 
@@ -33,6 +34,27 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         responseTag.Color.Should().Be(tag.Color);
         responseTag.CreatedDateTime.Should().Be(tag.CreatedDateTime);
         responseTag.ModifiedDateTime.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetTagByIdWhenTagNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_TAG_ID = 1;
+
+        // Act
+        var response = await Client.GetAsync(
+            requestUri: $"/api/tags/{NON_EXISTENT_TAG_ID}");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
     }
 
     [Fact]
@@ -81,7 +103,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task CreateTag()
+    public async Task CreateTagWithValidData()
     {
         // Arrange
         var creationDto = new TagForCreationDto(
@@ -122,7 +144,34 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task UpdateTag()
+    public async Task CreateTagWithInvalidData()
+    {
+        // Arrange
+        const string INVALID_TITLE = "   \t   \n   ";
+        const string INVALID_COLOR = "   \t   \n   ";
+        var anyDateTime = new DateTime();
+        var creationDto = new TagForCreationDto(
+            INVALID_TITLE, INVALID_COLOR, CreatedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PostAsJsonAsync(requestUri: "/api/tags", creationDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+
+        var dbTags = await GetTagsFromDatabase();
+        dbTags.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task UpdateTagWithValidDataWhenTagExists()
     {
         // Arrange
         var createdDateTime = new DateTime(
@@ -172,7 +221,74 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task DeleteTag()
+    public async Task UpdateTagWhenTagNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_TAG_ID = 1;
+
+        var anyDateTime = new DateTime();
+        var updateDto = new TagForUpdateDto(
+            Title: "New folder title", Color: "424242", ModifiedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tags/{NON_EXISTENT_TAG_ID}", updateDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateTagWithInvalidData()
+    {
+        // Arrange
+        const string OLD_TITLE = "Old tag title";
+        const string OLD_COLOR = "111111";
+        var createdDateTime = new DateTime(
+            year: 2025, month: 7, day: 1, hour: 1, minute: 1, second: 1,
+            DateTimeKind.Utc);
+        var tag = await CreateTagInDatabase(OLD_TITLE, OLD_COLOR, createdDateTime);
+
+        const string INVALID_TITLE = "   \t   \n   ";
+        const string INVALID_COLOR = "   \t   \n   ";
+        var anyDateTime = new DateTime();
+        var updateDto = new TagForUpdateDto(
+            INVALID_TITLE, INVALID_COLOR, ModifiedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tags/{tag.Id}", updateDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+
+        var dbTags = await GetTagsFromDatabase();
+        dbTags.Should().HaveCount(1);
+
+        var dbTag = dbTags.Single();
+        dbTag.Id.Should().Be(tag.Id);
+        dbTag.Title.Should().Be(OLD_TITLE);
+        dbTag.Color.Should().Be(OLD_COLOR);
+        dbTag.CreatedDateTime.Should().Be(createdDateTime);
+        dbTag.ModifiedDateTime.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task DeleteTagWhenTagExists()
     {
         // Arrange
         var tagToDelete = await CreateTagInDatabase();
@@ -194,6 +310,26 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         var dbTags = await GetTagsFromDatabase();
         dbTags.Should().HaveCount(1);
         dbTags.Single().Id.Should().Be(otherTag.Id);
+    }
+
+    [Fact]
+    public async Task DeleteTagWhenTagNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_TAG_ID = 1;
+
+        // Act
+        var response = await Client
+            .DeleteAsync(requestUri: $"/api/tags/{NON_EXISTENT_TAG_ID}");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
     }
 
     #region helpers
