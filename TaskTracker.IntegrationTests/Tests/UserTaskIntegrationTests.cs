@@ -424,13 +424,13 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         dbTask.CompletedDateTime.Should().BeNull();
         dbTask.DueDateTime.Should().Be(oldDueDateTime);
         dbTask.MovedToTrashDateTime.Should().BeNull();
-        dbTask.Tags.Should().BeEmpty();
+        dbTask.Tags.Should().BeNullOrEmpty();
         dbTask.CreatedDateTime.Should().Be(createdDateTime);
         dbTask.ModifiedDateTime.Should().BeNull();
     }
 
     [Fact]
-    public async Task CompleteTask()
+    public async Task CompleteTaskWhenTaskExists()
     {
         // Arrange
         var folder = await CreateFolderInDatabase();
@@ -486,7 +486,30 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task IncompleteTask()
+    public async Task CompleteTaskWhenTaskNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_TASK_ID = 1;
+        var anyDateTime = new DateTime();
+        var completeDto = new UserTaskForCompleteDto(CompletedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/completed", completeDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task IncompleteTaskWhenTaskExists()
     {
         // Arrange
         var folder = await CreateFolderInDatabase();
@@ -542,7 +565,30 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task MoveTaskToTrash()
+    public async Task IncompleteTaskWhenTaskNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_TASK_ID = 1;
+        var anyDateTime = new DateTime();
+        var completeDto = new UserTaskForIncompleteDto(ModifiedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/incompleted", completeDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task MoveTaskToTrashWhenTaskExists()
     {
         // Arrange
         var folder = await CreateFolderInDatabase();
@@ -606,7 +652,30 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     }
 
     [Fact]
-    public async Task MoveTaskFromTrash()
+    public async Task MoveTaskToTrashWhenTaskNotExists()
+    {
+        // Arrange
+        const int NON_EXISTENT_TASK_ID = 1;
+        var anyDateTime = new DateTime();
+        var moveToTrashDto = new UserTaskForMoveToTrashDto(MovedToTrashDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/movedToTrash", moveToTrashDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task MoveTaskFromTrashWhenTaskAndFolderExist()
     {
         // Arrange
         var task = await CreateTaskInTrashInDatabase();
@@ -659,6 +728,70 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         dbTask.Tags.Should().BeNullOrEmpty();
         dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
         dbTask.ModifiedDateTime.Should().Be(utcNow);
+    }
+
+    [Fact]
+    public async Task MoveTaskFromTrashWhenTaskNotExits()
+    {
+        // Arrange
+        const int NON_EXISTENT_TASK_ID = 1;
+        var anyDateTime = new DateTime();
+        var moveToTrashDto = new UserTaskForMoveToTrashDto(MovedToTrashDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/movedFromTrash", moveToTrashDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task MoveTaskFromTrashWhenFolderNotExists()
+    {
+        // Arrange
+        var task = await CreateTaskInTrashInDatabase();
+
+        const int NON_EXISTENT_FOLDER_ID = 1;
+        var anyDateTime = new DateTime();
+        var moveFromTrashDto = new UserTaskForMoveFromTrashDto(
+            NON_EXISTENT_FOLDER_ID, ModifiedDateTime: anyDateTime);
+
+        // Act
+        var response = await Client.PutAsJsonAsync(
+            requestUri: $"/api/tasks/{task.Id}/movedFromTrash", moveFromTrashDto);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+
+        content.Should().NotBeNull();
+        content.IsOk.Should().BeFalse();
+        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.Value.Should().BeNull();
+
+        var dbTasks = await GetTasksFromDatabase();
+        dbTasks.Should().HaveCount(1);
+
+        var dbTask = dbTasks.Single();
+        dbTask.Id.Should().Be(task.Id);
+        dbTask.Title.Should().Be(task.Title);
+        dbTask.Description.Should().BeNull();
+        dbTask.FolderId.Should().BeNull();
+        dbTask.CompletedDateTime.Should().BeNull();
+        dbTask.DueDateTime.Should().Be(task.DueDateTime);
+        dbTask.MovedToTrashDateTime.Should().Be(task.MovedToTrashDateTime);
+        dbTask.Tags.Should().BeNullOrEmpty();
+        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.Should().Be(task.ModifiedDateTime);
     }
 
     [Fact]
