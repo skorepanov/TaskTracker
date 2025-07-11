@@ -285,10 +285,11 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result>();
+        var content = await response.Content.ReadFromJsonAsync<Result<bool>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
+        content.Value.Should().BeTrue();
         content.Error.Should().BeNull();
 
         var dbFolders = await GetFoldersFromDatabase();
@@ -309,10 +310,11 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result>();
+        var content = await response.Content.ReadFromJsonAsync<Result<bool>>();
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
+        content.Value.Should().BeFalse();
         content.Error.Should().NotBeNullOrWhiteSpace();
     }
 

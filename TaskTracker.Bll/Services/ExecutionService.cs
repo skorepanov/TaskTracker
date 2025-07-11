@@ -11,7 +11,7 @@ public class ExecutionService
         }
         catch (Exception e)
         {
-            return Result.Failure<T>(e.Message);
+            return Result<T>.Failure(e.Message);
         }
     }
 }
