@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TaskTracker.Bll.Interfaces;
-using TaskTracker.Bll.Models;
-
-namespace TaskTracker.Dal.Repositories;
+﻿namespace TaskTracker.Dal.Repositories;
 
 public class FolderRepository(ApplicationContext db) : IFolderRepository
 {
