@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Divider, Dropdown, MenuProps } from "antd";
 import { useStore } from "../../stores/RootStore";
-import { formatDate } from "../../utils";
+import { formatDate } from "../../utils/dateTimeFormatter";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useSettings } from "../../contexts/SettingsContext";
 import { useTranslation } from "../../hooks/useTranslation";

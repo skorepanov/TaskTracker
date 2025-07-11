@@ -4,7 +4,7 @@ import { Checkbox, Divider, Dropdown, MenuProps } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { useSettings } from "../../contexts/SettingsContext";
 import { useTranslation } from "../../hooks/useTranslation";
-import { formatDate } from "../../utils";
+import { formatDate } from "../../utils/dateTimeFormatter";
 import ITask from "../../interfaces/ITask";
 import TaskTag from "../tag/TaskTag";
 
