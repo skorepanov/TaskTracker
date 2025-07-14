@@ -2,12 +2,12 @@
 
 public class UserTask
 {
-    public int Id { get; }
+    public int Id { get; init; }
     public string Title { get; private set; }
     public string? Description { get; private set; }
 
     public int? FolderId { get; private set; }
-    public Folder? Folder { get; }
+    public Folder? Folder { get; init; }
 
     public DateTime? CompletedDateTime { get; private set; }
 

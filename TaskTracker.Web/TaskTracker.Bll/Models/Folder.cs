@@ -2,7 +2,7 @@
 
 public class Folder
 {
-    public int Id { get; }
+    public int Id { get; init; }
 
     public string Title { get; private set; }
 
