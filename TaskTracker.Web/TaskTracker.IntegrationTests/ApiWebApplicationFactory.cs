@@ -10,12 +10,12 @@ namespace TaskTracker.IntegrationTests;
 
 public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    public Mock<IDateTimeProvider> MockDateTimeProvider { get; private set; }
+    public readonly Mock<IDateTimeProvider> MockDateTimeProvider;
 
     private readonly IConfiguration _configuration;
-    private NpgsqlConnection _connection;
+    private NpgsqlConnection? _connection;
     private readonly string _connectionString;
-    private Respawner _respawner;
+    private Respawner? _respawner;
 
     public ApiWebApplicationFactory()
     {
@@ -31,6 +31,8 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
         }
 
         _connectionString = connectionString;
+
+        MockDateTimeProvider = new Mock<IDateTimeProvider>();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -52,7 +54,6 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
                     .UseSnakeCaseNamingConvention();
             });
 
-            MockDateTimeProvider = new Mock<IDateTimeProvider>();
             services.AddSingleton(MockDateTimeProvider.Object);
         });
     }
@@ -79,13 +80,20 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
 
     public async Task ResetDatabaseAsync()
     {
-        await _respawner.ResetAsync(_connection);
+        if (_connection is not null && _respawner is not null)
+        {
+            await _respawner.ResetAsync(_connection);
+        }
     }
 
     public new async Task DisposeAsync()
     {
-        await _connection.CloseAsync();
-        await _connection.DisposeAsync();
+        if (_connection is not null)
+        {
+            await _connection.CloseAsync();
+            await _connection.DisposeAsync();
+        }
+
         await base.DisposeAsync();
     }
 }

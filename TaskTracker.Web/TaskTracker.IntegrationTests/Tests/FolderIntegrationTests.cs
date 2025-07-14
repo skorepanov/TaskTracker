@@ -12,7 +12,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             DateTimeKind.Utc);
         var folder = await CreateFolderInDatabase(title: "Folder title", createdDateTime);
 
-        var otherFolder = await CreateFolderInDatabase();
+        await CreateFolderInDatabase();
 
         // Act
         var response = await Client.GetAsync(requestUri: $"/api/folders/{folder.Id}");

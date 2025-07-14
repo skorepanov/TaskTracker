@@ -13,7 +13,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         var tag = await CreateTagInDatabase(
             title: "Tag title", color: "123456", createdDateTime);
 
-        var otherTag = await CreateTagInDatabase();
+        await CreateTagInDatabase();
 
         // Act
         var response = await Client.GetAsync(requestUri: $"/api/tags/{tag.Id}");

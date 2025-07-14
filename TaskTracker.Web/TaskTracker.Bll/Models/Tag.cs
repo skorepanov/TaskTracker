@@ -12,7 +12,7 @@ public class Tag
 
     public DateTime? ModifiedDateTime { get; private set; }
 
-    public List<UserTask> UserTasks { get; init; }
+    public List<UserTask>? UserTasks { get; init; }
 
     private Tag(string title, string color, DateTime createdDateTime)
     {

@@ -7,7 +7,7 @@ public class UserTask
     public string? Description { get; private set; }
 
     public int? FolderId { get; private set; }
-    public Folder? Folder { get; private set; }
+    public Folder? Folder { get; }
 
     public DateTime? CompletedDateTime { get; private set; }
 

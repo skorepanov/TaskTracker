@@ -18,7 +18,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         var task = await CreateTaskInDatabase(
             title: "Task title", folder.Id, dueDateTime, createdDateTime);
 
-        var otherTask = await CreateTaskInDatabase();
+       await CreateTaskInDatabase();
 
         var utcNow = new DateTime(
             year: 2025, month: 7, day: 2, hour: 1, minute: 1, second: 1,
@@ -77,10 +77,10 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     {
         // Arrange
         var folder = await CreateFolderInDatabase();
-
         var incompletedTask = await CreateIncompletedTaskInDatabase(folder.Id);
-        var completedTask = await CreateCompletedTaskInDatabase(folder.Id);
-        var taskInTrash = await CreateTaskInTrashInDatabase();
+
+        await CreateCompletedTaskInDatabase(folder.Id);
+        await CreateTaskInTrashInDatabase();
 
         // Act
         var response = await Client.GetAsync(requestUri: $"/api/tasks/incomplete");
@@ -115,10 +115,10 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     {
         // Arrange
         var folder = await CreateFolderInDatabase();
-
-        var incompletedTask = await CreateIncompletedTaskInDatabase(folder.Id);
         var completedTask = await CreateCompletedTaskInDatabase(folder.Id);
-        var taskInTrash = await CreateTaskInTrashInDatabase();
+
+        await CreateIncompletedTaskInDatabase(folder.Id);
+        await CreateTaskInTrashInDatabase();
 
         // Act
         var response = await Client.GetAsync(requestUri: $"/api/tasks/complete");
@@ -153,10 +153,10 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
     {
         // Arrange
         var folder = await CreateFolderInDatabase();
-
-        var incompletedTask = await CreateIncompletedTaskInDatabase(folder.Id);
-        var completedTask = await CreateCompletedTaskInDatabase(folder.Id);
         var taskInTrash = await CreateTaskInTrashInDatabase();
+
+        await CreateIncompletedTaskInDatabase(folder.Id);
+        await CreateCompletedTaskInDatabase(folder.Id);
 
         // Act
         var response = await Client.GetAsync(requestUri: $"/api/tasks/trash");
