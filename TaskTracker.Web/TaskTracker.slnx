@@ -2,7 +2,6 @@
   <Project Path="TaskTracker.Bll/TaskTracker.Bll.csproj" />
   <Project Path="TaskTracker.Dal/TaskTracker.Dal.csproj" />
   <Project Path="TaskTracker.IntegrationTests/TaskTracker.IntegrationTests.csproj" />
-  <Project Path="TaskTracker.Ui/TaskTracker.Ui.esproj" />
   <Project Path="TaskTracker.UnitTests/TaskTracker.UnitTests.csproj" />
   <Project Path="TaskTracker.Web/TaskTracker.Web.csproj" />
 </Solution>
