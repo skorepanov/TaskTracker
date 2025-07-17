@@ -46,7 +46,7 @@ public class UserTask
             throw new DomainException(error);
         }
 
-        var normalizedTitle = userTaskDto.Title.Trim();
+        var normalizedTitle = userTaskDto.Title!.Trim();
         var createdDateTime = userTaskDto.CreatedDateTime ?? now;
 
         var task = new UserTask(
@@ -71,7 +71,7 @@ public class UserTask
             throw new DomainException(error);
         }
 
-        Title = userTaskDto.Title.Trim();
+        Title = userTaskDto.Title!.Trim();
         Description = userTaskDto.Description;
         FolderId = userTaskDto.FolderId;
         Tags = tags.ToList();

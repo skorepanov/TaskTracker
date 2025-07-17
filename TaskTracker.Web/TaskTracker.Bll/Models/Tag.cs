@@ -34,8 +34,8 @@ public class Tag
             throw new DomainException(error);
         }
 
-        var normalizedTitle = tagDto.Title.Trim();
-        var normalizedColor = tagDto.Color.Trim();
+        var normalizedTitle = tagDto.Title!.Trim();
+        var normalizedColor = tagDto.Color!.Trim();
         var createdDateTime = tagDto.CreatedDateTime ?? now;
 
         var tag = new Tag(normalizedTitle, normalizedColor, createdDateTime);
@@ -55,8 +55,8 @@ public class Tag
             throw new DomainException(error);
         }
 
-        Title = tagDto.Title.Trim();
-        Color = tagDto.Color.Trim();
+        Title = tagDto.Title!.Trim();
+        Color = tagDto.Color!.Trim();
         ModifiedDateTime = tagDto.ModifiedDateTime ?? now;
     }
 

@@ -28,7 +28,7 @@ public class Folder
             throw new DomainException(error);
         }
 
-        var normalizedTitle = folderDto.Title.Trim();
+        var normalizedTitle = folderDto.Title!.Trim();
         var createdDateTime = folderDto.CreatedDateTime ?? now;
 
         var folder = new Folder(normalizedTitle, createdDateTime);
@@ -47,7 +47,7 @@ public class Folder
             throw new DomainException(error);
         }
 
-        Title = folderDto.Title.Trim();
+        Title = folderDto.Title!.Trim();
         ModifiedDateTime = folderDto.ModifiedDateTime ?? now;
     }
 
