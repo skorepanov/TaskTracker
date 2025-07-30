@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using TaskTracker.Dal;
 using TaskTracker.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddServices();
 builder.Services.AddRepositories();
 
+#region Configure database context
+
 var connectionString = builder.Configuration.GetConnectionString(name: "Default");
 
 if (string.IsNullOrWhiteSpace(connectionString))
@@ -17,6 +21,8 @@ if (string.IsNullOrWhiteSpace(connectionString))
 }
 
 builder.Services.ConfigureDbContext(connectionString);
+
+#endregion
 
 builder.Services.AddCustomHealthChecks();
 
@@ -32,6 +38,16 @@ builder.Services.AddOpenApi(options =>
 #endregion
 
 var app = builder.Build();
+
+#region Create database and apply migrations
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
+#endregion
 
 #region Configure the HTTP request pipeline
 
@@ -67,4 +83,4 @@ app.Run();
 /// <summary>
 /// Класс Program для возможности его использования в интеграционных тестах
 /// </summary>
-public partial class Program { }
+public partial class Program;
