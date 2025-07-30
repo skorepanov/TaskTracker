@@ -64,7 +64,7 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
 
         using var scope = Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        await dbContext.Database.EnsureCreatedAsync();
+        await dbContext.Database.MigrateAsync();
         await _connection.OpenAsync();
 
         var respawnerOptions = new RespawnerOptions
