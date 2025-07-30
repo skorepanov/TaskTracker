@@ -61,11 +61,11 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
     public async Task InitializeAsync()
     {
         _connection = new NpgsqlConnection(_connectionString);
-        await _connection.OpenAsync();
 
         using var scope = Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-        await dbContext.Database.MigrateAsync();
+        await dbContext.Database.EnsureCreatedAsync();
+        await _connection.OpenAsync();
 
         var respawnerOptions = new RespawnerOptions
         {
