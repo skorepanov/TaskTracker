@@ -1,0 +1,24 @@
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["TaskTracker.Web/TaskTracker.Web.csproj", "TaskTracker.Web/"]
+COPY ["TaskTracker.Dal/TaskTracker.Dal.csproj", "TaskTracker.Dal/"]
+COPY ["TaskTracker.Bll/TaskTracker.Bll.csproj", "TaskTracker.Bll/"]
+RUN dotnet restore "TaskTracker.Web/TaskTracker.Web.csproj"
+COPY . .
+WORKDIR "/src/TaskTracker.Web"
+RUN dotnet build "./TaskTracker.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./TaskTracker.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "TaskTracker.Web.dll"]

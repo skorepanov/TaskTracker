@@ -1,0 +1,40 @@
+name: task_tracker
+
+services:
+  backend:
+    container_name: task_tracker_backend
+    build:
+      context: ../TaskTracker.Web
+      dockerfile: ../docker/Dockerfile.backend
+    ports:
+      - 7265:8080
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - db
+
+  frontend:
+    container_name: task_tracker_frontend
+    build:
+      context: ../TaskTracker.Ui
+      dockerfile: ../docker/Dockerfile.frontend
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:latest
+    container_name: task_tracker_db
+    restart: always
+    environment:
+      POSTGRES_DB: task_tracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+
+volumes:
+  db_data:

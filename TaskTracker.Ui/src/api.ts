@@ -1,4 +1,4 @@
-export const AppUrl = "https://localhost:7265/api";
+export const AppUrl = "http://localhost:7265/api";
 
 interface IApiResponse<T> {
     isOk: boolean;
