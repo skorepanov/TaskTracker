@@ -1,4 +1,4 @@
-export const AppUrl = "http://localhost:7265/api";
+export const AppUrl = process.env.REACT_APP_API_URL;
 
 interface IApiResponse<T> {
     isOk: boolean;
