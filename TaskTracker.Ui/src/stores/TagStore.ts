@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { Api, AppUrl } from "../api";
+import { Api, ApiUrl } from "../api";
 import ITag from "../interfaces/ITag";
 
 class TagStore {
@@ -10,7 +10,7 @@ class TagStore {
     }
 
     fetchTags = async () => {
-        const url = `${AppUrl}/tags`;
+        const url = `${ApiUrl}/tags`;
 
         const response = await Api.get<ITag[]>(url);
 
@@ -26,7 +26,7 @@ class TagStore {
     };
 
     createTag = async (title: string, color: string) => {
-        const url = `${AppUrl}/tags`;
+        const url = `${ApiUrl}/tags`;
 
         const params = {
             title: title,
@@ -48,7 +48,7 @@ class TagStore {
     };
 
     updateTag = async (tagId: number, title: string, color: string) => {
-        const url = `${AppUrl}/tags/${tagId}`;
+        const url = `${ApiUrl}/tags/${tagId}`;
 
         const params = {
             title: title,
@@ -72,7 +72,7 @@ class TagStore {
     };
 
     deleteTag = async (tagId: number) => {
-        const url = `${AppUrl}/tags/${tagId}`;
+        const url = `${ApiUrl}/tags/${tagId}`;
 
         const response = await Api.delete(url);
 

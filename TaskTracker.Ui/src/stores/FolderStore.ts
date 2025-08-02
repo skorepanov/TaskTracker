@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { Api, AppUrl } from "../api";
+import { Api, ApiUrl } from "../api";
 import IFolder from "../interfaces/IFolder";
 
 class FolderStore {
@@ -10,7 +10,7 @@ class FolderStore {
     }
 
     fetchFolders = async () => {
-        const url = `${AppUrl}/folders`;
+        const url = `${ApiUrl}/folders`;
 
         const response = await Api.get<IFolder[]>(url);
 
@@ -26,7 +26,7 @@ class FolderStore {
     };
 
     createFolder = async (title: string) => {
-        const url = `${AppUrl}/folders`;
+        const url = `${ApiUrl}/folders`;
 
         const params = {
             title: title,
@@ -47,7 +47,7 @@ class FolderStore {
     };
 
     updateFolder = async (folderId: number, title: string) => {
-        const url = `${AppUrl}/folders/${folderId}`;
+        const url = `${ApiUrl}/folders/${folderId}`;
 
         const params = {
             title: title,
@@ -70,7 +70,7 @@ class FolderStore {
     };
 
     deleteFolder = async (folderId: number) => {
-        const url = `${AppUrl}/folders/${folderId}`;
+        const url = `${ApiUrl}/folders/${folderId}`;
 
         const response = await Api.delete(url);
 

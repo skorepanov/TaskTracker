@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction, observable } from "mobx";
 import dayjs, { Dayjs } from "dayjs";
 import ITask from "../interfaces/ITask";
-import { Api, AppUrl } from "../api";
+import { Api, ApiUrl } from "../api";
 
 class TaskStore {
     tasks = observable.map<number, ITask>();
@@ -29,7 +29,7 @@ class TaskStore {
     }
 
     fetchIncompleteTasks = async () => {
-        const url = `${AppUrl}/tasks/incomplete`;
+        const url = `${ApiUrl}/tasks/incomplete`;
         const response = await Api.get<ITask[]>(url);
 
         if (!response.isOk || response.value === null) {
@@ -46,7 +46,7 @@ class TaskStore {
     };
 
     fetchCompletedTasks = async () => {
-        const url = `${AppUrl}/tasks/complete`;
+        const url = `${ApiUrl}/tasks/complete`;
         const response = await Api.get<ITask[]>(url);
 
         if (!response.isOk || response.value === null) {
@@ -63,7 +63,7 @@ class TaskStore {
     };
 
     fetchTasksInTrash = async () => {
-        const url = `${AppUrl}/tasks/trash`;
+        const url = `${ApiUrl}/tasks/trash`;
 
         const response = await Api.get<ITask[]>(url);
 
@@ -85,7 +85,7 @@ class TaskStore {
         dueDateTime: Date | null,
         folderId: number | null
     ) => {
-        const url = `${AppUrl}/tasks`;
+        const url = `${ApiUrl}/tasks`;
 
         const params = {
             title: title,
@@ -116,7 +116,7 @@ class TaskStore {
         dueDateTime: Date | null,
         tagIds: number[] | null
     ) => {
-        const url = `${AppUrl}/tasks/${taskId}`;
+        const url = `${ApiUrl}/tasks/${taskId}`;
 
         const params = {
             title: title,
@@ -141,7 +141,7 @@ class TaskStore {
     };
 
     deleteTask = async (taskId: number) => {
-        const url = `${AppUrl}/tasks/${taskId}`;
+        const url = `${ApiUrl}/tasks/${taskId}`;
 
         const response = await Api.delete(url);
 
@@ -159,7 +159,7 @@ class TaskStore {
     };
 
     completeTask = async (taskId: number) => {
-        const url = `${AppUrl}/tasks/${taskId}/completed`;
+        const url = `${ApiUrl}/tasks/${taskId}/completed`;
 
         const params = {
             completedDateTime: new Date().toISOString(),
@@ -179,7 +179,7 @@ class TaskStore {
     };
 
     incompleteTask = async (taskId: number) => {
-        const url = `${AppUrl}/tasks/${taskId}/incompleted`;
+        const url = `${ApiUrl}/tasks/${taskId}/incompleted`;
 
         const params = {
             modifiedDateTime: new Date().toISOString(),
@@ -199,7 +199,7 @@ class TaskStore {
     };
 
     moveTaskToTrash = async (taskId: number) => {
-        const url = `${AppUrl}/tasks/${taskId}/movedToTrash`;
+        const url = `${ApiUrl}/tasks/${taskId}/movedToTrash`;
 
         const params = {
             movedToTrashDateTime: new Date().toISOString(),
@@ -223,7 +223,7 @@ class TaskStore {
     };
 
     moveTaskFromTrash = async (taskId: number, folderId: number | null) => {
-        const url = `${AppUrl}/tasks/${taskId}/movedFromTrash`;
+        const url = `${ApiUrl}/tasks/${taskId}/movedFromTrash`;
 
         const params = {
             folderId: folderId,
