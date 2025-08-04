@@ -3,82 +3,70 @@ using Scalar.AspNetCore;
 using TaskTracker.Dal;
 using TaskTracker.Web;
 
-var builder = WebApplication.CreateBuilder(args);
+var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-#region Add services to the container
+configureServices(webApplicationBuilder);
 
-builder.Services.AddControllers();
-builder.Services.AddServices();
-builder.Services.AddRepositories();
+var webApplication = webApplicationBuilder.Build();
 
-#region Configure database context
+await applyDatabaseMigrations(webApplication);
+configureHttpRequestPipeline(webApplication);
 
-var connectionString = builder.Configuration.GetConnectionString(name: "Default");
+webApplication.Run();
+return;
 
-if (string.IsNullOrWhiteSpace(connectionString))
+
+void configureServices(WebApplicationBuilder builder)
 {
-    throw new Exception(message: "Не найдена строка подключения");
+    builder.Services.AddControllers();
+    builder.Services.AddServices();
+    builder.Services.AddRepositories();
+
+    var connectionString = builder.Configuration
+        .GetConnectionString(name: "Default");
+
+    if (string.IsNullOrWhiteSpace(connectionString))
+    {
+        throw new Exception(message: "Не найдена строка подключения");
+    }
+
+    builder.Services.ConfigureDbContext(connectionString);
+    builder.Services.AddCustomHealthChecks();
+
+    builder.Services.AddOpenApi(options =>
+    {
+        options.AddDocumentTransformer<TaskTrackerApiTransformer>();
+    });
 }
 
-builder.Services.ConfigureDbContext(connectionString);
-
-#endregion
-
-builder.Services.AddCustomHealthChecks();
-
-#endregion
-
-#region Configure OpenApi
-
-builder.Services.AddOpenApi(options =>
+async Task applyDatabaseMigrations(WebApplication app)
 {
-    options.AddDocumentTransformer<TaskTrackerApiTransformer>();
-});
-
-#endregion
-
-var app = builder.Build();
-
-#region Create database and apply migrations
-
-using (var scope = app.Services.CreateScope())
-{
+    using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
     await dbContext.Database.MigrateAsync();
 }
 
-#endregion
-
-#region Configure the HTTP request pipeline
-
-app.UseExceptionHandler(_ => { });
-
-if (app.Environment.IsDevelopment())
+void configureHttpRequestPipeline(WebApplication app)
 {
-    app.MapOpenApi();
+    app.UseExceptionHandler(_ => { });
 
-    app.UseSwaggerUI(options =>
+    if (app.Environment.IsDevelopment())
     {
-        options.SwaggerEndpoint(url: "/openapi/v1.json", name: "OpenAPI v1");
-    });
+        app.MapOpenApi();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint(url: "/openapi/v1.json", name: "OpenAPI v1");
+        });
+        app.MapScalarApiReference();
+    }
 
-    app.MapScalarApiReference();
+    app.UseHttpsRedirection();
+    app.UseCors(corsPolicyBuilder
+        => corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    app.UseAuthorization();
+    app.MapControllers();
+    app.MapHealthChecks(pattern: "api/health");
 }
-
-app.UseHttpsRedirection();
-
-app.UseCors(corsPolicyBuilder
-    => corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapHealthChecks("api/health");
-
-#endregion
-
-app.Run();
 
 /// <summary>
 /// Класс Program для возможности его использования в интеграционных тестах
