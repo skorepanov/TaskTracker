@@ -1,23 +1,27 @@
-## Getting Started
+# Планировщик задач
 
-### Prerequisites
+## Необходимые компоненты
 
 - Docker
 - Docker Compose
 
-### Running the Application
+## Запуск приложения
 
-1. Clone the repository.
-2. Navigate to the `docker` directory.
-3. Run the following command to start the application:
+1. Склонировать репозиторий.
+2. Перейти в директорию `docker`.
+3. Выполнить следующую команду для запуска приложения:
 
 ```
 docker-compose up --build
 ```
 
-This command will build the Docker images and start the containers for the ASP.NET Web API, React application, and PostgreSQL database.
+Эта команда соберет Docker-образы и запустит контейнеры для:
+- Приложения ASP.NET Web API.
+- Приложения React.
+- Базы данных PostgreSQL.
 
-### Accessing the Application
+## Доступ к приложению
 
-- The ASP.NET Web API will be available at `http://localhost:7265`.
-- The React application will be available at `http://localhost:3000`.
+- Приложение ASP.NET Web API будет доступно по адресу `http://localhost:7265`.
+- Приложение React будет доступно по адресу `http://localhost:3000`.
+- База данных PostgreSQL будет доступна по адресу `http://localhost:5433`.
