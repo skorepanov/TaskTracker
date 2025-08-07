@@ -45,16 +45,14 @@ docker-compose up --build
 
 ### Доступ к приложению
 
-- Backend будет доступен по адресу: `http://localhost:7265`.
-- Frontend будет доступен по адресу: `http://localhost:3000`.
-- База данных будет доступна по адресу: `http://localhost:5433`.
+- Backend: `http://localhost:7265`.
+- Frontend: `http://localhost:3000`.
+- База данных: `http://localhost:5433`.
 
 ## Документация API
 
-Подключается только в Development-окружении, поэтому недоступна при запуске через Docker.
-
-- Scalar: `https://localhost:7265/scalar/v1`.
-- Swagger: `https://localhost:7265/swagger/index.html`.
+- Scalar: `http://localhost:7265/scalar/v1`.
+- Swagger: `http://localhost:7265/swagger/index.html`.
 
 ## Тестирование
 

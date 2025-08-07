@@ -50,15 +50,12 @@ void configureHttpRequestPipeline(WebApplication app)
 {
     app.UseExceptionHandler(_ => { });
 
-    if (app.Environment.IsDevelopment())
+    app.MapOpenApi();
+    app.UseSwaggerUI(options =>
     {
-        app.MapOpenApi();
-        app.UseSwaggerUI(options =>
-        {
-            options.SwaggerEndpoint(url: "/openapi/v1.json", name: "OpenAPI v1");
-        });
-        app.MapScalarApiReference();
-    }
+        options.SwaggerEndpoint(url: "/openapi/v1.json", name: "OpenAPI v1");
+    });
+    app.MapScalarApiReference();
 
     app.UseHttpsRedirection();
     app.UseCors(corsPolicyBuilder
