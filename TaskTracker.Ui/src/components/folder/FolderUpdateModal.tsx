@@ -28,20 +28,33 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
         setTitle(event.target.value);
     };
 
+    const handleTitlePressEnter
+        = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+        event.stopPropagation();
+
+        if (!isUpdateFolderButtonDisabled()) {
+            await updateFolder();
+        }
+    }
+
     const isUpdateFolderButtonDisabled = () => {
         return title.trim() === "";
     };
 
     const handleUpdateFolderButtonClick = async () => {
-        setTitle(title.trim());
-        await folderStore.updateFolder(props.folder.id, title);
-        props.hideModal();
+        await updateFolder();
     };
 
     const handleCancelClick = () => {
         setTitle(props.folder.title);
         props.hideModal();
     };
+
+    const updateFolder = async () => {
+        setTitle(title.trim());
+        await folderStore.updateFolder(props.folder.id, title);
+        props.hideModal();
+    }
 
     return (
         <Modal
@@ -60,6 +73,7 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
                 placeholder={t("folderTitle")}
                 value={title}
                 onChange={handleTitleChange}
+                onPressEnter={handleTitlePressEnter}
                 style={{ width: 300 }}
             />
         </Modal>

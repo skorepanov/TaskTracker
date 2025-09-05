@@ -30,6 +30,15 @@ const TagCreationModal: React.FC<ITagCreationModalProps> = observer(props => {
         setTitle(event.target.value);
     };
 
+    const handleTitlePressEnter
+        = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+        event.stopPropagation();
+
+        if (!isCreateTagButtonDisabled()) {
+            await createTag();
+        }
+    }
+
     const handleColorChange = (color: Color) => {
         setColor(color.toHex());
     };
@@ -39,10 +48,7 @@ const TagCreationModal: React.FC<ITagCreationModalProps> = observer(props => {
     };
 
     const handleCreateTagButtonClick = async () => {
-        await tagStore.createTag(title, color);
-        setTitle("");
-        setColor(defaultColor);
-        props.hideModal();
+        await createTag();
     };
 
     const handleCancelClick = () => {
@@ -50,6 +56,13 @@ const TagCreationModal: React.FC<ITagCreationModalProps> = observer(props => {
         setColor(defaultColor);
         props.hideModal();
     };
+
+    const createTag = async () => {
+        await tagStore.createTag(title, color);
+        setTitle("");
+        setColor(defaultColor);
+        props.hideModal();
+    }
 
     return (
         <Modal
@@ -69,6 +82,7 @@ const TagCreationModal: React.FC<ITagCreationModalProps> = observer(props => {
                     placeholder={t("tagTitle")}
                     value={title}
                     onChange={handleTitleChange}
+                    onPressEnter={handleTitlePressEnter}
                     style={{ width: "300" }}
                 />
                 <ColorPicker

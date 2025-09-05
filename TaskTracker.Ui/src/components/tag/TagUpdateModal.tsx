@@ -30,6 +30,15 @@ const TagUpdateModal: React.FC<ITagUpdateModalProps> = observer(props => {
         setTitle(event.target.value);
     };
 
+    const handleTitlePressEnter
+        = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+        event.stopPropagation();
+
+        if (!isUpdateTagButtonDisabled()) {
+            await updateTag();
+        }
+    }
+
     const handleColorChange = (color: Color) => {
         setColor(color.toHex());
     };
@@ -39,9 +48,7 @@ const TagUpdateModal: React.FC<ITagUpdateModalProps> = observer(props => {
     };
 
     const handleUpdateTagButtonClick = async () => {
-        setTitle(title.trim());
-        await tagStore.updateTag(props.tag.id, title, color);
-        props.hideModal();
+        await updateTag();
     };
 
     const handleCancelClick = () => {
@@ -49,6 +56,12 @@ const TagUpdateModal: React.FC<ITagUpdateModalProps> = observer(props => {
         setColor(props.tag.color);
         props.hideModal();
     };
+
+    const updateTag = async () => {
+        setTitle(title.trim());
+        await tagStore.updateTag(props.tag.id, title, color);
+        props.hideModal();
+    }
 
     return (
         <Modal
@@ -68,6 +81,7 @@ const TagUpdateModal: React.FC<ITagUpdateModalProps> = observer(props => {
                     placeholder={t("tagTitle")}
                     value={title}
                     onChange={handleTitleChange}
+                    onPressEnter={handleTitlePressEnter}
                     style={{ width: "300" }}
                 />
                 <ColorPicker

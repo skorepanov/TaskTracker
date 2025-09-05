@@ -29,20 +29,33 @@ const FolderCreationModal: React.FC<IFolderCreationModalProps> = observer(
             setTitle(event.target.value);
         };
 
+        const handleTitlePressEnter
+            = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+            event.stopPropagation();
+
+            if (!isCreateFolderButtonDisabled()) {
+                await createFolder();
+            }
+        }
+
         const isCreateFolderButtonDisabled = () => {
             return title.trim() === "";
         };
 
         const handleCreateFolderButtonClick = async () => {
-            await folderStore.createFolder(title);
-            setTitle("");
-            props.hideModal();
+            await createFolder();
         };
 
         const handleCancelClick = () => {
             setTitle("");
             props.hideModal();
         };
+
+        const createFolder = async () => {
+            await folderStore.createFolder(title);
+            setTitle("");
+            props.hideModal();
+        }
 
         return (
             <Modal
@@ -61,6 +74,7 @@ const FolderCreationModal: React.FC<IFolderCreationModalProps> = observer(
                     placeholder={t("folderTitle")}
                     value={title}
                     onChange={handleTitleChange}
+                    onPressEnter={handleTitlePressEnter}
                     style={{ width: 300 }}
                 />
             </Modal>
