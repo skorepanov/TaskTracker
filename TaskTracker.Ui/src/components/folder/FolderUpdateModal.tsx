@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import { Input, Modal } from "antd";
+import { Input, InputRef, Modal } from "antd";
 import { useStore } from "../../stores/RootStore";
 import { useTranslation } from "../../hooks/useTranslation";
 import IFolder from "../../interfaces/IFolder";
@@ -16,6 +16,13 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
     const t = useTranslation();
 
     const [title, setTitle] = useState<string>(props.folder.title);
+    const titleRef = useRef<InputRef>(null);
+
+    const handleAfterOpenChange = async (open: boolean) => {
+        if (open && titleRef.current) {
+            titleRef.current.focus();
+        }
+    }
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
@@ -40,6 +47,7 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
         <Modal
             title={t("updateFolder")}
             open={props.isModalOpen}
+            afterOpenChange={handleAfterOpenChange}
             okText={t("save")}
             onOk={handleUpdateFolderButtonClick}
             okButtonProps={{
@@ -48,6 +56,7 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
             cancelText={t("cancel")}
             onCancel={handleCancelClick}>
             <Input
+                ref={titleRef}
                 placeholder={t("folderTitle")}
                 value={title}
                 onChange={handleTitleChange}
