@@ -74,6 +74,7 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
                 value={title}
                 onChange={handleTitleChange}
                 onPressEnter={handleTitlePressEnter}
+                onKeyDown={(event) => event.stopPropagation()}
                 style={{ width: 300 }}
             />
         </Modal>
