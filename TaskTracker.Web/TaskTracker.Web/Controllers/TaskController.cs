@@ -13,7 +13,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// </summary>
     /// <param name="taskId">Идентификатор задачи</param>
     [HttpGet("{taskId:int}", Name = nameof(GetTaskById))]
-    public async Task<IActionResult> GetTaskById(int taskId)
+    public async Task<ActionResult<Result<UserTaskVm>>> GetTaskById(int taskId)
     {
         var result = await executionService.TryExecute(
             () => taskService.GetTaskById(taskId));
@@ -25,7 +25,8 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// </summary>
     [HttpGet]
     [Route("incomplete")]
-    public async Task<IActionResult> GetIncompletedTasks()
+    public async Task<ActionResult<Result<IReadOnlyList<UserTaskVm>>>>
+        GetIncompletedTasks()
     {
         var result = await executionService.TryExecute(
             () => taskService.GetIncompletedTasks());
@@ -37,7 +38,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// </summary>
     [HttpGet]
     [Route("complete")]
-    public async Task<ActionResult> GetCompletedTasks()
+    public async Task<ActionResult<Result<IReadOnlyList<UserTaskVm>>>> GetCompletedTasks()
     {
         var result = await executionService.TryExecute(
             () => taskService.GetCompletedTasks());
@@ -49,7 +50,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// </summary>
     [HttpGet]
     [Route("trash")]
-    public async Task<IActionResult> GetTasksInTrash()
+    public async Task<ActionResult<Result<IReadOnlyList<UserTaskVm>>>> GetTasksInTrash()
     {
         var result = await executionService.TryExecute(
             () => taskService.GetTasksInTrash());
@@ -61,7 +62,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// </summary>
     /// <param name="userTaskDto">Данные для создания задачи</param>
     [HttpPost]
-    public async Task<IActionResult> CreateTask(
+    public async Task<ActionResult<Result<UserTaskVm>>> CreateTask(
         [FromBody] UserTaskForCreationDto userTaskDto)
     {
         var result = await executionService.TryExecute(
@@ -75,7 +76,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для обновления задачи</param>
     [HttpPut("{taskId:int}")]
-    public async Task<IActionResult> UpdateTask(
+    public async Task<ActionResult<Result<UserTaskVm>>> UpdateTask(
         int taskId, [FromBody] UserTaskForUpdateDto userTaskDto)
     {
         var result = await executionService.TryExecute(
@@ -89,7 +90,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для отметки задачи как выполненной</param>
     [HttpPut("{taskId:int}/completed")]
-    public async Task<IActionResult> CompleteTask(
+    public async Task<ActionResult<Result<UserTaskVm>>> CompleteTask(
         int taskId, [FromBody] UserTaskForCompleteDto userTaskDto)
     {
         var result = await executionService.TryExecute(
@@ -103,7 +104,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для отметки задачи как невыполненной</param>
     [HttpPut("{taskId:int}/incompleted")]
-    public async Task<IActionResult> IncompleteTask(
+    public async Task<ActionResult<Result<UserTaskVm>>> IncompleteTask(
         int taskId, [FromBody] UserTaskForIncompleteDto userTaskDto)
     {
         var result = await executionService.TryExecute(
@@ -117,7 +118,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для перемещения задачи в корзину</param>
     [HttpPut("{taskId:int}/movedToTrash")]
-    public async Task<IActionResult> MoveTaskToTrash(
+    public async Task<ActionResult<Result<UserTaskVm>>> MoveTaskToTrash(
         int taskId, [FromBody] UserTaskForMoveToTrashDto userTaskDto)
     {
         var result = await executionService.TryExecute(
@@ -131,7 +132,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// <param name="taskId">Идентификатор задачи</param>
     /// <param name="userTaskDto">Данные для перемещения задачи из корзины</param>
     [HttpPut("{taskId:int}/movedFromTrash")]
-    public async Task<IActionResult> MoveTaskFromTrash(
+    public async Task<ActionResult<Result<UserTaskVm>>> MoveTaskFromTrash(
         int taskId, [FromBody] UserTaskForMoveFromTrashDto userTaskDto)
     {
         var result = await executionService.TryExecute(
@@ -144,7 +145,7 @@ public class TaskController(ExecutionService executionService, TaskService taskS
     /// </summary>
     /// <param name="taskId">Идентификатор задачи</param>
     [HttpDelete("{taskId:int}")]
-    public async Task<IActionResult> DeleteTask(int taskId)
+    public async Task<ActionResult<Result<bool>>> DeleteTask(int taskId)
     {
         var result = await executionService.TryExecute(
             () => taskService.DeleteTask(taskId));

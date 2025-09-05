@@ -13,7 +13,7 @@ public class TagController(ExecutionService executionService, TagService tagServ
     /// </summary>
     /// <param name="tagId">Идентификатор тега</param>
     [HttpGet("{tagId:int}", Name = nameof(GetTagById))]
-    public async Task<IActionResult> GetTagById(int tagId)
+    public async Task<ActionResult<Result<TagVm>>> GetTagById(int tagId)
     {
         var result = await executionService.TryExecute(
             () => tagService.GetTagById(tagId));
@@ -24,7 +24,7 @@ public class TagController(ExecutionService executionService, TagService tagServ
     /// Получить все теги
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult> GetTags()
+    public async Task<ActionResult<Result<IReadOnlyList<TagVm>>>> GetTags()
     {
         var result = await executionService.TryExecute(
             () => tagService.GetTags());
@@ -36,7 +36,8 @@ public class TagController(ExecutionService executionService, TagService tagServ
     /// </summary>
     /// <param name="tagDto">Данные для создания тега</param>
     [HttpPost]
-    public async Task<IActionResult> CreateTag([FromBody] TagForCreationDto tagDto)
+    public async Task<ActionResult<Result<TagVm>>> CreateTag(
+        [FromBody] TagForCreationDto tagDto)
     {
         var result = await executionService.TryExecute(
             () => tagService.CreateTag(tagDto));
@@ -49,7 +50,7 @@ public class TagController(ExecutionService executionService, TagService tagServ
     /// <param name="tagId">Идентификатор тега</param>
     /// <param name="tagDto">Данные для обновления тега</param>
     [HttpPut("{tagId:int}")]
-    public async Task<IActionResult> UpdateTag(
+    public async Task<ActionResult<Result<TagVm>>> UpdateTag(
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
         var result = await executionService.TryExecute(
@@ -62,7 +63,7 @@ public class TagController(ExecutionService executionService, TagService tagServ
     /// </summary>
     /// <param name="tagId">Идентификатор тега</param>
     [HttpDelete("{tagId:int}")]
-    public async Task<IActionResult> DeleteTag(int tagId)
+    public async Task<ActionResult<Result<bool>>> DeleteTag(int tagId)
     {
         var result = await executionService.TryExecute(
             () => tagService.DeleteTag(tagId));

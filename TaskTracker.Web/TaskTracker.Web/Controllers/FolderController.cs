@@ -5,7 +5,9 @@
 /// </summary>
 [ApiController]
 [Route("api/folders")]
-public class FolderController(ExecutionService executionService, FolderService folderService)
+public class FolderController(
+    ExecutionService executionService,
+    FolderService folderService)
     : ControllerBase
 {
     /// <summary>
@@ -13,7 +15,7 @@ public class FolderController(ExecutionService executionService, FolderService f
     /// </summary>
     /// <param name="folderId">Идентификатор папки</param>
     [HttpGet("{folderId:int}", Name = nameof(GetFolderById))]
-    public async Task<IActionResult> GetFolderById(int folderId)
+    public async Task<ActionResult<Result<FolderVm>>> GetFolderById(int folderId)
     {
         var result = await executionService.TryExecute(
             () => folderService.GetFolderById(folderId));
@@ -24,7 +26,7 @@ public class FolderController(ExecutionService executionService, FolderService f
     /// Получить все папки
     /// </summary>
     [HttpGet]
-    public async Task<IActionResult> GetFolders()
+    public async Task<ActionResult<Result<IReadOnlyList<FolderVm>>>> GetFolders()
     {
         var result = await executionService.TryExecute(
             () => folderService.GetFolders());
@@ -36,7 +38,8 @@ public class FolderController(ExecutionService executionService, FolderService f
     /// </summary>
     /// <param name="folderDto">Данные для создания папки</param>
     [HttpPost]
-    public async Task<IActionResult> CreateFolder([FromBody] FolderForCreationDto folderDto)
+    public async Task<ActionResult<Result<FolderVm>>> CreateFolder(
+        [FromBody] FolderForCreationDto folderDto)
     {
         var result = await executionService.TryExecute(
             () => folderService.CreateFolder(folderDto));
@@ -49,7 +52,7 @@ public class FolderController(ExecutionService executionService, FolderService f
     /// <param name="folderId">Идентификатор папки</param>
     /// <param name="folderDto">Данные для обновления папки</param>
     [HttpPut("{folderId:int}")]
-    public async Task<IActionResult> UpdateFolder(
+    public async Task<ActionResult<Result<FolderVm>>> UpdateFolder(
         int folderId, [FromBody] FolderForUpdateDto folderDto)
     {
         var result = await executionService.TryExecute(
@@ -62,7 +65,7 @@ public class FolderController(ExecutionService executionService, FolderService f
     /// </summary>
     /// <param name="folderId">Идентификатор папки</param>
     [HttpDelete("{folderId:int}")]
-    public async Task<IActionResult> DeleteFolder(int folderId)
+    public async Task<ActionResult<Result<bool>>> DeleteFolder(int folderId)
     {
         var result = await executionService.TryExecute(
             () => folderService.DeleteFolder(folderId));
