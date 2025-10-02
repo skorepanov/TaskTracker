@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
 import {
@@ -14,6 +14,7 @@ import {
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import dayjs, { Dayjs } from "dayjs";
 import { useTranslation } from "../../hooks/useTranslation";
+import { useDebounce } from "../../hooks/useDebounce";
 import { dateFormat, formatDateTime } from "../../utils/dateTimeFormatter";
 
 type TagRender = SelectProps["tagRender"];
@@ -26,6 +27,30 @@ const TaskUpdatePanel: React.FC = observer(() => {
     const t = useTranslation();
 
     const { currentTask: task } = taskStore;
+
+    const [description, setDecription] = useState<string>(task?.description ?? "");
+
+    const updateTaskDebounced = useDebounce(async (
+        taskId: number,
+        title: string,
+        description: string,
+        folderId: number | null,
+        dueDateTime: Date | null,
+        tagIds: number[] | null
+    ) => {
+        await taskStore.updateTask(
+            taskId,
+            title,
+            description,
+            folderId,
+            dueDateTime,
+            tagIds
+        );
+    }, 5000);
+
+    useEffect(() => {
+        setDecription(task?.description ?? "");
+    }, [task?.description]);
 
     if (!task) {
         return null;
@@ -116,7 +141,9 @@ const TaskUpdatePanel: React.FC = observer(() => {
     const handleDescriptionChange = async (
         event: React.ChangeEvent<HTMLTextAreaElement>
     ) => {
-        await taskStore.updateTask(
+        setDecription(event.target.value);
+
+        updateTaskDebounced(
             task.id,
             task.title,
             event.target.value,
@@ -258,7 +285,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
             />
             <TextArea
                 placeholder={t("taskDescription")}
-                value={task.description ?? ""}
+                value={description}
                 disabled={isDisabled}
                 variant="borderless"
                 onChange={handleDescriptionChange}
