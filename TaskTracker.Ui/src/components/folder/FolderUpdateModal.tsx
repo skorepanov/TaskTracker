@@ -37,6 +37,15 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
         }
     }
 
+    const handleTitleKeyDown
+        = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        event.stopPropagation();
+
+        if (event.key === 'Escape') {
+            handleCancelClick();
+        }
+    };
+
     const isUpdateFolderButtonDisabled = () => {
         return title.trim() === "";
     };
@@ -74,6 +83,7 @@ const FolderUpdateModal: React.FC<IFolderUpdateModalProps> = observer(props => {
                 value={title}
                 onChange={handleTitleChange}
                 onPressEnter={handleTitlePressEnter}
+                onKeyDown={handleTitleKeyDown}
                 style={{ width: 300 }}
             />
         </Modal>

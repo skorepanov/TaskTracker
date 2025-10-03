@@ -39,6 +39,15 @@ const TagUpdateModal: React.FC<ITagUpdateModalProps> = observer(props => {
         }
     }
 
+    const handleTitleKeyDown
+        = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        event.stopPropagation();
+
+        if (event.key === 'Escape') {
+            handleCancelClick();
+        }
+    };
+
     const handleColorChange = (color: Color) => {
         setColor(color.toHex());
     };
@@ -82,6 +91,7 @@ const TagUpdateModal: React.FC<ITagUpdateModalProps> = observer(props => {
                     value={title}
                     onChange={handleTitleChange}
                     onPressEnter={handleTitlePressEnter}
+                    onKeyDown={handleTitleKeyDown}
                     style={{ width: "300" }}
                 />
                 <ColorPicker

@@ -38,6 +38,15 @@ const FolderCreationModal: React.FC<IFolderCreationModalProps> = observer(
             }
         }
 
+        const handleTitleKeyDown
+            = (event: React.KeyboardEvent<HTMLInputElement>) => {
+            event.stopPropagation();
+
+            if (event.key === 'Escape') {
+                handleCancelClick();
+            }
+        };
+
         const isCreateFolderButtonDisabled = () => {
             return title.trim() === "";
         };
@@ -75,6 +84,7 @@ const FolderCreationModal: React.FC<IFolderCreationModalProps> = observer(
                     value={title}
                     onChange={handleTitleChange}
                     onPressEnter={handleTitlePressEnter}
+                    onKeyDown={handleTitleKeyDown}
                     style={{ width: 300 }}
                 />
             </Modal>
