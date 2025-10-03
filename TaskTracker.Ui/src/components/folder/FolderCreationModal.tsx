@@ -75,7 +75,6 @@ const FolderCreationModal: React.FC<IFolderCreationModalProps> = observer(
                     value={title}
                     onChange={handleTitleChange}
                     onPressEnter={handleTitlePressEnter}
-                    onKeyDown={(event) => event.stopPropagation()}
                     style={{ width: 300 }}
                 />
             </Modal>
