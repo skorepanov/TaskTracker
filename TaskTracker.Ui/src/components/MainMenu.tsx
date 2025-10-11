@@ -38,9 +38,19 @@ const MainMenu: React.FC = observer(() => {
     ) => {
         return (
             <Link to={link}>
-                <div style={{ float: "left" }}>{title}</div>
-                <div style={{ float: "right", color: "grey" }}>
-                    {incompletedTaskCount}
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div
+                        style={{
+                            flexGrow: 1,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                        }}
+                    >
+                        {title}
+                    </div>
+                    <div style={{ color: "grey", marginLeft: 10 }}>
+                        {incompletedTaskCount}
+                    </div>
                 </div>
             </Link>
         );
@@ -48,14 +58,22 @@ const MainMenu: React.FC = observer(() => {
 
     const getFolderRootLabel = () => {
         return (
-            <>
-                <div style={{ float: "left" }}>{t("folders")}</div>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div
+                    style={{
+                        flexGrow: 1,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                     }}
+                >
+                    {t("folders")}
+                </div>
                 <div
                     onClick={e => e.stopPropagation()}
-                    style={{ float: "right" }}>
+                    style={{ marginLeft: 10, marginRight: 5 }}>
                     <FolderCreationModalButton />
                 </div>
-            </>
+            </div>
         );
     };
 
@@ -100,14 +118,22 @@ const MainMenu: React.FC = observer(() => {
 
     const getTagRootLabel = () => {
         return (
-            <>
-                <div style={{ float: "left" }}>{t("tags")}</div>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div
+                    style={{
+                        flexGrow: 1,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                    }}
+                >
+                    {t("tags")}
+                </div>
                 <div
                     onClick={e => e.stopPropagation()}
-                    style={{ float: "right" }}>
+                    style={{ marginLeft: 10, marginRight: 5 }}>
                     <TagCreationModalButton />
                 </div>
-            </>
+            </div>
         );
     };
 
@@ -133,11 +159,13 @@ const MainMenu: React.FC = observer(() => {
                 menu={{ items: contextMenuItems }}
                 trigger={["contextMenu"]}>
                 <Link to={`/tags/${tag.id}`}>
-                    <div style={{ float: "left" }}>
-                        <TaskTag tag={tag} />
-                    </div>
-                    <div style={{ float: "right", color: "grey" }}>
-                        {tagIncompleteTaskCount}
+                    <div style={{ display: "flex", flexDirection: "row" }}>
+                        <div style={{ flexGrow: 1, overflow: "hidden" }}>
+                            <TaskTag tag={tag} />
+                        </div>
+                        <div style={{ color: "grey", marginLeft: 10 }}>
+                            {tagIncompleteTaskCount}
+                        </div>
                     </div>
                 </Link>
             </Dropdown>
