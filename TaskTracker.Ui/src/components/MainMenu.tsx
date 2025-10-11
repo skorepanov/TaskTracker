@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Dropdown, Divider, Menu, MenuProps } from "antd";
+import { Dropdown, Divider, Menu, MenuProps, Tooltip } from "antd";
 import { useStore } from "../stores/RootStore";
 import { useTranslation } from "../hooks/useTranslation";
 import IFolder from "../interfaces/IFolder";
@@ -93,16 +93,36 @@ const MainMenu: React.FC = observer(() => {
             },
         ];
 
+        const folderLink = `/folders/${folder.id}`;
+
         return (
             <Dropdown
                 key={folder.id}
                 menu={{ items: contextMenuItems }}
-                trigger={["contextMenu"]}>
-                {getLabel(
-                    `/folders/${folder.id}`,
-                    folder.title,
-                    folderIncompleteTaskCount
-                )}
+                trigger={["contextMenu"]}
+            >
+                <Tooltip
+                    title={folder.title}
+                    placement="right"
+                    mouseEnterDelay={0.8}
+                >
+                    <Link to={folderLink}>
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                            <div
+                                style={{
+                                    flexGrow: 1,
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                }}
+                            >
+                                {folder.title}
+                            </div>
+                            <div style={{ color: "grey", marginLeft: 10 }}>
+                                {folderIncompleteTaskCount}
+                            </div>
+                        </div>
+                    </Link>
+                </Tooltip>
             </Dropdown>
         );
     };
@@ -153,21 +173,30 @@ const MainMenu: React.FC = observer(() => {
             },
         ];
 
+        const tagLink = `/tags/${tag.id}`;
+
         return (
             <Dropdown
                 key={tag.id}
                 menu={{ items: contextMenuItems }}
-                trigger={["contextMenu"]}>
-                <Link to={`/tags/${tag.id}`}>
-                    <div style={{ display: "flex", flexDirection: "row" }}>
-                        <div style={{ flexGrow: 1, overflow: "hidden" }}>
-                            <TaskTag tag={tag} />
+                trigger={["contextMenu"]}
+            >
+                <Tooltip
+                    title={tag.title}
+                    placement="right"
+                    mouseEnterDelay={0.8}
+                >
+                    <Link to={tagLink}>
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                            <div style={{ flexGrow: 1, overflow: "hidden" }}>
+                                <TaskTag tag={tag} />
+                            </div>
+                            <div style={{ color: "grey", marginLeft: 10 }}>
+                                {tagIncompleteTaskCount}
+                            </div>
                         </div>
-                        <div style={{ color: "grey", marginLeft: 10 }}>
-                            {tagIncompleteTaskCount}
-                        </div>
-                    </div>
-                </Link>
+                    </Link>
+                </Tooltip>
             </Dropdown>
         );
     };
