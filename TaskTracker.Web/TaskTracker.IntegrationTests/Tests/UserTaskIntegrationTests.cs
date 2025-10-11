@@ -26,12 +26,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
 
         // Act
-        var response = await Client.GetAsync(requestUri: $"/api/tasks/{task.Id}");
+        var response = await Client.GetAsync(
+            requestUri: $"/api/tasks/{task.Id}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -59,12 +62,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.GetAsync(
-            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}");
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -83,13 +88,16 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         await CreateTaskInTrashInDatabase();
 
         // Act
-        var response = await Client.GetAsync(requestUri: $"/api/tasks/incomplete");
+        var response = await Client.GetAsync(
+            requestUri: "/api/tasks/incomplete",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>(
+                TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -121,13 +129,16 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         await CreateTaskInTrashInDatabase();
 
         // Act
-        var response = await Client.GetAsync(requestUri: $"/api/tasks/complete");
+        var response = await Client.GetAsync(
+            requestUri: "/api/tasks/complete",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>(
+                TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -159,13 +170,16 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         await CreateCompletedTaskInDatabase(folder.Id);
 
         // Act
-        var response = await Client.GetAsync(requestUri: $"/api/tasks/trash");
+        var response = await Client.GetAsync(
+            requestUri: "/api/tasks/trash",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>(
+                TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -204,12 +218,16 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
 
         // Act
-        var response = await Client.PostAsJsonAsync(requestUri: "/api/tasks", creationDto);
+        var response = await Client.PostAsJsonAsync(
+            requestUri: "/api/tasks",
+            creationDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -253,12 +271,16 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             INVALID_TITLE, FolderId: null, DueDateTime: null, CreatedDateTime: anyDateTime);
 
         // Act
-        var response = await Client.PostAsJsonAsync(requestUri: "/api/tasks", creationDto);
+        var response = await Client.PostAsJsonAsync(
+            requestUri: "/api/tasks",
+            creationDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -304,12 +326,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{task.Id}", updateDto);
+            requestUri: $"/api/tasks/{task.Id}",
+            updateDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -362,12 +387,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}", updateDto);
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}",
+            updateDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -401,12 +429,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{task.Id}", updateDto);
+            requestUri: $"/api/tasks/{task.Id}",
+            updateDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -445,12 +476,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{task.Id}/completed", completeDto);
+            requestUri: $"/api/tasks/{task.Id}/completed",
+            completeDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -495,12 +529,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/completed", completeDto);
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/completed",
+            completeDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -524,12 +561,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{task.Id}/incompleted", incompleteDto);
+            requestUri: $"/api/tasks/{task.Id}/incompleted",
+            incompleteDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -574,12 +614,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/incompleted", completeDto);
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/incompleted",
+            completeDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -611,12 +654,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{task.Id}/movedToTrash", moveToTrashDto);
+            requestUri: $"/api/tasks/{task.Id}/movedToTrash",
+            moveToTrashDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -661,12 +707,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/movedToTrash", moveToTrashDto);
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/movedToTrash",
+            moveToTrashDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -690,12 +739,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{task.Id}/movedFromTrash", moveFromTrashDto);
+            requestUri: $"/api/tasks/{task.Id}/movedFromTrash",
+            moveFromTrashDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -740,12 +792,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/movedFromTrash", moveToTrashDto);
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}/movedFromTrash",
+            moveToTrashDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -766,12 +821,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tasks/{task.Id}/movedFromTrash", moveFromTrashDto);
+            requestUri: $"/api/tasks/{task.Id}/movedFromTrash",
+            moveFromTrashDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -802,13 +860,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         var otherTask = await CreateTaskInTrashInDatabase();
 
         // Act
-        var response = await Client
-            .DeleteAsync(requestUri: $"/api/tasks/{taskToDelete.Id}");
+        var response = await Client.DeleteAsync(
+            requestUri: $"/api/tasks/{taskToDelete.Id}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -827,13 +887,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         const int NON_EXISTENT_TASK_ID = 1;
 
         // Act
-        var response = await Client
-            .DeleteAsync(requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}");
+        var response = await Client.DeleteAsync(
+            requestUri: $"/api/tasks/{NON_EXISTENT_TASK_ID}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();

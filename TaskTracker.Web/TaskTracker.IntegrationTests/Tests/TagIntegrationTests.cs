@@ -16,12 +16,15 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         await CreateTagInDatabase();
 
         // Act
-        var response = await Client.GetAsync(requestUri: $"/api/tags/{tag.Id}");
+        var response = await Client.GetAsync(
+            requestUri: $"/api/tags/{tag.Id}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -44,12 +47,14 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.GetAsync(
-            requestUri: $"/api/tags/{NON_EXISTENT_TAG_ID}");
+            requestUri: $"/api/tags/{NON_EXISTENT_TAG_ID}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -74,13 +79,16 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             title: "Tag title 2", color: "222222", createdDateTime2);
 
         // Act
-        var response = await Client.GetAsync(requestUri: "/api/tags");
+        var response = await Client.GetAsync(
+            requestUri: "/api/tags",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<TagVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<TagVm>>>(
+                TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -115,12 +123,16 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
 
         // Act
-        var response = await Client.PostAsJsonAsync(requestUri: "/api/tags", creationDto);
+        var response = await Client.PostAsJsonAsync(
+            requestUri: "/api/tags",
+            creationDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -154,12 +166,16 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             INVALID_TITLE, INVALID_COLOR, CreatedDateTime: anyDateTime);
 
         // Act
-        var response = await Client.PostAsJsonAsync(requestUri: "/api/tags", creationDto);
+        var response = await Client.PostAsJsonAsync(
+            requestUri: "/api/tags",
+            creationDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -190,12 +206,15 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tags/{tag.Id}", updateDto);
+            requestUri: $"/api/tags/{tag.Id}",
+            updateDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -232,12 +251,15 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tags/{NON_EXISTENT_TAG_ID}", updateDto);
+            requestUri: $"/api/tags/{NON_EXISTENT_TAG_ID}",
+            updateDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -264,12 +286,15 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/tags/{tag.Id}", updateDto);
+            requestUri: $"/api/tags/{tag.Id}",
+            updateDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -295,13 +320,15 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         var otherTag = await CreateTagInDatabase();
 
         // Act
-        var response = await Client
-            .DeleteAsync(requestUri: $"/api/tags/{tagToDelete.Id}");
+        var response = await Client.DeleteAsync(
+            requestUri: $"/api/tags/{tagToDelete.Id}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -320,13 +347,15 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         const int NON_EXISTENT_TAG_ID = 1;
 
         // Act
-        var response = await Client
-            .DeleteAsync(requestUri: $"/api/tags/{NON_EXISTENT_TAG_ID}");
+        var response = await Client.DeleteAsync(
+            requestUri: $"/api/tags/{NON_EXISTENT_TAG_ID}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();

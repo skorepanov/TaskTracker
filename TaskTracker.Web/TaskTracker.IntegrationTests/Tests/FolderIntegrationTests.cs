@@ -15,12 +15,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         await CreateFolderInDatabase();
 
         // Act
-        var response = await Client.GetAsync(requestUri: $"/api/folders/{folder.Id}");
+        var response = await Client.GetAsync(
+            requestUri: $"/api/folders/{folder.Id}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -42,12 +45,14 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.GetAsync(
-            requestUri: $"/api/folders/{NON_EXISTENT_FOLDER_ID}");
+            requestUri: $"/api/folders/{NON_EXISTENT_FOLDER_ID}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -70,13 +75,16 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         var folder2 = await CreateFolderInDatabase(title: "Folder title 2", createdDateTime2);
 
         // Act
-        var response = await Client.GetAsync(requestUri: "/api/folders");
+        var response = await Client.GetAsync(
+            requestUri: "/api/folders",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<FolderVm>>>();
+            .ReadFromJsonAsync<Result<IReadOnlyList<FolderVm>>>(
+                TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -108,12 +116,16 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         MockDateTimeProvider.Setup(p => p.UtcNow).Returns(utcNow);
 
         // Act
-        var response = await Client.PostAsJsonAsync(requestUri: "api/folders", creationDto);
+        var response = await Client.PostAsJsonAsync(
+            requestUri: "api/folders",
+            creationDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -145,12 +157,16 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             INVALID_TITLE, CreatedDateTime: anyDateTime);
 
         // Act
-        var response = await Client.PostAsJsonAsync(requestUri: "api/folders", creationDto);
+        var response = await Client.PostAsJsonAsync(
+            requestUri: "api/folders",
+            creationDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -179,12 +195,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/folders/{folder.Id}", updateDto);
+            requestUri: $"/api/folders/{folder.Id}",
+            updateDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -219,12 +238,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/folders/{NON_EXISTENT_FOLDER_ID}", updateDto);
+            requestUri: $"/api/folders/{NON_EXISTENT_FOLDER_ID}",
+            updateDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -249,12 +271,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
 
         // Act
         var response = await Client.PutAsJsonAsync(
-            requestUri: $"/api/folders/{folder.Id}", updateDto);
+            requestUri: $"/api/folders/{folder.Id}",
+            updateDto,
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();
@@ -279,13 +304,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         var otherFolder = await CreateFolderInDatabase();
 
         // Act
-        var response = await Client
-            .DeleteAsync(requestUri: $"/api/folders/{folderToDelete.Id}");
+        var response = await Client.DeleteAsync(
+            requestUri: $"/api/folders/{folderToDelete.Id}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeTrue();
@@ -304,13 +331,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         const int NON_EXISTENT_FOLDER_ID = 1;
 
         // Act
-        var response = await Client
-            .DeleteAsync(requestUri: $"/api/folders/{NON_EXISTENT_FOLDER_ID}");
+        var response = await Client.DeleteAsync(
+            requestUri: $"/api/folders/{NON_EXISTENT_FOLDER_ID}",
+            TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>();
+        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
+            TestContext.Current.CancellationToken);
 
         content.Should().NotBeNull();
         content.IsOk.Should().BeFalse();

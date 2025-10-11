@@ -58,7 +58,7 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
         });
     }
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         _connection = new NpgsqlConnection(_connectionString);
 

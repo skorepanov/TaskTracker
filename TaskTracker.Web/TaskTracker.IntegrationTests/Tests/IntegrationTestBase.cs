@@ -21,10 +21,10 @@ public abstract class IntegrationTestBase
         MockDateTimeProvider = Factory.MockDateTimeProvider;
     }
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await Factory.ResetDatabaseAsync();
     }
 
-    public Task DisposeAsync() => Task.CompletedTask;
+    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }
