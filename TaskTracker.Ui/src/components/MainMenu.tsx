@@ -56,6 +56,34 @@ const MainMenu: React.FC = observer(() => {
         );
     };
 
+    const getInboxLabel = (incompletedTaskCount?: number) => {
+        return (
+            <Link
+                to="/inbox"
+                onDragOver={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }}
+                onDrop={async (event) => await handleTaskDrop(event, null)}
+            >
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div
+                        style={{
+                            flexGrow: 1,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                        }}
+                    >
+                        Inbox
+                    </div>
+                    <div style={{ color: "grey", marginLeft: 10 }}>
+                        {incompletedTaskCount}
+                    </div>
+                </div>
+            </Link>
+        );
+    }
+
     const getFolderRootLabel = () => {
         return (
             <div style={{ display: "flex", flexDirection: "row" }}>
@@ -106,7 +134,16 @@ const MainMenu: React.FC = observer(() => {
                     placement="right"
                     mouseEnterDelay={0.8}
                 >
-                    <Link to={folderLink}>
+                    <Link
+                        to={folderLink}
+                        onDragOver={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }}
+                        onDrop={async (event) => {
+                            await handleTaskDrop(event, folder.id);
+                        }}
+                    >
                         <div style={{ display: "flex", flexDirection: "row" }}>
                             <div
                                 style={{
@@ -210,6 +247,22 @@ const MainMenu: React.FC = observer(() => {
         });
     };
 
+    const handleTaskDrop = async (
+        event: React.DragEvent<HTMLAnchorElement>,
+        folderId: number | null
+    ) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const transferDataAsJson = event.dataTransfer.getData("text/plain");
+        const parsedTransferData = JSON.parse(transferDataAsJson);
+
+        if (parsedTransferData?.taskId) {
+            await taskStore
+                .updateTaskFolder(parsedTransferData.taskId, folderId);
+        }
+    }
+
     const mainMenuItems: MenuItem[] = [
         {
             key: "/all",
@@ -225,7 +278,7 @@ const MainMenu: React.FC = observer(() => {
         },
         {
             key: "/inbox",
-            label: getLabel("/inbox", "Inbox", inboxIncompletedTasksCount),
+            label: getInboxLabel(inboxIncompletedTasksCount),
         },
         {
             type: "divider",

@@ -71,6 +71,11 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
         taskStore.currentTaskId = task.id;
     };
 
+    const handleTaskDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+        const transferData = JSON.stringify({ taskId: task.id });
+        event.dataTransfer.setData("text/plain", transferData);
+    }
+
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
         const isCompletedNew = event.target.checked;
 
@@ -103,6 +108,8 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
                 trigger={["contextMenu"]}>
                 <div
                     onClick={handleTaskClick}
+                    draggable
+                    onDragStart={handleTaskDragStart}
                     style={{
                         color: taskTextColor,
                         backgroundColor: backgroundColor,

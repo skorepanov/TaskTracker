@@ -140,6 +140,21 @@ class TaskStore {
         });
     };
 
+    updateTaskFolder = async (taskId: number, folderId: number | null) => {
+        const task = this.tasks.get(taskId);
+
+        if (task) {
+            await this.updateTask(
+                task.id,
+                task.title,
+                task.description,
+                folderId,
+                task.dueDateTime,
+                task.tagIds
+            );
+        }
+    };
+
     deleteTask = async (taskId: number) => {
         const url = `${ApiUrl}/tasks/${taskId}`;
 
