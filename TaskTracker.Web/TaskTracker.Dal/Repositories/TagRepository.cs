@@ -20,13 +20,13 @@ public class TagRepository(ApplicationContext db) : ITagRepository
         return await db.Tags.ToListAsync();
     }
 
-    public async Task<IReadOnlyList<Tag>> GetTags(IEnumerable<int> tagIds)
+    public async Task<IReadOnlyList<Tag>> GetTags(ICollection<int> tagIds)
     {
         var tags = await db.Tags
             .Where(t => tagIds.Contains(t.Id))
             .ToListAsync();
 
-        if (tags.Count != tagIds.Count())
+        if (tags.Count != tagIds.Count)
         {
             var existentTagIds = tags.Select(t => t.Id).ToList();
             var nonExistentTagIds = tagIds.Except(existentTagIds).ToList();

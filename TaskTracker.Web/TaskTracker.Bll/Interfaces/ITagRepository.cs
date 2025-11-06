@@ -6,7 +6,7 @@ public interface ITagRepository
 
     Task<IReadOnlyList<Tag>> GetTags();
 
-    Task<IReadOnlyList<Tag>> GetTags(IEnumerable<int> tagIds);
+    Task<IReadOnlyList<Tag>> GetTags(ICollection<int> tagIds);
 
     Task CreateTag(Tag tag);
 
