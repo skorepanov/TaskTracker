@@ -22,7 +22,20 @@ public class TagRepository(ApplicationContext db) : ITagRepository
 
     public async Task<IReadOnlyList<Tag>> GetTags(IEnumerable<int> tagIds)
     {
-        return await db.Tags.Where(t => tagIds.Contains(t.Id)).ToListAsync();
+        var tags = await db.Tags
+            .Where(t => tagIds.Contains(t.Id))
+            .ToListAsync();
+
+        if (tags.Count != tagIds.Count())
+        {
+            var existentTagIds = tags.Select(t => t.Id).ToList();
+            var nonExistentTagIds = tagIds.Except(existentTagIds).ToList();
+
+            var error = ErrorMessages.TagsNotFound(nonExistentTagIds);
+            throw new DomainException(error);
+        }
+
+        return tags;
     }
 
     public async Task CreateTag(Tag tag)

@@ -83,22 +83,11 @@ public class TaskService(
             }
         }
 
-        var tagIds = userTaskDto.TagIds ?? [];
-        IReadOnlyList<Tag> tags = new List<Tag>();
+        var tagIds = userTaskDto.TagIds?.Distinct().ToList() ?? [];
 
-        if (tagIds.Count > 0)
-        {
-            tags = await tagRepository.GetTags(tagIds);
-
-            var existentTagIds = tags.Select(t => t.Id).ToList();
-            var nonExistentTagIds = tagIds.Except(existentTagIds).ToList();
-
-            if (nonExistentTagIds.Count > 0)
-            {
-                var error = ErrorMessages.TagsNotFound(nonExistentTagIds);
-                throw new DomainException(error);
-            }
-        }
+        var tags = tagIds.Count > 0
+            ? await tagRepository.GetTags(tagIds)
+            : [];
 
         task.UpdateTask(userTaskDto, dateTimeProvider.UtcNow, tags);
 
