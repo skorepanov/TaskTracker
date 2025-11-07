@@ -17,10 +17,10 @@ public static class DiExtensions
     public static void AddServices(this IServiceCollection collection)
     {
         collection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-        collection.AddTransient<ExecutionService>();
-        collection.AddTransient<TaskService>();
-        collection.AddTransient<FolderService>();
-        collection.AddTransient<TagService>();
+        collection.AddScoped<ExecutionService>();
+        collection.AddScoped<TaskService>();
+        collection.AddScoped<FolderService>();
+        collection.AddScoped<TagService>();
     }
 
     /// <summary>
@@ -28,9 +28,9 @@ public static class DiExtensions
     /// </summary>
     public static void AddRepositories(this IServiceCollection collection)
     {
-        collection.AddTransient<ITaskRepository, TaskRepository>();
-        collection.AddTransient<IFolderRepository, FolderRepository>();
-        collection.AddTransient<ITagRepository, TagRepository>();
+        collection.AddScoped<ITaskRepository, TaskRepository>();
+        collection.AddScoped<IFolderRepository, FolderRepository>();
+        collection.AddScoped<ITagRepository, TagRepository>();
     }
 
     /// <summary>
