@@ -20,9 +20,9 @@ public class FolderUnitTests
         var sut = Folder.CreateFolder(folderDto, now: anyDateTime);
 
         // Assert
-        sut.Title.Should().Be(TITLE);
-        sut.CreatedDateTime.Should().Be(createdDateTime);
-        sut.ModifiedDateTime.Should().BeNull();
+        sut.Title.ShouldBe(TITLE);
+        sut.CreatedDateTime.ShouldBe(createdDateTime);
+        sut.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -39,8 +39,8 @@ public class FolderUnitTests
         var action = () => Folder.CreateFolder(folderDto, now: anyDateTime);
 
         // Assert
-        action.Should().Throw<DomainException>()
-            .Which.Message.Should().NotBeNullOrWhiteSpace();
+        Should.Throw<DomainException>(action)
+            .Message.ShouldNotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class FolderUnitTests
         var sut = Folder.CreateFolder(folderDto, now);
 
         // Assert
-        sut.CreatedDateTime.Should().Be(now);
+        sut.CreatedDateTime.ShouldBe(now);
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public class FolderUnitTests
         var sut = Folder.CreateFolder(folderDto, now);
 
         // Assert
-        sut.CreatedDateTime.Should().Be(createdDateTime);
+        sut.CreatedDateTime.ShouldBe(createdDateTime);
     }
     #endregion
 
@@ -97,8 +97,8 @@ public class FolderUnitTests
         sut.UpdateFolder(folderDto, modifiedDateTime);
 
         // Assert
-        sut.Title.Should().Be(NEW_TITLE);
-        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+        sut.Title.ShouldBe(NEW_TITLE);
+        sut.ModifiedDateTime.ShouldBe(modifiedDateTime);
     }
 
     [Fact]
@@ -118,11 +118,11 @@ public class FolderUnitTests
         var action = () => sut.UpdateFolder(folderDto, now: anyDateTime);
 
         // Assert
-        action.Should().Throw<DomainException>()
-            .Which.Message.Should().NotBeNullOrWhiteSpace();
+        Should.Throw<DomainException>(action)
+            .Message.ShouldNotBeNullOrWhiteSpace();
 
-        sut.Title.Should().Be(OLD_TITLE);
-        sut.ModifiedDateTime.Should().BeNull();
+        sut.Title.ShouldBe(OLD_TITLE);
+        sut.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class FolderUnitTests
         sut.UpdateFolder(folderDto, now);
 
         // Assert
-        sut.ModifiedDateTime.Should().Be(now);
+        sut.ModifiedDateTime.ShouldBe(now);
     }
 
     [Fact]
@@ -161,7 +161,7 @@ public class FolderUnitTests
         sut.UpdateFolder(folderDto, now);
 
         // Assert
-        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+        sut.ModifiedDateTime.ShouldBe(modifiedDateTime);
     }
     #endregion
 

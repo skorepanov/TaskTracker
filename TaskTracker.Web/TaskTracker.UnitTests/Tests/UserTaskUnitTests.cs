@@ -14,8 +14,8 @@ public class UserTaskUnitTests
         sut.Complete(completedDateTime);
 
         // Assert
-        sut.CompletedDateTime.Should().Be(completedDateTime);
-        sut.ModifiedDateTime.Should().Be(completedDateTime);
+        sut.CompletedDateTime.ShouldBe(completedDateTime);
+        sut.ModifiedDateTime.ShouldBe(completedDateTime);
     }
     #endregion
 
@@ -34,8 +34,8 @@ public class UserTaskUnitTests
         sut.Incomplete(modifiedDateTime);
 
         // Assert
-        sut.CompletedDateTime.Should().BeNull();
-        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+        sut.CompletedDateTime.ShouldBeNull();
+        sut.ModifiedDateTime.ShouldBe(modifiedDateTime);
     }
     #endregion
 
@@ -51,8 +51,8 @@ public class UserTaskUnitTests
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDateTime.Should().BeNull();
-        overdueDayCount.Should().Be(0);
+        sut.DueDateTime.ShouldBeNull();
+        overdueDayCount.ShouldBe(0);
     }
 
     [Fact]
@@ -70,8 +70,8 @@ public class UserTaskUnitTests
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDateTime.Should().Be(dueDateTime);
-        overdueDayCount.Should().Be(2);
+        sut.DueDateTime.ShouldBe(dueDateTime);
+        overdueDayCount.ShouldBe(2);
     }
 
     [Fact]
@@ -89,8 +89,8 @@ public class UserTaskUnitTests
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDateTime.Should().Be(dueDateTime);
-        overdueDayCount.Should().Be(0);
+        sut.DueDateTime.ShouldBe(dueDateTime);
+        overdueDayCount.ShouldBe(0);
     }
 
     [Fact]
@@ -108,8 +108,8 @@ public class UserTaskUnitTests
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDateTime.Should().Be(dueDateTime);
-        overdueDayCount.Should().Be(0);
+        sut.DueDateTime.ShouldBe(dueDateTime);
+        overdueDayCount.ShouldBe(0);
     }
 
     [Fact]
@@ -130,8 +130,8 @@ public class UserTaskUnitTests
         var overdueDayCount = sut.CalculateOverdueDays(today);
 
         // Assert
-        sut.DueDateTime.Should().Be(dueDateTime);
-        overdueDayCount.Should().Be(0);
+        sut.DueDateTime.ShouldBe(dueDateTime);
+        overdueDayCount.ShouldBe(0);
     }
     #endregion
 
@@ -157,11 +157,11 @@ public class UserTaskUnitTests
         var sut = UserTask.CreateTask(userTaskDto, now: anyDateTime);
 
         // Assert
-        sut.Title.Should().Be(TITLE);
-        sut.FolderId.Should().Be(FOLDER_ID);
-        sut.DueDateTime.Should().Be(dueDateTime);
-        sut.CreatedDateTime.Should().Be(createdDateTime);
-        sut.ModifiedDateTime.Should().BeNull();
+        sut.Title.ShouldBe(TITLE);
+        sut.FolderId.ShouldBe(FOLDER_ID);
+        sut.DueDateTime.ShouldBe(dueDateTime);
+        sut.CreatedDateTime.ShouldBe(createdDateTime);
+        sut.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -180,8 +180,8 @@ public class UserTaskUnitTests
         var action = () => UserTask.CreateTask(userTaskDto, now: anyDateTime);
 
         // Assert
-        action.Should().Throw<DomainException>()
-            .Which.Message.Should().NotBeNullOrWhiteSpace();
+        Should.Throw<DomainException>(action)
+            .Message.ShouldNotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -200,7 +200,7 @@ public class UserTaskUnitTests
         var sut = UserTask.CreateTask(userTaskDto, now);
 
         // Assert
-        sut.CreatedDateTime.Should().Be(now);
+        sut.CreatedDateTime.ShouldBe(now);
     }
 
     [Fact]
@@ -220,7 +220,7 @@ public class UserTaskUnitTests
         var sut = UserTask.CreateTask(userTaskDto, now);
 
         // Assert
-        sut.CreatedDateTime.Should().Be(createdDateTime);
+        sut.CreatedDateTime.ShouldBe(createdDateTime);
     }
     #endregion
 
@@ -252,12 +252,12 @@ public class UserTaskUnitTests
         sut.UpdateTask(userTaskDto, modifiedDateTime, tags: []);
 
         // Assert
-        sut.Title.Should().Be(NEW_TITLE);
-        sut.Description.Should().Be(DESCRIPTION);
-        sut.FolderId.Should().Be(NEW_FOLDER_ID);
-        sut.Tags.Should().BeEmpty();
-        sut.DueDateTime.Should().Be(newDueDateTime);
-        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+        sut.Title.ShouldBe(NEW_TITLE);
+        sut.Description.ShouldBe(DESCRIPTION);
+        sut.FolderId.ShouldBe(NEW_FOLDER_ID);
+        sut.Tags.ShouldBeEmpty();
+        sut.DueDateTime.ShouldBe(newDueDateTime);
+        sut.ModifiedDateTime.ShouldBe(modifiedDateTime);
     }
 
     [Fact]
@@ -284,15 +284,15 @@ public class UserTaskUnitTests
         var action = () => sut.UpdateTask(userTaskDto, now: anyDateTime, tags: []);
 
         // Assert
-        action.Should().Throw<DomainException>()
-            .Which.Message.Should().NotBeNullOrWhiteSpace();
+        Should.Throw<DomainException>(action)
+            .Message.ShouldNotBeNullOrWhiteSpace();
 
-        sut.Title.Should().Be(OLD_TITLE);
-        sut.Description.Should().BeNull();
-        sut.FolderId.Should().Be(OLD_FOLDER_ID);
-        sut.Tags.Should().BeNull();
-        sut.DueDateTime.Should().Be(oldDueDateTime);
-        sut.ModifiedDateTime.Should().BeNull();
+        sut.Title.ShouldBe(OLD_TITLE);
+        sut.Description.ShouldBeNull();
+        sut.FolderId.ShouldBe(OLD_FOLDER_ID);
+        sut.Tags.ShouldBeNull();
+        sut.DueDateTime.ShouldBe(oldDueDateTime);
+        sut.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -315,7 +315,7 @@ public class UserTaskUnitTests
         sut.UpdateTask(userTaskDto, now, tags: []);
 
         // Assert
-        sut.ModifiedDateTime.Should().Be(now);
+        sut.ModifiedDateTime.ShouldBe(now);
     }
 
     [Fact]
@@ -339,7 +339,7 @@ public class UserTaskUnitTests
         sut.UpdateTask(userTaskDto, now, tags: []);
 
         // Assert
-        sut.ModifiedDateTime.Should().Be(modifiedDateTime);
+        sut.ModifiedDateTime.ShouldBe(modifiedDateTime);
     }
 
     [Fact]
@@ -370,7 +370,7 @@ public class UserTaskUnitTests
         sut.UpdateTask(userTaskDto, now: anyDateTime, tags);
 
         // Assert
-        sut.Tags.Should().BeEquivalentTo(tags);
+        sut.Tags.ShouldBeEquivalentTo(tags);
     }
     #endregion
 
@@ -386,10 +386,10 @@ public class UserTaskUnitTests
          sut.MoveToTrash(movedToTrashDateTime);
 
          // Assert
-         sut.MovedToTrashDateTime.Should().Be(movedToTrashDateTime);
-         sut.IsInTrash.Should().BeTrue();
-         sut.ModifiedDateTime.Should().Be(movedToTrashDateTime);
-         sut.FolderId.Should().BeNull();
+         sut.MovedToTrashDateTime.ShouldBe(movedToTrashDateTime);
+         sut.IsInTrash.ShouldBeTrue();
+         sut.ModifiedDateTime.ShouldBe(movedToTrashDateTime);
+         sut.FolderId.ShouldBeNull();
      }
 
     [Fact]
@@ -403,10 +403,10 @@ public class UserTaskUnitTests
         sut.MoveToTrash(movedToTrashDateTime);
 
         // Assert
-        sut.MovedToTrashDateTime.Should().Be(movedToTrashDateTime);
-        sut.IsInTrash.Should().BeTrue();
-        sut.ModifiedDateTime.Should().Be(movedToTrashDateTime);
-        sut.FolderId.Should().BeNull();
+        sut.MovedToTrashDateTime.ShouldBe(movedToTrashDateTime);
+        sut.IsInTrash.ShouldBeTrue();
+        sut.ModifiedDateTime.ShouldBe(movedToTrashDateTime);
+        sut.FolderId.ShouldBeNull();
     }
 
     [Fact]
@@ -423,13 +423,13 @@ public class UserTaskUnitTests
         var action = () => sut.MoveToTrash(newMovedToTrashDateTime);
 
         // Assert
-        action.Should().Throw<DomainException>()
-            .Which.Message.Should().NotBeNullOrWhiteSpace();
+        Should.Throw<DomainException>(action)
+            .Message.ShouldNotBeNullOrWhiteSpace();
 
-        sut.MovedToTrashDateTime.Should().Be(oldMovedToTrashDateTime);
-        sut.IsInTrash.Should().BeTrue();
-        sut.ModifiedDateTime.Should().Be(oldMovedToTrashDateTime);
-        sut.FolderId.Should().BeNull();
+        sut.MovedToTrashDateTime.ShouldBe(oldMovedToTrashDateTime);
+        sut.IsInTrash.ShouldBeTrue();
+        sut.ModifiedDateTime.ShouldBe(oldMovedToTrashDateTime);
+        sut.FolderId.ShouldBeNull();
     }
     #endregion
 
@@ -449,10 +449,10 @@ public class UserTaskUnitTests
         sut.MoveFromTrash(movedFromTrashDateTime, folderId: null);
 
         // Assert
-        sut.MovedToTrashDateTime.Should().BeNull();
-        sut.IsInTrash.Should().BeFalse();
-        sut.ModifiedDateTime.Should().Be(movedFromTrashDateTime);
-        sut.FolderId.Should().BeNull();
+        sut.MovedToTrashDateTime.ShouldBeNull();
+        sut.IsInTrash.ShouldBeFalse();
+        sut.ModifiedDateTime.ShouldBe(movedFromTrashDateTime);
+        sut.FolderId.ShouldBeNull();
     }
 
     [Fact]
@@ -472,10 +472,10 @@ public class UserTaskUnitTests
         sut.MoveFromTrash(movedFromTrashDateTime, NEW_FOLDER_ID);
 
         // Assert
-        sut.MovedToTrashDateTime.Should().BeNull();
-        sut.IsInTrash.Should().BeFalse();
-        sut.ModifiedDateTime.Should().Be(movedFromTrashDateTime);
-        sut.FolderId.Should().Be(NEW_FOLDER_ID);
+        sut.MovedToTrashDateTime.ShouldBeNull();
+        sut.IsInTrash.ShouldBeFalse();
+        sut.ModifiedDateTime.ShouldBe(movedFromTrashDateTime);
+        sut.FolderId.ShouldBe(NEW_FOLDER_ID);
     }
 
     [Fact]
@@ -499,13 +499,13 @@ public class UserTaskUnitTests
            => sut.MoveFromTrash(secondMovedFromTrashDateTime, SECOND_FOLDER_ID);
 
         // Assert
-        action.Should().Throw<DomainException>()
-            .Which.Message.Should().NotBeNullOrWhiteSpace();
+        Should.Throw<DomainException>(action)
+            .Message.ShouldNotBeNullOrWhiteSpace();
 
-        sut.MovedToTrashDateTime.Should().BeNull();
-        sut.IsInTrash.Should().BeFalse();
-        sut.ModifiedDateTime.Should().Be(firstMovedFromTrashDateTime);
-        sut.FolderId.Should().Be(FIRST_FOLDER_ID);
+        sut.MovedToTrashDateTime.ShouldBeNull();
+        sut.IsInTrash.ShouldBeFalse();
+        sut.ModifiedDateTime.ShouldBe(firstMovedFromTrashDateTime);
+        sut.FolderId.ShouldBe(FIRST_FOLDER_ID);
     }
     #endregion
 
