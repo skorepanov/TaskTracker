@@ -64,37 +64,35 @@ const TaskCreationPanel: React.FC<ITaskCreationPanelProps> = observer(props => {
     };
 
     return (
-        <Space.Compact style={{ width: "100%" }}>
+        <Space.Compact
+            style={{
+                width: "100%",
+                marginTop: 10,
+                marginBottom: 20
+            }}
+        >
             <Input
                 placeholder={t("createTask")}
                 value={title}
                 onChange={handleTitleChange}
                 onPressEnter={handleTitlePressEnter}
-                addonAfter={
-                    <>
-                        <Select
-                            placeholder={t("folder")}
-                            options={[inboxOption, ...folderOptions]}
-                            value={folderId}
-                            onChange={handleFolderChange}
-                            showSearch
-                            optionFilterProp="label"
-                            popupMatchSelectWidth={false}
-                            style={{ maxWidth: 250 }}
-                        />
-                        <DatePicker
-                            placeholder={t("date")}
-                            value={dueDateTimeAsDayjs}
-                            format={dateFormat}
-                            onChange={handleDueDateTimeChange}
-                            style={{
-                                width: 120,
-                                marginLeft: 10,
-                            }}
-                        />
-                    </>
-                }
-                style={{ marginTop: 10, marginBottom: 20, marginRight: 5 }}
+            />
+            <Select
+                placeholder={t("folder")}
+                options={[inboxOption, ...folderOptions]}
+                value={folderId}
+                onChange={handleFolderChange}
+                showSearch
+                optionFilterProp="label"
+                popupMatchSelectWidth={false}
+                style={{ maxWidth: 250 }}
+            />
+            <DatePicker
+                placeholder={t("date")}
+                value={dueDateTimeAsDayjs}
+                format={dateFormat}
+                onChange={handleDueDateTimeChange}
+                style={{ width: 160, marginRight: 5 }}
             />
         </Space.Compact>
     );
