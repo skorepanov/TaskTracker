@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Activity, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/RootStore";
 import {
@@ -85,33 +85,6 @@ const TaskUpdatePanel: React.FC = observer(() => {
         label: t.title,
         color: t.color,
     }));
-
-    const movedToTrashDateTimeComponent =
-        task.movedToTrashDateTime !== null ? (
-            <div>
-                {t("taskMovedToTrash")}:{" "}
-                {formatDateTime(task.movedToTrashDateTime)}
-            </div>
-        ) : null;
-
-    const completedDateTimeComponent = isCompleted ? (
-        <div>
-            {t("taskCompleted")}: {formatDateTime(task.completedDateTime)}
-        </div>
-    ) : null;
-
-    const modifiedDateTimeComponent =
-        task.modifiedDateTime !== null ? (
-            <div>
-                {t("taskUpdated")}: {formatDateTime(task.modifiedDateTime)}
-            </div>
-        ) : null;
-
-    const createdDateTimeComponent = (
-        <div>
-            {t("taskCreated")}: {formatDateTime(task.createdDateTime)}
-        </div>
-    );
 
     const handleCompletedChange = async (event: CheckboxChangeEvent) => {
         const isCompletedNew = event.target.checked;
@@ -217,23 +190,6 @@ const TaskUpdatePanel: React.FC = observer(() => {
         );
     };
 
-    const folderComponent = !isDisabled ? (
-        <Select
-            placeholder={t("folder")}
-            options={[inboxOption, ...folderOptions]}
-            value={task.folderId ?? inboxId}
-            onChange={handleFolderChange}
-            showSearch
-            optionFilterProp="label"
-            popupMatchSelectWidth={false}
-            style={{
-                width: 200,
-                marginLeft: 10,
-                marginTop: 10,
-            }}
-        />
-    ) : null;
-
     return (
         <div
             style={{
@@ -291,13 +247,51 @@ const TaskUpdatePanel: React.FC = observer(() => {
                 onChange={handleDescriptionChange}
                 style={{ flexGrow: 1, height: "100%", resize: "none" }}
             />
-            {folderComponent}
+            <Activity mode={isDisabled ? "hidden" : "visible"}>
+                <Select
+                    placeholder={t("folder")}
+                    options={[inboxOption, ...folderOptions]}
+                    value={task.folderId ?? inboxId}
+                    onChange={handleFolderChange}
+                    showSearch
+                    optionFilterProp="label"
+                    popupMatchSelectWidth={false}
+                    style={{
+                        width: 200,
+                        marginLeft: 10,
+                        marginTop: 10,
+                    }}
+                />
+            </Activity>
             <Divider size="small" />
             <div style={{ marginLeft: 10, marginBottom: 10 }}>
-                {movedToTrashDateTimeComponent}
-                {completedDateTimeComponent}
-                {modifiedDateTimeComponent}
-                {createdDateTimeComponent}
+                <Activity
+                    mode={task.movedToTrashDateTime !== null
+                        ? "visible"
+                        : "hidden"}
+                >
+                    <div>
+                        {t("taskMovedToTrash")}:{" "}
+                        {formatDateTime(task.movedToTrashDateTime)}
+                    </div>
+                </Activity>
+                <Activity mode={isCompleted ? "visible" : "hidden"}>
+                    <div>
+                        {t("taskCompleted")}:{" "}
+                        {formatDateTime(task.completedDateTime)}
+                    </div>
+                </Activity>
+                <Activity
+                    mode={task.modifiedDateTime !== null ? "visible" : "hidden"}
+                >
+                    <div>
+                        {t("taskUpdated")}:{" "}
+                        {formatDateTime(task.modifiedDateTime)}
+                    </div>
+                </Activity>
+                <div>
+                    {t("taskCreated")}: {formatDateTime(task.createdDateTime)}
+                </div>
             </div>
         </div>
     );

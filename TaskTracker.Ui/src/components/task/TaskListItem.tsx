@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Activity, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Divider, Dropdown, MenuProps } from "antd";
 import { useStore } from "../../stores/RootStore";
@@ -35,26 +35,20 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
     const backgroundColor =
         taskStore.currentTask?.id === task.id ? selectedTaskColor : "";
 
-    const folderComponent = props.shouldShowFolder ? (
-        <>{props.folder?.title ?? "<Inbox>"}</>
-    ) : null;
-
     const overdueComponentColor =
         !isCompleted && task.overdueDaysCount > 0 ? "red" : "";
 
     const overdueDaysComponent =
-        task.overdueDaysCount > 0 ? (
-            <>
-                ({task.overdueDaysCount} {t("daysAgo")})
-            </>
-        ) : null;
+        <Activity mode={task.overdueDaysCount > 0 ? "visible" : "hidden"}>
+            ({task.overdueDaysCount} {t("daysAgo")})
+        </Activity>;
 
     const overdueComponent =
-        task.dueDateTime !== null ? (
+        <Activity mode={task.dueDateTime !== null ? "visible" : "hidden"}>
             <span style={{ color: overdueComponentColor }}>
-                {formatDate(task.dueDateTime)} {overdueDaysComponent}
+                {formatDate(task.dueDateTime!)} {overdueDaysComponent}
             </span>
-        ) : null;
+        </Activity>;
 
     const taskTags = tagStore.getFilteredSortedTags(task.tagIds);
 
@@ -128,10 +122,18 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
                     <div style={{ float: "right" }}>{taskTagComponents}</div>
                     <br />
                     {overdueComponent}
-                    {overdueComponent !== null && folderComponent !== null
-                        ? " / "
-                        : null}
-                    {folderComponent}
+                    <Activity
+                        mode={task.dueDateTime !== null && props.shouldShowFolder
+                            ? "visible"
+                            : "hidden"}
+                    >
+                        {" / "}
+                    </Activity>
+                    <Activity
+                        mode={props.shouldShowFolder ? "visible" : "hidden"}
+                    >
+                        {props.folder?.title ?? "<Inbox>"}
+                    </Activity>
                 </div>
             </Dropdown>
             <Divider style={{ marginTop: 0, marginBottom: 0 }} />
