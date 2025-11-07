@@ -1,5 +1,5 @@
-﻿global using FluentAssertions;
-global using Moq;
+﻿global using Moq;
+global using Shouldly;
 global using Xunit;
 global using System;
 global using System.Collections.Generic;

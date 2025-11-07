@@ -20,21 +20,21 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseFolder = content.Value;
-        responseFolder.Should().NotBeNull();
-        responseFolder.Id.Should().Be(folder.Id);
-        responseFolder.Title.Should().Be(folder.Title);
-        responseFolder.CreatedDateTime.Should().Be(folder.CreatedDateTime);
-        responseFolder.ModifiedDateTime.Should().BeNull();
+        responseFolder.ShouldNotBeNull();
+        responseFolder.Id.ShouldBe(folder.Id);
+        responseFolder.Title.ShouldBe(folder.Title);
+        responseFolder.CreatedDateTime.ShouldBe(folder.CreatedDateTime);
+        responseFolder.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -49,15 +49,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -80,28 +80,29 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content
             .ReadFromJsonAsync<Result<IReadOnlyList<FolderVm>>>(
                 TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
-        content.Value.Should().NotBeNull().And.HaveCount(2);
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
+        content.Value.ShouldNotBeNull();
+        content.Value.Count.ShouldBe(2);
 
         var responseFolder1 = content.Value.SingleOrDefault(f => f.Id == folder1.Id);
-        responseFolder1.Should().NotBeNull();
-        responseFolder1.Title.Should().Be(folder1.Title);
-        responseFolder1.CreatedDateTime.Should().Be(folder1.CreatedDateTime);
-        responseFolder1.ModifiedDateTime.Should().BeNull();
+        responseFolder1.ShouldNotBeNull();
+        responseFolder1.Title.ShouldBe(folder1.Title);
+        responseFolder1.CreatedDateTime.ShouldBe(folder1.CreatedDateTime);
+        responseFolder1.ModifiedDateTime.ShouldBeNull();
 
         var responseFolder2 = content.Value.SingleOrDefault(f => f.Id == folder2.Id);
-        responseFolder2.Should().NotBeNull();
-        responseFolder2.Title.Should().Be(folder2.Title);
-        responseFolder2.CreatedDateTime.Should().Be(folder2.CreatedDateTime);
-        responseFolder2.ModifiedDateTime.Should().BeNull();
+        responseFolder2.ShouldNotBeNull();
+        responseFolder2.Title.ShouldBe(folder2.Title);
+        responseFolder2.CreatedDateTime.ShouldBe(folder2.CreatedDateTime);
+        responseFolder2.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -122,29 +123,29 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseFolder = content.Value;
-        responseFolder.Should().NotBeNull();
-        responseFolder.Title.Should().Be(creationDto.Title);
-        responseFolder.CreatedDateTime.Should().Be(utcNow);
-        responseFolder.ModifiedDateTime.Should().BeNull();
+        responseFolder.ShouldNotBeNull();
+        responseFolder.Title.ShouldBe(creationDto.Title);
+        responseFolder.CreatedDateTime.ShouldBe(utcNow);
+        responseFolder.ModifiedDateTime.ShouldBeNull();
 
         var dbFolders = await GetFoldersFromDatabase();
-        dbFolders.Should().HaveCount(1);
+        dbFolders.Count.ShouldBe(1);
 
         var dbFolder = dbFolders.Single();
-        dbFolder.Id.Should().Be(responseFolder.Id);
-        dbFolder.Title.Should().Be(creationDto.Title);
-        dbFolder.CreatedDateTime.Should().Be(utcNow);
-        dbFolder.ModifiedDateTime.Should().BeNull();
+        dbFolder.Id.ShouldBe(responseFolder.Id);
+        dbFolder.Title.ShouldBe(creationDto.Title);
+        dbFolder.CreatedDateTime.ShouldBe(utcNow);
+        dbFolder.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -163,18 +164,18 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
 
         var dbFolders = await GetFoldersFromDatabase();
-        dbFolders.Should().BeEmpty();
+        dbFolders.ShouldBeEmpty();
     }
 
     [Fact]
@@ -200,30 +201,30 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseFolder = content.Value;
-        responseFolder.Should().NotBeNull();
-        responseFolder.Id.Should().Be(folder.Id);
-        responseFolder.Title.Should().Be(updateDto.Title);
-        responseFolder.CreatedDateTime.Should().Be(folder.CreatedDateTime);
-        responseFolder.ModifiedDateTime.Should().Be(utcNow);
+        responseFolder.ShouldNotBeNull();
+        responseFolder.Id.ShouldBe(folder.Id);
+        responseFolder.Title.ShouldBe(updateDto.Title);
+        responseFolder.CreatedDateTime.ShouldBe(folder.CreatedDateTime);
+        responseFolder.ModifiedDateTime.ShouldBe(utcNow);
 
         var dbFolders = await GetFoldersFromDatabase();
-        dbFolders.Should().HaveCount(1);
+        dbFolders.Count.ShouldBe(1);
 
         var dbFolder = dbFolders.Single();
-        dbFolder.Id.Should().Be(folder.Id);
-        dbFolder.Title.Should().Be(updateDto.Title);
-        dbFolder.CreatedDateTime.Should().Be(folder.CreatedDateTime);
-        dbFolder.ModifiedDateTime.Should().Be(utcNow);
+        dbFolder.Id.ShouldBe(folder.Id);
+        dbFolder.Title.ShouldBe(updateDto.Title);
+        dbFolder.CreatedDateTime.ShouldBe(folder.CreatedDateTime);
+        dbFolder.ModifiedDateTime.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -243,15 +244,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -276,24 +277,24 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
 
         var dbFolders = await GetFoldersFromDatabase();
-        dbFolders.Should().HaveCount(1);
+        dbFolders.Count.ShouldBe(1);
 
         var dbFolder = dbFolders.Single();
-        dbFolder.Id.Should().Be(folder.Id);
-        dbFolder.Title.Should().Be(OLD_TITLE);
-        dbFolder.CreatedDateTime.Should().Be(createdDateTime);
-        dbFolder.ModifiedDateTime.Should().BeNull();
+        dbFolder.Id.ShouldBe(folder.Id);
+        dbFolder.Title.ShouldBe(OLD_TITLE);
+        dbFolder.CreatedDateTime.ShouldBe(createdDateTime);
+        dbFolder.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -309,19 +310,19 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Value.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Value.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var dbFolders = await GetFoldersFromDatabase();
-        dbFolders.Should().HaveCount(1);
-        dbFolders.Single().Id.Should().Be(otherFolder.Id);
+        dbFolders.Count.ShouldBe(1);
+        dbFolders.Single().Id.ShouldBe(otherFolder.Id);
     }
 
     [Fact]
@@ -336,15 +337,15 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Value.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Value.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
     }
 
     #region helpers

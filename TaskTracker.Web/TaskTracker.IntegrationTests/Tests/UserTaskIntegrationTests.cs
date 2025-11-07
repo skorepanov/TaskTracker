@@ -31,27 +31,27 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTask = content.Value;
-        responseTask.Should().NotBeNull();
-        responseTask.Id.Should().Be(task.Id);
-        responseTask.Title.Should().Be(task.Title);
-        responseTask.Description.Should().BeNull();
-        responseTask.FolderId.Should().Be(task.FolderId);
-        responseTask.CompletedDateTime.Should().BeNull();
-        responseTask.DueDateTime.Should().Be(task.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().BeNull();
-        responseTask.TagIds.Should().BeNull();
-        responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().BeNull();
+        responseTask.ShouldNotBeNull();
+        responseTask.Id.ShouldBe(task.Id);
+        responseTask.Title.ShouldBe(task.Title);
+        responseTask.Description.ShouldBeNull();
+        responseTask.FolderId.ShouldBe(task.FolderId);
+        responseTask.CompletedDateTime.ShouldBeNull();
+        responseTask.DueDateTime.ShouldBe(task.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBeNull();
+        responseTask.TagIds.ShouldBeNull();
+        responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        responseTask.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -66,15 +66,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -93,29 +93,30 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content
             .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>(
                 TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
-        content.Value.Should().NotBeNull().And.HaveCount(1);
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
+        content.Value.ShouldNotBeNull();
+        content.Value.Count.ShouldBe(1);
 
         var responseTask = content.Value.Single();
-        responseTask.Should().NotBeNull();
-        responseTask.Id.Should().Be(incompletedTask.Id);
-        responseTask.Title.Should().Be(incompletedTask.Title);
-        responseTask.Description.Should().BeNull();
-        responseTask.FolderId.Should().Be(incompletedTask.FolderId);
-        responseTask.CompletedDateTime.Should().BeNull();
-        responseTask.DueDateTime.Should().Be(incompletedTask.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().BeNull();
-        responseTask.TagIds.Should().BeNull();
-        responseTask.CreatedDateTime.Should().Be(incompletedTask.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().BeNull();
+        responseTask.ShouldNotBeNull();
+        responseTask.Id.ShouldBe(incompletedTask.Id);
+        responseTask.Title.ShouldBe(incompletedTask.Title);
+        responseTask.Description.ShouldBeNull();
+        responseTask.FolderId.ShouldBe(incompletedTask.FolderId);
+        responseTask.CompletedDateTime.ShouldBeNull();
+        responseTask.DueDateTime.ShouldBe(incompletedTask.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBeNull();
+        responseTask.TagIds.ShouldBeNull();
+        responseTask.CreatedDateTime.ShouldBe(incompletedTask.CreatedDateTime);
+        responseTask.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -134,29 +135,30 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content
             .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>(
                 TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
-        content.Value.Should().NotBeNull().And.HaveCount(1);
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
+        content.Value.ShouldNotBeNull();
+        content.Value.Count.ShouldBe(1);
 
         var responseTask = content.Value.Single();
-        responseTask.Should().NotBeNull();
-        responseTask.Id.Should().Be(completedTask.Id);
-        responseTask.Title.Should().Be(completedTask.Title);
-        responseTask.Description.Should().BeNull();
-        responseTask.FolderId.Should().Be(completedTask.FolderId);
-        responseTask.CompletedDateTime.Should().Be(completedTask.CompletedDateTime);
-        responseTask.DueDateTime.Should().Be(completedTask.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().BeNull();
-        responseTask.TagIds.Should().BeNull();
-        responseTask.CreatedDateTime.Should().Be(completedTask.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().Be(completedTask.ModifiedDateTime);
+        responseTask.ShouldNotBeNull();
+        responseTask.Id.ShouldBe(completedTask.Id);
+        responseTask.Title.ShouldBe(completedTask.Title);
+        responseTask.Description.ShouldBeNull();
+        responseTask.FolderId.ShouldBe(completedTask.FolderId);
+        responseTask.CompletedDateTime.ShouldBe(completedTask.CompletedDateTime);
+        responseTask.DueDateTime.ShouldBe(completedTask.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBeNull();
+        responseTask.TagIds.ShouldBeNull();
+        responseTask.CreatedDateTime.ShouldBe(completedTask.CreatedDateTime);
+        responseTask.ModifiedDateTime.ShouldBe(completedTask.ModifiedDateTime);
     }
 
     [Fact]
@@ -175,29 +177,30 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content
             .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>(
                 TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
-        content.Value.Should().NotBeNull().And.HaveCount(1);
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
+        content.Value.ShouldNotBeNull();
+        content.Value.Count.ShouldBe(1);
 
         var responseTask = content.Value.Single();
-        responseTask.Should().NotBeNull();
-        responseTask.Id.Should().Be(taskInTrash.Id);
-        responseTask.Title.Should().Be(taskInTrash.Title);
-        responseTask.Description.Should().BeNull();
-        responseTask.FolderId.Should().Be(taskInTrash.FolderId);
-        responseTask.CompletedDateTime.Should().BeNull();
-        responseTask.DueDateTime.Should().Be(taskInTrash.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().Be(taskInTrash.MovedToTrashDateTime);
-        responseTask.TagIds.Should().BeNull();
-        responseTask.CreatedDateTime.Should().Be(taskInTrash.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().Be(taskInTrash.ModifiedDateTime);
+        responseTask.ShouldNotBeNull();
+        responseTask.Id.ShouldBe(taskInTrash.Id);
+        responseTask.Title.ShouldBe(taskInTrash.Title);
+        responseTask.Description.ShouldBeNull();
+        responseTask.FolderId.ShouldBe(taskInTrash.FolderId);
+        responseTask.CompletedDateTime.ShouldBeNull();
+        responseTask.DueDateTime.ShouldBe(taskInTrash.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBe(taskInTrash.MovedToTrashDateTime);
+        responseTask.TagIds.ShouldBeNull();
+        responseTask.CreatedDateTime.ShouldBe(taskInTrash.CreatedDateTime);
+        responseTask.ModifiedDateTime.ShouldBe(taskInTrash.ModifiedDateTime);
     }
 
     [Fact]
@@ -224,41 +227,41 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTask = content.Value;
-        responseTask.Should().NotBeNull();
-        responseTask.Title.Should().Be(creationDto.Title);
-        responseTask.Description.Should().BeNull();
-        responseTask.FolderId.Should().Be(creationDto.FolderId);
-        responseTask.CompletedDateTime.Should().BeNull();
-        responseTask.DueDateTime.Should().Be(creationDto.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().BeNull();
-        responseTask.TagIds.Should().BeNull();
-        responseTask.CreatedDateTime.Should().Be(utcNow);
-        responseTask.ModifiedDateTime.Should().BeNull();
+        responseTask.ShouldNotBeNull();
+        responseTask.Title.ShouldBe(creationDto.Title);
+        responseTask.Description.ShouldBeNull();
+        responseTask.FolderId.ShouldBe(creationDto.FolderId);
+        responseTask.CompletedDateTime.ShouldBeNull();
+        responseTask.DueDateTime.ShouldBe(creationDto.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBeNull();
+        responseTask.TagIds.ShouldBeNull();
+        responseTask.CreatedDateTime.ShouldBe(utcNow);
+        responseTask.ModifiedDateTime.ShouldBeNull();
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().HaveCount(1);
+        dbTasks.Count.ShouldBe(1);
 
         var dbTask = dbTasks.Single();
-        dbTask.Id.Should().Be(responseTask.Id);
-        dbTask.Title.Should().Be(creationDto.Title);
-        dbTask.Description.Should().BeNull();
-        dbTask.FolderId.Should().Be(creationDto.FolderId);
-        dbTask.CompletedDateTime.Should().BeNull();
-        dbTask.DueDateTime.Should().Be(creationDto.DueDateTime);
-        dbTask.MovedToTrashDateTime.Should().BeNull();
-        dbTask.Tags.Should().BeNullOrEmpty();
-        dbTask.CreatedDateTime.Should().Be(utcNow);
-        dbTask.ModifiedDateTime.Should().BeNull();
+        dbTask.Id.ShouldBe(responseTask.Id);
+        dbTask.Title.ShouldBe(creationDto.Title);
+        dbTask.Description.ShouldBeNull();
+        dbTask.FolderId.ShouldBe(creationDto.FolderId);
+        dbTask.CompletedDateTime.ShouldBeNull();
+        dbTask.DueDateTime.ShouldBe(creationDto.DueDateTime);
+        dbTask.MovedToTrashDateTime.ShouldBeNull();
+        dbTask.Tags.ShouldBeEmpty();
+        dbTask.CreatedDateTime.ShouldBe(utcNow);
+        dbTask.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -277,18 +280,18 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().BeEmpty();
+        dbTasks.ShouldBeEmpty();
     }
 
     [Fact]
@@ -331,43 +334,44 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTask = content.Value;
-        responseTask.Should().NotBeNull();
-        responseTask.Id.Should().Be(task.Id);
-        responseTask.Title.Should().Be(updateDto.Title);
-        responseTask.Description.Should().Be(updateDto.Description);
-        responseTask.FolderId.Should().Be(updateDto.FolderId);
-        responseTask.CompletedDateTime.Should().BeNull();
-        responseTask.DueDateTime.Should().Be(updateDto.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().BeNull();
-        responseTask.TagIds.Should().BeEquivalentTo([tagId1.Id, tagId2.Id]);
-        responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().Be(utcNow);
+        responseTask.ShouldNotBeNull();
+        responseTask.Id.ShouldBe(task.Id);
+        responseTask.Title.ShouldBe(updateDto.Title);
+        responseTask.Description.ShouldBe(updateDto.Description);
+        responseTask.FolderId.ShouldBe(updateDto.FolderId);
+        responseTask.CompletedDateTime.ShouldBeNull();
+        responseTask.DueDateTime.ShouldBe(updateDto.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBeNull();
+        responseTask.TagIds.ShouldBe([tagId1.Id, tagId2.Id]);
+        responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        responseTask.ModifiedDateTime.ShouldBe(utcNow);
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().HaveCount(1);
+        dbTasks.Count.ShouldBe(1);
 
         var dbTask = dbTasks.Single();
-        dbTask.Id.Should().Be(responseTask.Id);
-        dbTask.Title.Should().Be(updateDto.Title);
-        dbTask.Description.Should().Be(updateDto.Description);
-        dbTask.FolderId.Should().Be(updateDto.FolderId);
-        dbTask.CompletedDateTime.Should().BeNull();
-        dbTask.DueDateTime.Should().Be(updateDto.DueDateTime);
-        dbTask.MovedToTrashDateTime.Should().BeNull();
-        dbTask.Tags.Should().HaveCount(2);
-        dbTask.Tags.Select(t => t.Id).ToList().Should().BeEquivalentTo([tagId1.Id, tagId2.Id]);
-        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        dbTask.ModifiedDateTime.Should().Be(utcNow);
+        dbTask.Id.ShouldBe(responseTask.Id);
+        dbTask.Title.ShouldBe(updateDto.Title);
+        dbTask.Description.ShouldBe(updateDto.Description);
+        dbTask.FolderId.ShouldBe(updateDto.FolderId);
+        dbTask.CompletedDateTime.ShouldBeNull();
+        dbTask.DueDateTime.ShouldBe(updateDto.DueDateTime);
+        dbTask.MovedToTrashDateTime.ShouldBeNull();
+        dbTask.Tags.ShouldNotBeNull();
+        dbTask.Tags.Count.ShouldBe(2);
+        dbTask.Tags.Select(t => t.Id).ToList().ShouldBe([tagId1.Id, tagId2.Id]);
+        dbTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -392,15 +396,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -434,30 +438,30 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().HaveCount(1);
+        dbTasks.Count.ShouldBe(1);
 
         var dbTask = dbTasks.Single();
-        dbTask.Id.Should().Be(task.Id);
-        dbTask.Title.Should().Be(OLD_TASK_TITLE);
-        dbTask.Description.Should().BeNull();
-        dbTask.FolderId.Should().BeNull();
-        dbTask.CompletedDateTime.Should().BeNull();
-        dbTask.DueDateTime.Should().Be(oldDueDateTime);
-        dbTask.MovedToTrashDateTime.Should().BeNull();
-        dbTask.Tags.Should().BeNullOrEmpty();
-        dbTask.CreatedDateTime.Should().Be(createdDateTime);
-        dbTask.ModifiedDateTime.Should().BeNull();
+        dbTask.Id.ShouldBe(task.Id);
+        dbTask.Title.ShouldBe(OLD_TASK_TITLE);
+        dbTask.Description.ShouldBeNull();
+        dbTask.FolderId.ShouldBeNull();
+        dbTask.CompletedDateTime.ShouldBeNull();
+        dbTask.DueDateTime.ShouldBe(oldDueDateTime);
+        dbTask.MovedToTrashDateTime.ShouldBeNull();
+        dbTask.Tags.ShouldBeEmpty();
+        dbTask.CreatedDateTime.ShouldBe(createdDateTime);
+        dbTask.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -481,42 +485,42 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTask = content.Value;
-        responseTask.Should().NotBeNull();
-        responseTask.Id.Should().Be(task.Id);
-        responseTask.Title.Should().Be(task.Title);
-        responseTask.Description.Should().BeNull();
-        responseTask.FolderId.Should().Be(task.FolderId);
-        responseTask.CompletedDateTime.Should().Be(utcNow);
-        responseTask.DueDateTime.Should().Be(task.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().BeNull();
-        responseTask.TagIds.Should().BeNull();
-        responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().Be(utcNow);
+        responseTask.ShouldNotBeNull();
+        responseTask.Id.ShouldBe(task.Id);
+        responseTask.Title.ShouldBe(task.Title);
+        responseTask.Description.ShouldBeNull();
+        responseTask.FolderId.ShouldBe(task.FolderId);
+        responseTask.CompletedDateTime.ShouldBe(utcNow);
+        responseTask.DueDateTime.ShouldBe(task.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBeNull();
+        responseTask.TagIds.ShouldBeNull();
+        responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        responseTask.ModifiedDateTime.ShouldBe(utcNow);
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().HaveCount(1);
+        dbTasks.Count.ShouldBe(1);
 
         var dbTask = dbTasks.Single();
-        dbTask.Id.Should().Be(task.Id);
-        dbTask.Title.Should().Be(task.Title);
-        dbTask.Description.Should().BeNull();
-        dbTask.FolderId.Should().Be(task.FolderId);
-        dbTask.CompletedDateTime.Should().Be(utcNow);
-        dbTask.DueDateTime.Should().Be(task.DueDateTime);
-        dbTask.MovedToTrashDateTime.Should().BeNull();
-        dbTask.Tags.Should().BeNullOrEmpty();
-        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        dbTask.ModifiedDateTime.Should().Be(utcNow);
+        dbTask.Id.ShouldBe(task.Id);
+        dbTask.Title.ShouldBe(task.Title);
+        dbTask.Description.ShouldBeNull();
+        dbTask.FolderId.ShouldBe(task.FolderId);
+        dbTask.CompletedDateTime.ShouldBe(utcNow);
+        dbTask.DueDateTime.ShouldBe(task.DueDateTime);
+        dbTask.MovedToTrashDateTime.ShouldBeNull();
+        dbTask.Tags.ShouldBeEmpty();
+        dbTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -534,15 +538,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -566,42 +570,42 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTask = content.Value;
-        responseTask.Should().NotBeNull();
-        responseTask.Id.Should().Be(task.Id);
-        responseTask.Title.Should().Be(task.Title);
-        responseTask.Description.Should().BeNull();
-        responseTask.FolderId.Should().Be(task.FolderId);
-        responseTask.CompletedDateTime.Should().BeNull();
-        responseTask.DueDateTime.Should().Be(task.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().BeNull();
-        responseTask.TagIds.Should().BeNull();
-        responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().Be(utcNow);
+        responseTask.ShouldNotBeNull();
+        responseTask.Id.ShouldBe(task.Id);
+        responseTask.Title.ShouldBe(task.Title);
+        responseTask.Description.ShouldBeNull();
+        responseTask.FolderId.ShouldBe(task.FolderId);
+        responseTask.CompletedDateTime.ShouldBeNull();
+        responseTask.DueDateTime.ShouldBe(task.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBeNull();
+        responseTask.TagIds.ShouldBeNull();
+        responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        responseTask.ModifiedDateTime.ShouldBe(utcNow);
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().HaveCount(1);
+        dbTasks.Count.ShouldBe(1);
 
         var dbTask = dbTasks.Single();
-        dbTask.Id.Should().Be(task.Id);
-        dbTask.Title.Should().Be(task.Title);
-        dbTask.Description.Should().BeNull();
-        dbTask.FolderId.Should().Be(task.FolderId);
-        dbTask.CompletedDateTime.Should().BeNull();
-        dbTask.DueDateTime.Should().Be(task.DueDateTime);
-        dbTask.MovedToTrashDateTime.Should().BeNull();
-        dbTask.Tags.Should().BeNullOrEmpty();
-        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        dbTask.ModifiedDateTime.Should().Be(utcNow);
+        dbTask.Id.ShouldBe(task.Id);
+        dbTask.Title.ShouldBe(task.Title);
+        dbTask.Description.ShouldBeNull();
+        dbTask.FolderId.ShouldBe(task.FolderId);
+        dbTask.CompletedDateTime.ShouldBeNull();
+        dbTask.DueDateTime.ShouldBe(task.DueDateTime);
+        dbTask.MovedToTrashDateTime.ShouldBeNull();
+        dbTask.Tags.ShouldBeEmpty();
+        dbTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -619,15 +623,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -659,42 +663,42 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTask = content.Value;
-        responseTask.Should().NotBeNull();
-        responseTask.Id.Should().Be(task.Id);
-        responseTask.Title.Should().Be(task.Title);
-        responseTask.Description.Should().BeNull();
-        responseTask.FolderId.Should().BeNull();
-        responseTask.CompletedDateTime.Should().BeNull();
-        responseTask.DueDateTime.Should().Be(task.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().Be(utcNow);
-        responseTask.TagIds.Should().BeNull();
-        responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().Be(utcNow);
+        responseTask.ShouldNotBeNull();
+        responseTask.Id.ShouldBe(task.Id);
+        responseTask.Title.ShouldBe(task.Title);
+        responseTask.Description.ShouldBeNull();
+        responseTask.FolderId.ShouldBeNull();
+        responseTask.CompletedDateTime.ShouldBeNull();
+        responseTask.DueDateTime.ShouldBe(task.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBe(utcNow);
+        responseTask.TagIds.ShouldBeNull();
+        responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        responseTask.ModifiedDateTime.ShouldBe(utcNow);
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().HaveCount(1);
+        dbTasks.Count.ShouldBe(1);
 
         var dbTask = dbTasks.Single();
-        dbTask.Id.Should().Be(task.Id);
-        dbTask.Title.Should().Be(task.Title);
-        dbTask.Description.Should().BeNull();
-        dbTask.FolderId.Should().BeNull();
-        dbTask.CompletedDateTime.Should().BeNull();
-        dbTask.DueDateTime.Should().Be(task.DueDateTime);
-        dbTask.MovedToTrashDateTime.Should().Be(utcNow);
-        dbTask.Tags.Should().BeNullOrEmpty();
-        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        dbTask.ModifiedDateTime.Should().Be(utcNow);
+        dbTask.Id.ShouldBe(task.Id);
+        dbTask.Title.ShouldBe(task.Title);
+        dbTask.Description.ShouldBeNull();
+        dbTask.FolderId.ShouldBeNull();
+        dbTask.CompletedDateTime.ShouldBeNull();
+        dbTask.DueDateTime.ShouldBe(task.DueDateTime);
+        dbTask.MovedToTrashDateTime.ShouldBe(utcNow);
+        dbTask.Tags.ShouldBeEmpty();
+        dbTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -712,15 +716,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -744,42 +748,42 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTask = content.Value;
-        responseTask.Should().NotBeNull();
-        responseTask.Id.Should().Be(task.Id);
-        responseTask.Title.Should().Be(task.Title);
-        responseTask.Description.Should().BeNull();
-        responseTask.FolderId.Should().Be(folder.Id);
-        responseTask.CompletedDateTime.Should().BeNull();
-        responseTask.DueDateTime.Should().Be(task.DueDateTime);
-        responseTask.MovedToTrashDateTime.Should().BeNull();
-        responseTask.TagIds.Should().BeNull();
-        responseTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        responseTask.ModifiedDateTime.Should().Be(utcNow);
+        responseTask.ShouldNotBeNull();
+        responseTask.Id.ShouldBe(task.Id);
+        responseTask.Title.ShouldBe(task.Title);
+        responseTask.Description.ShouldBeNull();
+        responseTask.FolderId.ShouldBe(folder.Id);
+        responseTask.CompletedDateTime.ShouldBeNull();
+        responseTask.DueDateTime.ShouldBe(task.DueDateTime);
+        responseTask.MovedToTrashDateTime.ShouldBeNull();
+        responseTask.TagIds.ShouldBeNull();
+        responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        responseTask.ModifiedDateTime.ShouldBe(utcNow);
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().HaveCount(1);
+        dbTasks.Count.ShouldBe(1);
 
         var dbTask = dbTasks.Single();
-        dbTask.Id.Should().Be(task.Id);
-        dbTask.Title.Should().Be(task.Title);
-        dbTask.Description.Should().BeNull();
-        dbTask.FolderId.Should().Be(folder.Id);
-        dbTask.CompletedDateTime.Should().BeNull();
-        dbTask.DueDateTime.Should().Be(task.DueDateTime);
-        dbTask.MovedToTrashDateTime.Should().BeNull();
-        dbTask.Tags.Should().BeNullOrEmpty();
-        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        dbTask.ModifiedDateTime.Should().Be(utcNow);
+        dbTask.Id.ShouldBe(task.Id);
+        dbTask.Title.ShouldBe(task.Title);
+        dbTask.Description.ShouldBeNull();
+        dbTask.FolderId.ShouldBe(folder.Id);
+        dbTask.CompletedDateTime.ShouldBeNull();
+        dbTask.DueDateTime.ShouldBe(task.DueDateTime);
+        dbTask.MovedToTrashDateTime.ShouldBeNull();
+        dbTask.Tags.ShouldBeEmpty();
+        dbTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -797,15 +801,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -826,30 +830,30 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().HaveCount(1);
+        dbTasks.Count.ShouldBe(1);
 
         var dbTask = dbTasks.Single();
-        dbTask.Id.Should().Be(task.Id);
-        dbTask.Title.Should().Be(task.Title);
-        dbTask.Description.Should().BeNull();
-        dbTask.FolderId.Should().BeNull();
-        dbTask.CompletedDateTime.Should().BeNull();
-        dbTask.DueDateTime.Should().Be(task.DueDateTime);
-        dbTask.MovedToTrashDateTime.Should().Be(task.MovedToTrashDateTime);
-        dbTask.Tags.Should().BeNullOrEmpty();
-        dbTask.CreatedDateTime.Should().Be(task.CreatedDateTime);
-        dbTask.ModifiedDateTime.Should().Be(task.ModifiedDateTime);
+        dbTask.Id.ShouldBe(task.Id);
+        dbTask.Title.ShouldBe(task.Title);
+        dbTask.Description.ShouldBeNull();
+        dbTask.FolderId.ShouldBeNull();
+        dbTask.CompletedDateTime.ShouldBeNull();
+        dbTask.DueDateTime.ShouldBe(task.DueDateTime);
+        dbTask.MovedToTrashDateTime.ShouldBe(task.MovedToTrashDateTime);
+        dbTask.Tags.ShouldBeEmpty();
+        dbTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
+        dbTask.ModifiedDateTime.ShouldBe(task.ModifiedDateTime);
     }
 
     [Fact]
@@ -865,19 +869,19 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Value.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Value.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var dbTasks = await GetTasksFromDatabase();
-        dbTasks.Should().HaveCount(1);
-        dbTasks.Single().Id.Should().Be(otherTask.Id);
+        dbTasks.Count.ShouldBe(1);
+        dbTasks.Single().Id.ShouldBe(otherTask.Id);
     }
 
     [Fact]
@@ -892,15 +896,15 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Value.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Value.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
     }
 
     #region helpers

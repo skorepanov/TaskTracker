@@ -21,22 +21,22 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTag = content.Value;
-        responseTag.Should().NotBeNull();
-        responseTag.Id.Should().Be(tag.Id);
-        responseTag.Title.Should().Be(tag.Title);
-        responseTag.Color.Should().Be(tag.Color);
-        responseTag.CreatedDateTime.Should().Be(tag.CreatedDateTime);
-        responseTag.ModifiedDateTime.Should().BeNull();
+        responseTag.ShouldNotBeNull();
+        responseTag.Id.ShouldBe(tag.Id);
+        responseTag.Title.ShouldBe(tag.Title);
+        responseTag.Color.ShouldBe(tag.Color);
+        responseTag.CreatedDateTime.ShouldBe(tag.CreatedDateTime);
+        responseTag.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -51,15 +51,15 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -84,30 +84,31 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content
             .ReadFromJsonAsync<Result<IReadOnlyList<TagVm>>>(
                 TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
-        content.Value.Should().NotBeNull().And.HaveCount(2);
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
+        content.Value.ShouldNotBeNull();
+        content.Value.Count.ShouldBe(2);
 
         var responseTag1 = content.Value.SingleOrDefault(t => t.Id == tag1.Id);
-        responseTag1.Should().NotBeNull();
-        responseTag1.Title.Should().Be(tag1.Title);
-        responseTag1.Color.Should().Be(tag1.Color);
-        responseTag1.CreatedDateTime.Should().Be(tag1.CreatedDateTime);
-        responseTag1.ModifiedDateTime.Should().BeNull();
+        responseTag1.ShouldNotBeNull();
+        responseTag1.Title.ShouldBe(tag1.Title);
+        responseTag1.Color.ShouldBe(tag1.Color);
+        responseTag1.CreatedDateTime.ShouldBe(tag1.CreatedDateTime);
+        responseTag1.ModifiedDateTime.ShouldBeNull();
 
         var responseTag2 = content.Value.SingleOrDefault(t => t.Id == tag2.Id);
-        responseTag2.Should().NotBeNull();
-        responseTag2.Title.Should().Be(tag2.Title);
-        responseTag2.Color.Should().Be(tag2.Color);
-        responseTag2.CreatedDateTime.Should().Be(tag2.CreatedDateTime);
-        responseTag2.ModifiedDateTime.Should().BeNull();
+        responseTag2.ShouldNotBeNull();
+        responseTag2.Title.ShouldBe(tag2.Title);
+        responseTag2.Color.ShouldBe(tag2.Color);
+        responseTag2.CreatedDateTime.ShouldBe(tag2.CreatedDateTime);
+        responseTag2.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -129,30 +130,30 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTag = content.Value;
-        responseTag.Should().NotBeNull();
-        responseTag.Title.Should().Be(creationDto.Title);
-        responseTag.Color.Should().Be(creationDto.Color);
-        responseTag.CreatedDateTime.Should().Be(utcNow);
+        responseTag.ShouldNotBeNull();
+        responseTag.Title.ShouldBe(creationDto.Title);
+        responseTag.Color.ShouldBe(creationDto.Color);
+        responseTag.CreatedDateTime.ShouldBe(utcNow);
 
         var dbTags = await GetTagsFromDatabase();
-        dbTags.Should().HaveCount(1);
+        dbTags.Count.ShouldBe(1);
 
         var dbTag = dbTags.Single();
-        dbTag.Id.Should().Be(responseTag.Id);
-        dbTag.Title.Should().Be(creationDto.Title);
-        dbTag.Color.Should().Be(creationDto.Color);
-        dbTag.CreatedDateTime.Should().Be(utcNow);
-        dbTag.ModifiedDateTime.Should().BeNull();
+        dbTag.Id.ShouldBe(responseTag.Id);
+        dbTag.Title.ShouldBe(creationDto.Title);
+        dbTag.Color.ShouldBe(creationDto.Color);
+        dbTag.CreatedDateTime.ShouldBe(utcNow);
+        dbTag.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -172,18 +173,18 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
 
         var dbTags = await GetTagsFromDatabase();
-        dbTags.Should().BeEmpty();
+        dbTags.ShouldBeEmpty();
     }
 
     [Fact]
@@ -211,32 +212,32 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var responseTag = content.Value;
-        responseTag.Should().NotBeNull();
-        responseTag.Id.Should().Be(tag.Id);
-        responseTag.Title.Should().Be(updateDto.Title);
-        responseTag.Color.Should().Be(updateDto.Color);
-        responseTag.CreatedDateTime.Should().Be(tag.CreatedDateTime);
-        responseTag.ModifiedDateTime.Should().Be(utcNow);
+        responseTag.ShouldNotBeNull();
+        responseTag.Id.ShouldBe(tag.Id);
+        responseTag.Title.ShouldBe(updateDto.Title);
+        responseTag.Color.ShouldBe(updateDto.Color);
+        responseTag.CreatedDateTime.ShouldBe(tag.CreatedDateTime);
+        responseTag.ModifiedDateTime.ShouldBe(utcNow);
 
         var dbTags = await GetTagsFromDatabase();
-        dbTags.Should().HaveCount(1);
+        dbTags.Count.ShouldBe(1);
 
         var dbTag = dbTags.Single();
-        dbTag.Id.Should().Be(tag.Id);
-        dbTag.Title.Should().Be(updateDto.Title);
-        dbTag.Color.Should().Be(updateDto.Color);
-        dbTag.CreatedDateTime.Should().Be(tag.CreatedDateTime);
-        dbTag.ModifiedDateTime.Should().Be(utcNow);
+        dbTag.Id.ShouldBe(tag.Id);
+        dbTag.Title.ShouldBe(updateDto.Title);
+        dbTag.Color.ShouldBe(updateDto.Color);
+        dbTag.CreatedDateTime.ShouldBe(tag.CreatedDateTime);
+        dbTag.ModifiedDateTime.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -256,15 +257,15 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
     }
 
     [Fact]
@@ -291,25 +292,25 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
-        content.Value.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
+        content.Value.ShouldBeNull();
 
         var dbTags = await GetTagsFromDatabase();
-        dbTags.Should().HaveCount(1);
+        dbTags.Count.ShouldBe(1);
 
         var dbTag = dbTags.Single();
-        dbTag.Id.Should().Be(tag.Id);
-        dbTag.Title.Should().Be(OLD_TITLE);
-        dbTag.Color.Should().Be(OLD_COLOR);
-        dbTag.CreatedDateTime.Should().Be(createdDateTime);
-        dbTag.ModifiedDateTime.Should().BeNull();
+        dbTag.Id.ShouldBe(tag.Id);
+        dbTag.Title.ShouldBe(OLD_TITLE);
+        dbTag.Color.ShouldBe(OLD_COLOR);
+        dbTag.CreatedDateTime.ShouldBe(createdDateTime);
+        dbTag.ModifiedDateTime.ShouldBeNull();
     }
 
     [Fact]
@@ -325,19 +326,19 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeTrue();
-        content.Value.Should().BeTrue();
-        content.Error.Should().BeNull();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeTrue();
+        content.Value.ShouldBeTrue();
+        content.Error.ShouldBeNull();
 
         var dbTags = await GetTagsFromDatabase();
-        dbTags.Should().HaveCount(1);
-        dbTags.Single().Id.Should().Be(otherTag.Id);
+        dbTags.Count.ShouldBe(1);
+        dbTags.Single().Id.ShouldBe(otherTag.Id);
     }
 
     [Fact]
@@ -352,15 +353,15 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
             TestContext.Current.CancellationToken);
 
-        content.Should().NotBeNull();
-        content.IsOk.Should().BeFalse();
-        content.Value.Should().BeFalse();
-        content.Error.Should().NotBeNullOrWhiteSpace();
+        content.ShouldNotBeNull();
+        content.IsOk.ShouldBeFalse();
+        content.Value.ShouldBeFalse();
+        content.Error.ShouldNotBeNullOrWhiteSpace();
     }
 
     #region helpers
