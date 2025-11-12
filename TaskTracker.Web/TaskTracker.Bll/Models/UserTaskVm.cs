@@ -50,7 +50,7 @@ public record UserTaskVm
     /// <summary>
     /// Идентификаторы тегов
     /// </summary>
-    public IReadOnlyList<int>? TagIds { get; }
+    public IReadOnlyList<int> TagIds { get; }
 
     /// <summary>
     /// Дата создания задачи
@@ -75,7 +75,7 @@ public record UserTaskVm
         DueDateTime = task.DueDateTime;
         OverdueDaysCount = task.CalculateOverdueDays(today);
         MovedToTrashDateTime = task.MovedToTrashDateTime;
-        TagIds = task.Tags?.Count > 0 ? task.Tags.Select(t => t.Id).ToList() : null;
+        TagIds = task.Tags.Select(t => t.Id).ToList();
         CreatedDateTime = task.CreatedDateTime;
         ModifiedDateTime = task.ModifiedDateTime;
     }
@@ -93,7 +93,7 @@ public record UserTaskVm
         DateTime? dueDateTime,
         int overdueDaysCount,
         DateTime? movedToTrashDateTime,
-        IReadOnlyList<int>? tagIds,
+        IReadOnlyList<int> tagIds,
         DateTime createdDateTime,
         DateTime? modifiedDateTime)
     {

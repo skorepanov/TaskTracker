@@ -49,7 +49,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.CompletedDateTime.ShouldBeNull();
         responseTask.DueDateTime.ShouldBe(task.DueDateTime);
         responseTask.MovedToTrashDateTime.ShouldBeNull();
-        responseTask.TagIds.ShouldBeNull();
+        responseTask.TagIds.ShouldBeEmpty();
         responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
         responseTask.ModifiedDateTime.ShouldBeNull();
     }
@@ -114,7 +114,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.CompletedDateTime.ShouldBeNull();
         responseTask.DueDateTime.ShouldBe(incompletedTask.DueDateTime);
         responseTask.MovedToTrashDateTime.ShouldBeNull();
-        responseTask.TagIds.ShouldBeNull();
+        responseTask.TagIds.ShouldBeEmpty();
         responseTask.CreatedDateTime.ShouldBe(incompletedTask.CreatedDateTime);
         responseTask.ModifiedDateTime.ShouldBeNull();
     }
@@ -156,7 +156,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.CompletedDateTime.ShouldBe(completedTask.CompletedDateTime);
         responseTask.DueDateTime.ShouldBe(completedTask.DueDateTime);
         responseTask.MovedToTrashDateTime.ShouldBeNull();
-        responseTask.TagIds.ShouldBeNull();
+        responseTask.TagIds.ShouldBeEmpty();
         responseTask.CreatedDateTime.ShouldBe(completedTask.CreatedDateTime);
         responseTask.ModifiedDateTime.ShouldBe(completedTask.ModifiedDateTime);
     }
@@ -198,7 +198,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.CompletedDateTime.ShouldBeNull();
         responseTask.DueDateTime.ShouldBe(taskInTrash.DueDateTime);
         responseTask.MovedToTrashDateTime.ShouldBe(taskInTrash.MovedToTrashDateTime);
-        responseTask.TagIds.ShouldBeNull();
+        responseTask.TagIds.ShouldBeEmpty();
         responseTask.CreatedDateTime.ShouldBe(taskInTrash.CreatedDateTime);
         responseTask.ModifiedDateTime.ShouldBe(taskInTrash.ModifiedDateTime);
     }
@@ -244,7 +244,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.CompletedDateTime.ShouldBeNull();
         responseTask.DueDateTime.ShouldBe(creationDto.DueDateTime);
         responseTask.MovedToTrashDateTime.ShouldBeNull();
-        responseTask.TagIds.ShouldBeNull();
+        responseTask.TagIds.ShouldBeEmpty();
         responseTask.CreatedDateTime.ShouldBe(utcNow);
         responseTask.ModifiedDateTime.ShouldBeNull();
 
@@ -367,7 +367,6 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         dbTask.CompletedDateTime.ShouldBeNull();
         dbTask.DueDateTime.ShouldBe(updateDto.DueDateTime);
         dbTask.MovedToTrashDateTime.ShouldBeNull();
-        dbTask.Tags.ShouldNotBeNull();
         dbTask.Tags.Count.ShouldBe(2);
         dbTask.Tags.Select(t => t.Id).ToList().ShouldBe([tagId1.Id, tagId2.Id]);
         dbTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
@@ -503,7 +502,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.CompletedDateTime.ShouldBe(utcNow);
         responseTask.DueDateTime.ShouldBe(task.DueDateTime);
         responseTask.MovedToTrashDateTime.ShouldBeNull();
-        responseTask.TagIds.ShouldBeNull();
+        responseTask.TagIds.ShouldBeEmpty();
         responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
         responseTask.ModifiedDateTime.ShouldBe(utcNow);
 
@@ -588,7 +587,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.CompletedDateTime.ShouldBeNull();
         responseTask.DueDateTime.ShouldBe(task.DueDateTime);
         responseTask.MovedToTrashDateTime.ShouldBeNull();
-        responseTask.TagIds.ShouldBeNull();
+        responseTask.TagIds.ShouldBeEmpty();
         responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
         responseTask.ModifiedDateTime.ShouldBe(utcNow);
 
@@ -681,7 +680,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.CompletedDateTime.ShouldBeNull();
         responseTask.DueDateTime.ShouldBe(task.DueDateTime);
         responseTask.MovedToTrashDateTime.ShouldBe(utcNow);
-        responseTask.TagIds.ShouldBeNull();
+        responseTask.TagIds.ShouldBeEmpty();
         responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
         responseTask.ModifiedDateTime.ShouldBe(utcNow);
 
@@ -766,7 +765,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         responseTask.CompletedDateTime.ShouldBeNull();
         responseTask.DueDateTime.ShouldBe(task.DueDateTime);
         responseTask.MovedToTrashDateTime.ShouldBeNull();
-        responseTask.TagIds.ShouldBeNull();
+        responseTask.TagIds.ShouldBeEmpty();
         responseTask.CreatedDateTime.ShouldBe(task.CreatedDateTime);
         responseTask.ModifiedDateTime.ShouldBe(utcNow);
 

@@ -290,7 +290,7 @@ public class UserTaskUnitTests
         sut.Title.ShouldBe(OLD_TITLE);
         sut.Description.ShouldBeNull();
         sut.FolderId.ShouldBe(OLD_FOLDER_ID);
-        sut.Tags.ShouldBeNull();
+        sut.Tags.ShouldBeEmpty();
         sut.DueDateTime.ShouldBe(oldDueDateTime);
         sut.ModifiedDateTime.ShouldBeNull();
     }
