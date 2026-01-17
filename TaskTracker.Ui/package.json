@@ -10,7 +10,7 @@
     "@types/node": "^24.10.0",
     "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
-    "antd": "^5.28.0",
+    "antd": "^6.2.0",
     "jest-editor-support": "^32.0.0-beta.1",
     "mobx": "^6.15.0",
     "mobx-react-lite": "^4.1.1",
