@@ -11,47 +11,48 @@ namespace TaskTracker.Web;
 /// </summary>
 public static class DiExtensions
 {
-    /// <summary>
-    /// Зарегистрировать сервисы
-    /// </summary>
-    public static void AddServices(this IServiceCollection collection)
+    extension(IServiceCollection collection)
     {
-        collection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-        collection.AddScoped<ExecutionService>();
-        collection.AddScoped<TaskService>();
-        collection.AddScoped<FolderService>();
-        collection.AddScoped<TagService>();
-    }
+        /// <summary>
+        /// Зарегистрировать сервисы
+        /// </summary>
+        public void AddServices()
+        {
+            collection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            collection.AddScoped<ExecutionService>();
+            collection.AddScoped<TaskService>();
+            collection.AddScoped<FolderService>();
+            collection.AddScoped<TagService>();
+        }
 
-    /// <summary>
-    /// Зарегистрировать репозитории
-    /// </summary>
-    public static void AddRepositories(this IServiceCollection collection)
-    {
-        collection.AddScoped<ITaskRepository, TaskRepository>();
-        collection.AddScoped<IFolderRepository, FolderRepository>();
-        collection.AddScoped<ITagRepository, TagRepository>();
-    }
+        /// <summary>
+        /// Зарегистрировать репозитории
+        /// </summary>
+        public void AddRepositories()
+        {
+            collection.AddScoped<ITaskRepository, TaskRepository>();
+            collection.AddScoped<IFolderRepository, FolderRepository>();
+            collection.AddScoped<ITagRepository, TagRepository>();
+        }
 
-    /// <summary>
-    /// Сконфигурировать контекст БД
-    /// </summary>
-    public static void ConfigureDbContext(
-        this IServiceCollection collection,
-        string connectionString)
-    {
-        collection.AddDbContext<ApplicationContext>(
-            options => options
-                .UseNpgsql(connectionString)
-                .UseSnakeCaseNamingConvention());
-    }
+        /// <summary>
+        /// Сконфигурировать контекст БД
+        /// </summary>
+        public void ConfigureDbContext(string connectionString)
+        {
+            collection.AddDbContext<ApplicationContext>(
+                options => options
+                    .UseNpgsql(connectionString)
+                    .UseSnakeCaseNamingConvention());
+        }
 
-    /// <summary>
-    /// Зарегистрировать Health Checks
-    /// </summary>
-    public static void AddCustomHealthChecks(this IServiceCollection collection)
-    {
-        collection.AddHealthChecks()
-            .AddCheck<DataBaseHealthCheck>(name: nameof(DataBaseHealthCheck));
+        /// <summary>
+        /// Зарегистрировать Health Checks
+        /// </summary>
+        public void AddCustomHealthChecks()
+        {
+            collection.AddHealthChecks()
+                .AddCheck<DataBaseHealthCheck>(name: nameof(DataBaseHealthCheck));
+        }
     }
 }
