@@ -64,8 +64,3 @@ void configureHttpRequestPipeline(WebApplication app)
     app.MapControllers();
     app.MapHealthChecks(pattern: "api/health");
 }
-
-/// <summary>
-/// Класс Program для возможности его использования в интеграционных тестах
-/// </summary>
-public partial class Program;
