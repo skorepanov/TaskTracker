@@ -176,6 +176,7 @@ const TaskUpdatePanel: React.FC = observer(() => {
         return (
             <Tag
                 color={`#${color}`}
+                variant="solid"
                 closable={closable}
                 onClose={onClose}
                 onMouseDown={handleMouseDown}>
