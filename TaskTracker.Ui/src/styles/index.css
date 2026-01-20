@@ -7,6 +7,10 @@ body {
     padding-right: 0 !important;
 }
 
+.ant-tag {
+    margin-right: 8px;
+}
+
 .ant-tag-close-icon {
     mix-blend-mode: difference;
 }
