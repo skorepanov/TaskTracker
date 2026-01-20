@@ -6,9 +6,10 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["TaskTracker.Domain/TaskTracker.Domain.csproj", "TaskTracker.Domain/"]
+COPY ["TaskTracker.Application/TaskTracker.Application.csproj", "TaskTracker.Application/"]
+COPY ["TaskTracker.Infrastructure/TaskTracker.Infrastructure.csproj", "TaskTracker.Infrastructure/"]
 COPY ["TaskTracker.Web/TaskTracker.Web.csproj", "TaskTracker.Web/"]
-COPY ["TaskTracker.Dal/TaskTracker.Dal.csproj", "TaskTracker.Dal/"]
-COPY ["TaskTracker.Bll/TaskTracker.Bll.csproj", "TaskTracker.Bll/"]
 RUN dotnet restore "TaskTracker.Web/TaskTracker.Web.csproj"
 COPY . .
 WORKDIR "/src/TaskTracker.Web"

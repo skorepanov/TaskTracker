@@ -11,19 +11,19 @@
 ## Структура приложения
 
 - `TaskTracker.Web` - backend.
-    - Слои приложения:
-        - `TaskTracker.Web` - слой Web API - контроллеры, dependency injection.
-        - `TaskTracker.Bll` - слой бизнес-логики - модели и сервисы.
-        - `TaskTracker.Dal` - слой доступа к данным - репозитории, миграции.
-        - Web и Dal зависят от Bll; Bll не зависит от других слоёв.
-    - Тесты:
-        - `TaskTracker.UnitTests` - модульные тесты.
-        - `TaskTracker.IntegrationTests` - интеграционные тесты.
+  - Слои приложения:
+    - `TaskTracker.Domain` - доменный слой - модели и исключения.
+    - `TaskTracker.Application` - слой бизнес-логики - сервисы.
+    - `TaskTracker.Infrastructure` - слой доступа к данным - репозитории, миграции.
+    - `TaskTracker.Web` - слой Web API - контроллеры, dependency injection.
+  - Тесты:
+    - `TaskTracker.UnitTests` - модульные тесты.
+    - `TaskTracker.IntegrationTests` - интеграционные тесты.
 - `TaskTracker.Ui` - frontend.
 - `docker` - файлы конфигурации Docker.
-    - `Dockerfile.backend` - инструкция по сборке Docker-образа для backend.
-    - `Dockerfile.frontend` - инструкция по сборке Docker-образа для frontend.
-    - `docker-compose.yaml` - инструкция по сборке всего приложения - backend, frontend и БД.
+  - `Dockerfile.backend` - инструкция по сборке Docker-образа для backend.
+  - `Dockerfile.frontend` - инструкция по сборке Docker-образа для frontend.
+  - `docker-compose.yaml` - инструкция по сборке всего приложения - backend, frontend и БД.
 
 ## Необходимые компоненты для запуска приложения
 
@@ -57,12 +57,12 @@ docker-compose up --build
 ## Тестирование
 
 - Модульные тесты.
-    - Проект: `TaskTracker.UnitTests`.
-    - Технологии: xUnit, FleuntAssertions.
-    - Тестируют только бизнес-модели, в изоляции от бизнес-сервисов и внешних зависимостей.
+  - Проект: `TaskTracker.UnitTests`.
+  - Технологии: xUnit, Shouldly.
+  - Тестируют только бизнес-модели, в изоляции от бизнес-сервисов и внешних зависимостей.
 - Интеграционные тесты.
-    - Проект: `TaskTracker.IntegrationTests`.
-    - Технологии: xUnit, Moq, FluentAssertions, Respawn.
-    - Тестируют backend от Web API до БД включительно.
-    - При первом запуске, при необходимости, создают БД и применяют миграции.
-    - Тестовые данные удаляются из БД между тестами с помощью Respawn.
+  - Проект: `TaskTracker.IntegrationTests`.
+  - Технологии: xUnit, Moq, Shouldly, Respawn.
+  - Тестируют backend от Web API до БД включительно.
+  - При первом запуске, при необходимости, создают БД и применяют миграции.
+  - Тестовые данные удаляются из БД между тестами с помощью Respawn.

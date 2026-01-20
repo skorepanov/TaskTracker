@@ -7,6 +7,9 @@ global using System.Net;
 global using System.Net.Http.Json;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
-global using TaskTracker.Bll.Interfaces;
-global using TaskTracker.Bll.Models;
-global using TaskTracker.Dal;
+
+global using TaskTracker.Application.Interfaces;
+global using TaskTracker.Application.Vms;
+global using TaskTracker.Domain.Dtos;
+global using TaskTracker.Domain.Models;
+global using TaskTracker.Infrastructure;

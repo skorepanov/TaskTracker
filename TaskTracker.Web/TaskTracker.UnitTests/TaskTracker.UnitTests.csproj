@@ -19,7 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TaskTracker.Bll\TaskTracker.Bll.csproj" />
+      <ProjectReference Include="..\TaskTracker.Application\TaskTracker.Application.csproj" />
+      <ProjectReference Include="..\TaskTracker.Infrastructure\TaskTracker.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

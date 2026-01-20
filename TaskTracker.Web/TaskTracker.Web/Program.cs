@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using TaskTracker.Dal;
+using TaskTracker.Infrastructure;
 using TaskTracker.Web;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
