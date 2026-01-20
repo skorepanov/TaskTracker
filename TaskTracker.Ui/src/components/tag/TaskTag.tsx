@@ -11,7 +11,7 @@ const TaskTag: React.FC<ITaskTagProps> = observer(props => {
     const { tag } = props;
 
     return (
-        <Tag color={`#${tag.color}`}>
+        <Tag color={`#${tag.color}`} variant="solid">
             <div style={{ mixBlendMode: "difference" }}>{tag.title}</div>
         </Tag>
     );
