@@ -1,4 +1,5 @@
 import React, { Activity, useState } from "react";
+import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Divider, Dropdown, MenuProps } from "antd";
 import { useStore } from "../../stores/RootStore";
@@ -132,7 +133,17 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
                     <Activity
                         mode={props.shouldShowFolder ? "visible" : "hidden"}
                     >
-                        {props.folder?.title ?? "<Inbox>"}
+                        {
+                            props.folder
+                                ?
+                                    <Link to={`/folders/${props.folder.id}`}>
+                                        {props.folder.title}
+                                    </Link>
+                                :
+                                    <Link to={"/inbox"}>
+                                        {"<Inbox>"}
+                                    </Link>
+                        }
                     </Activity>
                 </div>
             </Dropdown>
