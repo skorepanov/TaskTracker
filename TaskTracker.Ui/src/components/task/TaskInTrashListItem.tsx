@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Checkbox, Divider, Dropdown, MenuProps } from "antd";
 import { useStore } from "../../stores/RootStore";
@@ -33,11 +34,10 @@ const TaskInTrashListItem: React.FC<ITaskInTrashListItemProps> = observer(
 
         const taskTagComponents = taskTags
             ? taskTags.map(t => (
-                  <TaskTag
-                      key={t.id}
-                      tag={t}
-                  />
-              ))
+                <Link key={t.id} to={`/tags/${t.id}`}>
+                    <TaskTag tag={t} />
+                </Link>
+            ))
             : [];
 
         const dateComponent =

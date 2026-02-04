@@ -55,10 +55,9 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
 
     const taskTagComponents = taskTags
         ? taskTags.map(t => (
-              <TaskTag
-                  key={t.id}
-                  tag={t}
-              />
+            <Link key={t.id} to={`/tags/${t.id}`}>
+                <TaskTag tag={t} />
+            </Link>
           ))
         : [];
 
