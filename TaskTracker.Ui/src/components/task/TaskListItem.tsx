@@ -62,6 +62,29 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
           ))
         : [];
 
+    const shouldShowFolderSeparator
+        = task.dueDateTime !== null && props.shouldShowFolder
+
+    const folderSeparatorComponent =
+        <Activity mode={shouldShowFolderSeparator ? "visible" : "hidden"}>
+            {" / "}
+        </Activity>;
+
+    const folderComponent =
+        <Activity mode={props.shouldShowFolder ? "visible" : "hidden"}>
+            {
+                props.folder
+                    ?
+                        <Link to={`/folders/${props.folder.id}`}>
+                            {props.folder.title}
+                        </Link>
+                    :
+                        <Link to={"/inbox"}>
+                            {"<Inbox>"}
+                        </Link>
+            }
+        </Activity>;
+
     const handleTaskClick = () => {
         taskStore.currentTaskId = task.id;
     };
@@ -123,28 +146,8 @@ const TaskListItem: React.FC<ITaskListItemProps> = observer(props => {
                     <div style={{ float: "right" }}>{taskTagComponents}</div>
                     <br />
                     {overdueComponent}
-                    <Activity
-                        mode={task.dueDateTime !== null && props.shouldShowFolder
-                            ? "visible"
-                            : "hidden"}
-                    >
-                        {" / "}
-                    </Activity>
-                    <Activity
-                        mode={props.shouldShowFolder ? "visible" : "hidden"}
-                    >
-                        {
-                            props.folder
-                                ?
-                                    <Link to={`/folders/${props.folder.id}`}>
-                                        {props.folder.title}
-                                    </Link>
-                                :
-                                    <Link to={"/inbox"}>
-                                        {"<Inbox>"}
-                                    </Link>
-                        }
-                    </Activity>
+                    {folderSeparatorComponent}
+                    {folderComponent}
                 </div>
             </Dropdown>
             <Divider style={{ marginTop: 0, marginBottom: 0 }} />
