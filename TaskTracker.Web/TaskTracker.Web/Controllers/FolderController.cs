@@ -5,32 +5,27 @@
 /// </summary>
 [ApiController]
 [Route("api/folders")]
-public class FolderController(
-    ExecutionService executionService,
-    FolderService folderService)
-    : ControllerBase
+public class FolderController(FolderService folderService) : ControllerBase
 {
     /// <summary>
     /// Получить папку по идентификатору
     /// </summary>
     /// <param name="folderId">Идентификатор папки</param>
     [HttpGet("{folderId:int}", Name = nameof(GetFolderById))]
-    public async Task<ActionResult<Result<FolderVm>>> GetFolderById(int folderId)
+    public async Task<ActionResult<FolderVm>> GetFolderById(int folderId)
     {
-        var result = await executionService.TryExecute(
-            () => folderService.GetFolderById(folderId));
-        return Ok(result);
+        var folder = await folderService.GetFolderById(folderId);
+        return Ok(folder);
     }
 
     /// <summary>
     /// Получить все папки
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<Result<IReadOnlyList<FolderVm>>>> GetFolders()
+    public async Task<ActionResult<IReadOnlyList<FolderVm>>> GetFolders()
     {
-        var result = await executionService.TryExecute(
-            () => folderService.GetFolders());
-        return Ok(result);
+        var folders = await folderService.GetFolders();
+        return Ok(folders);
     }
 
     /// <summary>
@@ -38,12 +33,11 @@ public class FolderController(
     /// </summary>
     /// <param name="folderDto">Данные для создания папки</param>
     [HttpPost]
-    public async Task<ActionResult<Result<FolderVm>>> CreateFolder(
+    public async Task<ActionResult<FolderVm>> CreateFolder(
         [FromBody] FolderForCreationDto folderDto)
     {
-        var result = await executionService.TryExecute(
-            () => folderService.CreateFolder(folderDto));
-        return Ok(result);
+        var folder = await folderService.CreateFolder(folderDto);
+        return Ok(folder);
     }
 
     /// <summary>
@@ -52,12 +46,11 @@ public class FolderController(
     /// <param name="folderId">Идентификатор папки</param>
     /// <param name="folderDto">Данные для обновления папки</param>
     [HttpPut("{folderId:int}")]
-    public async Task<ActionResult<Result<FolderVm>>> UpdateFolder(
+    public async Task<ActionResult<FolderVm>> UpdateFolder(
         int folderId, [FromBody] FolderForUpdateDto folderDto)
     {
-        var result = await executionService.TryExecute(
-            () => folderService.UpdateFolder(folderId, folderDto));
-        return Ok(result);
+        var folder = await folderService.UpdateFolder(folderId, folderDto);
+        return Ok(folder);
     }
 
     /// <summary>
@@ -65,10 +58,9 @@ public class FolderController(
     /// </summary>
     /// <param name="folderId">Идентификатор папки</param>
     [HttpDelete("{folderId:int}")]
-    public async Task<ActionResult<Result<bool>>> DeleteFolder(int folderId)
+    public async Task<ActionResult<bool>> DeleteFolder(int folderId)
     {
-        var result = await executionService.TryExecute(
-            () => folderService.DeleteFolder(folderId));
-        return Ok(result);
+        var isDeleted = await folderService.DeleteFolder(folderId);
+        return Ok(isDeleted);
     }
 }

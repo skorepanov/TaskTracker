@@ -33,14 +33,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+        var responseTask = await response.Content.ReadFromJsonAsync<UserTaskVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTask = content.Value;
         responseTask.ShouldNotBeNull();
         responseTask.Id.ShouldBe(task.Id);
         responseTask.Title.ShouldBe(task.Title);
@@ -66,15 +61,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -95,17 +82,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>(
+        var responseTasks = await response.Content
+            .ReadFromJsonAsync<IReadOnlyList<UserTaskVm>>(
                 TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-        content.Value.ShouldNotBeNull();
-        content.Value.Count.ShouldBe(1);
+        responseTasks.ShouldNotBeNull();
+        responseTasks.Count.ShouldBe(1);
 
-        var responseTask = content.Value.Single();
+        var responseTask = responseTasks.Single();
         responseTask.ShouldNotBeNull();
         responseTask.Id.ShouldBe(incompletedTask.Id);
         responseTask.Title.ShouldBe(incompletedTask.Title);
@@ -137,17 +121,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>(
+        var responseTasks = await response.Content
+            .ReadFromJsonAsync<IReadOnlyList<UserTaskVm>>(
                 TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-        content.Value.ShouldNotBeNull();
-        content.Value.Count.ShouldBe(1);
+        responseTasks.ShouldNotBeNull();
+        responseTasks.Count.ShouldBe(1);
 
-        var responseTask = content.Value.Single();
+        var responseTask = responseTasks.Single();
         responseTask.ShouldNotBeNull();
         responseTask.Id.ShouldBe(completedTask.Id);
         responseTask.Title.ShouldBe(completedTask.Title);
@@ -179,17 +160,14 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<UserTaskVm>>>(
+        var responseTasks = await response.Content
+            .ReadFromJsonAsync<IReadOnlyList<UserTaskVm>>(
                 TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-        content.Value.ShouldNotBeNull();
-        content.Value.Count.ShouldBe(1);
+        responseTasks.ShouldNotBeNull();
+        responseTasks.Count.ShouldBe(1);
 
-        var responseTask = content.Value.Single();
+        var responseTask = responseTasks.Single();
         responseTask.ShouldNotBeNull();
         responseTask.Id.ShouldBe(taskInTrash.Id);
         responseTask.Title.ShouldBe(taskInTrash.Title);
@@ -229,14 +207,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+        var responseTask = await response.Content.ReadFromJsonAsync<UserTaskVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTask = content.Value;
         responseTask.ShouldNotBeNull();
         responseTask.Title.ShouldBe(creationDto.Title);
         responseTask.Description.ShouldBeNull();
@@ -280,15 +253,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
 
         var dbTasks = await GetTasksFromDatabase();
         dbTasks.ShouldBeEmpty();
@@ -336,14 +301,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+        var responseTask = await response.Content.ReadFromJsonAsync<UserTaskVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTask = content.Value;
         responseTask.ShouldNotBeNull();
         responseTask.Id.ShouldBe(task.Id);
         responseTask.Title.ShouldBe(updateDto.Title);
@@ -395,15 +355,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -437,15 +389,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
 
         var dbTasks = await GetTasksFromDatabase();
         dbTasks.Count.ShouldBe(1);
@@ -486,14 +430,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+        var responseTask = await response.Content.ReadFromJsonAsync<UserTaskVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTask = content.Value;
         responseTask.ShouldNotBeNull();
         responseTask.Id.ShouldBe(task.Id);
         responseTask.Title.ShouldBe(task.Title);
@@ -537,15 +476,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -571,14 +502,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+        var responseTask = await response.Content.ReadFromJsonAsync<UserTaskVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTask = content.Value;
         responseTask.ShouldNotBeNull();
         responseTask.Id.ShouldBe(task.Id);
         responseTask.Title.ShouldBe(task.Title);
@@ -622,15 +548,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -664,14 +582,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+        var responseTask = await response.Content.ReadFromJsonAsync<UserTaskVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTask = content.Value;
         responseTask.ShouldNotBeNull();
         responseTask.Id.ShouldBe(task.Id);
         responseTask.Title.ShouldBe(task.Title);
@@ -715,15 +628,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -749,14 +654,9 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
+        var responseTask = await response.Content.ReadFromJsonAsync<UserTaskVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTask = content.Value;
         responseTask.ShouldNotBeNull();
         responseTask.Id.ShouldBe(task.Id);
         responseTask.Title.ShouldBe(task.Title);
@@ -800,15 +700,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -829,15 +721,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<UserTaskVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
 
         var dbTasks = await GetTasksFromDatabase();
         dbTasks.Count.ShouldBe(1);
@@ -870,13 +754,10 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
+        var isDeleted = await response.Content.ReadFromJsonAsync<bool>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Value.ShouldBeTrue();
-        content.Error.ShouldBeNull();
+        isDeleted.ShouldBeTrue();
 
         var dbTasks = await GetTasksFromDatabase();
         dbTasks.Count.ShouldBe(1);
@@ -895,15 +776,7 @@ public class UserTaskIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Value.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     #region helpers

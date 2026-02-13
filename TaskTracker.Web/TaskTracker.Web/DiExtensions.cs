@@ -19,7 +19,6 @@ public static class DiExtensions
         public void AddServices()
         {
             collection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            collection.AddScoped<ExecutionService>();
             collection.AddScoped<TaskService>();
             collection.AddScoped<FolderService>();
             collection.AddScoped<TagService>();

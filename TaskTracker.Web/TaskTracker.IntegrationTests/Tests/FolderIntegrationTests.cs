@@ -22,14 +22,9 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+        var responseFolder = await response.Content.ReadFromJsonAsync<FolderVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseFolder = content.Value;
         responseFolder.ShouldNotBeNull();
         responseFolder.Id.ShouldBe(folder.Id);
         responseFolder.Title.ShouldBe(folder.Title);
@@ -49,15 +44,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -82,23 +69,20 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<FolderVm>>>(
+        var responseFolders = await response.Content
+            .ReadFromJsonAsync<IReadOnlyList<FolderVm>>(
                 TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-        content.Value.ShouldNotBeNull();
-        content.Value.Count.ShouldBe(2);
+        responseFolders.ShouldNotBeNull();
+        responseFolders.Count.ShouldBe(2);
 
-        var responseFolder1 = content.Value.SingleOrDefault(f => f.Id == folder1.Id);
+        var responseFolder1 = responseFolders.SingleOrDefault(f => f.Id == folder1.Id);
         responseFolder1.ShouldNotBeNull();
         responseFolder1.Title.ShouldBe(folder1.Title);
         responseFolder1.CreatedDateTime.ShouldBe(folder1.CreatedDateTime);
         responseFolder1.ModifiedDateTime.ShouldBeNull();
 
-        var responseFolder2 = content.Value.SingleOrDefault(f => f.Id == folder2.Id);
+        var responseFolder2 = responseFolders.SingleOrDefault(f => f.Id == folder2.Id);
         responseFolder2.ShouldNotBeNull();
         responseFolder2.Title.ShouldBe(folder2.Title);
         responseFolder2.CreatedDateTime.ShouldBe(folder2.CreatedDateTime);
@@ -125,14 +109,9 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+        var responseFolder = await response.Content.ReadFromJsonAsync<FolderVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseFolder = content.Value;
         responseFolder.ShouldNotBeNull();
         responseFolder.Title.ShouldBe(creationDto.Title);
         responseFolder.CreatedDateTime.ShouldBe(utcNow);
@@ -164,15 +143,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
 
         var dbFolders = await GetFoldersFromDatabase();
         dbFolders.ShouldBeEmpty();
@@ -203,14 +174,9 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
+        var responseFolder = await response.Content.ReadFromJsonAsync<FolderVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseFolder = content.Value;
         responseFolder.ShouldNotBeNull();
         responseFolder.Id.ShouldBe(folder.Id);
         responseFolder.Title.ShouldBe(updateDto.Title);
@@ -244,15 +210,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -277,15 +235,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<FolderVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
 
         var dbFolders = await GetFoldersFromDatabase();
         dbFolders.Count.ShouldBe(1);
@@ -312,13 +262,10 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
+        var isDeleted = await response.Content.ReadFromJsonAsync<bool>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Value.ShouldBeTrue();
-        content.Error.ShouldBeNull();
+        isDeleted.ShouldBeTrue();
 
         var dbFolders = await GetFoldersFromDatabase();
         dbFolders.Count.ShouldBe(1);
@@ -337,15 +284,7 @@ public class FolderIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Value.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     #region helpers

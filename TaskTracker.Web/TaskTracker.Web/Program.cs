@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using TaskTracker.Infrastructure;
 using TaskTracker.Web;
+using TaskTracker.Web.Handlers;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,9 @@ return;
 
 void configureServices(WebApplicationBuilder builder)
 {
+    builder.Services.AddProblemDetails();
+    builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
     builder.Services.AddControllers();
     builder.Services.AddServices();
     builder.Services.AddRepositories();
@@ -48,7 +52,8 @@ async Task applyDatabaseMigrations(WebApplication app)
 
 void configureHttpRequestPipeline(WebApplication app)
 {
-    app.UseExceptionHandler(_ => { });
+    app.UseExceptionHandler();
+    app.UseStatusCodePages();
 
     app.MapOpenApi();
     app.UseSwaggerUI(options =>

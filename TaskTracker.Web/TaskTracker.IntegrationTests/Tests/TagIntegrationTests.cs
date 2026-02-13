@@ -23,14 +23,9 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+        var responseTag = await response.Content.ReadFromJsonAsync<TagVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTag = content.Value;
         responseTag.ShouldNotBeNull();
         responseTag.Id.ShouldBe(tag.Id);
         responseTag.Title.ShouldBe(tag.Title);
@@ -51,15 +46,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -86,24 +73,21 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content
-            .ReadFromJsonAsync<Result<IReadOnlyList<TagVm>>>(
+        var responseTags = await response.Content
+            .ReadFromJsonAsync<IReadOnlyList<TagVm>>(
                 TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-        content.Value.ShouldNotBeNull();
-        content.Value.Count.ShouldBe(2);
+        responseTags.ShouldNotBeNull();
+        responseTags.Count.ShouldBe(2);
 
-        var responseTag1 = content.Value.SingleOrDefault(t => t.Id == tag1.Id);
+        var responseTag1 = responseTags.SingleOrDefault(t => t.Id == tag1.Id);
         responseTag1.ShouldNotBeNull();
         responseTag1.Title.ShouldBe(tag1.Title);
         responseTag1.Color.ShouldBe(tag1.Color);
         responseTag1.CreatedDateTime.ShouldBe(tag1.CreatedDateTime);
         responseTag1.ModifiedDateTime.ShouldBeNull();
 
-        var responseTag2 = content.Value.SingleOrDefault(t => t.Id == tag2.Id);
+        var responseTag2 = responseTags.SingleOrDefault(t => t.Id == tag2.Id);
         responseTag2.ShouldNotBeNull();
         responseTag2.Title.ShouldBe(tag2.Title);
         responseTag2.Color.ShouldBe(tag2.Color);
@@ -132,14 +116,9 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+        var responseTag = await response.Content.ReadFromJsonAsync<TagVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTag = content.Value;
         responseTag.ShouldNotBeNull();
         responseTag.Title.ShouldBe(creationDto.Title);
         responseTag.Color.ShouldBe(creationDto.Color);
@@ -173,15 +152,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
 
         var dbTags = await GetTagsFromDatabase();
         dbTags.ShouldBeEmpty();
@@ -214,14 +185,9 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
+        var responseTag = await response.Content.ReadFromJsonAsync<TagVm>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Error.ShouldBeNull();
-
-        var responseTag = content.Value;
         responseTag.ShouldNotBeNull();
         responseTag.Id.ShouldBe(tag.Id);
         responseTag.Title.ShouldBe(updateDto.Title);
@@ -257,15 +223,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     [Fact]
@@ -292,15 +250,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<TagVm>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
-        content.Value.ShouldBeNull();
+        await AssertResponseWithDomainProblemDetails(response);
 
         var dbTags = await GetTagsFromDatabase();
         dbTags.Count.ShouldBe(1);
@@ -328,13 +278,10 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
+        var isDeleted = await response.Content.ReadFromJsonAsync<bool>(
             TestContext.Current.CancellationToken);
 
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeTrue();
-        content.Value.ShouldBeTrue();
-        content.Error.ShouldBeNull();
+        isDeleted.ShouldBeTrue();
 
         var dbTags = await GetTagsFromDatabase();
         dbTags.Count.ShouldBe(1);
@@ -353,15 +300,7 @@ public class TagIntegrationTests(ApiWebApplicationFactory factory)
             TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        var content = await response.Content.ReadFromJsonAsync<Result<bool>>(
-            TestContext.Current.CancellationToken);
-
-        content.ShouldNotBeNull();
-        content.IsOk.ShouldBeFalse();
-        content.Value.ShouldBeFalse();
-        content.Error.ShouldNotBeNullOrWhiteSpace();
+        await AssertResponseWithDomainProblemDetails(response);
     }
 
     #region helpers

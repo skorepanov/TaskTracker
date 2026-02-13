@@ -10,13 +10,28 @@ export const Api: IApi = {
     get: async <T>(url: string) => {
         try {
             const response = await fetch(url);
-            const data: IApiResponse<T> = await response.json();
 
-            if (!data.isOk) {
-                console.error(data.error);
+            if (response.status === 200) {
+                const data: T = await response.json();
+
+                const dataResponse: IApiResponse<T> = {
+                    isOk: true,
+                    value: data,
+                    error: null,
+                };
+
+                return dataResponse;
             }
 
-            return data;
+            const errorResponse: IApiResponse<T> = {
+                isOk: false,
+                error: response.statusText,
+                value: null,
+            };
+
+            console.error(response.statusText);
+
+            return errorResponse;
         } catch (error) {
             console.error(error);
 
@@ -38,13 +53,27 @@ export const Api: IApi = {
                 body: JSON.stringify(params),
             });
 
-            const data: IApiResponse<T> = await response.json();
+            if (response.status === 200) {
+                const data: T = await response.json();
 
-            if (!data.isOk) {
-                console.error(data.error);
+                const dataResponse: IApiResponse<T> = {
+                    isOk: true,
+                    value: data,
+                    error: null,
+                };
+
+                return dataResponse;
             }
 
-            return data;
+            const errorResponse: IApiResponse<T> = {
+                isOk: false,
+                error: response.statusText,
+                value: null,
+            };
+
+            console.error(response.statusText);
+
+            return errorResponse;
         } catch (error) {
             console.error(error);
 
@@ -66,13 +95,27 @@ export const Api: IApi = {
                 body: JSON.stringify(params),
             });
 
-            const data: IApiResponse<T> = await response.json();
+            if (response.status === 200) {
+                const data: T = await response.json();
 
-            if (!data.isOk) {
-                console.error(data.error);
+                const dataResponse: IApiResponse<T> = {
+                    isOk: true,
+                    value: data,
+                    error: null,
+                };
+
+                return dataResponse;
             }
 
-            return data;
+            const errorResponse: IApiResponse<T> = {
+                isOk: false,
+                error: response.statusText,
+                value: null,
+            };
+
+            console.error(response.statusText);
+
+            return errorResponse;
         } catch (error) {
             console.error(error);
 
@@ -93,13 +136,27 @@ export const Api: IApi = {
                 method: "DELETE",
             });
 
-            const data: IApiResponse<T> = await response.json();
+            if (response.status === 200) {
+                const data: T = await response.json();
 
-            if (!data.isOk) {
-                console.error(data.error);
+                const dataResponse: IApiResponse<T> = {
+                    isOk: true,
+                    value: data,
+                    error: null,
+                };
+
+                return dataResponse;
             }
 
-            return data;
+            const errorResponse: IApiResponse<T> = {
+                isOk: false,
+                error: response.statusText,
+                value: null,
+            };
+
+            console.error(response.statusText);
+
+            return errorResponse;
         } catch (error) {
             console.error(error);
 

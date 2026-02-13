@@ -1,4 +1,7 @@
-﻿namespace TaskTracker.IntegrationTests.Tests;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace TaskTracker.IntegrationTests.Tests;
 
 /// <summary>
 /// Класс нужен только для применения атрибута [CollectionDefinition]
@@ -27,4 +30,21 @@ public abstract class IntegrationTestBase
     }
 
     public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+
+    protected async ValueTask AssertResponseWithDomainProblemDetails(
+        HttpResponseMessage response)
+    {
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>(
+            TestContext.Current.CancellationToken);
+
+        problemDetails.ShouldNotBeNull();
+        problemDetails.Status.ShouldBe(StatusCodes.Status400BadRequest);
+        problemDetails.Title.ShouldNotBeNullOrWhiteSpace();
+        problemDetails.Type.ShouldNotBeNullOrWhiteSpace();
+        problemDetails.Detail.ShouldNotBeNullOrWhiteSpace();
+        problemDetails.Instance.ShouldNotBeNullOrWhiteSpace();
+        problemDetails.Extensions.ShouldContainKey("timestamp");
+    }
 }

@@ -5,7 +5,7 @@
 /// </summary>
 [ApiController]
 [Route("api/tags")]
-public class TagController(ExecutionService executionService, TagService tagService)
+public class TagController(TagService tagService)
     : ControllerBase
 {
     /// <summary>
@@ -13,22 +13,20 @@ public class TagController(ExecutionService executionService, TagService tagServ
     /// </summary>
     /// <param name="tagId">Идентификатор тега</param>
     [HttpGet("{tagId:int}", Name = nameof(GetTagById))]
-    public async Task<ActionResult<Result<TagVm>>> GetTagById(int tagId)
+    public async Task<ActionResult<TagVm>> GetTagById(int tagId)
     {
-        var result = await executionService.TryExecute(
-            () => tagService.GetTagById(tagId));
-        return Ok(result);
+        var tag = await tagService.GetTagById(tagId);
+        return Ok(tag);
     }
 
     /// <summary>
     /// Получить все теги
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<Result<IReadOnlyList<TagVm>>>> GetTags()
+    public async Task<ActionResult<IReadOnlyList<TagVm>>> GetTags()
     {
-        var result = await executionService.TryExecute(
-            () => tagService.GetTags());
-        return Ok(result);
+        var tags = await tagService.GetTags();
+        return Ok(tags);
     }
 
     /// <summary>
@@ -36,12 +34,11 @@ public class TagController(ExecutionService executionService, TagService tagServ
     /// </summary>
     /// <param name="tagDto">Данные для создания тега</param>
     [HttpPost]
-    public async Task<ActionResult<Result<TagVm>>> CreateTag(
+    public async Task<ActionResult<TagVm>> CreateTag(
         [FromBody] TagForCreationDto tagDto)
     {
-        var result = await executionService.TryExecute(
-            () => tagService.CreateTag(tagDto));
-        return Ok(result);
+        var tag = await tagService.CreateTag(tagDto);
+        return Ok(tag);
     }
 
     /// <summary>
@@ -50,12 +47,11 @@ public class TagController(ExecutionService executionService, TagService tagServ
     /// <param name="tagId">Идентификатор тега</param>
     /// <param name="tagDto">Данные для обновления тега</param>
     [HttpPut("{tagId:int}")]
-    public async Task<ActionResult<Result<TagVm>>> UpdateTag(
+    public async Task<ActionResult<TagVm>> UpdateTag(
         int tagId, [FromBody] TagForUpdateDto tagDto)
     {
-        var result = await executionService.TryExecute(
-            () => tagService.UpdateTag(tagId, tagDto));
-        return Ok(result);
+        var tag = await tagService.UpdateTag(tagId, tagDto);
+        return Ok(tag);
     }
 
     /// <summary>
@@ -63,10 +59,9 @@ public class TagController(ExecutionService executionService, TagService tagServ
     /// </summary>
     /// <param name="tagId">Идентификатор тега</param>
     [HttpDelete("{tagId:int}")]
-    public async Task<ActionResult<Result<bool>>> DeleteTag(int tagId)
+    public async Task<ActionResult<bool>> DeleteTag(int tagId)
     {
-        var result = await executionService.TryExecute(
-            () => tagService.DeleteTag(tagId));
-        return Ok(result);
+        var isDeleted = await tagService.DeleteTag(tagId);
+        return Ok(isDeleted);
     }
 }
