@@ -6,7 +6,9 @@ namespace TaskTracker.Web.Handlers;
 /// <summary>
 /// Глобальный обработчик исключений
 /// </summary>
-public class GlobalExceptionHandler(IProblemDetailsService problemDetailsService)
+public class GlobalExceptionHandler(
+    IProblemDetailsService problemDetailsService,
+    IHostEnvironment hostEnvironment)
     : IExceptionHandler
 {
     /// <summary>
@@ -38,9 +40,7 @@ public class GlobalExceptionHandler(IProblemDetailsService problemDetailsService
             }
         };
 
-        var isDevelopment = httpContext.RequestServices
-            .GetRequiredService<IHostEnvironment>()
-            .IsDevelopment();
+        var isDevelopment = hostEnvironment.IsDevelopment();
 
         if (isDevelopment)
         {
