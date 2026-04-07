@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.2" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-      <PackageReference Include="Moq" Version="4.20.72" />
-      <PackageReference Include="Respawn" Version="7.0.0" />
-      <PackageReference Include="Shouldly" Version="4.3.0" />
-      <PackageReference Include="xunit.v3" Version="3.2.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" />
+      <PackageReference Include="Moq" />
+      <PackageReference Include="Respawn" />
+      <PackageReference Include="Shouldly" />
+      <PackageReference Include="xunit.v3" />
     </ItemGroup>
 
     <ItemGroup>
